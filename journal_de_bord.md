@@ -59,8 +59,9 @@ base SQLite (7 tables, 3 vues SQL) par un pipeline reproductible
   niveau 3 + 212 lignes de synthèse). Leçon : toujours réconcilier deux
   sources qui décrivent le même objet avant d'en écarter une.
 - Découverte 3 : la marge est calculable par opération (Recettes −
-  Dépenses, budget vs engagé/facturé) ; 144 opérations sont assez avancées
-  (engagement > 30 %) pour l'apprentissage supervisé de l'axe A — petit
+  Dépenses, budget vs engagé/facturé) ; le périmètre d'apprentissage de
+  l'axe A, arrêté au notebook 03, compte **123 opérations** (engagement
+  ≥ 60 %, marge budgétée > 50 k€, recettes budgétées > 0) — petit
   échantillon assumé, qui oriente vers des modèles régularisés (cf.
   *regularization.pdf*, guide de choix p. 33-34).
 - Nettoyages notables : natures de lot harmonisées (`appt`/`Appartement`,
@@ -246,3 +247,24 @@ modèles des notebooks, chaque page vérifiée sans exception via AppTest.**
   SQL, même anti-fuite, élasticité du panel) : une seule source de vérité
   par indicateur.
 - Confidentialité respectée : aucune donnée nominative de client affichée.
+
+## Étape 13 — Audit final en contexte neuf
+
+**Résumé : un auditeur indépendant a tout re-vérifié par exécution (base,
+notebooks, couverture de la consigne, plateforme) ; verdict PASS, avec 4
+incohérences texte ↔ sortie et un chiffre non traçable, tous corrigés.**
+
+- PASS confirmés : base conforme au dictionnaire (comptages exacts), 7
+  notebooks sans erreur et 100 % des cellules exécutées, les 24 concepts
+  et 9 modules couverts, les 5 pages de la plateforme sans exception.
+- Corrections issues de l'audit : (1) nb06 — les vendeurs centraux
+  désistent en réalité MOINS que les périphériques (16,9 % vs 20,2 %), le
+  texte disait l'inverse ; (2) nb06 — précision de la logistique 0,72 (et
+  non 0,63) ; (3) nb05 — 95 opérations (et non 92), ε = −0,81, p = 0,57 ;
+  (4) nb00 — motif dominant 42 % (et non ≈ 45 %) ; (5) le « 144 opérations
+  exploitables » du cadrage, invérifiable, remplacé partout par le
+  périmètre traçable du notebook 03 (123 opérations : engagement ≥ 60 %,
+  marge > 50 k€, recettes > 0).
+- Leçon d'humilité : ma « vérification systématique sorties ↔ texte »
+  avait laissé passer ces cas — une relecture par un regard neuf qui
+  ré-exécute tout n'est pas un luxe, c'est une étape de la démarche.

@@ -252,9 +252,9 @@ print(f"\nε retenu pour l'optimisation : {EPSILON}")
 
 C.append(("md", r"""
 **Lecture — honnêteté sur la force du signal.** Notre estimation interne
-($\hat\varepsilon \approx -0{,}9$) a le bon signe mais n'est **pas
-significative** (p ≈ 0,5) : la cherté moyenne par opération varie peu (les
-grilles sont déjà alignées sur le marché) et 92 opérations ne suffisent
+($\hat\varepsilon = -0{,}81$) a le bon signe mais n'est **pas
+significative** (p = 0,57) : la cherté moyenne par opération varie peu (les
+grilles sont déjà alignées sur le marché) et 95 opérations ne suffisent
 pas. Nous retenons $\varepsilon = -1$, valeur **compatible avec notre
 estimation ponctuelle et avec la littérature** sur la demande de logements
 neufs (élasticités-prix usuelles entre −1 et −2 : Meen, *Modelling Spatial

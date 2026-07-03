@@ -114,9 +114,11 @@ donnéebrut/ (4 exports Excel)          data/externe/ (BCE, Eurostat, geo.api)
 - Les données budgétaires sont une **photo à date d'export** (pas
   d'historique de révisions) : le « taux de variation de marge » compare le
   budget initial au réalisé (engagé/facturé) à cette date. Les opérations
-  trop peu avancées (taux d'engagement < 30 %) sont exclues de
+  trop peu avancées (taux d'engagement < 60 %) sont exclues de
   l'apprentissage supervisé de l'axe A.
-- 267 opérations, dont ~144 exploitables pour l'axe A : petit échantillon,
+- 267 opérations, dont 123 exploitables pour l'axe A (engagement ≥ 60 %,
+  marge budgétée > 50 k€, recettes budgétées > 0, cf. notebook 03 §1) :
+  petit échantillon,
   d'où la préférence pour des modèles simples, régularisés et validés en
   validation croisée, et une lecture prudente des intervalles.
 - Les recommandations de prix (axe C) sont des aides à la décision, pas des

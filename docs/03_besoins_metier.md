@@ -13,12 +13,14 @@
 
 ### Axe A — Risque de dérive de marge
 
-**Constat chiffré** (exploration, base au 2026-06) : sur les 144 opérations
-suffisamment avancées (engagement > 30 % ou achevées), la variation
-médiane entre marge budgétée et marge « engagée » est fortement négative ;
-les dépassements se concentrent sur quelques postes (construction, frais
-financiers). L'entreprise découvre souvent la dérive au moment de la
-facturation, trop tard pour agir.
+**Constat chiffré** (notebook 03, base au 2026-06) : sur les 123
+opérations suffisamment avancées (engagement ≥ 60 %, marge budgétée
+> 50 k€, recettes budgétées > 0), la moitié n'a aucun dépassement engagé,
+mais 28 % subissent une dérive matérielle (plus de 2 % de la marge
+budgétée), avec une queue extrême à −125 % ; les dépassements se
+concentrent sur les postes techniques (construction, VRD). L'entreprise
+découvre souvent la dérive au moment de la facturation, trop tard pour
+agir.
 
 **Besoins** :
 - B-A1 : score de risque par opération (probabilité de dérive de marge

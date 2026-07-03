@@ -497,7 +497,7 @@ désistements réels au prix d'une alerte sur ~24 % des dossiers. La
 **baseline majoritaire a un F1 de 0** (elle ne détecte aucun désistement —
 son exactitude de 87 % illustre pourquoi l'exactitude est trompeuse sur
 classes déséquilibrées). La **régression logistique fait moins bien en
-F1 (≈ 0,24)** : plus précise (0,63) mais quasi muette (rappel 0,15), elle
+F1 (0,25)** : plus précise (0,72) mais quasi muette (rappel 0,15), elle
 sur-pénalise la classe rare ; le prior de classes et le lissage de Naive
 Bayes le rendent plus généreux en rappel — préférable pour un système
 d'**alerte précoce** où manquer un désistement coûte plus cher qu'une
@@ -831,12 +831,13 @@ C.append(("md", r"""
    caractérisée : la défaillance d'un seul prescripteur externe
    (VALORICIEL) toucherait la quasi-totalité des opérations où il opère.
 2. **Le risque n'est pas uniforme entre pivots** : VALORICIEL désiste
-   ~30 % de ses dossiers, contre ~9 % pour le réseau interne — les
-   vendeurs centraux dans leur ensemble désistent **plus** que les
-   périphériques. Croisé avec le §5 (canaux « panneau »/« site » côté
-   désisté), cela suggère des prospects moins qualifiés dans certains
-   canaux externes ; la commission versée à un prescripteur qui désiste
-   beaucoup est une dépense sans recette.
+   ~30 % de ses dossiers, contre ~9 % pour le réseau interne. En
+   moyenne, les vendeurs centraux (top 10 d'intermédiarité, 16,9 % de
+   désistement) font même légèrement **mieux** que les périphériques
+   (20,2 %) : la centralité n'est pas le facteur de risque — c'est la
+   dispersion ENTRE pivots qui compte, et elle est énorme (du simple au
+   triple entre les deux premiers). La commission versée à un
+   prescripteur qui désiste beaucoup est une dépense sans recette.
 3. **Les communautés recoupent des sous-marchés géographiques** (les
    vendeurs locaux ne co-vendent que dans les opérations de leur zone),
    mais la lecture doit rester prudente : la projection est dense

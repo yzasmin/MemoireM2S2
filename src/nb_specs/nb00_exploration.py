@@ -290,7 +290,8 @@ pd.DataFrame(lignes).sort_values("entropie (bits)", ascending=False)
 C.append(("md", r"""
 **Lecture.** `nature_lot` et `agence` portent une information équilibrée
 (entropie proche du maximum uniforme). `motif_desistement` est concentré
-(≈ 45 % « problème de financement / refus de prêt ») : ce déséquilibre
+(42 % « problème de financement / refus de prêt », et davantage en
+regroupant les motifs de financement) : ce déséquilibre
 guidera la lecture des métriques de l'axe transverse texte (notebook 06),
 où le F1 par classe sera préféré à l'exactitude.
 """))
