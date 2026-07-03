@@ -52,6 +52,23 @@ exécutée.
 Régénérer un notebook : `python src/nb_specs/nbXX_*.py` (le script construit
 et ré-exécute le notebook de bout en bout).
 
+## Tout lancer depuis Google Colab (poste sans droits d'installation)
+
+Le dépôt étant privé, il faut un **token GitHub en lecture seule** :
+github.com → *Settings* → *Developer settings* → *Fine-grained personal
+access tokens* → *Generate new token* → limiter au dépôt `MemoireM2S2`,
+permission *Contents : Read-only*. Ensuite :
+
+- **Notebooks 00-06** : sur [colab.research.google.com](https://colab.research.google.com),
+  onglet *GitHub*, coche « dépôts privés » et autorise ton compte, choisis
+  `yzasmin/MemoireM2S2` et la branche `claude/copilote-financier-angelotti-72c614`,
+  puis ouvre n'importe quel notebook. Sa première cellule clone le dépôt
+  (colle le token quand il est demandé) et reconstruit la base.
+- **Plateforme Streamlit** : ouvre `notebooks/99_lancer_plateforme_colab.ipynb`
+  de la même façon et exécute ses 3 cellules — la dernière affiche une URL
+  publique temporaire vers l'application. Ne partage pas cette URL (données
+  internes) et arrête la session Colab après usage.
+
 ## Reproduire de zéro
 
 ```bash

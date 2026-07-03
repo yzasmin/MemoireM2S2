@@ -17,20 +17,35 @@ RACINE = Path(__file__).resolve().parent.parent
 NOTEBOOKS = RACINE / "notebooks"
 
 #: Cellule d'amorçage commune : fonctionne en local (dépôt déjà présent)
-#: comme sur Google Colab (clonage du dépôt + installation des dépendances).
+#: comme sur Google Colab (clonage du dépôt + dépendances manquantes).
+#: Le dépôt étant privé, Colab demande un token GitHub en lecture seule
+#: (github.com -> Settings -> Developer settings -> Fine-grained tokens,
+#: dépôt MemoireM2S2 seul, permission « Contents : Read-only »).
 AMORCAGE = '''\
 # --- Amorçage : exécution locale ou Google Colab ---
-import pathlib, subprocess, sys
+import importlib.util, pathlib, subprocess, sys
+
+DEPOT = "github.com/yzasmin/MemoireM2S2.git"
+BRANCHE = "claude/copilote-financier-angelotti-72c614"
 
 racine = pathlib.Path.cwd()
 while not (racine / "src" / "nettoyage.py").exists() and racine != racine.parent:
     racine = racine.parent
-if not (racine / "src" / "nettoyage.py").exists():  # environnement Colab vierge
-    subprocess.run(["git", "clone", "-b", "claude/copilote-financier-angelotti-72c614",
-                    "https://github.com/yzasmin/MemoireM2S2.git"], check=True)
+if not (racine / "src" / "nettoyage.py").exists():   # environnement Colab vierge
+    r = subprocess.run(["git", "clone", "-b", BRANCHE, f"https://{DEPOT}"],
+                       capture_output=True, text=True)
+    if r.returncode != 0:                             # dépôt privé -> token requis
+        from getpass import getpass
+        token = getpass("Dépôt privé — colle un token GitHub en LECTURE SEULE : ").strip()
+        subprocess.run(["git", "clone", "-b", BRANCHE, f"https://{token}@{DEPOT}"],
+                       check=True)
     racine = pathlib.Path.cwd() / "MemoireM2S2"
-    subprocess.run([sys.executable, "-m", "pip", "install", "-q", "-r",
-                    str(racine / "requirements.txt")], check=True)
+    # N'installe que ce qui manque (Colab a déjà pandas/sklearn/statsmodels)
+    for module, paquet in [("openpyxl", "openpyxl"), ("networkx", "networkx"),
+                           ("statsmodels", "statsmodels"), ("sklearn", "scikit-learn")]:
+        if importlib.util.find_spec(module) is None:
+            subprocess.run([sys.executable, "-m", "pip", "install", "-q", paquet],
+                           check=True)
 
 sys.path.insert(0, str(racine / "src"))
 import base_sql
