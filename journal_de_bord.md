@@ -268,3 +268,31 @@ incohérences texte ↔ sortie et un chiffre non traçable, tous corrigés.**
 - Leçon d'humilité : ma « vérification systématique sorties ↔ texte »
   avait laissé passer ces cas — une relecture par un regard neuf qui
   ré-exécute tout n'est pas un luxe, c'est une étape de la démarche.
+
+## Étape 14 — Refonte métier de la plateforme (retour du commanditaire)
+
+**Résumé : la plateforme est refondue pour la direction financière —
+langage métier sans jargon statistique, design professionnel, et périmètre
+restreint aux 147 opérations de promotion (aménagement exclu).**
+
+- Retour utilisateur : la première version était « trop data science »
+  pour ses destinataires. Leçon de conduite de projet : l'outil de
+  restitution ne s'adresse pas au jury du mémoire mais au métier — les
+  métriques de validation (F1, R²) restent dans les notebooks, l'écran ne
+  montre que des décisions possibles (« niveau d'alerte », « prix de
+  marché estimé », « sensibilité de la demande au coût du crédit »).
+- Périmètre : l'activité aménagement (120 opérations) est exclue de tous
+  les indicateurs de la plateforme (`operations.activite = 'Promotion'`) ;
+  les notebooks conservent les 267 opérations car la distinction
+  promotion/aménagement y est un résultat d'analyse (typologie du
+  notebook 02). Le modèle de risque, entraîné toutes activités, ne score à
+  l'écran que les lignes promotion.
+- Pages : Vue d'ensemble (5 indicateurs, top 5 des opérations à examiner),
+  Alertes marge (68 opérations en cours : 10 alerte / 2 à surveiller / 56
+  conformes, détail des postes en dépassement en euros), Rythme de vente
+  (simulateur de taux 2026 en phrases claires), Pilotage des prix (127
+  appartements évalués : 111 dans le marché, 4 au-dessus, 12 en dessous ;
+  grille recommandée lot par lot), Qualité commerciale.
+- Vérification : les 5 pages passent AppTest sans exception ; contrôle
+  indépendant du filtre (147 opérations affichées) et de l'absence de
+  jargon à l'écran.
