@@ -1,6 +1,6 @@
 # Copilote Financier — Groupe Angelotti
 
-**Mémoire de fin d'études M2 MIASHS — Yasmina Saoudy**
+**Mémoire de fin d'études M2 MIASHS — Yasmina Saoud**
 
 Outil d'aide à la décision pour un promoteur-aménageur immobilier (Groupe
 Angelotti, filiale Nexity), construit sur les données de gestion réelles de
