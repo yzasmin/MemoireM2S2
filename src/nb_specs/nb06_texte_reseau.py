@@ -665,18 +665,20 @@ plt.show()
 
 C.append(("md", r"""
 **Lecture.** L'agence au profil **le plus atypique est de très loin
-Salon-de-Provence** : $D_{KL} \approx 3{,}1$ bits contre moins de 0,3 bit
-pour toutes les autres, avec une entropie effondrée (≈ 0,56 bit contre
-1,6-1,7 ailleurs). La raison se lit dans la table : **90 % de ses motifs
-sont « Autres motifs »** — non pas un comportement client différent, mais
-très probablement un **défaut de saisie** (le motif n'est pas renseigné
-finement dans cette agence). C'est un enseignement métier en soi : avant
-d'être un signal commercial, la KL est ici un **détecteur de qualité de
-données** — le copilote signalera cette agence pour fiabiliser la saisie,
-sans quoi ses désistements resteront inanalysables. Derrière elle,
-Toulouse (KL ≈ 0,27, sur-représentation du financement) et Montpellier
-(KL ≈ 0,11) s'écartent modérément du profil groupe, dominé par le refus de
-prêt (~53 %) puis la rétractation légale (~36 %).
+Salon-de-Provence** : $D_{KL} \approx 3{,}0$ bits contre moins de 0,3 bit
+pour toutes les autres, avec une entropie effondrée (0,47 bit contre
+1,26-1,41 ailleurs, et 1,50 pour le groupe). La raison se lit dans la
+table : **90 % de ses motifs sont « Autres motifs »** — non pas un
+comportement client différent, mais très probablement un **défaut de
+saisie** (le motif n'est pas renseigné finement dans cette agence). C'est
+un enseignement métier en soi : avant d'être un signal commercial, la KL
+est ici un **détecteur de qualité de données** — le copilote signalera
+cette agence pour fiabiliser la saisie, sans quoi ses désistements
+resteront inanalysables. Derrière elle, Toulouse (KL ≈ 0,27 :
+sur-représentation de la rétractation légale, 51 % de ses motifs contre
+36 % au niveau groupe) et Montpellier (KL ≈ 0,11) s'écartent modérément du
+profil groupe, dominé par le refus de prêt (~53 %) puis la rétractation
+légale (~36 %).
 """))
 
 C.append(("md", r"""
