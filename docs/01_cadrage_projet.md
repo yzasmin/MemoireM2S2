@@ -5,7 +5,8 @@
 ## 1. Contexte
 
 Le Groupe Angelotti est un promoteur-aménageur immobilier implanté en
-Occitanie et en Provence (agences Béziers, Montpellier, Toulouse, Aix),
+Occitanie et en Provence (agences Béziers, Montpellier, Toulouse, Perpignan,
+Salon-de-Provence et Carcassonne, cette dernière en aménagement uniquement),
 filiale du groupe Nexity. Son activité : acheter du foncier, concevoir des
 programmes (appartements, terrains à bâtir, stationnements), les
 commercialiser en VEFA, puis les livrer.
@@ -29,8 +30,8 @@ Trois questions reviennent en comité d'engagement et en revue de gestion :
 2. **À quel rythme le stock va-t-il s'écouler ?** Le rythme de réservation
    dépend du contexte macroéconomique (taux d'intérêt des crédits habitat,
    moral des ménages), de la localisation et du produit. Or 2023-2024 a
-   montré la violence de ce lien : la remontée des taux de 1 % à 4 % a
-   divisé la demande.
+   montré la violence de ce lien : la remontée des taux de 1,1 % (décembre
+   2021) à 3,6 % (décembre 2023) a divisé la demande.
 3. **À quel prix vendre chaque lot ?** Trop cher, le lot reste en stock et
    génère des frais financiers ; pas assez cher, la marge fond. Les remises
    sont aujourd'hui accordées au cas par cas, sans règle.

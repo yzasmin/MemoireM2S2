@@ -331,3 +331,21 @@ corrections de forme.**
   notebooks et `docs/` de ce dépôt, ce qui a servi de second ancrage de
   style, plus directement pertinent que le seul mémoire de mi-parcours
   puisque écrit sur ce même projet.
+- Relecture à contexte neuf (sous-agent dédié, confrontant chaque chiffre du
+  chapitre à la sortie de notebook ou à la ligne de code correspondante) :
+  verdict PASS avec 2 corrections mineures, appliquées. (1) L'« élasticité
+  -taille » du modèle hédonique (nb05, cellule 6) était présentée comme
+  « −3,1 % par doublement de surface » : le coefficient porte en réalité sur
+  `log_surface` **standardisé** (`StandardScaler` dans le
+  `ColumnTransformer`, même code que `plateforme/app.py`), donc c'est
+  « −3,1 % par écart-type de log(surface) », pas par doublement — corrigé.
+  (2) L'introduction citait « Aix » parmi les agences, recopié de
+  `docs/01_cadrage_projet.md` (rédigé avant la donnée définitive) sans
+  vérifier contre `operations.agence` : la requête réelle donne Béziers,
+  Montpellier, Toulouse, Perpignan, Salon-de-Provence et Carcassonne
+  (aménagement uniquement), sans Aix — corrigé. La fourchette de taux « 1,1 %
+  à environ 4 % » de `docs/01_cadrage_projet.md` et
+  `docs/03_besoins_metier.md` a aussi été resserrée à sa valeur exacte dans
+  le chapitre (1,1 % en décembre 2021, 3,6 % en décembre 2023, table
+  `conjoncture`) ; les deux documents `docs/` restent à corriger de la même
+  façon s'ils sont réutilisés ailleurs.

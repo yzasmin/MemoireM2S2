@@ -20,7 +20,8 @@ d'en assumer le périmètre et les limites.
 
 Le Groupe Angelotti est un promoteur-aménageur immobilier implanté en
 Occitanie et en région PACA (agences de Béziers, Montpellier, Toulouse,
-Perpignan, Aix, Salon-de-Provence), filiale du groupe Nexity. Son activité se
+Perpignan, Salon-de-Provence et Carcassonne, cette dernière en aménagement
+uniquement), filiale du groupe Nexity. Son activité se
 répartit en deux métiers : la **promotion immobilière** (concevoir,
 construire et commercialiser des logements neufs) et l'**aménagement
 foncier** (diviser et viabiliser un terrain en lots à bâtir). Chaque
@@ -44,9 +45,9 @@ revue de gestion, et structurent le projet :
 2. **À quel rythme le stock va-t-il s'écouler ?** Le rythme de réservation
    dépend du contexte macroéconomique — en premier lieu du taux des crédits
    à l'habitat — de la localisation et du produit. La remontée des taux de
-   1,1 % à environ 4 % entre 2022 et 2024 a donné une illustration brutale de
-   ce lien, avec un effondrement visible du rythme de vente sur la même
-   période.
+   1,1 % (décembre 2021) à 3,6 % (décembre 2023), selon la série BCE utilisée
+   par le Copilote, a donné une illustration brutale de ce lien, avec un
+   effondrement visible du rythme de vente sur la même période.
 3. **À quel prix vendre chaque lot ?** Un lot trop cher reste en stock et
    génère des frais financiers de portage ; un lot bradé érode la marge. Les
    remises sont aujourd'hui accordées au cas par cas, sans règle explicite,
@@ -543,8 +544,8 @@ interprétable.
 Les primes hédoniques sont économiquement cohérentes : une prime d'étage
 (+6,0 % par écart-type), une prime d'exposition Sud (+2,6 % contre
 Est-Ouest), une décote nette du logement social réglementé (−62,8 % contre
-le libre) et une élasticité-taille négative (−3,1 % par doublement de
-surface, la demande de petites surfaces étant plus dense). L'effet millésime
+le libre) et une élasticité-taille négative (−3,1 % par écart-type de
+log(surface), la demande de petites surfaces étant plus dense). L'effet millésime
 est particulièrement parlant : +19,0 % en 2023 et +20,9 % en 2026 par
 rapport à 2016, un plateau atteint après 2022 (Figure 10) — les prix du neuf
 n'ont pas baissé avec la remontée des taux, c'est le **volume** de ventes

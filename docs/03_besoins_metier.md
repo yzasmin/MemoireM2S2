@@ -39,7 +39,7 @@ plateforme.
 
 **Constat chiffré** : 14 428 réservations 2016-2026 ; le rythme mensuel
 groupe est passé d'environ 150/mois (2021-2022) à moins de 115/mois (2023)
-en pleine remontée des taux (1,1 % → 4 %) ; 2 157 désistements dont 45 %
+en pleine remontée des taux (1,1 % → 3,6 %) ; 2 157 désistements dont 45 %
 pour problème de financement / refus de prêt — le lien taux → demande est
 au cœur du besoin.
 
