@@ -156,8 +156,9 @@ print(f"Opérations à risque (dérive < -2 %) : {y_class.sum()} / {len(df)}"
 '''))
 
 C.append(("md", r"""
-**Lecture.** La moitié des opérations n'a aucun dépassement engagé
-(variation nulle) ; un quart dépasse la « dérive matérielle » de −2 % de la
+**Lecture.** Plus d'un tiers des opérations (36,6 %) n'a aucun dépassement
+engagé (variation exactement nulle) et la médiane est quasi nulle
+(−0,4 %) ; plus d'un quart dépasse la « dérive matérielle » de −2 % de la
 marge ; quelques cas extrêmes perdent plus de la moitié de la marge
 budgétée. Cette structure semi-continue justifie le double traitement :
 régression pour quantifier, classification pour alerter.
@@ -354,8 +355,8 @@ C.append(("md", r"""
 comparables) désignent les facteurs structurels de dérive — typiquement le
 poids des postes techniques (VRD, construction) et le taux de désistement,
 tandis qu'une marge relative budgétée confortable protège. Le R² test
-modeste est un résultat honnête : la moitié de l'échantillon est à
-variation nulle et les dérives extrêmes tiennent à des aléas (contentieux,
+modeste est un résultat honnête : plus d'un tiers de l'échantillon est à
+variation exactement nulle et les dérives extrêmes tiennent à des aléas (contentieux,
 géotechnique) absents des données — c'est précisément pourquoi l'axe A
 bascule maintenant en **classification** du risque.
 """))

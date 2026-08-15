@@ -80,7 +80,7 @@ taux des crédits habitat France (BCE), confiance des ménages (Eurostat),
 référentiel communes avec population et coordonnées (geo.api.gouv.fr).**
 
 - Le besoin vient de l'axe B : le rythme de vente dépend du contexte macro
-  (la remontée des taux 2022-2023 de 1,1 % à ~4 % coïncide avec la chute
+  (la remontée des taux 2022-2023 de 1,1 % à 3,6 % coïncide avec la chute
   des réservations observée dans la grille) — ces séries seront les
   variables exogènes $x_{k,t}$ de l'ARIMAX (*SeriesTemp_ARIMAX*, slides 1-8).
 - La distance au littoral est dérivée des coordonnées geo.api.gouv.fr :
@@ -126,11 +126,12 @@ honnête sur la volumétrie.**
   Ghemawat pour MapReduce ; Zaharia pour Spark).
 - Contrôle croisé Spark ↔ SQLite à l'euro près (dépenses 1 561,8 M€,
   recettes 1 754,8 M€ par les deux moteurs).
-- Leçon d'échelle : sur 64 788 lignes, Spark est ~28× plus lent que pandas
-  (démarrage de session 27 s, conversion 6 s, overhead JVM) — le passage à
-  l'échelle est une assurance pour les volumétries futures (groupe Nexity
-  entier), pas un gain immédiat. Un étudiant qui vend Spark comme
-  accélérateur sur 25 Mo se trompe de problème.
+- Leçon d'échelle : sur 64 788 lignes (9 Mo en mémoire), Spark est ~58×
+  plus lent que pandas (démarrage de session 23,9 s, conversion 5,1 s,
+  overhead JVM ; rapport mesuré à la ré-exécution finale — une première
+  exécution donnait ~28×, les chronos varient avec la machine, la
+  conclusion non). Le passage à l'échelle est une assurance pour les
+  volumétries futures (groupe Nexity entier), pas un gain immédiat.
 
 ## Étape 7 — Notebook 02 : analyse multidimensionnelle et typologie
 

@@ -29,7 +29,7 @@ Trois questions reviennent en comité d'engagement et en revue de gestion :
 2. **À quel rythme le stock va-t-il s'écouler ?** Le rythme de réservation
    dépend du contexte macroéconomique (taux d'intérêt des crédits habitat,
    moral des ménages), de la localisation et du produit. Or 2023-2024 a
-   montré la violence de ce lien : la remontée des taux de 1 % à 4 % a
+   montré la violence de ce lien : la remontée des taux de 1,1 % à 3,6 % a
    divisé la demande.
 3. **À quel prix vendre chaque lot ?** Trop cher, le lot reste en stock et
    génère des frais financiers ; pas assez cher, la marge fond. Les remises

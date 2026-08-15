@@ -15,7 +15,7 @@
 
 **Constat chiffré** (notebook 03, base au 2026-06) : sur les 123
 opérations suffisamment avancées (engagement ≥ 60 %, marge budgétée
-> 50 k€, recettes budgétées > 0), la moitié n'a aucun dépassement engagé,
+> 50 k€, recettes budgétées > 0), plus d'un tiers (36,6 %) n'a aucun dépassement engagé,
 mais 28 % subissent une dérive matérielle (plus de 2 % de la marge
 budgétée), avec une queue extrême à −125 % ; les dépassements se
 concentrent sur les postes techniques (construction, VRD). L'entreprise
@@ -39,7 +39,7 @@ plateforme.
 
 **Constat chiffré** : 14 428 réservations 2016-2026 ; le rythme mensuel
 groupe est passé d'environ 150/mois (2021-2022) à moins de 115/mois (2023)
-en pleine remontée des taux (1,1 % → 4 %) ; 2 157 désistements dont 45 %
+en pleine remontée des taux (1,1 % → 3,6 % fin 2023) ; 2 157 désistements dont 45 %
 pour problème de financement / refus de prêt — le lien taux → demande est
 au cœur du besoin.
 

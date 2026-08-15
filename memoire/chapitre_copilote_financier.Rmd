@@ -48,7 +48,8 @@ déraper financièrement, et peut-on le détecter avant que la facturation ne
 rende la dérive irréversible ? La deuxième concerne l'**écoulement** : à
 quel rythme le stock de lots va-t-il se vendre, sachant que la période
 2022-2024 a montré la sensibilité de la demande au coût du crédit (le taux
-moyen des crédits habitat est passé d'environ 1,1 % à 4 % avant de refluer
+moyen des crédits habitat est passé d'environ 1,1 % à un pic de 3,6 % fin
+2023, avant de refluer
 vers 3,1 % mi-2026) ? La troisième concerne les **prix** : à quel niveau
 positionner chaque lot du stock, alors que les remises commerciales sont
 aujourd'hui accordées au cas par cas, sans règle explicite ?
@@ -270,10 +271,12 @@ rend visible le schéma MapReduce, et contrôle croisé des résultats entre
 Spark et SQLite — les deux moteurs concordent à l'arrondi près (1 561,8 M€
 de dépenses budgétées, 1 754,8 M€ de recettes). J'en tire une conclusion
 volontairement à contre-courant : sur notre volumétrie (64 788 lignes,
-environ 25 Mo), Spark est environ vingt-huit fois **plus lent** que
-pandas, après 27 secondes de démarrage de session. Le passage à l'échelle
+soit 9 Mo une fois chargées en mémoire), Spark est cinquante-huit fois
+**plus lent** que pandas sur l'agrégation chronométrée, après 23,9
+secondes de démarrage de session — les chronos varient d'une machine à
+l'autre, l'ordre de grandeur et la conclusion non. Le passage à l'échelle
 est une assurance pour des volumétries futures, pas un accélérateur ;
-présenter Spark comme un gain sur 25 Mo serait une erreur de diagnostic.
+présenter Spark comme un gain sur moins de 10 Mo serait une erreur de diagnostic.
 
 ## Axe A
 
@@ -286,10 +289,11 @@ et du budget par poste), et la variation de marge rapporte la marge ainsi
 recalculée à la marge budgétée initiale. Le périmètre d'apprentissage
 retient 123 opérations suffisamment avancées (taux d'engagement d'au
 moins 60 %, marge budgétée supérieure à 50 k€, recettes budgétées
-positives). Sur ce périmètre, la moitié des opérations n'a aucun
-dépassement engagé, mais 28 % franchissent le seuil de dérive matérielle
-fixé à 2 % de la marge, avec quelques cas extrêmes au-delà de la moitié de
-la marge budgétée (Figure 5).
+positives). Sur ce périmètre, plus d'un tiers des opérations (36,6 %) n'a
+aucun dépassement engagé et la médiane de variation est quasi nulle, mais
+28 % franchissent le seuil de dérive matérielle fixé à 2 % de la marge,
+avec deux cas extrêmes au-delà de la moitié de la marge budgétée
+(Figure 5).
 
 ![Figure 5 — Distribution de la variation de marge « committée » et seuil de dérive matérielle à −2 % (notebook 03).](figures/fig05_distribution_variation_marge.png)
 
@@ -308,9 +312,10 @@ incidents numériques instructifs ont été rencontrés et documentés : les
 parts de postes sommant à un, la matrice de Gram était singulière tant
 qu'un poste de référence n'était pas retiré ; et un poste quasi constant
 produisait une colonne standardisée nulle. La régularisation Ridge (avec
-le paramètre choisi par validation croisée) stabilise les coefficients
-(Figure 6), mais le pouvoir explicatif reste modeste — un R² de 0,08 sur
-l'échantillon test — et je l'assume comme un résultat honnête : la
+le paramètre choisi par validation croisée) stabilise les coefficients et
+en permet une lecture comparée (Figure 6), mais le pouvoir explicatif
+reste modeste — un R² de 0,08 sur l'échantillon test pour les moindres
+carrés ordinaires, que la régularisation n'améliore pas — et je l'assume comme un résultat honnête : la
 structure budgétaire initiale prédispose à la dérive, elle ne la détermine
 pas ; l'aléa de chantier fait le reste.
 
@@ -401,8 +406,10 @@ taux, c'est le volume qui s'est ajusté, en cohérence avec l'axe B.
 
 Appliqué aux 127 appartements en stock, le modèle sert de détecteur : les
 lots dont le prix grille s'écarte du prix de marché estimé de plus d'une
-erreur type sont signalés (Figure 10) — 111 sont dans le marché, 4
-au-dessus, 12 en dessous à la date de l'export.
+erreur type sont signalés (Figure 10) — 103 sont dans le marché, 8
+au-dessus, 16 en dessous à la date de l'export. (La plateforme, qui
+ré-estime le modèle sur l'ensemble des transactions, aboutit à un
+classement légèrement plus clément : 111/4/12.)
 
 ![Figure 10 — Stock d'appartements : prix grille contre prix de marché estimé ; la bande correspond à plus ou moins une erreur type (notebook 05).](figures/fig10_stock_grille_vs_marche.png)
 

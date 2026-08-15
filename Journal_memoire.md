@@ -61,3 +61,29 @@ et les artefacts régénérés depuis les scripts du dépôt.**
 - Confirmation en conditions réelles de l'exigence de reproductibilité du
   cadrage : `python src/base_sql.py` + `python src/nb_specs/nb03_marge.py`
   ont suffi à tout reconstruire.
+
+## Vérification en contexte neuf du chapitre
+
+**Résumé : audit indépendant du chapitre — sommaire, figures et docx
+conformes ; 7 écarts chiffrés détectés et tous corrigés à la source.**
+
+- Trois écarts venaient d'une ré-exécution du notebook 01 dans un
+  environnement réinitialisé (chronos Spark : ×58 et 23,9 s de démarrage,
+  et non ×28 / 27 s de la première exécution) : le chapitre cite désormais
+  la mesure de la version commitée, en précisant que les chronos varient
+  mais pas la conclusion.
+- Un écart était une erreur du markdown du notebook 03 lui-même,
+  contredite par sa propre sortie (« la moitié » à variation nulle, en
+  réalité 36,6 %) : corrigé dans le notebook (reconstruit) ET dans le
+  chapitre, ainsi que dans docs/03_besoins_metier.md.
+- Le pic de taux était sur-arrondi (« 4 % » ; la série BCE plafonne à
+  3,6 % en décembre 2023) : corrigé dans le chapitre, le cadrage et le
+  journal de bord.
+- Le R² test de 0,08 était attribué au Ridge alors qu'il appartient à
+  l'OLS : phrase reformulée.
+- Les chiffres du stock (111/4/12) étaient ceux de la plateforme, pas du
+  notebook 05 cité (103/8/16) : le chapitre cite désormais le notebook et
+  signale l'écart de la plateforme entre parenthèses.
+- Leçon : quand un chiffre existe en deux versions (notebook figé vs
+  application recalculée), citer la source que la phrase invoque, et
+  expliciter l'autre.
