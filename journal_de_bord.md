@@ -126,10 +126,17 @@ honnête sur la volumétrie.**
   Ghemawat pour MapReduce ; Zaharia pour Spark).
 - Contrôle croisé Spark ↔ SQLite à l'euro près (dépenses 1 561,8 M€,
   recettes 1 754,8 M€ par les deux moteurs).
-- Leçon d'échelle : sur 64 788 lignes, Spark est ~28× plus lent que pandas
-  (démarrage de session 27 s, conversion 6 s, overhead JVM) — le passage à
-  l'échelle est une assurance pour les volumétries futures (groupe Nexity
-  entier), pas un gain immédiat. Un étudiant qui vend Spark comme
+- Leçon d'échelle : sur 64 788 lignes, Spark est nettement plus lent que
+  pandas — le rapport chronométré varie d'une exécution à l'autre (mesuré
+  ~×58 lors de la relecture pour le chapitre de mémoire du 2026-08-15 :
+  pandas 9,9 ms vs Spark 577,4 ms, plus 23,9 s de démarrage de session et
+  5,1 s de conversion ; un chiffre différent — ~×28 — avait été noté lors
+  d'une exécution antérieure). Le rapport exact dépend de la machine et du
+  tirage, mais l'ordre de grandeur (un à deux ordres de grandeur plus lent,
+  sans compter les secondes de démarrage JVM) et la conclusion ne changent
+  pas : le passage à l'échelle est une assurance pour les volumétries
+  futures (groupe Nexity entier), pas un gain immédiat. Un étudiant qui vend
+  Spark comme
   accélérateur sur 25 Mo se trompe de problème.
 
 ## Étape 7 — Notebook 02 : analyse multidimensionnelle et typologie
@@ -296,3 +303,31 @@ restreint aux 147 opérations de promotion (aménagement exclu).**
 - Vérification : les 5 pages passent AppTest sans exception ; contrôle
   indépendant du filtre (147 opérations affichées) et de l'absence de
   jargon à l'écran.
+
+## Étape 15 — Rédaction du chapitre de mémoire « Copilote Financier »
+
+**Résumé : chapitre de mémoire rédigé (`docs/chapitre_copilote_financier.Rmd`)
+en extrayant systématiquement les chiffres et figures des sept notebooks
+exécutés plutôt qu'en les recopiant depuis le journal ou le README, avec
+une relecture à contexte neuf qui confirme le fond mais réclame quelques
+corrections de forme.**
+
+- Méthode : extraction automatisée des cellules et sorties des notebooks
+  00-06 (texte + images `image/png` décodées) vers `docs/figures_memoire/`,
+  lecture intégrale de chaque sortie avant citation dans le chapitre,
+  ré-exécution du notebook 03 pour régénérer `plateforme/modeles/risque_marge.joblib`
+  (gitignoré, absent d'un checkout neuf) et vérification live des 5 pages de
+  la plateforme via `AppTest` de Streamlit — les chiffres cités dans le
+  chapitre (147 opérations, 10/2/56 alertes, 111/4/12 positions de prix,
+  421 lots en stock) proviennent de cette exécution réelle, pas d'une
+  recopie du journal.
+- Découverte : le rapport de vitesse pandas/Spark du notebook 01 varie d'une
+  exécution à l'autre (×58 mesuré cette fois contre ×28 noté à l'étape 6) —
+  corrigé ci-dessus avec les deux valeurs, l'ordre de grandeur et la
+  conclusion restant inchangés.
+- Leçon : le mémoire de mi-parcours (style de référence) mélange le « je »
+  narratif pour le parcours personnel et le « nous » pour la démarche
+  méthodologique — exactement la convention déjà en usage dans les
+  notebooks et `docs/` de ce dépôt, ce qui a servi de second ancrage de
+  style, plus directement pertinent que le seul mémoire de mi-parcours
+  puisque écrit sur ce même projet.
