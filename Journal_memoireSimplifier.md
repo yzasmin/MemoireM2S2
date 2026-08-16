@@ -86,3 +86,31 @@ une réserve documentaire levée ci-dessous.**
   chiffres de la plateforme (147 / 68 / 10 / 2 / 421 / 4,8 / 3,11 %) sont
   reproduits indépendamment depuis la base et le modèle sérialisé — ils ne
   sont pas seulement lus sur la capture d'écran.
+
+## Recadrage final : mémoire académique proportionné
+
+**Résumé : retour du commanditaire — le chapitre reste académique, mais il
+ne doit jamais dire au jury « le projet contient plus que nécessaire »,
+d'autant que le jury n'aura ni notebooks ni données ; le texte est
+recadré pour présenter chaque méthode comme un choix motivé par le
+problème.**
+
+- Supprimé : le cadrage introductif « le dépôt contient davantage, ce
+  chapitre trie » (auto-accusation de sur-complexité) ; la mention du
+  perceptron multicouche et le mot « tournoi » (la comparaison de
+  classifieurs devient une phrase sobre : quatre classifieurs confrontés,
+  écarts non significatifs à n = 123, choix de la forêt) ; les renvois
+  « (notebook 0X) » dans les légendes de figures (invérifiables par le
+  jury) ; « chaque chiffre correspond à une cellule exécutée » (remplacé
+  par l'argument de reproductibilité de bout en bout).
+- Conservé : tout le contenu chiffré déjà vérifié (aucun chiffre modifié),
+  le registre académique (modèle à effets aléatoires, validation croisée,
+  F1, régression hédonique), les conclusions négatives présentées comme
+  des résultats de démarche (Spark inadapté à la volumétrie, effet taux
+  non identifiable sur la série agrégée, élasticité interne non
+  significative) — ce sont elles qui montrent le discernement, sans
+  jamais avouer un travail excédentaire.
+- Rendus régénérés : .docx (9 images, 17 titres conformes) et .pdf (12
+  pages) ; vérification automatique de la purge des vestiges
+  (« perceptron », « tournoi », « démonstration académique »,
+  « notebook 0X ») et de la présence des chiffres clés.

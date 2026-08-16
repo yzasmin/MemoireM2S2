@@ -11,21 +11,20 @@ output:
 
 > **Note de rédaction.** Ce chapitre a été préparé avec l'aide d'un
 > assistant : c'est une base de travail factuelle, à reformuler avant
-> intégration au mémoire. Tous les chiffres proviennent des notebooks
-> exécutés du dépôt `MemoireM2S2` (branche principale).
+> intégration au mémoire. Tous les chiffres proviennent des analyses
+> exécutées du projet (dépôt `MemoireM2S2`) — cet encadré est à retirer
+> lors de l'intégration.
 
 Ce chapitre présente le projet Data Science annoncé dans mon mémoire de
 mi-parcours : le « Copilote Financier », un outil d'aide à la décision
-construit sur les données de gestion du groupe Angelotti. Le dépôt du
-projet contient davantage que ce qui est raconté ici : sept notebooks y
-déroulent, pour les besoins de la validation académique, l'ensemble des
-méthodes du Master, y compris des vérifications d'implémentation et des
-comparaisons de modèles sans enjeu décisionnel. Ce chapitre fait un choix
-assumé : raconter le travail qui sert la décision de l'entreprise, et
-réduire le reste à ce qu'il est — des garde-fous. Le fil conducteur du
-projet tient en une phrase : sur un jeu de données de cette taille, un
-petit nombre de modèles simples et bien compris vaut mieux qu'un grand
-appareillage, et le projet en apporte plusieurs preuves chiffrées.
+construit sur les données de gestion du groupe Angelotti pour sa direction
+financière. La démarche suit un principe directeur que la taille des
+données impose : 267 opérations et 32 Mo d'exports appellent un petit
+nombre de méthodes simples, choisies chacune pour une question précise et
+validées rigoureusement — pas un empilement de modèles. Le chapitre
+déroule cette démarche : cadrage du besoin, constitution d'une base de
+données fiable, puis trois axes de modélisation et leur restitution dans
+une application destinée aux contrôleurs de gestion.
 
 # Contexte
 
@@ -138,10 +137,10 @@ Trois vues SQL y encapsulent les calculs partagés : marge budgétée contre
 engagée par opération, réservations par opération et par mois, état du
 stock. C'est un choix structurant : la définition de la marge est écrite
 une seule fois, et les notebooks comme la plateforme consomment la même.
-La commande `python src/base_sql.py` reconstruit l'ensemble en quelques
-secondes ; les notebooks sont générés et ré-exécutés de bout en bout par
-des scripts versionnés, de sorte que chaque chiffre de ce chapitre
-correspond à une cellule réellement exécutée.
+Une seule commande reconstruit l'ensemble depuis les exports bruts en
+quelques secondes, et l'analyse complète est versionnée et ré-exécutable
+de bout en bout : tous les résultats présentés dans ce chapitre sont
+reproductibles.
 
 # Notebooks et résultats
 
@@ -156,7 +155,7 @@ proche d'une loi normale après passage au logarithme (asymétrie 0,39,
 diagramme quantile-quantile presque rectiligne, Figure 1). L'axe C
 modélisera donc le logarithme du prix.
 
-![Figure 1 — Prix au m² des appartements : distribution brute et après transformation logarithmique (notebook 00).](figures/fig01_distribution_prix_m2.png)
+![Figure 1 — Prix au m² des appartements : distribution brute et après transformation logarithmique.](figures/fig01_distribution_prix_m2.png)
 
 Le second est une leçon de méthode qui a évité une conclusion fausse. La
 corrélation entre les réservations mensuelles du groupe et le taux des
@@ -169,7 +168,7 @@ actives, les réservations racontent l'inverse (Figure 2) : la corrélation
 passe à -0,34 avec le taux et +0,44 avec la confiance des ménages. Tout
 l'axe B repose sur cette correction.
 
-![Figure 2 — Intensité de vente (réservations par opération active) : l'effet de la remontée des taux apparaît une fois l'effet portefeuille neutralisé (notebook 00).](figures/fig02_intensite_vente.png)
+![Figure 2 — Intensité de vente (réservations par opération active) : l'effet de la remontée des taux apparaît une fois l'effet portefeuille neutralisé.](figures/fig02_intensite_vente.png)
 
 ## SQL et Spark
 
@@ -178,15 +177,16 @@ vues métier partagées, les index, et un contrôle croisé des agrégats qui
 retrouve les mêmes totaux par deux moteurs indépendants (1 561,8 M€ de
 dépenses budgétées, 1 754,8 M€ de recettes, à l'arrondi près).
 
-Spark a été évalué comme piste de montée en charge, avec une conclusion
-négative assumée : sur notre volumétrie (64 788 lignes, 9 Mo en mémoire),
-l'agrégation chronométrée est environ cinquante fois plus lente qu'avec
-pandas (rapport mesuré de 58, après 24 secondes de démarrage de la machine
-virtuelle Java ; une exécution antérieure donnait 28 — le chiffre varie
-avec la machine, la conclusion non). SQLite et pandas sont la bonne
-architecture à cette échelle ; le chemin de montée en charge existe si le
-périmètre s'étendait un jour au groupe Nexity entier, et c'est tout ce
-qu'il fallait établir.
+Spark a été évalué comme piste de montée en charge, l'entreprise
+appartenant à un groupe dont le périmètre de données dépasse largement le
+sien. Le test est concluant par la négative : sur notre volumétrie
+(64 788 lignes, 9 Mo en mémoire), l'agrégation chronométrée est environ
+cinquante fois plus lente qu'avec pandas (rapport mesuré de 58, après 24
+secondes de démarrage de la machine virtuelle Java ; une exécution
+antérieure donnait 28 — le chiffre varie avec la machine, la conclusion
+non). SQLite et pandas constituent donc la bonne architecture à cette
+échelle, et le chemin de montée en charge est identifié si le périmètre
+s'étendait un jour au groupe Nexity.
 
 ## Axe A
 
@@ -207,7 +207,7 @@ de marge budgétée supérieure à 50 k€ — plus d'un tiers des opérations
 dérive matérielle fixé à 2 % de la marge, avec deux cas extrêmes au-delà
 de la moitié de la marge budgétée (Figure 3).
 
-![Figure 3 — Distribution de la variation de marge « committée » sur les 123 opérations du périmètre, et seuil de dérive matérielle à -2 % (notebook 03).](figures/fig05_distribution_variation_marge.png)
+![Figure 3 — Distribution de la variation de marge « committée » sur les 123 opérations du périmètre, et seuil de dérive matérielle à -2 %.](figures/fig05_distribution_variation_marge.png)
 
 Il faut le dire simplement : la partie la plus utile de cet axe pour
 l'entreprise n'est pas un modèle appris, c'est le **tableau descriptif des
@@ -219,16 +219,13 @@ test — résultat modeste et honnête, la structure du budget initial
 prédispose à la dérive mais ne la détermine pas, l'aléa de chantier fait
 le reste — et une classification des opérations « à risque » (dérive
 au-delà de 2 %) atteint un F1 de l'ordre de 0,30 à 0,34 en validation
-croisée selon le modèle (régression logistique 0,28, SVM 0,30, arbre
-0,34, forêt aléatoire 0,31), contre 0 pour la base de référence qui ne
-détecte rien. À 123 observations, ces écarts entre modèles sont dans le
-bruit de la validation croisée : j'ai retenu un modèle interprétable (la
-forêt, dont les probabilités alimentent les niveaux d'alerte), sans
-prétendre que le tournoi de modèles départageait quoi que ce soit — un
-perceptron multicouche testé en contrôle confirme d'ailleurs le
-sur-ajustement attendu à cette taille (F1 de 0,91 en apprentissage contre
-0,26 en validation). Le système est un outil de hiérarchisation de
-l'attention, pas un oracle.
+croisée stratifiée, contre 0 pour la référence majoritaire qui ne détecte
+rien. Quatre classifieurs classiques ont été confrontés (régression
+logistique, séparateur à vaste marge, arbre de décision, forêt
+aléatoire) ; à 123 observations, leurs écarts de performance ne sont pas
+significatifs, et le choix s'est porté sur la forêt aléatoire, dont les
+probabilités alimentent les niveaux d'alerte de la plateforme. Le système
+est un outil de hiérarchisation de l'attention, pas un oracle.
 
 ## Axe B
 
@@ -262,7 +259,7 @@ rythme. Sur cette base (Figure 4), une détente à 2,5 % fin 2026
 redonnerait environ +6 % de rythme en moyenne sur douze mois ; une
 remontée à 3,5 % en retirerait 3 %.
 
-![Figure 4 — Prévision d'intensité de vente à douze mois sous trois scénarios de taux 2026, avec intervalle à 80 % (notebook 04).](figures/fig07_scenarios_taux_2026.png)
+![Figure 4 — Prévision d'intensité de vente à douze mois sous trois scénarios de taux 2026, avec intervalle à 80 %.](figures/fig07_scenarios_taux_2026.png)
 
 Enfin, à l'échelle d'un programme, la courbe des réservations cumulées
 suit une forme en S ajustée par une fonction logistique à trois
@@ -273,7 +270,7 @@ médiane proche de vingt mois. Sa limite est connue et vérifiée : en début
 de commercialisation, le potentiel n'est pas identifiable, l'outil n'est
 donc proposé que sur les programmes avancés.
 
-![Figure 5 — Réservations cumulées et courbes logistiques ajustées sur quatre opérations terminées, avec le repère des 90 % du potentiel (notebook 04).](figures/fig08_courbes_ecoulement.png)
+![Figure 5 — Réservations cumulées et courbes logistiques ajustées sur quatre opérations terminées, avec le repère des 90 % du potentiel.](figures/fig08_courbes_ecoulement.png)
 
 ## Axe C
 
@@ -292,13 +289,13 @@ cohérence avec l'axe B. Une variante régularisée a été testée sans gain :
 avec cinq mille observations pour une trentaine de coefficients, il n'y
 avait rien à stabiliser.
 
-![Figure 6 — Effet millésime du modèle de prix (prime par année de réservation, référence 2016) (notebook 05).](figures/fig09_effet_millesime.png)
+![Figure 6 — Effet millésime du modèle de prix (prime par année de réservation, référence 2016).](figures/fig09_effet_millesime.png)
 
 Appliqué aux 127 appartements en stock, le modèle sert de détecteur : 103
 sont dans le marché, 8 au-dessus et 16 en dessous du prix estimé, au seuil
 d'une erreur type (Figure 7).
 
-![Figure 7 — Stock d'appartements : prix grille contre prix de marché estimé, bande à plus ou moins une erreur type (notebook 05).](figures/fig10_stock_grille_vs_marche.png)
+![Figure 7 — Stock d'appartements : prix grille contre prix de marché estimé, bande à plus ou moins une erreur type.](figures/fig10_stock_grille_vs_marche.png)
 
 La recommandation de remise est ensuite posée comme une petite
 optimisation sous contrainte : maximiser le revenu attendu à douze mois
@@ -393,6 +390,6 @@ laquelle la plateforme présente des scénarios plutôt qu'une prévision
 unique ; le texte des commentaires est un signal d'appoint, pas un
 prédicteur. Enfin, la plateforme couvre la promotion (147 opérations) et
 exclut l'aménagement foncier, dont la logique économique justifierait un
-traitement dédié ; les notebooks conservent les 267 opérations, et la
+traitement dédié ; l'analyse, elle, couvre les 267 opérations, et la
 frontière entre les deux activités y ressort d'ailleurs d'elle-même dès
 l'analyse exploratoire — validation involontaire du choix de périmètre.
