@@ -56,3 +56,33 @@ détail, l'appareillage académique en une phrase quand il est mentionné).**
 
 **Résumé : .docx via pandoc (comme la version précédente) et .pdf via
 pandoc + pdflatex (texlive minimal installé dans l'environnement).**
+
+## Vérification finale en contexte neuf
+
+**Résumé : PASS sur les 5 points (sommaire strict, ~45 chiffres tous
+conformes, pertinence éditoriale, 9 figures, rendus .docx et .pdf), avec
+une réserve documentaire levée ci-dessous.**
+
+- Seule réserve : « 118 opérations jointes, écart médian nul » (la
+  réconciliation Budget & EFR / LIVE) n'était tracé dans aucune cellule
+  exécutée — le vérificateur, avec d'autres clés de jointure, obtenait 80
+  ou 173. La clé correcte est l'ancien code d'opération (`GR_xxx`) :
+  `Code Operation old` côté Budget & EFR contre `BUDGET_CODE_OPERATION`
+  côté LIVE, en comparant la somme des dépenses budgétées HT (niveau 0
+  « Dépenses » côté LIVE). Ré-exécuté ce jour :
+  **118 opérations jointes, écart relatif médian 0,0, 118/118 sous 1 %.**
+  À savoir refaire à l'oral :
+
+  ```python
+  efr = budget_efr[budget_efr["Depenses / Recettes"] == "Dépenses"] \
+        .groupby("Code Operation old")["Budget HT"].sum()
+  liv = live[(live.BUDGET_NIVEAU == 0)
+             & (live.BUDGET_LIBELLE_POSTE == "Dépenses")] \
+        .groupby("BUDGET_CODE_OPERATION")["BUDGET_MONTANT_HT"].sum()
+  cmp = pd.concat([efr, liv], axis=1, keys=["efr", "live"]).dropna()
+  # -> 118 lignes ; (efr - live).abs() : médiane nulle
+  ```
+- Autre point utile pour l'oral, confirmé par le vérificateur : les
+  chiffres de la plateforme (147 / 68 / 10 / 2 / 421 / 4,8 / 3,11 %) sont
+  reproduits indépendamment depuis la base et le modèle sérialisé — ils ne
+  sont pas seulement lus sur la capture d'écran.
