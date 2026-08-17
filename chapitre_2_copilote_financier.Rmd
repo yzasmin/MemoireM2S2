@@ -376,8 +376,7 @@ la médiane est proche de vingt mois.
 
 La limite de cet indicateur est connue et vérifiée : en début de commercialisation, le
 potentiel n'est pas identifiable, l'ajustement pouvant alors produire n'importe quelle
-valeur. L'outil n'est donc proposé que sur les programmes suffisamment avancés, restriction
-que j'ai codée dans la plateforme plutôt que laissée à l'appréciation de l'utilisateur.
+valeur. L'outil n'est donc proposé que sur les programmes suffisamment avancés.
 
 ### Axe C
 
@@ -437,8 +436,7 @@ Trois constats simples, obtenus avec des moyens simples, complètent le disposit
 Le premier est un moteur de recherche par similarité, construit sur les 9 688 commentaires
 libres de vente. Une requête formulée en langage courant, comme « refus de prêt banque » ou
 « remise prix hors pack », remonte les dossiers concernés. C'est un outil d'audit des
-remises non structurées réellement utilisable, dans un contexte où ces remises ne font
-l'objet d'aucun champ dédié.
+remises non structurées réellement utilisable.
 
 Le deuxième porte sur les motifs de désistement, analysés par agence. Le profil obtenu
 révèle un problème de qualité de saisie plus qu'un fait commercial : à Salon-de-Provence,

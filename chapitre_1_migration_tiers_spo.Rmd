@@ -240,8 +240,8 @@ Ce dernier point mérite d'être souligné, parce qu'il illustre le genre de dé
 de la réussite d'une reprise. Rien ne garantit que l'ordre des deux conjoints soit le même
 dans Vadimm et dans SPO : un couple saisi manuellement peut très bien y figurer avec le
 conjoint en premier. Une recherche qui ne testerait qu'un seul sens laisserait donc passer
-une partie des doublons, et ces doublons seraient créés en double sans que personne s'en
-aperçoive avant longtemps. Tester les deux sens double la longueur de la formule, mais
+une partie des doublons, et les tiers concernés seraient créés une seconde fois sans que
+personne s'en aperçoive avant longtemps. Tester les deux sens allonge la formule, mais
 supprime entièrement ce risque.
 
 Lorsque l'une de ces trois formules renvoie un code tiers de SPO, du type `T00012666`, la
