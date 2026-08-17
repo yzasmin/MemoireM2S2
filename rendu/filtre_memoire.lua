@@ -24,8 +24,23 @@ local function numeroter_pour_word(doc)
     decalage = tonumber(pandoc.utils.stringify(doc.meta.chapoffset)) or 0
   end
   local compteurs = { 0, 0, 0, 0, 0 }
+  local numero_figure = 0
 
   return doc:walk({
+    -- Word ne numérote pas les figures : la légende « Figure X.Y – Titre »
+    -- est donc composée ici, comme le fait \caption en LaTeX.
+    Figure = function(el)
+      numero_figure = numero_figure + 1
+      local etiquette = string.format('Figure %d.%d – ', decalage + 1, numero_figure)
+      if el.caption and el.caption.long and #el.caption.long > 0 then
+        local premier = el.caption.long[1]
+        if premier.content then
+          table.insert(premier.content, 1, pandoc.Str(etiquette))
+        end
+      end
+      return el
+    end,
+
     Header = function(el)
       if el.classes:includes('unnumbered') then return nil end
       compteurs[el.level] = compteurs[el.level] + 1
