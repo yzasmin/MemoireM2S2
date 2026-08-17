@@ -3,6 +3,20 @@ title: "Le Copilote Financier"
 author: "Yasmina Saoud"
 date: ""
 lang: fr
+output:
+  pdf_document:
+    template: rendu/template_memoire.tex
+    latex_engine: pdflatex
+    number_sections: true
+    fig_caption: true
+    pandoc_args:
+      - --lua-filter=rendu/filtre_memoire.lua
+      - --top-level-division=chapter
+  word_document:
+    fig_caption: true
+    pandoc_args:
+      - --lua-filter=rendu/filtre_memoire.lua
+      - --top-level-division=chapter
 chapoffset: 1
 ---
 
