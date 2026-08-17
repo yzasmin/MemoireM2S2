@@ -414,8 +414,8 @@ qu'il s'agissait de sociétés, et un troisième comme personne physique alors q
 s'agissait d'un couple mal saisi. J'ai modifié manuellement leur nature dans la feuille
 pivot avant génération des fichiers, ce qui a suffi à ce qu'ils soient créés correctement,
 puisque la nature commande à la fois la clé d'unicité et la feuille de sortie qui les
-reçoit. L'un de ces trois cas était en réalité déjà créé dans SPO par un autre canal, et il
-a donc été retiré du fichier d'import.
+reçoit. L'un d'eux, en revanche, était déjà créé dans SPO par un autre canal : il a été
+retiré du fichier d'import plutôt que reclassé.
 
 **Les exclusions ponctuelles :** Un tiers relevant d'une opération de dation, c'est-à-dire
 d'un paiement en biens plutôt qu'en numéraire, existait déjà dans SPO et a été retiré du
