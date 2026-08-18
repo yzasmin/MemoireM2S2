@@ -272,11 +272,10 @@ axes A, B et C disent ce que chaque axe traite, la table des figures est appelé
 sommaire général et le glossaire a été complété de DirectAPI, EFR, Grimmo et MyReport.
 
 **Ce qui a été étoffé.** Le chapitre 2 était le plus court des cinq chapitres de mission
-alors qu'il porte la mission la plus longue. Environ cinq cents mots y ont été ajoutés sur
-deux points déjà présents dans le mémoire de mi-parcours mais traités en une phrase : ce que
-recouvre exactement l'étape de transformation et de mapping, et ce que contient la
-documentation interne que j'ai rédigée. Aucun fait nouveau n'y a été introduit ; c'est le
-développement de faits déjà énoncés par la source.
+alors qu'il porte la mission la plus longue. Il a été développé sur deux points déjà présents
+dans le mémoire de mi-parcours mais traités en une phrase : ce que recouvre l'étape de
+transformation et de mapping, et ce que contient la documentation interne que j'ai rédigée.
+Le développement a d'abord été trop loin, et a été repris ; voir la section 9.
 
 **Les trois remarques écartées, et pourquoi.**
 
@@ -302,3 +301,62 @@ fait douter du chiffre qu'il porte, alors même que le chiffre est juste. La sec
 les formulations absolues sont le point faible d'un mémoire technique. « Sans aucun
 doublon » est invérifiable et donc attaquable ; « sans doublon détecté par les trois clés
 d'unicité retenues » dit exactement ce qui a été fait, et se défend.
+
+
+---
+
+## 9. La leçon la plus importante de cette relecture
+
+**Résumé en une ligne.** Une seconde vérification, par un relecteur à contexte neuf qui
+n'avait participé ni à la rédaction ni au premier audit, a trouvé que le développement ajouté
+au chapitre 2 contenait quatre affirmations qu'aucune de mes sources ne porte. Elles ont été
+supprimées. C'est le point de ce dossier que je dois retenir avant tous les autres.
+
+**Ce qui s'était passé.** En étoffant le chapitre 2, l'écriture est passée sans prévenir du
+développement d'un fait établi à l'invention d'un fait vraisemblable. La frontière est plus
+ténue qu'elle n'en a l'air, et voici les quatre cas, parce qu'ils sont instructifs pris
+ensemble :
+
+1. **Une anecdote datée.** « J'avais constaté que je redécouvrais deux fois la même
+   contrainte, à quelques jours d'intervalle. » Aucune source ne dit cela. C'était une raison
+   plausible d'avoir rédigé la documentation interne, pas une raison attestée.
+2. **Une procédure inventée.** Les fichiers de mapping constitués « relevaient d'un arbitrage,
+   tranché avec les services concernés puis consigné ». La note dit seulement que j'ai
+   constitué ces fichiers.
+3. **Une scène avec un personnage.** « La responsable concernée pouvait ouvrir la maquette,
+   voir la formule et pointer la ligne fautive. » Personne n'apparaît nulle part dans les
+   sources à cet endroit.
+4. **Un durcissement technique.** « Un libellé de poste budgétaire, un type de tranche, une
+   nature d'opération y sont des valeurs contrôlées. » Le mi-parcours parle d'une
+   « nomenclature stricte », ce qui n'établit pas que ces trois champs précis soient des
+   listes fermées.
+
+Les quatre ont un trait commun : elles rendaient le texte plus vivant. C'est exactement ce
+qui les rendait dangereuses, parce qu'un détail concret est plus crédible qu'une
+généralité — et donc plus coûteux si le jury le vérifie.
+
+**Ce qui a été fait.** Les quatre passages sont supprimés ou ramenés à ce que les sources
+établissent. Le chapitre 2 gagne désormais environ quatre cents mots au lieu des cinq cent
+cinquante annoncés dans l'entrée précédente, et l'audit demandait six à huit cents. J'assume
+l'écart : mieux vaut un chapitre plus court que défendable seulement à moitié.
+
+**La règle que j'en tire, pour la suite.** Avant d'écrire une phrase qui fait image — une
+date, un nom, une réaction, un chiffre —, vérifier qu'elle figure quelque part dans une
+source, et pas seulement qu'elle est vraisemblable. Si elle est vraie mais non écrite, elle
+peut être dite au moment de la soutenance, où l'on répond de sa propre mémoire ; elle n'a pas
+sa place dans un manuscrit qui doit être vérifiable ligne à ligne.
+
+**Autres corrections issues de cette relecture.** Le tableau consolidé du chapitre 6
+contredisait la réserve « hors budgets détaillés » posée aux chapitres 1 et 2. La
+concordance des temps de la section 4.1.3 était restée incomplète sur les deux verbes que le
+premier audit nommait pourtant. La description de la figure 1.1 parlait de trois boîtes là où
+le schéma refait en porte quatre. La phrase sur les adresses étrangères répartissait trois
+tiers entre deux pays quand la note n'en documente qu'un par pays. Le glossaire n'était plus
+alphabétique après l'ajout de Grimmo et de MyReport. La référence [1] n'était appelée nulle
+part ; elle l'est désormais au chapitre 7, où elle sert. Enfin, le séparateur des titres
+d'axes a été ramené au deux-points employé partout ailleurs dans le mémoire.
+
+**Ce que le relecteur a laissé passer et que j'ai vérifié moi-même** : la table des matières
+n'est pas décalée, les sept encadrés « Sommaire » correspondent aux titres réels, les
+volumétries se recoupent d'un chapitre à l'autre, et les vingt-et-une figures sont toutes
+appelées et légendées, en PDF comme en Word.

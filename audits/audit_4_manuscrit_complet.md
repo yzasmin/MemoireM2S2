@@ -14,33 +14,39 @@ enseignements est en section 8 de `Notes_synthese2.md`.
 | Réf. | Objet | Ce qui a été fait |
 |:---|:---|:---|
 | D2 | Projet professionnel absent | Le bloc « À compléter » de la §7.4.1 est remplacé par deux paragraphes rédigés : court terme dans le groupe sur le périmètre données et SI, moyen terme vers un poste d'ingénieure données orienté aide à la décision. |
-| D3 | Bibliographie sans appel dans le texte | Bibliographie ramenée à six références, chacune appelée à l'endroit où elle sert. |
+| D3 | Bibliographie sans appel dans le texte | Bibliographie ramenée à six références. Cinq ont été appelées ; la sixième, la fiche métier [1], ne l'a été qu'à la passe suivante, au chapitre 7. |
 | D4 | Contradiction sur les tranches commerciales | Levée : le chapitre 2 et le chapitre 3 disent désormais la même chose. |
 | D5 | Figure 2.3 tronquée à droite | Régénérée avec des boîtes plus étroites et des écarts réduits. |
-| D6 | Sur-affirmations | Ramenées à ce que les sources établissent. |
-| D7 | Titres « Axe A / B / C » muets ; §5.7 redondante avec la transition | Sous-titres explicites ajoutés aux trois axes ; la page de transition ne reprend plus le récapitulatif que la conclusion venait de faire. La promotion du niveau 4 en 5.1.2 n'a **pas** été appliquée (voir « Écartées »). |
+| D6 | Sur-affirmations | Trois des quatre ramenées à ce que les sources établissent. La quatrième, le tableau consolidé du chapitre 6, a été corrigée à la passe suivante. |
+| D7 | Sept retitrages du chapitre 5 | Sous-titres explicites ajoutés aux trois axes ; la page de transition ne reprend plus le récapitulatif que la conclusion venait de faire. **Les cinq autres sous-points — promotion du niveau 4, titre du chapitre, titres 5.4 et 5.5, suppression de la section numérotée 5.7 — n'ont pas été appliqués** : voir « Écartées ». |
 | D8 | Figure 5.2 ne montre pas ce que le texte lui prête | La phrase d'appel a été réécrite pour dire ce que la figure montre réellement. |
 | D9 | 283 / 267 jamais réconciliés | Deux phrases d'ouverture en §5.2.1 expliquent que ce ne sont pas les mêmes ensembles, ni les mêmes dates. |
 | D10 | Mojibake dans la référence [2] | URL remplacée par sa forme encodée. |
-| D11 | Concordance des temps rompue §4.1.3 | Paragraphe repassé à l'imparfait, sauf les énoncés de règle. |
+| D11 | Concordance des temps rompue §4.1.3 | Trois verbes sur quatre repassés à l'imparfait ; les deux derniers, « doit » et « attribue », l'ont été à la passe suivante. |
 | D12 | Gabarit « Néanmoins… Cependant » | Connecteurs variés ; il ne reste que deux « Néanmoins » dans tout le manuscrit. |
-| D13 | Chapitre 2 trop court au regard de la mission | Environ cinq cents mots ajoutés sur l'étape de transformation et de mapping et sur la documentation interne, sans aucun fait nouveau. |
+| D13 | Chapitre 2 trop court au regard de la mission | Développé sur l'étape de transformation et de mapping et sur la documentation interne. **Quatre affirmations non sourcées s'y étaient glissées** ; elles ont été retirées à la passe suivante, ce qui ramène le gain à environ quatre cents mots. |
 | D14 | Deux tableaux mal mis en page | Le tableau des volumes du chapitre 3 ne se brise plus sur « 872 requêtes » ; celui des quatre exports du chapitre 5 tient sur une page. |
-| D15 | Glossaire incomplet | DirectAPI, EFR, Grimmo et MyReport ajoutés ; « GR Immo » corrigé en « Grimmo ». La suppression du mot « dashboard » n'a **pas** été appliquée (voir « Écartées »). |
+| D15 | Glossaire incomplet | DirectAPI, EFR, Grimmo et MyReport ajoutés, puis reclassés dans l'ordre alphabétique à la passe suivante, avec une entrée *Dashboard*. La suppression du mot « dashboard » du titre 5.1.2 n'a **pas** été appliquée (voir « Écartées »). |
 | D16 | Table des figures absente du sommaire général | `\addcontentsline` ajouté avant `\listoffigures`. |
 | D17 | Capitalisation flottante des objets SPO | Unifiée en minuscules au chapitre 2. |
-| D18 | Confidentialité des figures 2.1, 5.8 et 5.9 | Consigné comme point à faire valider par la tutrice en entreprise avant dépôt, avec l'option de floutage. Aucune modification unilatérale : ce n'est pas ma décision. |
+| D18 | Confidentialité des figures 2.1, 5.8 et 5.9 | **Non appliqué au document, consigné seulement.** Les figures sont inchangées ; le point est à faire valider par la tutrice en entreprise avant dépôt, avec l'option de floutage. Ce n'est pas une décision qui pouvait être prise ici. |
 | D19 | Résumé et page de titre | Phrase sur le chapitre 6 ajoutée, « sans aucun doublon » remplacé, mois de soutenance porté sur la page de titre. |
 | D20 | « la manière la plus optimale » | Remplacé par « la plus efficace ». |
 | D21 | « au niveau de sophistication » | Remplacé par « au degré de sophistication ». |
 | D22 | « sur deux cents, les messages se mélangent » | Remplacé par « sur plusieurs dizaines » : le lot de 200 relève de la reprise des tiers. |
 | D23 | Arborescence SPO énumérée de façon incomplète | « notamment » ajouté, liste complétée. |
 | D24 | Les 56 opérations conformes non données | Données, pour que le lecteur recompose les 68. |
-| D25 | Écart 1 557 / 1 602 | Consigné en section 6 de `Notes_synthese2.md`, avec la lecture retenue et sa justification. |
+| D25 | Écart 1 557 / 1 602 | Consigné en section 6 de `Notes_synthese2.md`. **Le document lui-même ne le signalait pas** ; la note demandée a été ajoutée au chapitre 3 dans la passe suivante, voir `audit_5_verification_conformite.md`. |
 | D26 | « Quelques acquéreurs résidaient hors de France » | Remplacé par le décompte explicite de la note de synthèse, « trois tiers ». L'écart entre cet énoncé et le tableau de détail de la note, qui n'en documente que deux, est consigné. |
 | D27 | « committée » non glosé | Le terme est défini au point où il apparaît dans le texte, et non plus seulement en légende. |
 | D28 | Guillemet ouvrant orphelin en fin de ligne | Corrigé, et généralisé : les 74 espaces intérieures de guillemets du manuscrit sont désormais insécables. |
 | D29 | Fig. 1.1 sans la quatrième couche | Le schéma porte désormais une bande « Les tableurs, quatrième couche du système », rattachée aux trois outils par des traits pointillés, et le texte la commente. |
+
+> **Avertissement.** Une vérification de conformité, menée par un second relecteur à contexte
+> neuf, a établi que ce tableau surestimait ce qui avait été fait : cinq lignes annonçaient
+> comme appliquées des remarques qui ne l'étaient que partiellement (D3, D6, D7, D11), et deux
+> (D18, D25) n'avaient produit aucune modification du document. Les lignes concernées ont été
+> rectifiées ci-dessus, et la suite complète est dans `audit_5_verification_conformite.md`.
 
 ## Écartées, et pourquoi
 
