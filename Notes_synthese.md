@@ -320,7 +320,19 @@ chapitre, et je consigne ici ce qu'il faudrait vérifier.
    conclusion annonce la reprise des historiques budgétaires comme un chantier à venir. Le
    chapitre 1 ne mentionne donc plus que les opérations et leurs tranches.
 
-### 4.2 Entre le brouillon du chapitre 2 et le dépôt
+### 4.2 Entre les deux chapitres
+
+**283 au chapitre 1, 267 au chapitre 2.** Ce ne sont pas les mêmes ensembles : 283 est le
+nombre d'opérations du périmètre de migration vers SPO, repris du mémoire de mi-parcours,
+tandis que 267 est le nombre d'opérations présentes dans l'export « Budget & EFR » du
+système de gestion, à une autre date et sur un autre périmètre. Aucun des deux chapitres
+n'affirme le contraire, et je n'ai rien ajouté pour rapprocher les deux chiffres, faute
+d'une source qui les relie. Un jury peut néanmoins poser la question : la réponse à
+préparer est celle-ci.
+
+---
+
+### 4.3 Entre le brouillon du chapitre 2 et le dépôt
 
 Ces points ont été relevés lors d'un contrôle croisé du brouillon avec les sorties
 réellement exécutées des notebooks. **Aucun n'a été corrigé dans le chapitre** : le
@@ -344,7 +356,7 @@ parce qu'un jury peut les relever.
 | « 3,1 % mi-2026 » | La série de la Banque centrale européenne n'est publiée que jusqu'en avril 2026 dans le dépôt ; les valeurs de mai et juin sont un report de la dernière valeur connue. |
 | Diagnostic du stock : « 103 dans le marché, 8 au-dessus, 16 en dessous » | Conforme au notebook. **Mais la plateforme affiche 111 / 4 / 12**, parce qu'elle ajuste le modèle sur tout le corpus et utilise une bande de ±13,1 % au lieu de ±11,1 %. Si une capture de la page « Pilotage des prix » est ajoutée un jour, les deux chiffrages se contrediront à l'écran. |
 
-### 4.3 Défauts internes aux figures du chapitre 2, non corrigeables sans réexécuter l'analyse
+### 4.4 Défauts internes aux figures du chapitre 2, non corrigeables sans réexécuter l'analyse
 
 Les neuf figures du chapitre 2 sont les sorties exécutées des notebooks : les regénérer
 supposerait de relancer l'analyse, avec un risque de divergence des chiffres. Je les ai donc
@@ -366,7 +378,7 @@ reprises telles quelles, et je note ici ce qu'il faudrait corriger à la prochai
 
 ---
 
-### 4.3 Vérifications qui, elles, sont conformes
+### 4.5 Vérifications qui, elles, sont conformes
 
 Le contrôle croisé a confirmé sans écart : 267 opérations ; 32 Mo d'exports (32,1 Mo
 mesurés) ; 16 467 / 65 000 / 79 106 / 2 164 lignes ; 64 788 + 212 = 65 000 ; 118 opérations
@@ -387,6 +399,38 @@ Les noms employés dans le chapitre sont ceux du dépôt : les cinq pages `Vue d
 `Alertes marge`, `Rythme de vente`, `Pilotage des prix`, `Qualité commerciale`, et les
 trois vues `v_marge_operation`, `v_ecoulement_mensuel`, `v_stock_lots`, dont les
 descriptions du brouillon correspondent exactement et dans le même ordre.
+
+---
+
+## 4bis. Recommandations d'audit écartées, à trancher par moi
+
+**Résumé en une ligne.** Trois recommandations du relecteur d'ensemble touchent au sommaire
+imposé ou aux figures du dépôt : elles sortent de ce que je pouvais décider, et je les
+reporte ici.
+
+1. **Renommer les titres du chapitre 2.** Le relecteur juge qu'ils sont restés en registre
+   de conduite de projet, là où le mémoire de mi-parcours ne nomme jamais un outil dans un
+   titre. Sa table de renommage, à prendre ou à laisser :
+   - 2.1.2 « Objectifs du dashboard » → « Le livrable attendu : une application de pilotage
+     pour la direction financière »
+   - 2.4 « Notebooks et résultats » → « Analyses et résultats »
+   - 2.4.2 « SQL et Spark » → « La base de données partagée et le test de montée en charge »
+   - 2.4.3 « Axe A » → « Axe A : le risque de dérive de marge »
+   - 2.4.4 « Axe B » → « Axe B : le rythme d'écoulement et l'effet du taux »
+   - 2.4.5 « Axe C » → « Axe C : le prix de marché et la règle de remise »
+   - 2.5 « Plateforme Streamlit » → « La plateforme livrée aux contrôleurs de gestion »
+   - 2.1.1.1 à remonter en 2.1.2, pour ramener le plan à trois niveaux.
+
+   Je ne l'ai pas fait : le sommaire du chapitre 2 est imposé, et la consigne demande de le
+   suivre exactement, sans en modifier l'ordre ni la numérotation.
+
+2. **Sortir la conclusion générale de la numérotation**, sous un titre « Conclusion » sans
+   numéro, comme le fait le mémoire de mi-parcours, et laisser en 2.6 le seul bilan de
+   chapitre. Même raison de ne pas l'avoir fait : le sommaire imposé se termine par
+   « 2.7. Conclusion du chapitre et conclusion générale ».
+
+3. **Traduire « dashboard » et « notebooks »**, qui figurent l'un et l'autre dans les titres
+   imposés. Le corps du texte, lui, dit partout « application web » et « plateforme ».
 
 ---
 

@@ -47,8 +47,11 @@ chapoffset: 1
 
 Ce chapitre présente le projet de Data Science que j'annonçais en fin de mémoire de
 mi-parcours : le « Copilote Financier », un outil d'aide à la décision construit sur les
-données de gestion du groupe Angelotti pour sa direction financière. J'y expose d'abord le
-besoin métier tel qu'il m'a été formulé, puis les données dont je disposais réellement,
+données de gestion du groupe Angelotti pour sa direction financière. Le périmètre annoncé
+alors a été redéfini en cours de projet : la prédiction de la marge à terminaison subsiste
+comme premier axe de travail, mais le besoin exprimé par la direction financière l'a
+élargie à deux autres questions, et la restitution a finalement été restreinte à la
+promotion immobilière. J'y expose d'abord le besoin métier tel qu'il m'a été formulé, puis les données dont je disposais réellement,
 l'architecture retenue pour les rendre exploitables, les trois axes d'analyse et leurs
 résultats, la plateforme qui les restitue aux contrôleurs de gestion, et enfin les limites
 que je considère comme faisant partie du livrable.
@@ -70,15 +73,14 @@ reviennent plus chers qu'anticipé, des acquéreurs se désistent, le rythme de 
 ralentit sous l'effet de la conjoncture.
 
 La direction financière suit ces dérives. Néanmoins, elle les suit opération par opération,
-sur tableurs, sans vision transverse. Chaque contrôleur de gestion connaît très bien les
-dossiers dont il a la charge ; personne ne dispose d'une vue d'ensemble permettant de dire,
-à un instant donné, quelles opérations méritent l'attention en priorité. C'est ce manque
+sur tableurs, sans vision transverse. Personne ne dispose d'une vue d'ensemble permettant
+de dire, à un instant donné, quelles opérations méritent l'attention en priorité. C'est ce manque
 qui a motivé le projet.
 
 ### Problème métier
 
-En échangeant avec la direction financière, j'ai identifié trois questions qui structurent
-les revues de gestion et auxquelles les tableurs actuels ne répondent pas.
+Trois questions structurent les revues de gestion, et les tableurs actuels n'y répondent
+pas.
 
 La première porte sur la marge. Quelles opérations examiner en priorité, parce que leur
 marge d'engagement dérive, et sur quels postes cette dérive se joue-t-elle, pour combien
@@ -92,7 +94,8 @@ de refluer vers 3,1 % mi-2026, et le rythme du groupe est tombé d'environ 150 
 115 réservations par mois en 2023. Reste à savoir ce qui, dans cette chute, revient à la
 conjoncture et ce qui revient aux programmes eux-mêmes.
 
-La troisième porte sur le prix. Quels lots du stock faut-il repricer ? La question n'est
+La troisième porte sur le prix. Quels lots du stock faut-il repricer, c'est-à-dire réviser
+à la hausse ou à la baisse ? La question n'est
 pas théorique, puisque 45 % des 2 157 désistements enregistrés ont pour motif un problème
 de financement ou un refus de prêt, et que les remises sont aujourd'hui accordées au cas
 par cas.
@@ -130,7 +133,7 @@ dont on ne saurait pas mesurer la performance réelle.
 
 Le livrable final est une application web destinée à la direction financière, dont la
 fonction est de traduire les modèles en décisions. C'est sur ce point qu'un retour de
-l'entreprise, reçu en cours de projet, a imposé une clarification utile.
+l'entreprise, reçu en cours de projet, nous a imposé une clarification utile.
 
 La première version de l'interface était trop marquée par le vocabulaire de la
 modélisation. Les écrans parlaient de scores, de probabilités et d'intervalles, là où les
@@ -218,7 +221,9 @@ ne pouvant être écrite nulle part, devait être recalculée à chaque généra
 
 Une seule commande reconstruit l'ensemble depuis les exports bruts, en quelques secondes.
 L'analyse complète est versionnée et ré-exécutable de bout en bout, ce qui signifie que
-tous les résultats présentés dans ce chapitre sont reproductibles.
+tous les résultats présentés dans ce chapitre sont reproductibles. Cette contrainte, que je
+me suis imposée avant d'écrire la première ligne d'analyse, est ce qui distingue un travail
+vérifiable d'une suite de manipulations dont personne ne saurait refaire le chemin.
 
 ## Notebooks et résultats
 
@@ -228,8 +233,8 @@ Au-delà du nettoyage décrit en section 2.2, l'exploration a produit deux résu
 directement orienté la modélisation.
 
 Le premier concerne la distribution des prix. Le prix au mètre carré des appartements est
-fortement asymétrique, avec un coefficient d'asymétrie de 19,2, ce qui interdisait
-d'appliquer telle quelle une régression linéaire. Après passage au logarithme, la
+fortement asymétrique, avec un coefficient d'asymétrie de 19,2, ce qui rendait le prix brut
+impropre à une modélisation linéaire directe. Après passage au logarithme, la
 distribution devient proche d'une loi normale : le coefficient d'asymétrie tombe à 0,39 et
 le diagramme quantile-quantile, qui compare la distribution observée à la distribution
 théorique, devient presque rectiligne. La Figure 2.1 rassemble les deux distributions et
@@ -311,12 +316,14 @@ variation atteint un coefficient de détermination de 0,08 sur l'échantillon te
 résultat est modeste, et je le présente tel quel : la structure du budget initial
 prédispose à la dérive mais ne la détermine pas, l'aléa de chantier faisant le reste. Une
 classification des opérations « à risque », c'est-à-dire dont la dérive dépasse 2 %,
-atteint un score F1 de l'ordre de 0,30 à 0,34 en validation croisée stratifiée, c'est-à-dire
+atteint un score F1, qui combine en une seule valeur la capacité à détecter les cas à
+risque et celle à ne pas en signaler à tort, de l'ordre de 0,30 à 0,34 en validation
+croisée stratifiée, c'est-à-dire
 sur des découpages qui conservent la proportion d'opérations à risque, contre 0 pour la
 référence majoritaire, qui ne détecte rien du tout. J'ai confronté quatre
-classifieurs classiques, la régression logistique, le séparateur à vaste marge, l'arbre de
-décision et la forêt aléatoire ; à 123 observations, leurs écarts de performance ne sont
-pas significatifs, et le choix s'est porté sur la forêt aléatoire, dont les probabilités
+classifieurs classiques : la régression logistique, le séparateur à vaste marge, l'arbre de
+décision et la forêt aléatoire. À 123 observations, leurs écarts de performance ne sont pas
+significatifs. Le choix s'est donc porté sur la forêt aléatoire, dont les probabilités
 alimentent les niveaux d'alerte de la plateforme.
 
 Il faut donc lire ce dispositif pour ce qu'il est : un outil de hiérarchisation de
@@ -336,8 +343,9 @@ compter que les mois où quelque chose s'est passé, et donc à surestimer le ry
 
 Un modèle à effets aléatoires sépare alors ce qui revient à l'opération de ce qui revient à
 la conjoncture. Deux enseignements en ressortent. D'une part, les deux tiers de la variance
-tiennent au programme lui-même, avec un coefficient de corrélation intraclasse de 0,66 : la
-localisation, le produit et le prix pèsent davantage que le contexte macroéconomique.
+tiennent au programme lui-même, avec un coefficient de corrélation intraclasse de 0,66 : ce
+qui distingue les programmes entre eux pèse davantage que la conjoncture qui leur est
+commune.
 D'autre part, l'effet du taux d'intérêt est fortement significatif : **une hausse d'un point
 de taux réduit les réservations mensuelles d'environ 19 %**, pour un coefficient de -0,216
 associé à une p-valeur inférieure à 10^-15^. La régression naïve, qui ignore la structure en
@@ -415,7 +423,8 @@ bande de tolérance.
 La recommandation de remise est ensuite posée comme une petite optimisation sous
 contrainte : maximiser le revenu attendu à douze mois d'une opération, en ajustant chaque
 prix dans des bornes commerciales de -10 à +5 %, sous un objectif d'accélération de
-l'écoulement, la demande réagissant au prix avec une élasticité fixée à -1.
+l'écoulement, la demande réagissant au prix avec une élasticité fixée à -1, c'est-à-dire
+une baisse de prix de 1 % qui ferait vendre 1 % de plus.
 
 Ce paramètre d'élasticité est la fragilité assumée de l'axe, et je préfère l'exposer que la
 laisser découvrir. Mon estimation interne donne -0,81, valeur qui a le bon signe mais qui
@@ -485,8 +494,8 @@ d'ajustement recommandée sous un objectif d'accélération choisi au curseur. L
 **Qualité commerciale** reprend les signaux faibles, alerte de saisie comprise.
 
 Chaque page a été vérifiée par le cadre de test de Streamlit, en contrôlant qu'elle
-s'exécute sans exception, y compris aux bornes des curseurs et sur les sélections vides. Et
-l'ensemble se reconstruit depuis les exports bruts, conformément à l'exigence de
+s'exécute sans exception, y compris aux bornes des curseurs et sur les sélections vides,
+et l'ensemble se reconstruit depuis les exports bruts, conformément à l'exigence de
 reproductibilité posée au départ.
 
 ## Périmètre et limites
@@ -518,9 +527,10 @@ Les autres limites sont assumées et documentées :
 
 Enfin, la plateforme couvre la promotion, soit 147 opérations, et exclut l'aménagement
 foncier, dont la logique économique justifierait un traitement dédié. L'analyse, elle,
-couvre bien les 267 opérations. Il est intéressant de noter que la frontière entre les deux
-activités ressort d'elle-même dès l'analyse exploratoire, constituant une validation
-involontaire du choix de périmètre demandé par l'entreprise.
+couvre bien les 267 opérations, périmètre des exports de gestion à la date d'extraction. La
+frontière entre les deux activités ressort d'ailleurs d'elle-même dès l'analyse
+exploratoire, constituant une validation involontaire du choix de périmètre demandé par
+l'entreprise.
 
 ## Conclusion du chapitre et conclusion générale
 
@@ -551,13 +561,14 @@ au chapitre 1. Ce sont des travaux de structure, faits pour rendre possible une
 analyse à venir.
 
 Cette année d'alternance m'aura donc fait parcourir un cycle complet. Le premier semestre a
-été celui de l'ingénierie des données, avec la migration vers SPO, ses dépendances
-hiérarchiques, ses identifiants dynamiques et sa stratégie de déploiement en coquilles
-vides. La reprise des tiers, exposée au chapitre 1, en a été le prolongement direct et,
-d'une certaine manière, l'aboutissement, puisqu'elle a achevé de constituer le socle
-commercial du nouvel outil. Le second semestre a été celui de la valorisation, avec un
-projet de Data Science mené de bout en bout, de la compréhension des exports jusqu'à une
-application destinée à la direction financière.
+été celui de l'ingénierie des données, avec la migration des opérations vers SPO et sa
+stratégie de déploiement en coquilles vides. La reprise des tiers, exposée au chapitre 1,
+l'a prolongée au second semestre : elle a achevé de constituer le socle commercial du
+nouvel outil, et elle a réalisé le chantier d'interopérabilité entre l'ERP et le CRM que
+j'annonçais en fin de mémoire de mi-parcours. Le second semestre aura donc été celui de la
+valorisation autant que celui de l'achèvement du socle, avec un projet de Data Science mené
+de bout en bout, de la compréhension des exports jusqu'à une application destinée à la
+direction financière.
 
 Ce que je retire de ce parcours tient en peu de mots. Un projet de données ne se joue pas
 au moment du choix de l'algorithme mais bien avant, lorsqu'on décide ce qu'est un client,
@@ -568,7 +579,7 @@ par d'autres.
 
 Il reste évidemment beaucoup à faire. La migration vers SPO n'est pas achevée, l'historique
 budgétaire reste à reprendre, et le Copilote Financier ne deviendra un véritable outil de
-suivi que lorsque les exports auront été historisés sur une durée suffisante. Mais les deux
-chantiers avancent désormais dans le même sens, et c'est cette convergence entre la
-structuration technique des données et leur valorisation statistique qui aura constitué le
-fil conducteur de mon année de Master 2.
+suivi que lorsque les exports auront été historisés sur une durée suffisante. Ce que cette
+année aura établi ne dépend pourtant pas de ces échéances : structurer une donnée et la
+modéliser ne sont pas deux métiers successifs, mais deux moments du même travail, et c'est
+le premier qui décide de ce que le second pourra en tirer.

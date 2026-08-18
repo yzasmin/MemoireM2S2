@@ -43,9 +43,10 @@ chapoffset: 0
 :::
 
 Ce chapitre détaille la reprise des tiers, c'est-à-dire des clients acquéreurs, depuis
-notre CRM Vadimm vers le nouvel ERP du groupe, SPO. Cette mission prolonge
-directement le chantier de migration exposé dans mon mémoire de mi-parcours, mais elle en
-change la nature : il ne s'agissait plus d'injecter des structures de gestion, opérations,
+notre CRM Vadimm vers le nouvel ERP du groupe, SPO. Cette mission, conduite au second
+semestre, prolonge directement le chantier de migration exposé dans mon mémoire de
+mi-parcours, et elle répond au chantier d'interopérabilité entre l'ERP et le CRM que j'y
+annonçais. Elle en change toutefois la nature : il ne s'agissait plus d'injecter des structures de gestion, opérations,
 tranches et budgets, mais des personnes, avec ce que cela implique de risques de doublons
 et d'exigence de qualité. J'y expose la conception du fichier de travail que j'ai construit
 pour industrialiser cette reprise, les trois mécanismes algorithmiques sur lesquels il
@@ -73,8 +74,7 @@ la forme de deux extractions complémentaires : celle des ventes enregistrées, 
 qui en porte 1 602. Le périmètre de travail ainsi constitué compte **1 602 lignes**, et
 c'est de ce total que part toute la chaîne de traitement.
 
-La difficulté ne tenait pas au volume, comparable à celui des 283 opérations du périmètre
-de migration engagé au premier semestre. Elle tenait à la nature même de la donnée. Concrètement, une
+La difficulté ne tenait pas au volume. Elle tenait à la nature même de la donnée. Concrètement, une
 ligne de l'extraction Vadimm ne décrit pas un client, elle décrit une vente. Un même
 acquéreur qui a acheté trois lots apparaît donc trois fois, et rien dans le fichier ne le
 signale.
@@ -294,11 +294,11 @@ approximations : ils sont la traduction directe du modèle de données décrit e
 
 ![Les six fichiers d'import produits par la feuille pivot](figures/fig_1_4_volumetrie_fichiers_import.png){width=95%}
 
-**[Emplacement réservé pour une figure — capture d'écran de la feuille `BuilderTiers`,
-montrant côte à côte les colonnes de données reprises et les colonnes calculées : les trois
-rangs de déduplication avec des valeurs 1 et 2 visibles, et une ligne portant un code SPO
-dans les colonnes de rapprochement. À insérer ici, avec renumérotation des figures
-suivantes.]**
+> **À insérer — figure.** Capture d'écran de la feuille `BuilderTiers`, montrant côte à
+> côte les colonnes de données reprises et les colonnes calculées : les trois rangs de
+> déduplication avec des valeurs 1 et 2 visibles, et une ligne portant un code SPO dans les
+> colonnes de rapprochement. Anonymiser les noms d'acquéreurs. Les figures suivantes sont à
+> renuméroter après insertion.
 
 ## De la préparation à l'injection : procédure et contraintes techniques
 
@@ -367,9 +367,8 @@ donnée saisie ailleurs.
 
 La démarche s'est déroulée en trois temps :
 
-1. **Génération des requêtes.** J'ai construit dans le fichier de travail, par formules et
-   sur le même principe de numérotation séquentielle que les feuilles de sortie, le corps
-   de chaque requête à partir des données présentes dans la feuille `Builder coordonnée`.
+1. **Génération des requêtes.** J'ai construit le corps de chaque requête à partir des
+   données présentes dans la feuille `Builder coordonnée`.
 2. **Constitution de la collection.** J'ai regroupé ces requêtes dans une collection
    Postman, l'outil de test et d'exécution de requêtes. La collection compte
    **872 requêtes PATCH**, organisées en cinq lots correspondant aux cinq fichiers d'import
@@ -377,10 +376,10 @@ La démarche s'est déroulée en trois temps :
 3. **Exécution et contrôle.** Les cinq lots ont été exécutés après la création des couples,
    et l'intégralité des 872 requêtes est passée sans erreur.
 
-**[Emplacement réservé pour une figure — capture d'écran de la collection Postman :
-arborescence des cinq lots et vue d'une requête PATCH sur son onglet *Body*, montrant la
-structure JSON Patch. Masquer l'adresse du serveur et les identifiants, comme sur la
-Figure 1.2. À insérer ici, avec renumérotation des figures suivantes.]**
+> **À insérer — figure.** Capture d'écran de la collection Postman : arborescence des cinq
+> lots et vue d'une requête PATCH sur son onglet *Body*, montrant la structure JSON Patch.
+> Masquer l'adresse du serveur et les identifiants, comme sur la Figure 1.2. Les figures
+> suivantes sont à renuméroter après insertion.
 
 Ce contournement m'a appris quelque chose que je n'avais pas formulé aussi clairement
 jusque-là : dans un projet de reprise, la limite d'un format d'import n'est pas
@@ -458,9 +457,9 @@ seuls la contrainte de format qui a imposé le recours à l'API.
 
 ![Répartition des 1 434 tiers créés selon leur nature](figures/fig_1_5_repartition_natures.png){width=92%}
 
-**[Emplacement réservé pour une figure — capture d'écran d'une fiche de couple dans SPO,
-onglet des représentants ouvert, montrant les deux personnes du couple et les coordonnées
-ajoutées par requête PATCH sur l'une d'elles. Anonymiser les noms. À insérer ici.]**
+> **À insérer — figure.** Capture d'écran d'une fiche de couple dans SPO, onglet des
+> représentants ouvert, montrant les deux personnes du couple et les coordonnées ajoutées
+> par requête PATCH sur l'une d'elles. Anonymiser les noms.
 
 Au-delà du résultat, ce projet m'a laissé un ensemble de points de vigilance que j'ai
 documentés et qui valent, je crois, bien au-delà du cas de cet import.
@@ -502,8 +501,7 @@ par un message d'erreur. Elle se manifeste par un compteur qui ne tombe pas just
 pourquoi j'ai ajouté à la feuille pivot un panneau de contrôle affichant en permanence les
 compteurs clés, et pourquoi la procédure impose de les vérifier avant tout export : tout
 écart entre ces compteurs et les valeurs attendues signale un problème à investiguer avant
-d'aller plus loin. Ce panneau est le seul dispositif de détection dont je disposais, et il
-a effectivement révélé plusieurs anomalies que rien d'autre n'aurait signalées.
+d'aller plus loin. Ce panneau est le seul dispositif de détection dont je disposais.
 
 Un dernier point de vigilance relève de la performance. Le fichier comporte environ 60 000
 cellules de formules, rendant le recalcul automatique pénible pendant les phases de
@@ -515,7 +513,8 @@ recommande.
 Cette reprise des tiers achève, pour la partie qui me revenait, le travail de constitution
 du socle de données du nouvel ERP. Après les opérations et leurs tranches migrées au
 premier semestre, les 1 434 clients acquéreurs disposent désormais dans SPO d'une fiche
-unique, correctement typée, dotée de ses coordonnées, de ses représentants et de son rôle.
+unique, correctement typée, dotée de ses représentants, de son rôle et, lorsque la source
+les portait, de ses coordonnées.
 Le référentiel commercial du groupe est reconstitué, et il l'est selon des règles écrites,
 tracées et rejouables plutôt que par une saisie dont personne n'aurait pu, six mois plus
 tard, reconstituer la logique.
@@ -526,20 +525,18 @@ rejoué au moins une fois avant la bascule définitive, à mesure que de nouveau
 créés dans l'ERP par les équipes commerciales. Le référentiel client est en revanche
 stabilisé, et c'est lui qui conditionne la suite.
 
-Ce chapitre aura montré, je l'espère, que la valeur de ce travail ne se mesure pas au
-nombre de lignes importées. Elle tient d'abord au choix des trois clés d'unicité, qui
-décide de ce qu'est un client dans notre référentiel ; ensuite à la capacité à contourner
-une limite de format en changeant de porte d'entrée vers le système ; enfin à la
-documentation des arbitrages, qui rend la reprise vérifiable par quelqu'un d'autre que
-celle qui l'a faite. Ces trois points relèvent de l'ingénierie des données plus que de la
-saisie.
+La valeur de ce travail ne se mesure pas au nombre de lignes importées. Elle tient d'abord
+au choix des trois clés d'unicité, qui décide de ce qu'est un client dans notre référentiel ;
+ensuite à la capacité à contourner une limite de format en changeant de porte d'entrée vers
+le système ; enfin à la documentation des arbitrages, qui rend la reprise vérifiable par
+quelqu'un d'autre que celle qui l'a faite.
 
 Cette étape était aussi un prérequis. Je concluais mon mémoire de mi-parcours en avançant
 que la qualité de l'architecture de données est le socle indispensable de toute
 modélisation, et que le report de mon projet de Data Science au second semestre était moins
 un retard qu'une conséquence logique de cet ordre des choses. Il est temps de le
-démontrer plutôt que de l'affirmer. Le chapitre suivant présente le projet que ce socle a
-rendu possible : le Copilote Financier, un outil d'aide à la décision construit sur les
+démontrer plutôt que de l'affirmer. Le chapitre suivant présente le projet auquel ce
+travail de structure ouvrait la voie : le Copilote Financier, un outil d'aide à la décision construit sur les
 données de gestion du groupe pour sa direction financière. On y verra que les mêmes
 questions reviennent, déplacées d'un cran : comprendre ce que contient réellement un export
 avant de le modéliser, écrire une définition une seule fois pour que tout le monde
