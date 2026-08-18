@@ -75,8 +75,9 @@ adresses postales, courriels et numéros de téléphone.
 
 La difficulté n'était pas la volumétrie, qui reste modeste au regard des 283 opérations
 traitées au premier semestre. Elle tenait à la nature même de la donnée. Concrètement, une
-ligne de l'extraction Vadimm ne décrit pas un client, elle décrit une vente. Un même acquéreur qui a
-acheté trois lots apparaît donc trois fois, et rien dans le fichier ne le signale.
+ligne de l'extraction Vadimm ne décrit pas un client, elle décrit une vente. Un même
+acquéreur qui a acheté trois lots apparaît donc trois fois, et rien dans le fichier ne le
+signale.
 Transformer un fichier de ventes en un référentiel de personnes suppose de reconstituer
 l'identité de chacune, ce que le système source ne faisait pas à ma place.
 
@@ -216,12 +217,12 @@ les occurrences suivantes les rangs 2, 3, et ainsi de suite. Seules les lignes d
 sont retenues pour l'import, les autres étant considérées comme des achats successifs d'un
 client déjà compté. Ce principe de rang présente un avantage sur une déduplication par
 suppression : aucune ligne n'est effacée du fichier de travail. Les doublons restent
-visibles, avec leur rang, ce qui permet à tout moment de vérifier pourquoi une ligne n'a
+visibles, avec leur rang, permettant à tout moment de vérifier pourquoi une ligne n'a
 pas été importée et de remonter à la vente concernée.
 
 Ce choix de trois clés différenciées est, à mes yeux, le véritable cœur méthodologique de
-ce travail. En effet, il traduit une idée simple : la règle d'unicité n'est pas une propriété du
-fichier, c'est une propriété du métier. Chercher une clé universelle aurait conduit soit à
+ce travail. En effet, il traduit une idée simple : la règle d'unicité n'est pas une
+propriété du fichier, c'est une propriété du métier. Chercher une clé universelle aurait conduit soit à
 fusionner des tiers distincts, soit à en dupliquer, et dans les deux cas l'erreur n'aurait
 été découverte que bien plus tard, dans l'usage quotidien de l'ERP.
 
@@ -252,7 +253,7 @@ référentiel client de l'entreprise.
 
 La Figure 1.3 récapitule l'effet cumulé de ces deux premiers mécanismes. Des 1 602 lignes
 brutes issues de Vadimm, la déduplication interne en écarte 128 qui correspondent à des
-achats répétés, ce qui ramène à 1 474 tiers uniques ; l'exclusion des tiers déjà présents
+achats répétés, ramenant le total à 1 474 tiers uniques ; l'exclusion des tiers déjà présents
 dans SPO en retire 40 de plus, pour un total de **1 434 tiers à créer**. Chaque étage de
 ce filtrage correspond à une règle explicite, écrite dans une colonne du fichier, donc
 vérifiable et reproductible.
@@ -471,7 +472,7 @@ silencieusement : modifier une feuille de sortie, dont le contenu est régénér
 recalcul ; insérer une ligne au milieu de la feuille pivot ou de la feuille de coordonnées,
 ce qui décale toutes les références ; et trier la feuille pivot, ce qui détruit la logique
 de rang, celle-ci étant calculée de façon cumulative sur l'ordre des lignes. Aucune de ces
-trois manipulations ne produit de message d'erreur, ce qui les rend d'autant plus
+trois manipulations ne produit de message d'erreur, les rendant d'autant plus
 dangereuses. C'est la raison pour laquelle la note de procédure les mentionne avant même
 d'expliquer comment utiliser le fichier.
 
@@ -483,13 +484,13 @@ formules, et qui ont chacun coûté du temps de recherche avant d'être compris 
    étaient donc systématiquement surévalués, jusqu'à ce que je restreigne le comptage aux
    seules valeurs textuelles réelles.
 2. **Le format des dates.** Le code de mise en forme des mois peut être interprété comme
-   un code de minutes selon le contexte, ce qui produit des clés de déduplication fausses
+   un code de minutes selon le contexte, produisant des clés de déduplication fausses
    sans qu'aucune erreur soit signalée. J'ai remplacé toute mise en forme globale par une
    recomposition explicite de l'année, du mois et du jour.
 3. **Les heures parasites dans les dates de naissance.** Certaines dates issues de
    l'extraction portaient une heure non nulle, d'autres non. Deux dates identiques à
-   l'affichage étaient donc considérées comme différentes par le tableur, ce qui cassait
-   la déduplication des personnes physiques. La normalisation systématique des dates à
+   l'affichage étaient donc considérées comme différentes par le tableur, cassant la
+   déduplication des personnes physiques. La normalisation systématique des dates à
    minuit a réglé le problème.
 4. **La différence entre cellule vide et chaîne vide.** Une cellule contenant une formule
    qui renvoie une chaîne vide n'est pas une cellule vide, et les tests de vacuité ne la
@@ -506,7 +507,7 @@ d'aller plus loin. Ce panneau est le seul dispositif de détection dont je dispo
 a effectivement révélé plusieurs anomalies que rien d'autre n'aurait signalées.
 
 Un dernier point de vigilance relève de la performance. Le fichier comporte environ 60 000
-cellules de formules, ce qui rend le recalcul automatique pénible pendant les phases de
+cellules de formules, rendant le recalcul automatique pénible pendant les phases de
 modification. Basculer en calcul manuel pendant le travail, puis forcer un recalcul complet
 avant chaque export, est la manière de travailler que j'ai retenue et que la procédure
 recommande.

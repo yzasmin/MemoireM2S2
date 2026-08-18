@@ -138,7 +138,7 @@ l'entreprise, reçu en cours de projet, a imposé une clarification utile.
 La première version de l'interface était trop marquée par le vocabulaire de la
 modélisation. Les écrans parlaient de scores, de probabilités et d'intervalles, là où les
 utilisateurs attendaient des niveaux d'alerte, des dépassements en euros et un prix de
-marché estimé. J'ai donc entièrement réécrit l'interface en langage de gestion, et j'en ai
+marché estimé. J'ai donc entièrement réécrit l'interface en langage de gestion, et nous en avons
 restreint le périmètre aux 147 opérations de promotion immobilière, l'aménagement foncier
 relevant d'une logique économique différente. Les métriques de validation, elles, restent
 dans les notebooks : l'écran ne montre que ce qui se décide.
@@ -228,8 +228,8 @@ Au-delà du nettoyage décrit en section 2.2, l'exploration a produit deux résu
 directement orienté la modélisation.
 
 Le premier concerne la distribution des prix. Le prix au mètre carré des appartements est
-fortement asymétrique, avec un coefficient d'asymétrie de 19,2, ce qui interdisait
-d'appliquer telle quelle une régression linéaire. Après passage au logarithme, la
+fortement asymétrique, avec un coefficient d'asymétrie de 19,2, interdisant d'appliquer
+telle quelle une régression linéaire. Après passage au logarithme, la
 distribution devient proche d'une loi normale : le coefficient d'asymétrie tombe à 0,39 et
 le diagramme quantile-quantile, qui compare la distribution observée à la distribution
 théorique, devient presque rectiligne. La Figure 2.1 montre les deux distributions côte à
@@ -246,8 +246,8 @@ vente, ce qui contredisait à la fois l'intuition des équipes commerciales et t
 l'on sait du marché.
 
 En réalité, la série brute est brouillée par la croissance du portefeuille. Le nombre
-d'opérations en commercialisation a fortement augmenté sur la période, ce qui soutient le
-volume total de réservations même lorsque la demande par programme s'effondre. Rapportées
+d'opérations en commercialisation a fortement augmenté sur la période, soutenant le volume
+total de réservations même lorsque la demande par programme s'effondre. Rapportées
 au nombre d'opérations actives, les réservations racontent l'inverse, comme le montre la
 Figure 2.2 : la corrélation passe à -0,34 avec le taux d'intérêt et à +0,44 avec la
 confiance des ménages. Tout l'axe B repose sur cette correction. Sans elle, j'aurais conclu
@@ -292,8 +292,8 @@ marge budgétée.
 Cette définition impose une précaution sur les variables explicatives, et j'y ai veillé
 dès la construction du jeu de données. Concrètement, le modèle n'utilise que le budget
 initial et les signaux commerciaux, jamais l'engagé ni le facturé, qui sont précisément ce
-qui définit la cible. Sans cette précaution, le modèle aurait « prédit » sa propre définition, avec des
-performances flatteuses et parfaitement trompeuses.
+qui définit la cible. Sans cette précaution, le modèle aurait « prédit » sa propre
+définition, avec des performances flatteuses et parfaitement trompeuses.
 
 Sur le périmètre exploitable, soit les 123 opérations engagées à au moins 60 % et dont la
 marge budgétée dépasse 50 k€, plus d'un tiers des opérations, 36,6 % exactement, n'a aucun
@@ -388,7 +388,7 @@ que par leur année de réservation. Ce modèle explique 88,6 % de la variance s
 l'échantillon test, avec une erreur type d'environ 11 % sur le prix.
 
 Son intérêt principal n'est pas sa performance mais sa lisibilité : ses coefficients se
-lisent comme des prix implicites, ce qui permet de les discuter avec la direction
+lisent comme des prix implicites, permettant de les discuter avec la direction
 commerciale. On y lit une prime d'étage de +6 %, une prime d'exposition sud, une décote de
 63 % pour le logement social, qui s'explique par des prix réglementés, et un effet millésime
 d'environ +19 points entre 2016 et 2023, suivi d'un plateau. La Figure 2.6 représente cet
@@ -398,8 +398,8 @@ effet millésime année par année.
 
 Ce plateau mérite d'être commenté, car il recoupe l'axe B. Les prix du neuf n'ont pas
 baissé avec la remontée des taux : c'est le volume qui s'est ajusté. Les deux axes disent
-donc la même chose par deux chemins indépendants, ce qui renforce la confiance que l'on
-peut accorder à l'un comme à l'autre. J'ai également testé une variante régularisée du
+donc la même chose par deux chemins indépendants, renforçant la confiance que l'on peut
+accorder à l'un comme à l'autre. J'ai également testé une variante régularisée du
 modèle, sans gain : avec cinq mille observations pour une trentaine de coefficients, il n'y
 avait rien à stabiliser.
 
@@ -440,8 +440,8 @@ remises non structurées réellement utilisable.
 
 Le deuxième porte sur les motifs de désistement, analysés par agence. Le profil obtenu
 révèle un problème de qualité de saisie plus qu'un fait commercial : à Salon-de-Provence,
-90 % des motifs sont enregistrés en « Autres motifs », ce qui rend les désistements de
-cette agence inanalysables tant que la saisie n'est pas fiabilisée. Ce constat n'est pas un
+90 % des motifs sont enregistrés en « Autres motifs », rendant les désistements de cette
+agence inanalysables tant que la saisie n'est pas fiabilisée. Ce constat n'est pas un
 résultat d'analyse au sens strict, mais c'est une information directement actionnable, et
 elle n'aurait pas été visible sans ce travail.
 
@@ -454,7 +454,7 @@ une dépense sans recette.
 
 J'ai enfin tenté de prédire le désistement à partir du seul texte du commentaire, avec un
 contrôle de fuite soigneux pour ne pas utiliser d'information postérieure au désistement.
-Le résultat plafonne à un score F1 de 0,34 : le texte seul ne suffit pas, et il est donc
+Ce résultat plafonne à un score F1 de 0,34 : le texte seul ne suffit pas, et il est donc
 traité comme un signal d'appoint et non comme un prédicteur.
 
 ## Plateforme Streamlit
@@ -519,7 +519,7 @@ Les autres limites sont assumées et documentées :
 Enfin, la plateforme couvre la promotion, soit 147 opérations, et exclut l'aménagement
 foncier, dont la logique économique justifierait un traitement dédié. L'analyse, elle,
 couvre bien les 267 opérations. Il est intéressant de noter que la frontière entre les deux
-activités ressort d'elle-même dès l'analyse exploratoire, ce qui constitue une validation
+activités ressort d'elle-même dès l'analyse exploratoire, constituant une validation
 involontaire du choix de périmètre demandé par l'entreprise.
 
 ## Conclusion du chapitre et conclusion générale
