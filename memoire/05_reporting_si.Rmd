@@ -35,11 +35,11 @@ mission consiste à traduire des besoins métiers parfois abstraits en indicateu
 exploitables et fiables.
 
 Le travail commence rarement par une spécification. Il commence par une gêne exprimée en
-réunion, ou par un tableau que quelqu'un refait à la main tous les mois. La première partie du travail consiste donc à
-reformuler la demande jusqu'à ce qu'elle soit calculable : de quelles lignes parle-t-on
-exactement, sur quelle période, et que fait-on des cas limites ? Cette reformulation est
-la partie du reporting que je sous-estimais en arrivant, et c'est celle qui décide de
-l'utilité du résultat.
+réunion, ou par un tableau que quelqu'un refait à la main tous les mois. La première partie du
+travail consiste donc à reformuler la demande jusqu'à ce qu'elle soit calculable : de quelles
+lignes parle-t-on exactement, sur quelle période, et que fait-on des cas limites ? Cette
+reformulation est la partie du reporting que je sous-estimais en arrivant, et c'est celle qui
+décide de l'utilité du résultat.
 
 ### Une complexité métier : la règle de facturation juridique
 
@@ -76,10 +76,11 @@ qui limitaient mes options :
 Ces deux contraintes se conjuguaient pour interdire toute solution qui aurait consisté à
 *stocker* le résultat. Il fallait donc concevoir une méthode de calcul dynamique.
 L'objectif était de créer un algorithme au sein de MyReport qui, lors de la génération du
-tableau, effectue un traitement en temps réel. Le système doit d'abord identifier les
-opérations et les lots, puis classer leurs commandes par ordre chronologique. Il attribue
-ensuite un rang à chaque commande et applique une condition logique : si le rang est
-impair, le statut est défini comme « Payant », et s'il est pair, il devient « Gratuit ».
+tableau, effectuait un traitement en temps réel. Le système devait d'abord identifier les
+opérations et les lots, puis classer leurs commandes par ordre chronologique. Il attribuait
+ensuite un rang à chaque commande et appliquait une condition logique, dont l'énoncé, lui,
+ne dépend d'aucune date : si le rang est impair, le statut est « Payant » ; s'il est pair,
+il est « Gratuit ».
 La Figure 4.1 représente cette chaîne de calcul.
 
 ![La règle de facturation juridique traduite en calcul de rang, exécuté à chaque génération du tableau](figures/fig_4_1_regle_facturation.png){width=100%}

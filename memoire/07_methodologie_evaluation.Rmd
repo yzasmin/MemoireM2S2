@@ -176,11 +176,11 @@ lorsque la référence majoritaire, elle, ne détecte rien du tout.
 
 Le troisième régime est celui de la **recette par l'usage**. Il s'applique aux livrables
 destinés à un utilisateur, où la question posée est : la personne s'en sert-elle, et pour la
-bonne chose ? Sur le reporting juridique, le régime de preuve retenu est la validation par le service
-demandeur, seul juge de la conformité de la règle appliquée. Sur
-l'application, chaque page a été vérifiée par un cadre de test automatisé, y compris aux
-bornes des curseurs et sur les sélections vides, mais c'est le retour de l'entreprise sur le
-vocabulaire des écrans qui a constitué la véritable recette.
+bonne chose ? Sur le reporting juridique, le régime de preuve retenu est la validation par le
+service demandeur, seul juge de la conformité de la règle appliquée. Sur l'application, chaque
+page a été vérifiée par un cadre de test automatisé, y compris aux bornes des curseurs et sur
+les sélections vides, mais c'est le retour de l'entreprise sur le vocabulaire des écrans qui a
+constitué la véritable recette.
 
 ### Ce que ces évaluations ne couvrent pas
 
@@ -272,7 +272,7 @@ Le tableau suivant récapitule ce qui a été livré et se trouve aujourd'hui en
 
 | Livrable | Volume ou périmètre |
 |:-------------------------------------------------|:----------------------------|
-| Opérations immobilières créées dans SPO | 283 |
+| Opérations créées dans SPO, hors budgets détaillés | 283 |
 | Tiers créés dans SPO, avec leurs objets rattachés | 1 434 |
 | Adresses, courriels et téléphones importés | 553, 469 et 538 |
 | Représentants des couples et des sociétés | 1 871 |

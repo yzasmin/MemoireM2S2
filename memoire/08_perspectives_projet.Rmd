@@ -35,10 +35,13 @@ modèle. Cette image n'est pas fausse, elle est simplement très minoritaire dan
 réel.
 
 Sur les quatre missions de l'année, une seule correspond à cette description, et encore
-partiellement. Ce qui a occupé le reste, c'est un travail de traduction, dans les deux sens.
-Traduire une gêne exprimée par un service en question calculable, d'abord. Traduire ensuite
-un résultat statistique en information sur laquelle quelqu'un peut décider. Entre ces deux
-traductions, la modélisation proprement dite occupe une place modeste.
+partiellement. Le poste que j'ai réellement occupé se rapproche davantage de celui de
+gestionnaire d'applications tel que le décrivent les référentiels métier [1] : comprendre les
+outils, les données qu'ils produisent et les besoins de ceux qui s'en servent. Ce qui a occupé
+le reste, c'est un travail de traduction, dans les deux sens. Traduire une gêne exprimée par un
+service en question calculable, d'abord. Traduire ensuite un résultat statistique en information
+sur laquelle quelqu'un peut décider. Entre ces deux traductions, la modélisation proprement dite
+occupe une place modeste.
 
 Cette traduction n'est pas une tâche annexe qu'on expédierait avant le vrai travail. Elle est
 le vrai travail, et elle est difficile pour une raison précise : les deux langues n'ont pas

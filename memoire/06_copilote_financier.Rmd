@@ -14,9 +14,9 @@
 - 5.4 Notebooks et résultats
     - 5.4.1 Exploration et nettoyage des données brutes
     - 5.4.2 SQL et Spark
-    - 5.4.3 Axe A — risque de dérive de marge
-    - 5.4.4 Axe B — vitesse d'écoulement
-    - 5.4.5 Axe C — prix du stock
+    - 5.4.3 Axe A : risque de dérive de marge
+    - 5.4.4 Axe B : vitesse d'écoulement
+    - 5.4.5 Axe C : prix du stock
     - 5.4.6 Signaux faibles (texte et réseau)
 - 5.5 Plateforme Streamlit
 - 5.6 Périmètre et limites
@@ -25,14 +25,14 @@
 
 Ce chapitre présente le projet de Data Science annoncé à la fin du premier semestre : le
 « Copilote Financier », un outil d'aide à la décision construit sur les données de gestion du
-groupe Angelotti pour sa direction financière. Le périmètre envisagé au départ, la prédiction
-de la rentabilité des opérations d'aménagement, a été redéfini en cours de projet : la prédiction de la marge à terminaison subsiste
-comme premier axe de travail, mais le besoin exprimé par la direction financière l'a
-élargie à deux autres questions, et la restitution a finalement été restreinte à la
-promotion immobilière. J'y expose d'abord le besoin métier tel qu'il m'a été formulé, puis les données dont je disposais réellement,
-l'architecture retenue pour les rendre exploitables, les trois axes d'analyse et leurs
-résultats, la plateforme qui les restitue aux contrôleurs de gestion, et enfin les limites
-que je considère comme faisant partie du livrable.
+groupe Angelotti pour sa direction financière. Le périmètre envisagé au départ, la prédiction de
+la rentabilité des opérations d'aménagement, a été redéfini en cours de projet : la prédiction
+de la marge à terminaison subsiste comme premier axe de travail, mais le besoin exprimé par la
+direction financière l'a élargie à deux autres questions, et la restitution a finalement été
+restreinte à la promotion immobilière. J'y expose d'abord le besoin métier tel qu'il m'a été
+formulé, puis les données dont je disposais réellement, l'architecture retenue pour les rendre
+exploitables, les trois axes d'analyse et leurs résultats, la plateforme qui les restitue aux
+contrôleurs de gestion, et enfin les limites que je considère comme faisant partie du livrable.
 
 Une décision a orienté tout le projet, et il vaut mieux l'énoncer d'emblée parce qu'elle
 explique la forme de ce qui suit. La taille des données disponibles, 267 opérations et
@@ -51,9 +51,8 @@ reviennent plus chers qu'anticipé, des acquéreurs se désistent, le rythme de 
 ralentit sous l'effet de la conjoncture.
 
 La direction financière suit ces dérives opération par opération, sur tableurs, sans vision
-transverse. Personne ne dispose d'une vue d'ensemble permettant
-de dire, à un instant donné, quelles opérations méritent l'attention en priorité. C'est ce manque
-qui a motivé le projet.
+transverse. Personne ne dispose d'une vue d'ensemble permettant de dire, à un instant donné,
+quelles opérations méritent l'attention en priorité. C'est ce manque qui a motivé le projet.
 
 ### Problème métier
 
@@ -99,13 +98,13 @@ J'ai formalisé ces besoins en trois axes de travail, complétés d'un axe trans
 4. **Axe transverse** : tirer des signaux simples des commentaires de vente et de la
    structure du réseau de vendeurs.
 
-Quatre exigences non fonctionnelles ont cadré le travail. La **reproductibilité** d'abord : tout doit se reconstruire
-depuis les exports bruts par un seul script, sans étape manuelle intermédiaire.
-L'**interprétabilité** ensuite : chaque score doit être accompagné des variables qui le
-déterminent. La **confidentialité** également : aucune donnée nominative de client n'est
+Quatre exigences non fonctionnelles ont cadré le travail. La **reproductibilité** d'abord : tout
+doit se reconstruire depuis les exports bruts par un seul script, sans étape manuelle
+intermédiaire. L'**interprétabilité** ensuite : chaque score doit être accompagné des variables
+qui le déterminent. La **confidentialité** également : aucune donnée nominative de client n'est
 affichée ni modélisée. L'**acceptation d'un petit échantillon** enfin : à cette taille, des
-modèles simples validés en validation croisée valent mieux que des architectures complexes
-dont on ne saurait pas mesurer la performance réelle.
+modèles simples validés en validation croisée valent mieux que des architectures complexes dont
+on ne saurait pas mesurer la performance réelle.
 
 ### Objectifs du dashboard
 
@@ -132,9 +131,9 @@ mots affichés.
 
 Quatre exports du système de gestion constituent le point de départ du projet. Leur
 périmètre de 267 opérations ne recouvre pas exactement les 283 opérations reprises au
-chapitre 2 : les deux décomptes sont établis à des dates différentes et sur des critères
-différents, la migration portant sur les dossiers actifs à reprendre et les exports sur les
-opérations disposant d'un budget analytique au moment de l'extraction.
+chapitre 2 : ce sont deux extractions distinctes, faites à des dates différentes, et les
+exports de gestion ne portent que les opérations disposant d'un budget analytique au moment
+de l'extraction.
 
 | Export                     | Grain                | Volumétrie                | Usage                            |
 |:---------------------------|:---------------------|:--------------------------|:---------------------------------|
@@ -237,12 +236,12 @@ au premier degré, cette valeur signifiait que la conjoncture n'explique rien du
 vente, ce qui contredisait tout ce que l'on sait du marché.
 
 En réalité, la série brute est brouillée par la croissance du portefeuille. Le nombre
-d'opérations en commercialisation a fortement augmenté sur la période, soutenant le volume
-total de réservations même lorsque la demande par programme s'effondre. Rapportées
-au nombre d'opérations actives, les réservations racontent l'inverse. La Figure 5.2 donne
-cette série d'intensité corrigée ; sa corrélation avec le taux d'intérêt passe à -0,34 et
-celle avec la confiance des ménages à +0,44. Tout l'axe B repose sur cette correction. Sans elle, j'aurais conclu
-à l'absence d'effet de la conjoncture, et j'aurais eu tort.
+d'opérations en commercialisation a fortement augmenté sur la période, soutenant le volume total
+de réservations même lorsque la demande par programme s'effondre. Rapportées au nombre
+d'opérations actives, les réservations racontent l'inverse. La Figure 5.2 donne cette série
+d'intensité corrigée ; sa corrélation avec le taux d'intérêt passe à -0,34 et celle avec la
+confiance des ménages à +0,44. Tout l'axe B repose sur cette correction. Sans elle, j'aurais
+conclu à l'absence d'effet de la conjoncture, et j'aurais eu tort.
 
 ![Intensité de vente, mesurée en réservations par opération active : l'effet de la remontée des taux apparaît une fois l'effet de portefeuille neutralisé](figures/fig_5_2_intensite_vente.png){width=100%}
 
@@ -254,19 +253,18 @@ totaux par deux moteurs indépendants, soit 1 561,8 M€ de dépenses budgét�
 de recettes, à l'arrondi près. Ce contrôle n'est pas une coquetterie : il garantit que la
 base chargée dit bien la même chose que les exports d'origine.
 
-J'ai ensuite évalué Spark comme piste de montée en charge, l'entreprise appartenant à un
-groupe dont le périmètre de données dépasse largement le sien. Le test aboutit à une
-conclusion négative, et c'est en cela qu'il est utile. Sur notre volumétrie, 64 788 lignes représentant 9 Mo en mémoire,
-l'agrégation chronométrée est environ cinquante fois plus lente qu'avec pandas. Le rapport
-mesuré est de 58, après 24 secondes de démarrage de la machine virtuelle Java ; une
-exécution antérieure donnait 28. Le chiffre varie donc avec la machine, mais la conclusion
-non.
+J'ai ensuite évalué Spark comme piste de montée en charge, l'entreprise appartenant à un groupe
+dont le périmètre de données dépasse largement le sien. Le test aboutit à une conclusion
+négative, et c'est en cela qu'il est utile. Sur notre volumétrie, 64 788 lignes représentant 9
+Mo en mémoire, l'agrégation chronométrée est environ cinquante fois plus lente qu'avec pandas.
+Le rapport mesuré est de 58, après 24 secondes de démarrage de la machine virtuelle Java ; une
+exécution antérieure donnait 28. Le chiffre varie donc avec la machine, mais la conclusion non.
 
 SQLite et pandas constituent donc la bonne architecture à cette échelle. L'intérêt du test
 est ailleurs : le chemin de montée en charge est identifié, si le périmètre devait un jour
 s'étendre à celui du groupe Nexity.
 
-### Axe A — risque de dérive de marge
+### Axe A : risque de dérive de marge
 
 La difficulté de l'axe A n'était pas le modèle mais la définition de la cible. Les exports
 dont je disposais sont une photographie à date, sans historique des révisions budgétaires :
@@ -318,7 +316,7 @@ alimentent les niveaux d'alerte de la plateforme.
 Il faut donc lire ce dispositif pour ce qu'il est : un outil de hiérarchisation de
 l'attention, pas un oracle.
 
-### Axe B — vitesse d'écoulement
+### Axe B : vitesse d'écoulement
 
 Budgéter les réservations de 2026 suppose de distinguer, dans le rythme de vente, ce qui
 relève de la conjoncture et ce qui relève du programme lui-même. C'est l'axe dont les
@@ -376,7 +374,7 @@ La limite de cet indicateur est connue et vérifiée : en début de commercialis
 potentiel n'est pas identifiable, l'ajustement pouvant alors produire n'importe quelle
 valeur. L'outil n'est donc proposé que sur les programmes suffisamment avancés.
 
-### Axe C — prix du stock
+### Axe C : prix du stock
 
 Repricer le stock suppose d'abord de savoir à quel prix chaque lot devrait se vendre. Le
 modèle que j'ai construit pour répondre à cette question est volontairement le plus simple
@@ -461,10 +459,10 @@ L'application finale est la meilleure réponse au risque de sur-complexité que 
 ouverture de ce chapitre : ce qui est livré au métier est simple. Cinq pages, un périmètre
 restreint aux 147 opérations de promotion, et aucun terme de modélisation à l'écran.
 
-La page **Vue d'ensemble**, présentée en Figure 5.8, donne la situation en quelques
-secondes : 147 opérations suivies, dont 10 en alerte et 2 à surveiller parmi les 68
-opérations en cours suffisamment engagées, les 56 autres étant conformes, 421 lots principaux en stock, un rythme récent
-de 4,8 réservations par opération et par mois, pour un taux de crédit à 3,11 %.
+La page **Vue d'ensemble**, présentée en Figure 5.8, donne la situation en quelques secondes :
+147 opérations suivies, dont 10 en alerte et 2 à surveiller parmi les 68 opérations en cours
+suffisamment engagées, les 56 autres étant conformes, 421 lots principaux en stock, un rythme
+récent de 4,8 réservations par opération et par mois, pour un taux de crédit à 3,11 %.
 
 ![Plateforme, page « Vue d'ensemble »](figures/fig_5_8_plateforme_vue_ensemble.png){width=100%}
 

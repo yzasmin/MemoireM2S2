@@ -1,11 +1,12 @@
 # Bibliographie {-}
 
-[1] Michael Page. (2025). *Fiche métier : gestionnaire d'applications.* [En ligne].
-Disponible sur :
+[1] Michael Page. (2025). *Fiche métier : gestionnaire d'applications.* [En ligne]. Disponible
+sur :
 <https://www.michaelpage.fr/advice/m%C3%A9tiers/syst%C3%A8mes-dinformation/fiche-m%C3%A9tier-gestionnaire-d%E2%80%99applications>.
 
-[2] Salvia Développement. (2025). *Documentation de l'API et site officiel de l'éditeur de
-la solution SPO.* [En ligne]. Disponible sur : <https://www.salviadeveloppement.fr/>.
+[2] Salvia Développement. (2025). *Site officiel de l'éditeur de la solution SPO et
+documentation technique de son API.* [En ligne]. Disponible sur :
+<https://www.salviadeveloppement.fr/>.
 
 [3] Bryan, P. et Nottingham, M. (2013). *JavaScript Object Notation (JSON) Patch,* RFC 6902,
 Internet Engineering Task Force. [En ligne]. Disponible sur :

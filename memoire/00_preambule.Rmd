@@ -38,13 +38,13 @@ déploiement en « coquilles vides » adoptée pour garantir la continuité de
 parallèle, j'ai assuré le maintien du système décisionnel et participé au déploiement du
 Single Sign-On sur deux périmètres du groupe.
 
-Le second semestre a prolongé ce travail de structure, puis l'a valorisé. J'ai d'abord
-conduit la reprise des tiers, c'est-à-dire des clients acquéreurs, en concevant une chaîne
-de traitement entièrement pilotée par formules qui a permis de créer 1 434 tiers dans SPO à
-partir de 1 602 lignes brutes, sans doublon détecté par les trois clés d'unicité retenues. J'ai ensuite mené de bout en bout un
-projet de Data Science, le « Copilote Financier », qui outille la direction financière sur
-trois questions de gestion : le risque de dérive des marges, le rythme d'écoulement des
-programmes et le pilotage des prix du stock.
+Le second semestre a prolongé ce travail de structure, puis l'a valorisé. J'ai d'abord conduit
+la reprise des tiers, c'est-à-dire des clients acquéreurs, en concevant une chaîne de traitement
+entièrement pilotée par formules qui a permis de créer 1 434 tiers dans SPO à partir de 1 602
+lignes brutes, sans doublon détecté par les trois clés d'unicité retenues. J'ai ensuite mené de
+bout en bout un projet de Data Science, le « Copilote Financier », qui outille la direction
+financière sur trois questions de gestion : le risque de dérive des marges, le rythme
+d'écoulement des programmes et le pilotage des prix du stock.
 
 Ce mémoire relit ensuite ces quatre missions transversalement, sous l'angle de la conduite de
 projet, des technologies et des méthodes employées, des régimes de preuve mobilisés pour
@@ -59,21 +59,22 @@ professionnel qui en découle.
 
 | Terme | Définition |
 |:------------------|:----------------------------------------------------------|
-| ADV | Dossier de vente lié à un lot immobilier, ouvert lors d'une réservation et suivi jusqu'à l'acte de vente. Par extension, désigne dans nos extractions l'acquéreur principal du dossier. |
 | Acte de vente | Document légal qui officialise la vente d'un bien immobilier entre un vendeur et un acquéreur. |
+| ADV | Dossier de vente lié à un lot immobilier, ouvert lors d'une réservation et suivi jusqu'à l'acte de vente. Par extension, désigne dans nos extractions l'acquéreur principal du dossier. |
 | Aménagement foncier | Opération qui consiste à diviser un terrain en plusieurs lots viabilisés, destinés à la vente pour la construction. |
 | API | Interface de programmation applicative, qui permet à deux logiciels d'échanger des données sans passer par leur interface utilisateur. |
 | CRM | *Customer Relationship Management*, outil de gestion de la relation client. Chez Angelotti, il s'agit de Vadimm. |
+| Dashboard | Tableau de bord. Le mémoire emploie le terme au chapitre 5 pour désigner le livrable tel que la direction financière l'a demandé ; le corps du texte parle ensuite d'application web ou de plateforme. |
 | Désistement | Renoncement d'un acquéreur à une réservation avant l'acte de vente. |
 | DirectAPI | Module de l'éditeur Salvia permettant d'injecter dans l'ERP des fichiers plats, sans passer par la saisie manuelle. |
 | EFR | État Financier de Référence, l'un des exports budgétaires du système de gestion, qui donne pour chaque poste le budget, l'engagé et le facturé. |
 | ERP | *Enterprise Resource Planning*, progiciel de gestion intégré couvrant l'ensemble des processus de l'entreprise. |
-| Grimmo | ERP métier historique du groupe, remplacé cette année par SPO. |
 | Fiabilisation des données | Ensemble des vérifications et corrections visant à garantir la cohérence et la justesse des données. |
 | GED | Gestion Électronique des Documents. |
+| Grimmo | ERP métier historique du groupe, remplacé cette année par SPO. |
 | Lot | Terrain ou logement mis en vente, issu d'un découpage foncier ou d'un programme immobilier. |
-| MyReport | Outil décisionnel du groupe, qui requête les bases de données sources et produit les tableaux de bord des services. |
 | Macro-lot | Ensemble de lots vendus groupés, souvent destiné à un promoteur ou investisseur pour un projet plus large. |
+| MyReport | Outil décisionnel du groupe, qui requête les bases de données sources et produit les tableaux de bord des services. |
 | Promotion immobilière | Activité consistant à concevoir, financer, construire et commercialiser des logements ou bâtiments neufs. |
 | Reporting | Création de tableaux de bord ou d'indicateurs à partir des données de gestion, souvent automatisée. |
 | Salvia | Éditeur de logiciels spécialisés dans la gestion immobilière, dont SPO. |

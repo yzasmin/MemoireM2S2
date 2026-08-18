@@ -56,12 +56,12 @@ modèle de données cible. Ma première tâche a consisté à analyser en profon
 documentation technique de l'API de Salvia [2]. L'enjeu était de comprendre la structure des
 objets attendus par l'ERP et leurs interdépendances.
 
-La Figure 2.1 montre l'interface de SPO sur le dossier d'une opération. On y lit directement
-le modèle de données : une opération est un conteneur, auquel se rattachent notamment
-son identification, ses indicateurs, son foncier, ses intervenants, ses versions, ses
-tranches, son budget, son planning, sa commercialisation et sa trésorerie. Cette arborescence n'est pas une commodité d'affichage,
-c'est la structure même que l'API attend, et la comprendre était le préalable à toute
-injection.
+La Figure 2.1 montre l'interface de SPO sur le dossier d'une opération. On y lit directement le
+modèle de données : une opération est un conteneur, auquel se rattachent notamment son
+identification, ses indicateurs, son foncier, ses intervenants, ses versions, ses tranches, son
+budget, son planning, sa commercialisation et sa trésorerie. Cette arborescence n'est pas une
+commodité d'affichage, c'est la structure même que l'API attend, et la comprendre était le
+préalable à toute injection.
 
 ![L'interface de SPO sur le dossier d'une opération : l'arborescence de gauche donne le modèle de données cible](figures/fig_2_1_interface_spo.png){width=100%}
 
@@ -76,7 +76,8 @@ première tient au contenu de chaque objet : quels champs l'ERP exige pour accep
 création, et lesquels il tolère vides. La documentation de l'éditeur les décrit, mais la
 description reste théorique tant qu'on n'a pas vu le service la refuser. La seconde tient à
 l'enchaînement des objets entre eux, c'est-à-dire à l'ordre dans lequel il faut les créer ;
-elle n'était pas documentée du tout, et c'est elle qui a occupé la suite du travail.
+elle n'était pas explicitée par la documentation, et c'est elle qui a occupé la suite du
+travail.
 
 Cette phase peut sembler improductive : elle ne crée aucune donnée et ne produit aucun
 livrable visible. Je la considère pourtant comme la plus rentable de tout le projet. Chaque
@@ -104,32 +105,25 @@ l'ancien et le nouveau système. Ce pipeline de données se décompose en trois 
    paramétrage extraites de SPO ou sur des fichiers de mapping que j'ai constitués.
 3. **Chargement** : les maquettes finalisées étaient ensuite injectées via DirectAPI.
 
-L'étape de transformation mérite qu'on s'y arrête, car c'est celle qui a demandé le plus de
-travail et celle dont dépendait la validité de tout le reste. Mapper un champ n'est pas le
-renommer. Une valeur venue de Grimmo n'entre dans SPO que si elle appartient à la
-nomenclature que le nouveau système reconnaît : un libellé de poste budgétaire, un type de
-tranche, une nature d'opération y sont des valeurs contrôlées, et non du texte libre. Le
-travail a donc consisté, champ par champ, à établir la correspondance entre ce que l'ancien
-système contenait et ce que le nouveau accepte.
+L'étape de transformation est celle qui a demandé le plus de travail, et celle dont dépendait
+la validité de tout le reste. La nomenclature de SPO est stricte : un libellé de poste
+budgétaire ou un type de tranche doit correspondre à une valeur que le nouveau système
+reconnaît, faute de quoi la ligne est rejetée. Le travail a donc consisté, champ par champ, à
+établir la correspondance entre ce que l'ancien système contenait et ce que le nouveau
+accepte.
 
-Ces correspondances n'ont pas toutes la même origine, et la distinction a des conséquences
-pratiques. Certaines proviennent de tables de paramétrage extraites de SPO : ce sont les
-listes de valeurs que l'ERP tient lui-même, donc des références sûres, qu'il suffit
-d'interroger. D'autres, en revanche, sont des fichiers de mapping que j'ai constitués, parce
-qu'aucune table ne les fournissait : la mise en regard des libellés de l'ancien système avec
-ceux du nouveau relevait alors d'un arbitrage, tranché avec les services concernés puis
-consigné. La différence est importante au moment de rendre des comptes : dans le premier cas,
-une divergence est une erreur de lecture ; dans le second, c'est une décision qu'il faut
-pouvoir justifier.
+Ces correspondances n'ont pas toutes la même origine, et la distinction compte. Certaines
+proviennent de tables de paramétrage extraites de SPO : ce sont les listes de valeurs que
+l'ERP tient lui-même, qu'il suffit d'interroger. D'autres sont des fichiers de mapping que
+j'ai constitués. La différence est importante au moment de rendre des comptes : dans le
+premier cas, une divergence est une erreur de lecture ; dans le second, c'est une mise en
+correspondance dont je réponds.
 
-Le choix d'Excel comme moteur de transformation, plutôt qu'un script, découle de l'arbitrage
-exposé plus haut. La fonction RechercheX y joue exactement le rôle d'une jointure : elle va
-chercher, dans la table de correspondance, la valeur cible associée à la valeur source. Sa
-vertu, dans ce contexte, est d'être lisible par les personnes qui connaissent le métier et
-non le code. Lorsqu'un poste budgétaire ressortait mal traduit, la responsable concernée
-pouvait ouvrir la maquette, voir la formule et pointer la ligne fautive de la table de
-correspondance. Un script aurait produit le même résultat, mais aurait déplacé la
-vérification vers moi seule.
+La fonction RechercheX joue dans ces maquettes le rôle d'une jointure : elle va chercher,
+dans la table de correspondance, la valeur cible associée à la valeur source. Le choix
+d'Excel comme moteur de transformation prolonge l'arbitrage exposé plus haut : la maquette
+reste lisible par les personnes qui connaissent le métier et non le code, et une
+correspondance douteuse peut leur être montrée telle quelle.
 
 Pour sécuriser ce processus, j'ai appliqué une méthode de validation itérative : nous avons
 d'abord migré 3 opérations pilotes, puis un lot de 12, afin de corriger les éventuels rejets
@@ -173,15 +167,11 @@ par écrit une connaissance qui n'existait jusque-là que sous la forme de codes
 interprétés, et il la rend transmissible : un guide de référence permettant d'éviter les
 erreurs de séquencement lors des phases de reprise ultérieures.
 
-Rédiger cette note n'était pas prévu au départ, et je ne l'ai pas fait par goût de la
-formalisation. Je l'ai fait parce que j'avais constaté que je redécouvrais deux fois la même
-contrainte, à quelques jours d'intervalle, faute de l'avoir notée. C'est le premier livrable
-écrit de mon année qui n'était pas un fichier de données, et c'est celui qui a le plus servi
-aux autres : la reprise des tiers, exposée au chapitre 3, s'est appuyée directement dessus,
-et n'a pas eu à refaire le travail de rétro-ingénierie. Cet épisode a modifié ma façon de
-travailler pour le reste de l'année. Une contrainte technique découverte empiriquement n'a de
-valeur, pour l'entreprise, que si elle est écrite quelque part ; sinon elle reste attachée à
-la personne qui l'a trouvée, et disparaît avec elle.
+Rédiger cette note n'était pas prévu au départ. Je l'ai fait parce que les règles que les
+codes d'erreur m'avaient révélées n'existaient nulle part ailleurs que dans mes notes de
+test. C'est le premier livrable écrit de mon année qui n'était pas un fichier de données, et
+c'est celui qui a le plus servi aux autres : la reprise des tiers, exposée au chapitre 3,
+s'est appuyée directement dessus.
 
 ### La complexité algorithmique des identifiants et du versionnement
 
@@ -264,11 +254,11 @@ Ce travail d'initialisation de la migration vers SPO a constitué l'axe central 
 semestre. Il est essentiel de préciser qu'à la fin de cette période, nous n'étions qu'au
 début de ce vaste chantier.
 
-Nous avons réussi à modéliser et intégrer la structure fondamentale des dossiers, à savoir
-les opérations et leurs tranches de travaux, la création des tranches commerciales étant
-encore en cours à la fin du semestre. Une part conséquente du travail restait à accomplir : l'analyse et
-l'intégration des données financières et comptables, notamment la reprise détaillée des
-budgets et de l'historique des factures.
+Nous avons réussi à modéliser et intégrer la structure fondamentale des dossiers, à savoir les
+opérations et leurs tranches de travaux, la création des tranches commerciales étant encore en
+cours à la fin du semestre. Une part conséquente du travail restait à accomplir : l'analyse et
+l'intégration des données financières et comptables, notamment la reprise détaillée des budgets
+et de l'historique des factures.
 
 Le tableau suivant récapitule l'état d'avancement à ce jalon.
 

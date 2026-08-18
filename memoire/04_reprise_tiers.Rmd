@@ -37,27 +37,29 @@ contournées, puis le bilan de l'import et les enseignements que j'en retire.
 
 ### Du CRM Vadimm à l'ERP SPO : le périmètre des données clients
 
-Le remplacement de l'ERP historique du groupe par SPO, décrit au chapitre 2, s'est fait par
-lots successifs. Après la création des opérations immobilières et de leurs tranches, il
-restait à reprendre les données commerciales, et en premier lieu les clients. Dans SPO, ces
-clients sont désignés par le terme générique de *tiers* : la même entité de base sert à représenter un
-acquéreur particulier comme une société, et se voit ensuite attribuer un ou plusieurs
-rôles. Reprendre les tiers signifiait donc alimenter le socle sur lequel toute la gestion
-commerciale allait s'appuyer.
+Le remplacement de l'ERP historique du groupe par SPO, décrit au chapitre 2, s'est fait par lots
+successifs. Après la création des opérations immobilières et de leurs tranches, il restait à
+reprendre les données commerciales, et en premier lieu les clients. Dans SPO, ces clients sont
+désignés par le terme générique de *tiers* : la même entité de base sert à représenter un
+acquéreur particulier comme une société, et se voit ensuite attribuer un ou plusieurs rôles.
+Reprendre les tiers signifiait donc alimenter le socle sur lequel toute la gestion commerciale
+allait s'appuyer.
 
 Le périmètre m'a été fixé de la manière suivante : importer dans SPO l'ensemble des clients
-ayant déjà acheté un bien chez Angelotti. La matière première provenait de notre CRM
-(*Customer Relationship Management*, l'outil de gestion de la relation client) Vadimm, sous
-la forme de deux extractions complémentaires : celle des ventes enregistrées, qui porte
-1 557 lignes, et celle des coordonnées de contact des acquéreurs et de leurs co-acquéreurs,
-qui en porte 1 602. Le périmètre de travail ainsi constitué compte **1 602 lignes**, et
-c'est de ce total que part toute la chaîne de traitement.
+ayant déjà acheté un bien chez Angelotti. La matière première provenait de notre CRM (*Customer
+Relationship Management*, l'outil de gestion de la relation client) Vadimm, sous la forme de
+deux extractions complémentaires : celle des ventes enregistrées, qui porte 1 557 lignes, et
+celle des coordonnées de contact des acquéreurs et de leurs co-acquéreurs, qui en porte 1 602.
+Les deux extractions ne se recouvrent donc pas exactement, et l'écart de 45 lignes entre elles
+n'est pas documenté dans les fichiers sources ; il s'explique vraisemblablement par des contacts
+renseignés sans vente correspondante. J'ai retenu le plus large des deux totaux, pour ne perdre
+aucun acquéreur en entrée de chaîne : le périmètre de travail compte **1 602 lignes**, et c'est
+de ce total que part toute la chaîne de traitement.
 
-La difficulté ne tenait pas au volume. Elle tenait à la nature même de la donnée. Concrètement, une
-ligne de l'extraction Vadimm ne décrit pas un client, elle décrit une vente. Un même
+La difficulté ne tenait pas au volume. Elle tenait à la nature même de la donnée. Concrètement,
+une ligne de l'extraction Vadimm ne décrit pas un client, elle décrit une vente. Un même
 acquéreur qui a acheté trois lots apparaît donc trois fois, et rien dans le fichier ne le
-signale.
-Transformer un fichier de ventes en un référentiel de personnes suppose de reconstituer
+signale. Transformer un fichier de ventes en un référentiel de personnes suppose de reconstituer
 l'identité de chacune, ce que le système source ne faisait pas à ma place.
 
 ### L'enjeu central : créer sans dupliquer
@@ -197,11 +199,11 @@ suppression : aucune ligne n'est effacée du fichier de travail. Les doublons re
 visibles, avec leur rang, permettant à tout moment de vérifier pourquoi une ligne n'a
 pas été importée et de remonter à la vente concernée.
 
-Ce choix de trois clés différenciées est, à mes yeux, le véritable cœur méthodologique de
-ce travail. En effet, il traduit une idée simple : la règle d'unicité n'est pas une
-propriété du fichier, c'est une propriété du métier. Chercher une clé universelle aurait conduit soit à
-fusionner des tiers distincts, soit à en dupliquer, et dans les deux cas l'erreur n'aurait
-été découverte que bien plus tard, dans l'usage quotidien de l'ERP.
+Ce choix de trois clés différenciées est, à mes yeux, le véritable cœur méthodologique de ce
+travail. En effet, il traduit une idée simple : la règle d'unicité n'est pas une propriété du
+fichier, c'est une propriété du métier. Chercher une clé universelle aurait conduit soit à
+fusionner des tiers distincts, soit à en dupliquer, et dans les deux cas l'erreur n'aurait été
+découverte que bien plus tard, dans l'usage quotidien de l'ERP.
 
 ### L'exclusion des tiers déjà présents dans SPO
 
@@ -239,12 +241,12 @@ vérifiable et reproductible.
 
 ### La propagation vers les feuilles de sortie par numérotation séquentielle
 
-Restait à alimenter les six feuilles de sortie à partir des lignes retenues. La difficulté
-tient à ce que ces feuilles n'ont ni la même population ni le même nombre de lignes. La
-feuille des tiers reçoit un enregistrement par tiers créé, mais la feuille des adresses ne
-concerne que les personnes physiques et morales, celle des courriels seulement celles de
-ces personnes dont le courriel est renseigné, et celle des représentants deux lignes par couple plus une par
-société. Il fallait donc, pour chaque feuille, une numérotation qui lui soit propre.
+Restait à alimenter les six feuilles de sortie à partir des lignes retenues. La difficulté tient
+à ce que ces feuilles n'ont ni la même population ni le même nombre de lignes. La feuille des
+tiers reçoit un enregistrement par tiers créé, mais la feuille des adresses ne concerne que les
+personnes physiques et morales, celle des courriels seulement celles de ces personnes dont le
+courriel est renseigné, et celle des représentants deux lignes par couple plus une par société.
+Il fallait donc, pour chaque feuille, une numérotation qui lui soit propre.
 
 Le mécanisme que j'ai retenu attribue à chaque ligne de la feuille pivot un **numéro
 séquentiel par destination**, calculé dans une colonne dédiée. Une ligne qui n'a pas
@@ -374,8 +376,8 @@ mécanisme de déduplication, mais c'est une part réelle du travail, et surtout
 engage une décision. J'ai tenu à documenter chacun de ces arbitrages dans la note de
 procédure, pour que la trace en subsiste indépendamment de moi.
 
-**Les adresses étrangères :** Trois tiers avaient une adresse hors de France, en Allemagne
-et aux Émirats arabes unis. SPO refusait initialement la création d'un tiers avec un pays
+**Les adresses étrangères :** Trois tiers avaient une adresse hors de France, dont un en
+Allemagne et un aux Émirats arabes unis. SPO refusait initialement la création d'un tiers avec un pays
 étranger renseigné directement dans le fichier d'import. Plutôt que de bloquer la chaîne
 pour ces trois cas, nous avons choisi de les créer avec le pays France par défaut, puis
 de rectifier le pays manuellement dans l'ERP après création, en vérifiant à chaque fois que
@@ -383,7 +385,7 @@ la modification était bien prise en compte. C'est un compromis assumé : il fai
 information provisoirement fausse dans le système, mais sur un périmètre connu, listé, et
 corrigé dans la foulée.
 
-**Les tiers mal classés :** Trois tiers étaient renseignés dans Vadimm avec une nature qui
+**Les tiers mal classés :** Trois autres tiers étaient renseignés dans Vadimm avec une nature qui
 ne correspondait pas à la réalité. Deux étaient enregistrés comme personnes physiques alors
 qu'il s'agissait de sociétés, et un troisième comme personne physique alors qu'il
 s'agissait d'un couple mal saisi. J'ai modifié manuellement leur nature dans la feuille
@@ -441,15 +443,14 @@ seuls la contrainte de format qui a imposé le recours à l'API.
 Au-delà du résultat, ce projet m'a laissé un ensemble de points de vigilance que j'ai
 documentés et qui valent, je crois, bien au-delà du cas de cet import.
 
-Le premier concerne l'usage du fichier lui-même. Quatre manipulations le cassent
-silencieusement : modifier une feuille de sortie, dont le contenu est régénéré à chaque
-recalcul ; modifier les colonnes calculées de la feuille pivot, qui portent toute la logique
-de rang et de numérotation ; insérer une ligne au milieu de la feuille pivot ou de la
-feuille de coordonnées, ce qui décale toutes les références ; et trier la feuille pivot, ce
-qui détruit la logique de rang, celle-ci étant calculée de façon cumulative sur l'ordre des
-lignes. Aucune de ces quatre manipulations ne produit de message d'erreur, les rendant
-d'autant plus dangereuses. C'est la raison pour laquelle la note de procédure les mentionne avant même
-d'expliquer comment utiliser le fichier.
+Le premier concerne l'usage du fichier lui-même. Quatre manipulations le cassent silencieusement
+: modifier une feuille de sortie, dont le contenu est régénéré à chaque recalcul ; modifier les
+colonnes calculées de la feuille pivot, qui portent toute la logique de rang et de numérotation
+; insérer une ligne au milieu de la feuille pivot ou de la feuille de coordonnées, ce qui décale
+toutes les références ; et trier la feuille pivot, ce qui détruit la logique de rang, celle-ci
+étant calculée de façon cumulative sur l'ordre des lignes. Aucune de ces quatre manipulations ne
+produit de message d'erreur, les rendant d'autant plus dangereuses. C'est la raison pour
+laquelle la note de procédure les mentionne avant même d'expliquer comment utiliser le fichier.
 
 Le second concerne un ensemble de pièges techniques que j'ai rencontrés en construisant les
 formules, et qui ont chacun coûté du temps de recherche avant d'être compris :

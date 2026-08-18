@@ -90,14 +90,14 @@ visible mais tout aussi structurante : les tableurs.
    pas. La direction financière suivait ainsi ses dérives budgétaires opération par
    opération, sur des fichiers individuels, sans vision transverse.
 
-La Figure 1.1 représente cette organisation et situe l'endroit où mes missions sont
-intervenues. Les trois outils y occupent le haut du schéma, reliés par les flèches qui
-figurent la circulation normale de la donnée ; les tableurs y forment la bande du bas, et
-les traits pointillés qui les rattachent aux trois outils marquent les échanges qui ne
-passent par aucun système. On y lit le problème central : la donnée existait, en quantité, mais elle était
+La Figure 1.1 représente cette organisation et situe l'endroit où mes missions sont intervenues.
+Les trois outils et leurs usages métier occupent le haut du schéma, reliés par les flèches qui
+figurent la circulation normale de la donnée ; les tableurs forment la bande du bas, et les
+traits pointillés qui les rattachent à chacun d'eux marquent les échanges qui ne passent par
+aucun système. On y lit le problème central : la donnée existait, en quantité, mais elle était
 répartie entre des outils qui ne partageaient ni les mêmes identifiants, ni les mêmes
-définitions. Le même client pouvait exister dans le CRM et dans l'ERP sans qu'aucun lien ne
-les rattache ; la même notion de marge pouvait être calculée différemment selon l'outil qui
+définitions. Le même client pouvait exister dans le CRM et dans l'ERP sans qu'aucun lien ne les
+rattache ; la même notion de marge pouvait être calculée différemment selon l'outil qui
 l'interrogeait.
 
 ![Les outils du système d'information et la circulation de la donnée](figures/fig_1_1_systeme_information.png){width=100%}
