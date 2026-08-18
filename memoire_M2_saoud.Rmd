@@ -131,73 +131,36 @@ professionnel qui en découle.
 
 # Introduction {-}
 
-Dans un environnement économique et technologique en perpétuelle évolution, la
-transformation numérique est devenue un levier de performance incontournable pour les
-acteurs de l'immobilier. La capacité à centraliser, fiabiliser et exploiter la donnée ne
-constitue plus seulement un avantage concurrentiel, mais une nécessité structurelle pour
-piloter efficacement l'activité. C'est dans cette dynamique que s'inscrit le groupe
-Angelotti, acteur de l'aménagement et de la promotion immobilière en Occitanie et en
-région PACA, qui poursuit sa stratégie de modernisation de son système d'information.
+Le groupe Angelotti, acteur de l'aménagement et de la promotion immobilière en Occitanie et
+en région PACA, poursuit depuis plusieurs années la modernisation de son système
+d'information. Après une première année d'alternance consacrée à la migration du CRM Vadimm,
+ma deuxième année de Master MIASHS au sein de la Holding SPA a coïncidé avec l'étape la plus
+lourde de cette transformation : la refonte complète de l'ERP métier, passant de l'outil
+historique Grimmo à la solution SPO éditée par Salvia. Ce changement d'échelle m'a conduite
+d'un rôle d'assistance opérationnelle vers des missions d'ingénierie, centrées sur
+l'interopérabilité des systèmes.
 
-Après une première année d'alternance consacrée à la migration du CRM Vadimm et à
-l'initiation au Machine Learning, ma deuxième année de Master MIASHS au sein de la Holding
-SPA marque une nouvelle étape. La transition numérique du groupe s'est accélérée cette
-année avec la refonte complète de son ERP métier, passant de l'outil historique Grimmo à
-la solution SPO éditée par Salvia. Ce changement d'échelle m'a conduite à évoluer d'un
-rôle d'assistance opérationnelle vers des missions d'ingénierie plus techniques. Le cœur
-du travail s'est déplacé vers l'interopérabilité des systèmes.
+Ce mémoire présente les travaux réalisés durant cette année, du premier jour de la migration
+jusqu'à la livraison d'une application d'aide à la décision. Il témoigne d'un mouvement en
+deux temps : le passage de la Data Science exploratoire au Data Engineering appliqué, puis le
+retour à la modélisation une fois les données reconstituées. L'ordre compte, et c'est de lui
+que je tire la thèse de ce mémoire, énoncée d'emblée pour que le lecteur puisse en juger au
+fil des chapitres : **la structure de la donnée commande ce que la modélisation peut en
+tirer**. Ce n'est pas une position théorique, c'est un constat que l'année a produit deux
+fois. La première en creux, lorsque la charge de la migration a repoussé le projet de Machine
+Learning au second semestre. La seconde en plein, lorsque ce projet a donné des résultats
+solides là où les données avaient une profondeur temporelle, et modestes là où elles
+n'étaient qu'une photographie à date.
 
-Ce mémoire présente l'ensemble des travaux réalisés durant cette année, du premier jour de
-la migration jusqu'à la livraison d'une application d'aide à la décision. Il témoigne d'un
-mouvement en deux temps dans mes missions : le passage de la Data Science exploratoire au
-Data Engineering appliqué, puis le retour à la modélisation une fois les données
-reconstituées. L'ordre compte. Avant de pouvoir modéliser ou prédire, il est impératif de
-construire une architecture de données robuste et cohérente. J'ai ainsi été confrontée à
-des défis techniques majeurs, impliquant l'automatisation de flux complexes, la gestion de
-règles de gestion dynamiques et l'industrialisation des processus de reprise.
+Sept chapitres suivent la progression de mes responsabilités. Le chapitre 1 pose le contexte
+métier et le contexte data. Les chapitres 2 à 5 exposent les quatre missions de l'année dans
+leur ordre d'apparition : la migration des opérations vers SPO, la reprise des tiers, les
+missions de reporting et d'infrastructure menées en parallèle, puis le projet de Data
+Science, le Copilote Financier. Le chapitre 6 relit ces missions transversalement, sous
+l'angle de la conduite de projet, des technologies employées, de l'évaluation des résultats
+et des difficultés rencontrées. Le chapitre 7 livre ma réflexion sur le métier de data
+scientist tel que je l'ai pratiqué, et présente les perspectives et mon projet professionnel.
 
-C'est de cette expérience que je tire la thèse de ce mémoire, et je préfère l'énoncer
-d'emblée pour que le lecteur puisse en juger au fil des chapitres : **la structure de la
-donnée commande ce que la modélisation peut en tirer**. Ce n'est pas une position
-théorique. C'est un constat que l'année a produit deux fois. La première, en creux,
-lorsque la charge de la migration a repoussé le projet de Machine Learning au second
-semestre. La seconde, en plein, lorsque le projet de Data Science a donné des résultats
-solides là où les données avaient une profondeur temporelle, et des résultats modestes là
-où elles n'étaient qu'une photographie à date.
-
-Ce document s'articule autour de sept chapitres, qui suivent la progression de mes
-responsabilités :
-
-- Le **chapitre 1** pose le contexte, dans sa double dimension. Le contexte métier d'abord,
-  celui d'un promoteur-aménageur dont l'activité s'étale sur des cycles longs ; le contexte
-  data ensuite, celui d'un système d'information en pleine mutation, où la donnée était
-  répartie entre plusieurs outils qui ne se parlaient pas.
-- Le **chapitre 2** présente le projet central du premier semestre : la migration des données
-  opérationnelles vers l'ERP SPO. J'y détaille la stratégie d'automatisation mise en œuvre
-  pour traiter une volumétrie critique de 283 opérations, en insistant sur les défis
-  algorithmiques posés par l'usage des API et sur la nécessité de maintenir la continuité de
-  service pour la facturation.
-- Le **chapitre 3** prolonge ce travail au second semestre avec la reprise des tiers, c'est-à-dire
-  des clients acquéreurs. J'y expose la conception d'une chaîne de traitement pilotée par
-  formules, les trois mécanismes algorithmiques qui la font fonctionner, et le contournement
-  par API qui a permis de dépasser une limite du format d'import.
-- Le **chapitre 4** aborde le maintien et l'évolution du système décisionnel, ainsi que les
-  missions transverses d'infrastructure. J'y expose comment j'ai dû concevoir des reportings
-  intégrant des règles juridiques complexes, en contournant les limitations techniques des
-  outils pour répondre aux besoins précis des services.
-- Le **chapitre 5** présente le projet de Data Science mené au second semestre : le Copilote
-  Financier, un outil d'aide à la décision construit sur les données de gestion pour la
-  direction financière.
-- Le **chapitre 6** prend de la hauteur sur ces quatre missions. Il expose la méthodologie de
-  conduite de projet que j'ai suivie, les technologies et les méthodes mobilisées, la manière
-  dont j'ai évalué mes propres résultats, et les difficultés que j'ai rencontrées.
-- Le **chapitre 7**, enfin, livre ma réflexion sur le métier de data scientist tel que je l'ai
-  pratiqué, et présente les perspectives ainsi que mon projet professionnel.
-
-À travers ce mémoire, mon objectif n'est pas seulement de présenter mon travail de cette
-seconde année. Il est aussi de montrer comment les métiers liés à la donnée évoluent, et
-comment la data science peut accompagner concrètement les transformations d'un secteur qui
-ne l'attendait pas.
 
 # Contexte de l'alternance : un métier de cycles longs, un système d'information en mutation
 
@@ -216,89 +179,70 @@ ne l'attendait pas.
 - 1.4 Les quatre missions de l'année et leur enchaînement
 :::
 
-Ce chapitre pose le décor dans lequel s'inscrivent les quatre missions que présente ce
-mémoire. Il le fait dans deux dimensions qu'il serait artificiel de séparer. La première est
-le contexte métier : ce que fait le groupe Angelotti, sur quels cycles, avec quelles
-contraintes économiques. La seconde est le contexte data : de quels outils disposait
-l'entreprise, dans quel état se trouvait sa donnée, et pourquoi la question de sa
-fiabilisation s'est posée avec cette acuité cette année précisément. Ces deux dimensions se
-commandent l'une l'autre, et c'est leur rencontre qui explique la forme prise par mes
+Ce chapitre pose le décor des quatre missions que présente ce mémoire, dans deux dimensions
+qu'il serait artificiel de séparer : le contexte métier, c'est-à-dire ce que fait le groupe
+Angelotti et sous quelles contraintes économiques, et le contexte data, c'est-à-dire l'état
+dans lequel se trouvait sa donnée. C'est leur rencontre qui explique la forme prise par mes
 missions.
 
 ## Le groupe Angelotti et la nature de son activité
 
 ### Deux métiers, deux logiques économiques
 
-Le groupe Angelotti conçoit, finance et commercialise des programmes immobiliers en
-Occitanie et en région PACA. Son activité se répartit entre deux métiers qu'il est essentiel
-de distinguer, parce que rien de ce qui suit ne se comprend si on les confond.
+Le groupe Angelotti conçoit, finance et commercialise des programmes immobiliers en Occitanie
+et en région PACA. Son activité se répartit entre deux métiers qu'il faut distinguer, parce
+que rien de ce qui suit ne se comprend si on les confond. L'**aménagement foncier** consiste à
+acquérir un terrain, à le viabiliser et à le découper en lots destinés à la construction : la
+valeur y est créée par la transformation du foncier, et les postes dominants sont
+l'acquisition et les travaux de voirie et réseaux. La **promotion immobilière** consiste à
+concevoir, financer, construire et commercialiser des logements neufs : la valeur y est créée
+par la construction, poste qui pèse le plus lourd dans le budget.
 
-L'**aménagement foncier** consiste à acquérir un terrain, à le viabiliser et à le découper en
-lots destinés à la construction. La valeur y est créée par la transformation du foncier
-lui-même, et les postes de dépense dominants sont l'acquisition du terrain et les travaux de
-voirie et de réseaux divers.
-
-La **promotion immobilière** consiste à concevoir, financer, construire et commercialiser des
-logements neufs. La valeur y est créée par la construction, et c'est ce poste qui pèse le
-plus lourd dans le budget.
-
-Cette distinction n'est pas seulement descriptive. Elle produit deux structures de coûts
-différentes, deux rythmes de commercialisation différents, et donc deux façons de suivre une
-opération. Nous verrons au chapitre 5 que cette frontière ressort d'elle-même dès l'analyse
-exploratoire des données de gestion, et qu'elle a justifié de restreindre le périmètre de
-l'outil d'aide à la décision à la seule promotion.
-
-Chaque opération, dans l'un comme dans l'autre métier, est portée par une société dédiée.
-Cette organisation juridique a une conséquence directe sur le système d'information : le
-suivi financier est nativement cloisonné par opération, et toute vision transverse doit être
-reconstruite.
+Cette distinction produit deux structures de coûts et deux rythmes de commercialisation
+différents, donc deux façons de suivre une opération. Nous verrons au chapitre 5 que la
+frontière ressort d'elle-même de l'analyse exploratoire, et qu'elle a justifié de restreindre
+le périmètre de l'outil d'aide à la décision à la seule promotion. Chaque opération, dans les
+deux métiers, est par ailleurs portée par une société dédiée : le suivi financier est donc
+nativement cloisonné par opération, et toute vision transverse doit être reconstruite.
 
 ### Le cycle long d'une opération et la dérive du budget
 
-Une opération immobilière vit sur un cycle long, qui se compte en années et non en mois. Un
-budget est arrêté au moment de l'engagement, puis le chantier et la commercialisation le font
-dériver. Les appels d'offres reviennent plus chers qu'anticipé, des acquéreurs se désistent,
-le rythme de vente ralentit sous l'effet de la conjoncture.
+Une opération immobilière vit sur un cycle qui se compte en années. Un budget est arrêté au
+moment de l'engagement, puis le chantier et la commercialisation le font dériver : les appels
+d'offres reviennent plus chers qu'anticipé, des acquéreurs se désistent, le rythme de vente
+ralentit sous l'effet de la conjoncture. Cette dérive n'est pas une anomalie, c'est le
+fonctionnement normal du métier. Ce qui pose problème, c'est de la mesurer à temps : entre le
+moment où un poste commence à déraper et celui où l'écart devient visible dans les comptes,
+il peut s'écouler plusieurs mois, et sur une marge de quelques centaines de milliers d'euros,
+ce délai suffit à transformer un ajustement en perte.
 
-Cette dérive n'est pas une anomalie, c'est le fonctionnement normal du métier. Ce qui pose
-problème, c'est de la mesurer à temps. Entre le moment où un poste budgétaire commence à
-déraper et le moment où l'écart devient visible dans les comptes, il peut s'écouler
-plusieurs mois, et sur une marge d'engagement de quelques centaines de milliers d'euros, ce
-délai suffit à transformer un ajustement en perte.
-
-Ce cycle long explique également pourquoi la reprise de l'historique était un enjeu majeur de
-la migration vers le nouvel ERP. Une opération engagée il y a trois ans et non encore livrée
-n'est pas une donnée d'archive, c'est un dossier vivant : elle continue de générer des
-factures, des appels de fonds et des actes de vente. Basculer d'un système à un autre sans
-emporter cet historique aurait interrompu la gestion en cours.
+Ce cycle long explique aussi pourquoi la reprise de l'historique était un enjeu de la
+migration. Une opération engagée il y a trois ans et non livrée n'est pas une donnée
+d'archive, c'est un dossier vivant : elle continue de générer des factures, des appels de
+fonds et des actes de vente. Basculer d'un système à l'autre sans emporter cet historique
+aurait interrompu la gestion en cours.
 
 ## Le système d'information et sa mutation
 
 ### Des outils spécialisés, mais cloisonnés
 
-À mon arrivée en deuxième année, le système d'information du groupe reposait sur trois
-outils principaux, chacun compétent sur son domaine, et sur une quatrième couche moins
-visible mais tout aussi structurante : les tableurs.
+À mon arrivée en deuxième année, le système d'information reposait sur trois outils
+principaux et sur une quatrième couche moins visible mais tout aussi structurante :
+**Grimmo**, l'ERP métier historique, portait la gestion des opérations ; **Vadimm**, le CRM,
+portait la relation commerciale, acquéreurs, réservations, désistements et coordonnées ;
+**MyReport**, l'outil décisionnel, requêtait les bases sources et produisait les tableaux de
+bord ; et **les tableurs**, enfin, faisaient le lien partout où les trois premiers ne se
+parlaient pas, la direction financière y suivant ses dérives budgétaires opération par
+opération, sans vision transverse.
 
-1. **Grimmo**, l'ERP métier historique, portait la gestion des opérations immobilières :
-   structure des dossiers, budgets, dépenses et recettes.
-2. **Vadimm**, le CRM, portait la relation commerciale : les acquéreurs, les réservations,
-   les désistements et les coordonnées des clients. Sa migration avait constitué l'essentiel
-   de mes missions de première année.
-3. **MyReport**, l'outil décisionnel, permettait de requêter les bases de données sources et
-   de produire les tableaux de bord des différents services.
-4. **Les tableurs**, enfin, faisaient le lien partout où les trois premiers ne se parlaient
-   pas. La direction financière suivait ainsi ses dérives budgétaires opération par
-   opération, sur des fichiers individuels, sans vision transverse.
-
-La Figure 1.1 représente cette organisation et situe l'endroit où mes missions sont intervenues.
-Les trois outils et leurs usages métier occupent le haut du schéma, reliés par les flèches qui
-figurent la circulation normale de la donnée ; les tableurs forment la bande du bas, et les
-traits pointillés qui les rattachent à chacun d'eux marquent les échanges qui ne passent par
-aucun système. On y lit le problème central : la donnée existait, en quantité, mais elle était
-répartie entre des outils qui ne partageaient ni les mêmes identifiants, ni les mêmes
-définitions. Le même client pouvait exister dans le CRM et dans l'ERP sans qu'aucun lien ne les
-rattache ; la même notion de marge pouvait être calculée différemment selon l'outil qui
+La Figure 1.1 représente cette organisation et situe l'endroit où mes missions sont
+intervenues. Les trois outils et leurs usages métier occupent le haut du schéma, reliés par
+les flèches qui figurent la circulation normale de la donnée ; les tableurs forment la bande
+du bas, et les traits pointillés qui les rattachent à chacun d'eux marquent les échanges qui
+ne passent par aucun système. On y lit le problème central : la donnée existait, en quantité,
+mais répartie entre des outils qui ne partageaient ni les mêmes identifiants ni les mêmes
+définitions. Le même client pouvait exister dans le CRM et dans l'ERP sans qu'aucun lien ne
+les rattache ; la même notion de marge pouvait être calculée différemment selon l'outil qui
 l'interrogeait.
 
 ![Les outils du système d'information et la circulation de la donnée](figures/fig_1_1_systeme_information.png){width=100%}
@@ -306,58 +250,42 @@ l'interrogeait.
 ### Le remplacement de l'ERP : ce que le changement impose
 
 La décision de remplacer Grimmo par SPO, l'ERP édité par Salvia, a été prise à l'échelle de
-la direction, et elle a commandé le calendrier de toute l'année. Un changement d'ERP n'est
-pas un changement d'outil : c'est un changement de modèle de données. Les objets ne portent
-plus les mêmes noms, ne s'articulent plus de la même façon, et n'acceptent plus les mêmes
-valeurs.
+la direction et a commandé le calendrier de toute l'année. Un changement d'ERP n'est pas un
+changement d'outil, c'est un changement de modèle de données : les objets ne portent plus les
+mêmes noms, ne s'articulent plus de la même façon et n'acceptent plus les mêmes valeurs.
 
-Trois contraintes en découlaient, et elles ont structuré mes missions du premier semestre.
+Trois contraintes en découlaient. Une contrainte de **volumétrie** d'abord : 283 opérations
+devaient être reprises avec leurs subdivisions et leurs budgets, échelle à laquelle une
+saisie manuelle intégrale était exclue. Une contrainte de **continuité de service** ensuite :
+les utilisateurs devaient pouvoir facturer dès le basculement, une interruption de deux
+semaines étant déjà inacceptable. Une contrainte de **conformité au modèle cible** enfin : SPO
+impose ses propres règles d'intégrité, qui n'étaient pas toutes documentées et qu'il a fallu
+découvrir en les heurtant, ce que le chapitre 2 détaille.
 
-La première est une contrainte de **volumétrie** : 283 opérations immobilières devaient être
-reprises, avec leurs subdivisions et leurs budgets. À cette échelle, une saisie manuelle
-intégrale était exclue.
-
-La deuxième est une contrainte de **continuité de service**. Les utilisateurs devaient
-pouvoir facturer dès le basculement, sans attendre que la reprise soit achevée. Une migration
-qui aurait interrompu la facturation, même deux semaines, aurait été inacceptable pour
-l'entreprise.
-
-La troisième est une contrainte de **conformité au modèle cible**. SPO impose ses propres
-règles d'intégrité, et ces règles n'étaient pas toutes documentées. Il a fallu les découvrir
-en les heurtant, ce que le chapitre 2 détaille.
-
-À ces trois contraintes s'ajoute une perspective qui n'était pas prévue au calendrier
-initial : le passage prochain vers l'infrastructure technique du groupe Nexity. Ce
-changement d'environnement engendrera des missions spécifiques d'adaptation de nos outils, et
-il a influé sur certains de mes choix techniques, notamment lorsqu'il a fallu évaluer si
-l'architecture retenue pour le projet de Data Science tiendrait à une échelle supérieure.
+S'y ajoute une perspective absente du calendrier initial : le passage prochain vers
+l'infrastructure technique du groupe Nexity, qui engendrera des missions d'adaptation et qui
+a influé sur certains choix techniques, notamment lorsqu'il a fallu évaluer si l'architecture
+retenue pour le projet de Data Science tiendrait à une échelle supérieure.
 
 ## Le contexte data : ce dont je disposais, et ce qu'il fallait en faire
 
 ### Une donnée abondante mais non exploitable en l'état
 
 Le contexte data science de mes missions se résume à un paradoxe que j'ai mis plusieurs mois
-à formuler clairement. L'entreprise ne manquait pas de données. Elle disposait de l'historique
-complet de ses opérations, de ses ventes, de ses désistements et de ses budgets, sur
-plusieurs années. Ce qui manquait, c'était la possibilité de s'en servir.
+à formuler : l'entreprise ne manquait pas de données. Elle disposait de l'historique complet
+de ses opérations, ventes, désistements et budgets sur plusieurs années. Ce qui manquait,
+c'était la possibilité de s'en servir, et trois obstacles se cumulaient.
 
-Trois obstacles se cumulaient.
-
-Le premier est l'**absence d'identifiant partagé**. Un acquéreur du CRM et un tiers de l'ERP
-ne se reconnaissent pas l'un l'autre. Rapprocher les deux suppose de reconstruire une clé
-d'identité, ce qui est précisément le sujet du chapitre 3.
-
-Le deuxième est l'**absence de définition partagée**. La marge d'une opération peut se calculer
-sur le budget, sur l'engagé ou sur le facturé, et chacun de ces calculs a sa légitimité. Tant
-que la définition n'est écrite nulle part, chaque tableau de bord porte implicitement la
-sienne, et deux services peuvent afficher deux chiffres différents pour la même opération
-sans que ni l'un ni l'autre ait tort.
-
-Le troisième est l'**absence de profondeur temporelle**. Les exports du système de gestion sont
-une photographie à date : ils disent où en est un budget aujourd'hui, mais pas comment il y
-est arrivé. Cette limite, je ne l'ai pleinement mesurée qu'au moment de modéliser, et elle
-plafonne l'un des trois axes du projet de Data Science, comme le chapitre 5 l'expose sans
-détour.
+Le premier est l'**absence d'identifiant partagé** : un acquéreur du CRM et un tiers de l'ERP
+ne se reconnaissent pas, et les rapprocher suppose de reconstruire une clé d'identité, qui
+est précisément le sujet du chapitre 3. Le deuxième est l'**absence de définition partagée** :
+la marge d'une opération peut se calculer sur le budget, sur l'engagé ou sur le facturé, et
+tant que la définition n'est écrite nulle part, chaque tableau de bord porte implicitement la
+sienne, deux services pouvant afficher deux chiffres différents sans que ni l'un ni l'autre
+ait tort. Le troisième est l'**absence de profondeur temporelle** : les exports du système de
+gestion disent où en est un budget aujourd'hui, pas comment il y est arrivé. Cette limite,
+que je n'ai pleinement mesurée qu'au moment de modéliser, plafonne l'un des trois axes du
+projet de Data Science.
 
 Ces trois obstacles ont un point commun : aucun ne relève de la modélisation. Ce sont des
 problèmes de structure, et ils se règlent avant tout modèle. C'est le constat qui fonde la
@@ -365,58 +293,49 @@ thèse de ce mémoire.
 
 ### Mon positionnement entre les métiers et le système d'information
 
-Ma position dans l'organisation mérite d'être précisée, parce qu'elle explique la diversité
-des missions présentées. Rattachée à la Holding SPA, j'ai travaillé au contact direct des
-services métiers, en particulier la direction financière, le service juridique et les
-équipes commerciales, tout en intervenant sur les outils du système d'information.
-
-Cette position intermédiaire a une conséquence pratique constante : la formulation du besoin
-fait partie du travail. Un service ne demande presque jamais un livrable technique. Il décrit
-une gêne, un tableau qu'il faut refaire à la main chaque mois, une question à laquelle il ne
-sait pas répondre. Traduire cette gêne en spécification exploitable, puis vérifier que la
-traduction était fidèle, occupe une part du temps que je n'avais pas anticipée en arrivant.
+Rattachée à la Holding SPA, j'ai travaillé au contact direct des services métiers — direction
+financière, service juridique, équipes commerciales — tout en intervenant sur les outils du
+système d'information. Cette position intermédiaire a une conséquence pratique constante : la
+formulation du besoin fait partie du travail. Un service ne demande presque jamais un
+livrable technique ; il décrit une gêne, un tableau qu'il refait à la main chaque mois, une
+question à laquelle il ne sait pas répondre. Traduire cette gêne en spécification, puis
+vérifier que la traduction était fidèle, occupe une part du temps que je n'avais pas
+anticipée.
 
 C'est aussi cette position qui explique que mes missions ne se rangent pas toutes sous
-l'étiquette de la data science. Le chapitre 4 présente ainsi une contribution au déploiement
-du Single Sign-On, qui relève de l'administration système. Ces missions transverses, bien
-que chronophages, sont complémentaires au travail de fond sur la donnée : elles m'ont donné
-une vision de l'architecture du système d'information que je n'aurais pas acquise autrement.
+l'étiquette de la data science : le chapitre 4 présente ainsi une contribution au déploiement
+du Single Sign-On, qui relève de l'administration système et qui m'a donné une vision de
+l'architecture du système d'information que je n'aurais pas acquise autrement.
 
 ## Les quatre missions de l'année et leur enchaînement
 
-L'année s'organise en quatre missions, réparties sur deux semestres, que présente la
-Figure 1.2. Leur enchaînement n'a rien d'arbitraire : chacune conditionne la suivante.
+L'année s'organise en quatre missions réparties sur deux semestres, que présente la
+Figure 1.2. Leur enchaînement n'a rien d'arbitraire, chacune conditionnant la suivante.
 
-1. **La migration des données opérationnelles vers SPO** (premier semestre, chapitre 2) a
-   consisté à reprendre les 283 opérations et leurs tranches depuis la base historique, les
-   budgets détaillés étant reportés à un second temps. C'est le socle : sans les opérations, rien d'autre ne peut exister dans le
-   nouvel ERP.
-2. **La reprise des tiers** (second semestre, chapitre 3) a complété ce socle par le volet
+1. **La migration des données opérationnelles vers SPO** (premier semestre, chapitre 2) a
+   repris les 283 opérations et leurs tranches depuis la base historique, les budgets
+   détaillés étant reportés à un second temps. C'est le socle : sans les opérations, rien
+   d'autre ne peut exister dans le nouvel ERP.
+2. **La reprise des tiers** (second semestre, chapitre 3) a complété ce socle par le volet
    commercial, en créant dans SPO les 1 434 clients acquéreurs du groupe.
 3. **Le maintien du système décisionnel et les missions SI transverses** (les deux semestres,
-   chapitre 4) ont couru en parallèle sur toute l'année, pour que les services continuent de
-   disposer de leurs indicateurs pendant que le socle se reconstruisait.
-4. **Le Copilote Financier** (second semestre, chapitre 5) a exploité ce socle une fois
+   chapitre 4) ont couru sur toute l'année, pour que les services continuent de disposer de
+   leurs indicateurs pendant que le socle se reconstruisait.
+4. **Le Copilote Financier** (second semestre, chapitre 5) a exploité ce socle une fois
    stabilisé, en construisant un outil d'aide à la décision pour la direction financière.
 
 ![Les quatre missions de l'année et leur répartition sur les deux semestres](figures/fig_1_2_frise_missions.png){width=100%}
 
-Cette progression dessine un mouvement que je n'avais pas prévu en arrivant, et qui est
-l'histoire de ce mémoire : partie d'un projet de modélisation, j'ai passé la majeure partie
-de l'année à construire ce qui rendait cette modélisation possible, avant d'y revenir. Le
-détour n'était pas une perte de temps, c'était le travail.
+Cette progression dessine un mouvement que je n'avais pas prévu, et qui est l'histoire de ce
+mémoire : partie d'un projet de modélisation, j'ai passé la majeure partie de l'année à
+construire ce qui rendait cette modélisation possible, avant d'y revenir. Le détour n'était
+pas une perte de temps, c'était le travail.
 
-::: transition
-Ce premier chapitre aura montré que les missions de cette année ne se comprennent pas comme
-une liste de tâches, mais comme la réponse à une situation précise : une entreprise dont le
-métier impose des cycles longs, dont le système d'information changeait de socle, et dont la
-donnée était abondante sans être exploitable.
-
-Le chapitre suivant entre dans le premier de ces chantiers, et le plus lourd : la migration
-des données opérationnelles vers l'ERP SPO. On y verra que le problème n'était pas de
-transférer des données d'un système à un autre, mais de rétro-concevoir les règles d'un
-modèle de données que personne, dans l'entreprise, ne connaissait encore.
-:::
+Ces missions ne se comprennent donc pas comme une liste de tâches, mais comme la réponse à
+une situation : des cycles longs, un système d'information qui changeait de socle, et une
+donnée abondante sans être exploitable. Le chapitre suivant entre dans le premier de ces
+chantiers, la migration vers SPO, où le problème n'était pas de transférer des données mais
+de rétro-concevoir les règles d'un modèle que personne ne connaissait encore.
 
 
 # La migration vers SPO : enjeux d'industrialisation et défis techniques
@@ -459,15 +378,11 @@ Nous avons donc opté pour une stratégie hybride :
 - Un traitement manuel pour les exceptions et les cas particuliers historiques ne pouvant
   entrer dans les gabarits standardisés.
 
-Cet arbitrage mérite d'être explicité, car il n'allait pas de soi. Automatiser suppose un
-investissement initial important, qui ne se rentabilise que si le volume est suffisant et si
-les données sont suffisamment homogènes. Sur 283 opérations, la première condition était
-remplie ; la seconde ne l'était que partiellement, et c'est précisément pourquoi la stratégie
-retenue est hybride plutôt qu'entièrement automatisée. Vouloir tout automatiser aurait
-conduit à écrire des règles pour des cas uniques, ce qui coûte plus cher que de les traiter
-à la main.
-
-Mon travail s'est structuré en deux phases techniques distinctes : une phase préparatoire
+Cet arbitrage n'allait pas de soi. Automatiser suppose un investissement initial qui ne se
+rentabilise que si le volume est suffisant et les données homogènes : sur 283 opérations, la
+première condition était remplie, la seconde seulement en partie. Vouloir tout automatiser
+aurait conduit à écrire des règles pour des cas uniques, ce qui coûte plus cher que de les
+traiter à la main. Mon travail s'est ensuite structuré en deux phases, une phase préparatoire
 d'appropriation et une phase opérationnelle d'industrialisation.
 
 ### Phase préparatoire : appropriation technique et tests unitaires
@@ -619,37 +534,28 @@ injection, que résume la Figure 2.4 :
 
 ![Le requêtage dynamique imposé par le versionnement des budgets](figures/fig_2_4_requetage_dynamique.png){width=100%}
 
-Cette contrainte forte m'a obligée à intégrer des vérifications programmatiques en amont de
-chaque écriture. Elle m'a surtout appris quelque chose de plus général sur les interfaces de
+Cette contrainte m'a surtout appris quelque chose de plus général sur les interfaces de
 programmation : une API ne se contente pas d'exposer des données, elle impose un modèle de
-comportement. Ici, le versionnement traduit une exigence d'auditabilité comptable
-parfaitement légitime, mais qui rend impossible toute écriture naïve. Comprendre l'intention
-derrière la contrainte est ce qui permet de la contourner proprement plutôt que de lutter
-contre elle.
+comportement. Le versionnement traduit ici une exigence d'auditabilité comptable parfaitement
+légitime, mais qui rend impossible toute écriture naïve. Comprendre l'intention derrière la
+contrainte est ce qui permet de la contourner proprement plutôt que de lutter contre elle.
 
 ## Adaptation stratégique : le déploiement en « coquilles vides »
 
-Face aux complexités techniques inhérentes à la gestion des identifiants et au versionnement,
-et compte tenu des délais stricts imposés par la direction, nous avons été confrontés à un
-arbitrage nécessaire entre perfection technique et urgence opérationnelle.
-
-La contrainte majeure provenait du besoin impératif des utilisateurs de réaliser la
-facturation électronique dès le basculement vers le nouvel outil. Pour que ce processus
-fonctionne, et notamment pour assurer le lien avec la Gestion Électronique des Documents
-(GED), il fallait que les opérations existent dans l'ERP, même si leur historique n'était pas
-encore intégralement reconstitué.
+Les complexités techniques exposées ci-dessus, jointes aux délais imposés par la direction,
+nous ont confrontés à un arbitrage entre perfection technique et urgence opérationnelle. La
+contrainte majeure venait du besoin des utilisateurs de facturer dès le basculement : pour que
+ce processus fonctionne, et notamment le lien avec la Gestion Électronique des Documents
+(GED), il fallait que les opérations existent dans l'ERP, même sans leur historique.
 
 ### Une approche agile par priorisation
 
-Nous avons donc décidé d'adopter une stratégie de déploiement dite en « coquilles vides ».
-Cette approche a consisté à dissocier le contenant, c'est-à-dire la structure de l'opération,
-du contenu, c'est-à-dire les données budgétaires détaillées.
-
-Concrètement, nous avons réorienté notre plan de migration pour prioriser la création massive
-des fiches opérations dans SPO. Nous avons injecté en priorité les données indispensables à
-la facturation, comme le code opération et le libellé, laissant temporairement de côté les
-données historiques plus complexes, budgets passés et détail des tranches, qui nécessitaient
-un temps de nettoyage supérieur.
+Nous avons donc adopté une stratégie de déploiement en « coquilles vides », qui dissocie le
+contenant — la structure de l'opération — du contenu, c'est-à-dire les données budgétaires
+détaillées. Le plan de migration a été réorienté pour créer massivement les fiches opérations
+et injecter en priorité ce qui est indispensable à la facturation, code opération et libellé,
+en laissant de côté les budgets passés et le détail des tranches, qui demandaient un temps de
+nettoyage supérieur.
 
 Cette décision est celle dont j'ai le plus appris en matière de conduite de projet. Elle
 suppose d'accepter qu'un système soit temporairement incomplet et de le documenter comme
@@ -660,28 +566,18 @@ transformé une dette implicite en dette suivie.
 
 ### Gains opérationnels et lissage de la charge
 
-Cette stratégie s'est révélée payante. Elle a permis de débloquer immédiatement la fonction
-de facturation et d'assurer la continuité de service sans attendre la finalisation totale de
-la migration. De plus, elle nous a offert un délai supplémentaire précieux pour traiter la
-reprise des données au fil de l'eau, dans un second temps, sans subir la pression de
-l'urgence quotidienne.
-
-Cette adaptation témoigne d'une gestion de projet agile, capable d'ajuster sa méthodologie
-pour répondre aux réalités du terrain.
+Cette stratégie a débloqué immédiatement la facturation et assuré la continuité de service
+sans attendre la finalisation de la migration. Elle a de plus offert un délai précieux pour
+traiter la reprise au fil de l'eau, sans la pression de l'urgence quotidienne.
 
 ## Bilan de la migration à la fin du premier semestre
 
-Ce travail d'initialisation de la migration vers SPO a constitué l'axe central du premier
-semestre. Il est essentiel de préciser qu'à la fin de cette période, nous n'étions qu'au
-début de ce vaste chantier.
-
-Nous avons réussi à modéliser et intégrer la structure fondamentale des dossiers, à savoir les
-opérations et leurs tranches de travaux, la création des tranches commerciales étant encore en
-cours à la fin du semestre. Une part conséquente du travail restait à accomplir : l'analyse et
-l'intégration des données financières et comptables, notamment la reprise détaillée des budgets
-et de l'historique des factures.
-
-Le tableau suivant récapitule l'état d'avancement à ce jalon.
+À la fin du premier semestre, nous n'étions qu'au début de ce chantier. La structure
+fondamentale des dossiers était modélisée et intégrée — opérations et tranches de travaux, la
+création des tranches commerciales étant encore en cours — mais une part conséquente du
+travail restait à accomplir : l'intégration des données financières et comptables, notamment
+la reprise détaillée des budgets et de l'historique des factures. Le tableau suivant
+récapitule l'état d'avancement à ce jalon.
 
 | Objet du modèle SPO | État à la fin du premier semestre |
 |:--------------------------------|:--------------------------------------------|
@@ -698,23 +594,13 @@ reprise, l'avancement ne se mesure pas au nombre d'enregistrements créés, mais
 modèle cible réellement couverte. Créer 283 opérations sans leurs budgets, ce n'est pas avoir
 fait la moitié du travail, c'est avoir rendu la seconde moitié possible.
 
-::: transition
-La migration vers SPO a occupé l'essentiel de mon premier semestre, et elle a défini le
-niveau d'exigence technique du reste de l'année. J'y ai appris à lire un modèle de données
-inconnu par ses messages d'erreur, à respecter une intégrité référentielle non documentée, et
-à arbitrer entre l'exhaustivité et la continuité de service.
-
-Néanmoins, le socle ainsi constitué restait incomplet sur un point qui allait vite se faire
-sentir. Les opérations existaient, mais les clients qui achètent dans ces opérations, eux,
-n'étaient pas encore dans le nouvel ERP. Or reprendre des clients n'est pas reprendre des
-structures de gestion : il s'agit de personnes, avec ce que cela implique de
-risques de doublons et d'exigence de qualité.
-
-Le chapitre suivant présente donc la reprise des tiers, conduite au second semestre. On y
-verra que le problème central n'y était plus l'ordre d'injection, mais une question
-préalable et bien plus difficile à trancher : à partir de quoi décide-t-on que deux lignes
-désignent la même personne ?
-:::
+Cette migration a défini le niveau d'exigence technique du reste de l'année : lire un modèle
+de données inconnu par ses messages d'erreur, respecter une intégrité référentielle non
+documentée, arbitrer entre exhaustivité et continuité de service. Le socle restait pourtant
+incomplet : les opérations existaient, mais pas les clients qui y achètent. Le chapitre
+suivant expose cette reprise des tiers, où la question centrale n'est plus l'ordre
+d'injection mais celle-ci : à partir de quoi décide-t-on que deux lignes désignent la même
+personne ?
 
 
 # La reprise des tiers : une chaîne de traitement pilotée par formules
@@ -1003,36 +889,25 @@ approximations : ils sont la traduction directe du modèle de données décrit e
 ### Génération et normalisation des fichiers d'import
 
 Une fois les six feuilles calculées, il restait à les transformer en fichiers réellement
-acceptés par SPO. Cette étape, que j'imaginais purement mécanique, a en réalité mobilisé
-plusieurs contraintes de format que la documentation ne mentionnait pas et que les premiers
-rejets ont fait apparaître.
+acceptés par SPO. Cette étape, que j'imaginais purement mécanique, a mobilisé quatre
+contraintes de format que la documentation ne mentionnait pas et que les premiers rejets ont
+fait apparaître : un encodage UTF-8 avec le point-virgule pour séparateur, seule
+configuration acceptée ; la conversion en ASCII pur de tous les noms, prénoms, adresses et
+professions, SPO refusant les caractères accentués ; la suppression de la seconde ligne
+d'en-tête des feuilles de travail ; et le découpage en lots de 200 tiers au maximum,
+homogènes en nature. Le détail de ces contraintes figure en annexe A.
 
-- **L'encodage et le séparateur.** Les fichiers doivent être enregistrés en CSV
-  (*Comma-Separated Values*, un format texte où les colonnes sont séparées par un
-  caractère) encodé en UTF-8, avec le point-virgule comme séparateur. C'est la seule
-  configuration acceptée par l'outil d'import.
-- **La normalisation des caractères.** SPO refuse les caractères accentués dans les
-  colonnes textuelles. Il a donc fallu convertir en ASCII pur l'ensemble des noms, prénoms,
-  adresses et professions, en remplaçant les caractères accentués par leur équivalent non
-  accentué. Cette contrainte est frustrante, puisqu'elle dégrade volontairement une donnée
-  correcte, mais elle est bloquante : sans elle, les lignes concernées sont rejetées.
-- **La structure de l'en-tête.** Les feuilles de travail comportent deux lignes de titre,
-  l'intitulé des colonnes et le type de données attendu. Seule la première doit être
-  conservée dans le fichier exporté.
-- **Le découpage en lots.** Les fichiers doivent être découpés en lots de 200 tiers au
-  maximum, et surtout être homogènes en nature : un même fichier ne peut pas contenir à la
-  fois des couples et des personnes physiques. Cette dernière règle a une conséquence
-  pratique importante, puisqu'elle impose de trier les lignes par nature avant de découper,
-  et c'est elle qui explique que l'import des couples s'est fait en cinq lots successifs.
+La dernière règle a une conséquence pratique : un même fichier ne pouvant mélanger couples et
+personnes physiques, il faut trier par nature avant de découper, ce qui explique que l'import
+des couples se soit fait en cinq lots successifs.
 
-J'ai consigné l'ensemble de ces contraintes dans la note de procédure remise à l'équipe, en
-même temps que la marche à suivre pour rejouer l'import si celui-ci devait être différé.
-Ce dernier point n'est pas anecdotique : entre la préparation du fichier et l'injection
-effective, d'autres tiers peuvent être créés dans SPO par les équipes commerciales. La
-procédure prévoit donc de redemander une extraction actualisée des tiers existants, de
-remplacer le contenu de la feuille de référence et de recalculer : les tiers devenus
-existants entre-temps sortent alors automatiquement du périmètre d'import. Le fichier reste
-ainsi utilisable dans le temps, ce qui était l'un de mes objectifs de conception.
+Ces contraintes sont consignées dans la note de procédure remise à l'équipe, avec la marche à
+suivre pour rejouer l'import s'il devait être différé — point qui n'est pas anecdotique,
+puisque d'autres tiers peuvent être créés dans SPO entre la préparation du fichier et
+l'injection. La procédure prévoit alors de redemander une extraction actualisée, de remplacer
+la feuille de référence et de recalculer : les tiers devenus existants sortent automatiquement
+du périmètre. Le fichier reste ainsi utilisable dans le temps, ce qui était l'un de mes
+objectifs de conception.
 
 ### Le contournement par API : 872 requêtes PATCH pour les coordonnées des couples
 
@@ -1089,48 +964,29 @@ n'avait pas eu l'occasion de mobiliser.
 
 ## Traitement des cas particuliers et arbitrages
 
-Aussi automatisée soit-elle, une reprise de données laisse toujours un résidu de cas qui ne
-rentrent dans aucune règle. Les traiter est moins spectaculaire que de concevoir un
-mécanisme de déduplication, mais c'est une part réelle du travail, et surtout une part qui
-engage une décision. J'ai tenu à documenter chacun de ces arbitrages dans la note de
-procédure, pour que la trace en subsiste indépendamment de moi.
+Une chaîne pilotée par formules ne traite pas tout. Neuf tiers ont demandé une intervention
+manuelle, répartis en quatre familles : trois adresses hors de France, que SPO refusait de
+créer avec un pays étranger et qui ont donc été créées en France puis rectifiées dans l'ERP ;
+trois tiers dont la nature était mal renseignée dans Vadimm, corrigée dans la feuille pivot
+avant génération puisque la nature commande à la fois la clé d'unicité et la feuille de
+sortie ; un tiers relevant d'une opération de dation, déjà présent dans SPO et retiré du
+fichier ; et deux doublons portant deux adresses divergentes. L'annexe B donne le détail de
+chaque cas et de l'arbitrage retenu.
 
-**Les adresses étrangères :** Trois tiers avaient une adresse hors de France, dont un en
-Allemagne et un aux Émirats arabes unis. SPO refusait initialement la création d'un tiers avec un pays
-étranger renseigné directement dans le fichier d'import. Plutôt que de bloquer la chaîne
-pour ces trois cas, nous avons choisi de les créer avec le pays France par défaut, puis
-de rectifier le pays manuellement dans l'ERP après création, en vérifiant à chaque fois que
-la modification était bien prise en compte. C'est un compromis assumé : il fait passer une
-information provisoirement fausse dans le système, mais sur un périmètre connu, listé, et
-corrigé dans la foulée.
+Ce dernier cas est le seul qui ait demandé un arbitrage véritable. Une même personne y
+apparaissait deux fois avec deux adresses différentes, sans qu'il soit possible de déterminer
+automatiquement laquelle retenir : la déduplication savait dire qu'il s'agissait de la même
+personne, elle ne pouvait pas dire où cette personne habite aujourd'hui. Après vérification
+des dates dans Vadimm, nous avons conservé l'adresse rattachée à la vente la plus récente.
 
-**Les tiers mal classés :** Trois autres tiers étaient renseignés dans Vadimm avec une nature qui
-ne correspondait pas à la réalité. Deux étaient enregistrés comme personnes physiques alors
-qu'il s'agissait de sociétés, et un troisième comme personne physique alors qu'il
-s'agissait d'un couple mal saisi. J'ai modifié manuellement leur nature dans la feuille
-pivot avant génération des fichiers, ce qui a suffi à ce qu'ils soient créés correctement,
-puisque la nature commande à la fois la clé d'unicité et la feuille de sortie qui les
-reçoit. L'un d'eux, en revanche, était déjà créé dans SPO par un autre canal : il a été
-retiré du fichier d'import plutôt que reclassé.
-
-**Les exclusions ponctuelles :** Un tiers relevant d'une opération de dation, c'est-à-dire
-d'un paiement en biens plutôt qu'en numéraire, existait déjà dans SPO et a été retiré du
-fichier.
-
-**Les doublons avec adresses divergentes :** Deux cas ont demandé un arbitrage véritable.
-Une même personne y apparaissait deux fois avec deux adresses différentes, sans qu'il soit
-possible de déterminer automatiquement laquelle retenir : la déduplication savait dire
-qu'il s'agissait de la même personne, elle ne pouvait pas dire où cette personne habite
-aujourd'hui. L'explication la plus vraisemblable était un déménagement entre deux achats.
-Après vérification des dates dans Vadimm, nous avons tranché en conservant l'adresse
-rattachée à la vente la plus récente.
-
-Ces cas sont peu nombreux au regard des 1 434 tiers créés, et il serait tentant de les
+Ces neuf cas sont peu nombreux au regard des 1 434 tiers créés, et il serait tentant de les
 présenter comme des détails. Je crois au contraire qu'ils délimitent précisément ce que
-l'automatisation peut et ne peut pas faire. Les formules savent appliquer une règle ;
-elles ne savent pas décider laquelle de deux adresses également plausibles est la bonne.
-La valeur du fichier de travail n'est pas d'avoir supprimé la décision humaine, mais de
-l'avoir concentrée sur une poignée de cas identifiés, au lieu de la diluer sur 1 602 lignes.
+l'automatisation peut et ne peut pas faire. Les formules savent appliquer une règle ; elles
+ne savent pas décider laquelle de deux adresses également plausibles est la bonne. La valeur
+du fichier de travail n'est pas d'avoir supprimé la décision humaine, mais de l'avoir
+concentrée sur une poignée de cas identifiés au lieu de la diluer sur 1 602 lignes. J'ai tenu
+à documenter chacun de ces arbitrages dans la note de procédure, pour que la trace en subsiste
+indépendamment de moi.
 
 ## Bilan de l'import et points de vigilance pour la suite
 
@@ -1159,88 +1015,40 @@ seuls la contrainte de format qui a imposé le recours à l'API.
 > représentants ouvert, montrant les deux personnes du couple et les coordonnées ajoutées
 > par requête PATCH sur l'une d'elles. Anonymiser les noms.
 
-Au-delà du résultat, ce projet m'a laissé un ensemble de points de vigilance que j'ai
-documentés et qui valent, je crois, bien au-delà du cas de cet import.
+Au-delà du résultat, ce projet m'a laissé des points de vigilance qui valent bien au-delà du
+cas de cet import.
 
-Le premier concerne l'usage du fichier lui-même. Quatre manipulations le cassent silencieusement
-: modifier une feuille de sortie, dont le contenu est régénéré à chaque recalcul ; modifier les
-colonnes calculées de la feuille pivot, qui portent toute la logique de rang et de numérotation
-; insérer une ligne au milieu de la feuille pivot ou de la feuille de coordonnées, ce qui décale
-toutes les références ; et trier la feuille pivot, ce qui détruit la logique de rang, celle-ci
-étant calculée de façon cumulative sur l'ordre des lignes. Aucune de ces quatre manipulations ne
-produit de message d'erreur, les rendant d'autant plus dangereuses. C'est la raison pour
-laquelle la note de procédure les mentionne avant même d'expliquer comment utiliser le fichier.
+Quatre manipulations cassent le fichier sans produire le moindre message d'erreur : modifier
+une feuille de sortie, dont le contenu est régénéré à chaque recalcul ; modifier les colonnes
+calculées de la feuille pivot, qui portent la logique de rang et de numérotation ; insérer une
+ligne au milieu d'une feuille, ce qui décale toutes les références ; et trier la feuille
+pivot, dont la logique de rang est cumulative sur l'ordre des lignes. La note de procédure les
+énonce avant même d'expliquer comment se servir du fichier.
 
-Le second concerne un ensemble de pièges techniques que j'ai rencontrés en construisant les
-formules, et qui ont chacun coûté du temps de recherche avant d'être compris :
+Les pièges de formule rencontrés relèvent tous du même défaut, et c'est l'enseignement
+principal que j'en tire : dans une chaîne pilotée par formules, l'erreur ne se manifeste
+presque jamais par un message d'erreur, mais par un compteur qui ne tombe pas juste. Chaîne
+vide comptée comme une valeur, code de mois interprété comme des minutes, heures parasites
+rendant différentes deux dates identiques à l'affichage, cellule vide confondue avec chaîne
+vide : chacun a produit des compteurs surévalués, des clés de déduplication fausses ou des
+faux positifs, et aucun n'a signalé quoi que ce soit. Le détail de ces quatre pièges et de
+leur correction figure en annexe C.
 
-1. **Le comptage des chaînes vides.** Une formule de comptage conditionnel considère comme
-   une valeur la chaîne vide renvoyée par une autre formule. Les compteurs de contrôle
-   étaient donc systématiquement surévalués, jusqu'à ce que je restreigne le comptage aux
-   seules valeurs textuelles réelles.
-2. **Le format des dates.** Le code de mise en forme des mois peut être interprété comme
-   un code de minutes selon le contexte, produisant des clés de déduplication fausses
-   sans qu'aucune erreur soit signalée. J'ai remplacé toute mise en forme globale par une
-   recomposition explicite de l'année, du mois et du jour.
-3. **Les heures parasites dans les dates de naissance.** Certaines dates issues de
-   l'extraction portaient une heure non nulle, d'autres non. Deux dates identiques à
-   l'affichage étaient donc considérées comme différentes par le tableur, cassant la
-   déduplication des personnes physiques. La normalisation systématique des dates à
-   minuit a réglé le problème.
-4. **La différence entre cellule vide et chaîne vide.** Une cellule contenant une formule
-   qui renvoie une chaîne vide n'est pas une cellule vide, et les tests de vacuité ne la
-   détectent pas comme telle. Cette confusion est à l'origine de plusieurs faux positifs
-   dans les premières versions des formules d'exclusion.
+C'est pourquoi j'ai ajouté à la feuille pivot un panneau de contrôle affichant en permanence
+les compteurs clés, que la procédure impose de vérifier avant tout export : c'est le seul
+dispositif de détection dont je disposais. Un dernier point relève de la performance : avec
+environ 60 000 cellules de formules, le recalcul automatique devient pénible, et la procédure
+recommande de travailler en calcul manuel puis de forcer un recalcul complet avant chaque
+export.
 
-Ces quatre points ont un dénominateur commun, et c'est l'enseignement principal que j'en
-tire : dans une chaîne de traitement par formules, l'erreur ne se manifeste presque jamais
-par un message d'erreur. Elle se manifeste par un compteur qui ne tombe pas juste. C'est
-pourquoi j'ai ajouté à la feuille pivot un panneau de contrôle affichant en permanence les
-compteurs clés, et pourquoi la procédure impose de les vérifier avant tout export : tout
-écart entre ces compteurs et les valeurs attendues signale un problème à investiguer avant
-d'aller plus loin. Ce panneau est le seul dispositif de détection dont je disposais.
-
-Un dernier point de vigilance relève de la performance. Le fichier comporte environ 60 000
-cellules de formules, rendant le recalcul automatique pénible pendant les phases de
-modification. Basculer en calcul manuel pendant le travail, puis forcer un recalcul complet
-avant chaque export, est la manière de travailler que j'ai retenue et que la procédure
-recommande.
-
-::: transition
-Cette reprise des tiers achève, pour la partie qui me revenait, le travail de constitution
-du socle de données du nouvel ERP. Après les opérations et leurs tranches migrées au
-premier semestre, les 1 434 clients acquéreurs disposent désormais dans SPO d'une fiche
-unique, correctement typée, dotée de ses représentants, de son rôle et, lorsque la source
-les portait, de ses coordonnées.
-Le référentiel commercial du groupe est reconstitué, et il l'est selon des règles écrites,
-tracées et rejouables plutôt que par une saisie dont personne n'aurait pu, six mois plus
-tard, reconstituer la logique.
-
-Néanmoins, il serait excessif de présenter ce chantier comme achevé. La reprise des
-historiques budgétaires reste devant nous, et le fichier de travail devra probablement être
-rejoué au moins une fois avant la bascule définitive, à mesure que de nouveaux tiers sont
-créés dans l'ERP par les équipes commerciales. Le référentiel client est en revanche
-stabilisé, et c'est lui qui conditionne la suite.
-
-La valeur de ce travail ne se mesure pas au nombre de lignes importées. Elle tient d'abord
-au choix des trois clés d'unicité, qui décide de ce qu'est un client dans notre référentiel ;
-ensuite à la capacité à contourner une limite de format en changeant de porte d'entrée vers
-le système ; enfin à la documentation des arbitrages, qui rend la reprise vérifiable par
-quelqu'un d'autre que celle qui l'a faite.
-
-Les deux chapitres qui précèdent ont donc reconstitué, chacun de son côté, une moitié du
-socle de gestion du groupe : les opérations et leurs tranches d'une part, les clients
-acquéreurs d'autre part. Pendant que ce socle se reconstruisait, les services n'ont pas cessé
-pour autant d'avoir besoin de leurs indicateurs, et l'entreprise a continué de faire évoluer
-son infrastructure.
-
-Le chapitre suivant présente ces missions filées, menées en parallèle des deux chantiers de
-reprise : le maintien du système décisionnel, avec une demande du service juridique qui
-illustre bien la difficulté d'implanter une règle métier dans un outil qui ne l'attend pas,
-et la contribution au déploiement du Single Sign-On. On y verra apparaître, sur un terrain
-plus modeste, la même question que celle qui commandera le projet de Data Science : où écrit-on
-une règle pour que tout le monde consomme la même ?
-:::
+Le référentiel commercial du groupe est ainsi reconstitué selon des règles écrites et
+rejouables, plutôt que par une saisie dont la logique aurait été introuvable six mois plus
+tard. Le chantier n'est pas clos pour autant : la reprise des historiques budgétaires reste
+devant nous, et le fichier devra être rejoué avant la bascule définitive. Pendant que ce
+socle se reconstruisait, les services ont continué d'avoir besoin de leurs indicateurs. Le
+chapitre suivant présente ces missions filées, où se pose déjà, sur un terrain plus modeste,
+la question qui commandera le projet de Data Science : où écrit-on une règle pour que tout le
+monde consomme la même ?
 
 
 # Maintien du système décisionnel et missions SI transverses
@@ -1346,94 +1154,58 @@ concevoir l'architecture du Copilote Financier.
 
 ### Enjeux et réalisation opérationnelle
 
-Au-delà de l'exploitation des données, j'ai également eu l'opportunité de participer à la
-sécurisation de leur accès. En parallèle de mes missions principales, j'ai collaboré avec
-l'administratrice des systèmes et outils SI sur un projet d'infrastructure transverse : le
-déploiement du SSO (Single Sign-On).
+En parallèle de mes missions principales, j'ai collaboré avec l'administratrice des systèmes
+et outils SI sur un projet d'infrastructure transverse : le déploiement du SSO
+(*Single Sign-On*), technologie permettant d'accéder à plusieurs applications avec une seule
+authentification. L'enjeu était double pour le groupe : réduire le nombre de mots de passe à
+mémoriser et renforcer la sécurité des accès aux outils sensibles.
 
-Le SSO est une technologie permettant à un utilisateur d'accéder à plusieurs applications
-avec une seule authentification. Pour le groupe Angelotti, l'enjeu était double :
-simplifier l'expérience utilisateur en réduisant le nombre de mots de passe à mémoriser,
-et renforcer la sécurité des accès aux outils sensibles.
-
-Mon rôle a été à la fois opérationnel et pédagogique. J'ai pris en charge le déploiement
-de la solution logicielle sur les postes de travail, en ciblant deux périmètres clés :
-l'agence de Perpignan et le service financier du siège. Cette mission m'a demandé de
-coordonner mes interventions avec les plannings des collaborateurs pour minimiser l'impact
-sur leur travail. Concrètement, j'ai procédé à l'installation du connecteur sur chaque
-poste, vérifié la bonne synchronisation avec l'annuaire de l'entreprise, et accompagné les
-utilisateurs lors de leur première connexion pour m'assurer de la bonne prise en main de
-l'outil. Nous avons volontairement commencé par ces deux périmètres avant d'envisager une
-généralisation, afin de mesurer les difficultés réelles sur un échantillon restreint.
+Mon rôle a été opérationnel et pédagogique. J'ai pris en charge le déploiement sur les postes
+de travail de deux périmètres, l'agence de Perpignan et le service financier du siège :
+installation du connecteur, vérification de la synchronisation avec l'annuaire d'entreprise,
+et accompagnement des utilisateurs lors de leur première connexion. Nous avons volontairement
+commencé par ces deux périmètres avant d'envisager une généralisation, afin de mesurer les
+difficultés réelles sur un échantillon restreint.
 
 ### Ce qu'une mission d'administration système apprend sur la donnée
 
-Cette expérience m'a permis de mieux appréhender les problématiques de gestion de parc
-informatique et de gouvernance des accès, des aspects souvent invisibles mais cruciaux
-pour la cohérence du Système d'Information.
+Cette expérience m'a fait appréhender les problématiques de gestion de parc et de gouvernance
+des accès, souvent invisibles mais cruciales pour la cohérence du système d'information. Elle
+m'a surtout appris quelque chose que je n'attendais pas d'une mission de déploiement.
+L'annuaire d'entreprise sur lequel repose le SSO est un référentiel d'identités : il répond,
+pour les collaborateurs, à la question que je me posais pour les clients au chapitre 3, à
+savoir comment garantir qu'une personne n'existe qu'une fois et qu'on sait la reconnaître.
+Voir ce problème résolu du côté de l'infrastructure, par un annuaire centralisé et une
+synchronisation automatique, éclaire par contraste la situation côté données de gestion, où
+aucun référentiel de ce type n'existait avant la reprise des tiers.
 
-Elle m'a aussi appris quelque chose que je n'attendais pas d'une mission de déploiement.
-L'annuaire d'entreprise, sur lequel repose le SSO, est un référentiel d'identités : il
-répond, pour les collaborateurs, à la même question que celle que je me posais pour les
-clients au chapitre 3, à savoir comment garantir qu'une personne n'existe qu'une fois et
-qu'on sait la reconnaître. Voir ce problème résolu, du côté de l'infrastructure, par un
-annuaire centralisé et une synchronisation automatique, éclaire par contraste la situation
-côté données de gestion, où aucun référentiel de ce type n'existait avant la reprise des
-tiers.
-
-Enfin, l'accompagnement des utilisateurs lors de leur première connexion a été instructif
-à sa manière. Une solution techniquement correcte qui déroute l'utilisateur au moment de
-s'en servir n'est pas une solution livrée. Ce constat, fait ici sur une fenêtre
-d'authentification, s'est retrouvé mot pour mot au moment de livrer l'application d'aide à
-la décision.
+L'accompagnement des utilisateurs a été instructif à sa manière : une solution techniquement
+correcte qui déroute l'utilisateur au moment de s'en servir n'est pas une solution livrée. Ce
+constat, fait ici sur une fenêtre d'authentification, s'est retrouvé mot pour mot au moment de
+livrer l'application d'aide à la décision.
 
 ## Ce que les missions filées coûtent et ce qu'elles rapportent
 
-Ces missions transverses, bien que chronophages, sont complémentaires au travail de fond
-sur la donnée et participent à ma compréhension des enjeux stratégiques du groupe. Il
-serait malhonnête de ne pas dire ce qu'elles ont coûté : elles fragmentent le temps, et un
-chantier de reprise interrompu trois fois dans la journée pour une demande de tableau de
-bord avance moins vite qu'un chantier mené d'un trait.
+Il serait malhonnête de ne pas dire ce que ces missions transverses ont coûté : elles
+fragmentent le temps, et un chantier de reprise interrompu trois fois dans la journée pour
+une demande de tableau de bord avance moins vite qu'un chantier mené d'un trait. Elles
+rapportent cependant trois choses que je n'aurais pas obtenues autrement.
 
-Elles rapportent cependant trois choses que je n'aurais pas obtenues autrement.
+La première est une **connaissance du métier** que la seule fréquentation des bases ne donne
+pas : on ne comprend pas ce qu'est une commande gratuite en lisant une table, on le comprend
+en écoutant le service juridique expliquer pourquoi la règle existe. La deuxième est une
+**crédibilité** auprès des services : avoir répondu à leurs demandes courantes pendant un an
+est ce qui a rendu possible, au second semestre, un échange direct avec la direction
+financière sur ses besoins d'aide à la décision. La troisième est une **vision de
+l'architecture** du système d'information dans son ensemble, depuis l'authentification des
+postes jusqu'aux tableaux de bord. C'est elle qui m'a permis de concevoir le projet du second
+semestre comme une chaîne complète plutôt que comme une suite de modèles.
 
-La première est une **connaissance du métier** que la seule fréquentation des bases de
-données ne donne pas. On ne comprend pas ce qu'est une commande gratuite en lisant une
-table ; on le comprend en écoutant le service juridique expliquer pourquoi la règle
-existe.
-
-La deuxième est une **crédibilité** auprès des services. Avoir répondu à leurs demandes
-courantes pendant un an est ce qui a rendu possible, au second semestre, un échange direct
-avec la direction financière sur ses besoins d'aide à la décision.
-
-La troisième est une **vision de l'architecture** du système d'information dans son
-ensemble, depuis l'authentification des postes jusqu'aux tableaux de bord, en passant par
-les bases de gestion. Cette vision d'ensemble est précisément ce qui manque le plus
-souvent à un profil purement analytique, et c'est elle qui m'a permis de concevoir le
-projet du second semestre comme une chaîne complète plutôt que comme une suite de modèles.
-
-::: transition
-Ces activités filées illustrent la diversité des missions inhérentes au métier de
-gestionnaire d'information. Au-delà des projets structurels de reprise, j'ai dû faire preuve
-d'agilité pour répondre aux besoins quotidiens des services métiers. La demande du service
-juridique a particulièrement mis en exergue ma capacité à contourner des limitations
-techniques par une modélisation logique rigoureuse, transformant une contrainte d'outil en
-une solution pérenne pour l'entreprise.
-
-Ces solutions restent pourtant des contournements, et il faut le reconnaître. Une règle
-recalculée à chaque affichage tient tant que personne d'autre n'en a besoin ; un tableau
-de bord construit sur un fichier écrasé chaque nuit tient tant que le format ne change
-pas. Ces contournements auront néanmoins rendu un service précis : ils ont maintenu le
-système décisionnel en état de marche pendant les douze mois qu'a duré la reconstruction
-du socle.
-
-Ce socle étant désormais fiable, le chapitre suivant présente ce qu'il devient possible d'en
-faire. Il expose le projet de Data Science mené au second semestre, le Copilote Financier,
-et
-la manière dont les questions rencontrées jusqu'ici, la définition partagée d'une notion, la
-reformulation d'un besoin métier, la prise en main par l'utilisateur, s'y retrouvent toutes,
-déplacées d'un cran.
-:::
+Ces solutions restent des contournements, et il faut le reconnaître : une règle recalculée à
+chaque affichage tient tant que personne d'autre n'en a besoin. Elles auront néanmoins
+maintenu le système décisionnel en état de marche pendant les douze mois qu'a duré la
+reconstruction du socle. Ce socle étant désormais fiable, le chapitre suivant expose ce qu'il
+devient possible d'en faire.
 
 
 # Le Copilote Financier
@@ -1472,12 +1244,11 @@ formulé, puis les données dont je disposais réellement, l'architecture retenu
 exploitables, les trois axes d'analyse et leurs résultats, la plateforme qui les restitue aux
 contrôleurs de gestion, et enfin les limites que je considère comme faisant partie du livrable.
 
-Une décision a orienté tout le projet, et il vaut mieux l'énoncer d'emblée parce qu'elle
-explique la forme de ce qui suit. La taille des données disponibles, 267 opérations et
-quatre exports totalisant 32 Mo, ne justifie pas un empilement de modèles. J'ai donc
-retenu un petit nombre de méthodes simples, chacune choisie pour une question précise et
-validée sérieusement, plutôt qu'un catalogue d'algorithmes dont aucun n'aurait pu être
-correctement évalué à cette échelle.
+Une décision a orienté tout le projet : la taille des données disponibles, 267 opérations et
+quatre exports totalisant 32 Mo, ne justifie pas un empilement de modèles. J'ai donc retenu un
+petit nombre de méthodes simples, chacune choisie pour une question précise et validée
+sérieusement, plutôt qu'un catalogue d'algorithmes dont aucun n'aurait pu être correctement
+évalué à cette échelle.
 
 ## Contexte
 
@@ -1494,32 +1265,28 @@ quelles opérations méritent l'attention en priorité. C'est ce manque qui a mo
 
 ### Problème métier
 
-Trois questions structurent les revues de gestion, et les tableurs actuels n'y répondent
-pas.
+Trois questions structurent les revues de gestion, et les tableurs actuels n'y répondent pas.
 
-La première porte sur la marge. Quelles opérations examiner en priorité, parce que leur
-marge d'engagement dérive, et sur quels postes cette dérive se joue-t-elle, pour combien
-d'euros ? La question suppose de comparer des dizaines d'opérations entre elles, ce
-qu'aucun tableur individuel ne permet.
+La première porte sur la **marge** : quelles opérations examiner en priorité parce que leur
+marge d'engagement dérive, sur quels postes et pour combien d'euros ? Y répondre suppose de
+comparer des dizaines d'opérations entre elles, ce qu'aucun tableur individuel ne permet.
 
-La deuxième porte sur le rythme de vente. Quel volume de réservations budgéter pour 2026 ?
-La période récente a montré à quel point la demande est sensible au coût du crédit : le
-taux moyen des crédits habitat est passé d'environ 1,1 % à un pic de 3,6 % fin 2023, avant
-de refluer vers 3,1 % mi-2026, et le rythme du groupe est tombé d'environ 150 à moins de
-115 réservations par mois en 2023. Reste à savoir ce qui, dans cette chute, revient à la
+La deuxième porte sur le **rythme de vente** : quel volume de réservations budgéter pour 2026 ?
+La période récente a montré la sensibilité de la demande au coût du crédit, le taux moyen des
+crédits habitat étant passé d'environ 1,1 % à un pic de 3,6 % fin 2023 avant de refluer vers
+3,1 % mi-2026, tandis que le rythme du groupe tombait d'environ 150 à moins de 115
+réservations par mois en 2023. Reste à savoir ce qui, dans cette chute, revient à la
 conjoncture et ce qui revient aux programmes eux-mêmes.
 
-La troisième porte sur le prix. Quels lots du stock faut-il repricer, c'est-à-dire réviser
-à la hausse ou à la baisse ? La question n'est
-pas théorique, puisque 45 % des 2 157 désistements enregistrés ont pour motif un problème
-de financement ou un refus de prêt, et que les remises sont aujourd'hui accordées au cas
-par cas.
+La troisième porte sur le **prix** : quels lots du stock faut-il réviser, à la hausse ou à la
+baisse ? La question n'est pas théorique, puisque 45 % des 2 157 désistements enregistrés ont
+pour motif un problème de financement ou un refus de prêt, et que les remises sont aujourd'hui
+accordées au cas par cas.
 
-Il faut souligner ce que ces trois questions ont en commun. Face à des besoins de ce type,
-la tentation serait de partir sur un projet d'apprentissage automatique de grande ampleur.
-C'est pourtant un problème de contrôle de gestion outillé par la donnée, et rien d'autre.
-Le matériau disponible se résume à 267 opérations et quatre exports Excel, soit une
-photographie à date.
+Ces trois questions ont un point commun. Face à des besoins de ce type, la tentation serait de
+partir sur un projet d'apprentissage automatique de grande ampleur ; c'est pourtant un problème
+de contrôle de gestion outillé par la donnée, et rien d'autre, le matériau disponible se
+résumant à 267 opérations et quatre exports Excel, soit une photographie à date.
 
 #### Besoins par axe et exigences non fonctionnelles
 
@@ -1984,17 +1751,10 @@ haut, historiser les exports mensuels et fiabiliser la saisie des motifs de dés
 exactement de la même nature que le travail décrit aux chapitres 2 et 3. Ce sont des travaux
 de structure, faits pour rendre possible une analyse à venir.
 
-::: transition
-Une succession de récits de mission ne fait pourtant pas un bilan. Les questions que pose un
-jury à un mémoire professionnel sont d'un autre ordre : comment ces projets ont-ils été
-conduits, avec quelles méthodes et quelles technologies, comment ai-je su que le résultat
-était bon, et qu'est-ce qui n'a pas fonctionné ? Elles ne se traitent pas au fil de chaque
-chapitre sans l'alourdir.
-
-Le chapitre suivant leur est donc consacré. Il relit transversalement les quatre missions,
-sous l'angle de la conduite de projet, des outils, de l'évaluation des résultats et des
-difficultés rencontrées.
-:::
+Une succession de récits de mission ne fait pourtant pas un bilan. Comment ces projets
+ont-ils été conduits, avec quelles méthodes, comment ai-je su que le résultat était bon, et
+qu'est-ce qui n'a pas fonctionné ? Le chapitre suivant relit transversalement les quatre
+missions sous ces angles.
 
 
 # Conduite de projet, méthodes et évaluation : une lecture transversale de l'année
@@ -2022,84 +1782,57 @@ difficultés rencontrées.
 Les cinq chapitres précédents ont exposé les missions dans l'ordre où elles se sont
 présentées. Ce chapitre les relit transversalement, sous quatre angles que le récit
 chronologique ne permet pas de traiter proprement : comment ces projets ont été conduits,
-avec quels outils et quelles méthodes, comment j'ai su que le résultat était bon, et ce qui
-n'a pas fonctionné.
-
-Cette relecture n'est pas un exercice imposé. Deux des enseignements que je retire de l'année
-ne sont visibles que dans la comparaison entre les missions, et resteraient invisibles si
-chacune était jugée seule.
+avec quels outils, comment j'ai su que le résultat était bon, et ce qui n'a pas fonctionné.
+Deux des enseignements que je retire de l'année ne sont visibles que dans cette comparaison.
 
 ## La conduite de projet : quatre missions, deux régimes
 
 ### Le régime de la reprise : itératif et piloté par les rejets
 
-Les deux chantiers de reprise, les opérations puis les tiers, ont été conduits selon la même
-méthode, et je ne l'avais pas choisie a priori : elle s'est imposée parce que le modèle cible
-était inconnu.
-
-Le principe en est simple. On ne peut pas spécifier complètement une reprise dont on ne
-connaît pas les règles d'acceptation. On avance donc par paliers de volume croissant, en
-traitant chaque rejet comme une information sur le modèle cible plutôt que comme une erreur à
-corriger. Sur la migration des opérations, cela a donné la progression de 3 opérations
-pilotes, puis 12, avant la masse. Sur la reprise des tiers, cela a donné le découpage en lots
-de 200 lignes, homogènes en nature.
+Les deux chantiers de reprise ont été conduits selon la même méthode, que je n'avais pas
+choisie a priori : elle s'est imposée parce que le modèle cible était inconnu. On ne peut pas
+spécifier complètement une reprise dont on ignore les règles d'acceptation. On avance donc
+par paliers de volume croissant, en traitant chaque rejet comme une information sur le modèle
+cible plutôt que comme une erreur à corriger — d'où la progression 3, puis 12 opérations
+avant la masse au chapitre 2, et les lots de 200 lignes homogènes en nature au chapitre 3.
 
 Cette méthode a une propriété que j'ai appris à apprécier : **le coût d'une erreur y est
 proportionnel au palier où on la découvre**. Une règle non comprise coûte quelques minutes sur
 trois opérations, une demi-journée sur douze, et une reprise complète du fichier sur la
-totalité du périmètre. Toute la valeur de la progression par paliers tient dans ce rapport.
-
-Elle a aussi une limite qu'il faut nommer. Elle est lente à démarrer, et elle produit peu de
-livrable visible pendant les premières semaines. Il faut accepter de rendre compte d'un
-travail dont le résultat, à ce stade, est une documentation interne et non des données dans
-le système.
+totalité du périmètre. Elle a aussi une limite : elle est lente à démarrer et produit peu de
+livrable visible pendant les premières semaines, le résultat étant alors une documentation
+interne et non des données dans le système.
 
 ### Le régime du projet analytique : cadrer, explorer, restituer
 
-Le projet du second semestre a suivi une logique différente, en trois temps nettement
-séparés.
+Le projet du second semestre a suivi une logique différente, en trois temps séparés. Le
+**cadrage** formule les questions de gestion avant de regarder les données et pose les
+exigences non fonctionnelles : reproductibilité, interprétabilité, confidentialité et
+acceptation d'un petit échantillon priment sur la performance brute. L'**exploration et la
+modélisation** viennent ensuite, chaque question étant traitée par la méthode la plus simple
+qui y réponde. La **restitution** traduit enfin les résultats dans le langage de l'utilisateur.
 
-1. **Le cadrage.** Formuler les questions de gestion avant de regarder les données, et poser
-   les exigences non fonctionnelles avant de commencer. C'est à cette étape que j'ai décidé
-   que la reproductibilité, l'interprétabilité, la confidentialité et l'acceptation d'un
-   petit échantillon primeraient sur la performance brute.
-2. **L'exploration et la modélisation.** Comprendre ce que contiennent réellement les
-   exports, construire la base, puis traiter chaque question avec la méthode la plus simple
-   qui y réponde.
-3. **La restitution.** Traduire les résultats dans le langage de l'utilisateur et les livrer
-   dans un outil qu'il ouvre lui-même.
-
-Le point d'articulation le plus délicat se situe entre les étapes 2 et 3. La première version
-de l'interface, trop marquée par le vocabulaire de la modélisation, a dû être entièrement
-réécrite après un retour de l'entreprise. Cette réécriture n'était pas une correction
-cosmétique : elle a changé ce que l'écran affiche, donc ce sur quoi l'utilisateur décide.
+Le point d'articulation le plus délicat se situe entre les deux dernières étapes. La première
+version de l'interface, trop marquée par le vocabulaire de la modélisation, a dû être
+entièrement réécrite : cette réécriture a changé ce que l'écran affiche, donc ce sur quoi
+l'utilisateur décide.
 
 ### Un arbitrage récurrent entre exhaustivité et continuité de service
 
-Un même arbitrage est revenu dans les quatre missions, sous des formes différentes, et c'est
-le premier enseignement transversal de l'année.
+Un même arbitrage est revenu dans les quatre missions, et c'est le premier enseignement
+transversal de l'année. Il a pris la forme des « coquilles vides » sur la migration, du
+traitement manuel des cas particuliers sur la reprise des tiers, du calcul dynamique sur le
+reporting juridique, et du périmètre restreint à la promotion immobilière sur le projet
+analytique. Dans les quatre cas, la décision a consisté à livrer quelque chose d'utile et
+d'incomplet plutôt que rien de complet.
 
-Sur la migration des opérations, il a pris la forme des « coquilles vides » : livrer une
-structure incomplète pour débloquer la facturation, plutôt qu'un système complet trop tard.
-Sur la reprise des tiers, il a pris la forme du traitement manuel des cas particuliers :
-écrire une règle pour deux cas coûte plus cher que de les traiter à la main. Sur le
-reporting juridique, il a pris la forme du calcul dynamique : accepter de recalculer la règle
-à chaque affichage faute de pouvoir la stocker. Sur le projet analytique, enfin, il a pris la
-forme du périmètre restreint à la promotion immobilière, l'aménagement relevant d'une autre
-logique économique.
-
-Dans les quatre cas, la décision a consisté à livrer quelque chose d'utile et d'incomplet
-plutôt que rien de complet. Ce qui distingue cet arbitrage d'un renoncement, c'est
-uniquement le fait d'écrire ce qui a été laissé de côté. Une dette documentée est une dette
-suivie ; une dette implicite devient, quelques mois plus tard, une donnée que tout le monde
-croit absente.
+Ce qui distingue cet arbitrage d'un renoncement, c'est uniquement le fait d'écrire ce qui a
+été laissé de côté. Une dette documentée est une dette suivie ; une dette implicite devient,
+quelques mois plus tard, une donnée que tout le monde croit absente.
 
 ## Technologies et méthodes mobilisées
 
 ### La chaîne d'outils, mission par mission
-
-Le tableau suivant récapitule les technologies et les méthodes effectivement employées, en
-distinguant ce qui relève de l'outil de ce qui relève de la méthode.
 
 | Mission | Technologies | Méthodes |
 |:------------|:-------------------------------|:---------------------------------|
@@ -2108,41 +1841,31 @@ distinguant ce qui relève de l'outil de ce qui relève de la méthode.
 | Reporting et SSO | MyReport, SQL en lecture, annuaire d'entreprise | Modélisation dynamique par calcul de rang, accompagnement utilisateur |
 | Copilote Financier | Python et pandas, SQLite en schéma en étoile, PySpark évalué, Streamlit | Régression linéaire et logistique, arbre, forêt aléatoire, séparateur à vaste marge, modèle à effets aléatoires sur panel, régression dynamique à erreurs ARIMA, ajustement logistique, recherche par similarité, optimisation sous contrainte |
 
-Deux remarques sur ce tableau.
-
-La première est que **la colonne des outils est beaucoup moins intéressante que celle des
-méthodes**, et c'est contre-intuitif quand on sort d'un cursus où l'on apprend des
-technologies. Excel figure dans deux missions sur quatre, non parce qu'il serait le bon outil
-dans l'absolu, mais parce que c'est l'outil que l'entreprise sait relire, corriger et
-maintenir sans moi. Un script Python aurait produit les mêmes fichiers d'import plus vite,
-et personne n'aurait pu le reprendre après mon départ.
-
-La seconde est que **la sophistication des méthodes décroît quand on se rapproche de
-l'utilisateur**. La partie la plus consultée du Copilote Financier repose sur du SQL
-descriptif, pas sur un modèle appris. Ce n'est pas un échec de la modélisation, c'est sa
+Deux remarques sur ce tableau. La première est que **la colonne des outils est beaucoup moins
+intéressante que celle des méthodes**, ce qui est contre-intuitif quand on sort d'un cursus où
+l'on apprend des technologies. Excel figure dans deux missions sur quatre, non qu'il soit le
+bon outil dans l'absolu, mais parce que c'est celui que l'entreprise sait relire, corriger et
+maintenir sans moi. Un script Python aurait produit les mêmes fichiers plus vite, et personne
+n'aurait pu le reprendre après mon départ. La seconde est que **la sophistication des méthodes
+décroît quand on se rapproche de l'utilisateur** : la partie la plus consultée du Copilote
+Financier repose sur du SQL descriptif. Ce n'est pas un échec de la modélisation, c'est sa
 place réelle dans un outil de gestion.
 
 ### Les choix que je referais, et ceux que je ne referais pas
 
-Trois choix me paraissent, avec le recul, avoir bien tenu.
-
-Le premier est **l'écriture des définitions partagées une seule fois**, dans les vues de la
-base du projet analytique. C'est la réponse directe au problème rencontré sur le reporting
-juridique, et c'est ce qui garantit que les notebooks et l'application disent la même chose.
-
-Le deuxième est **la documentation systématique des arbitrages**, aussi bien la note interne
-sur la séquence d'injection que la note de procédure de l'import des tiers. Ces documents
-sont ce qui rend le travail vérifiable par quelqu'un d'autre.
-
-Le troisième est **le refus d'ajouter une technologie sans nécessité**. Le test de montée en
-charge a montré que l'architecture légère retenue était la bonne à cette échelle ; conclure
-par la négative et le dire est un résultat.
+Trois choix ont bien tenu. **Écrire les définitions partagées une seule fois**, dans les vues
+de la base analytique, répond directement au problème rencontré sur le reporting juridique et
+garantit que les notebooks et l'application disent la même chose. **Documenter
+systématiquement les arbitrages**, par la note sur la séquence d'injection puis par la
+procédure d'import des tiers, est ce qui rend le travail vérifiable par quelqu'un d'autre.
+**Refuser d'ajouter une technologie sans nécessité**, enfin : conclure par la négative sur la
+montée en charge et le dire est un résultat.
 
 Un choix, en revanche, je ne le referais pas de la même façon. J'ai construit la première
-version de l'interface du Copilote Financier **avant** de la confronter aux utilisateurs, en
-supposant que des indicateurs correctement calculés seraient lisibles. Ils ne l'étaient pas.
-Aujourd'hui, je montrerais une maquette de l'écran avant d'écrire le premier modèle, parce
-que c'est l'écran qui détermine quelles grandeurs doivent être calculées, et non l'inverse.
+version de l'interface **avant** de la confronter aux utilisateurs, en supposant que des
+indicateurs correctement calculés seraient lisibles. Ils ne l'étaient pas. Aujourd'hui, je
+montrerais une maquette de l'écran avant d'écrire le premier modèle, parce que c'est l'écran
+qui détermine quelles grandeurs doivent être calculées, et non l'inverse.
 
 ## Comment j'ai évalué mon propre travail
 
@@ -2155,119 +1878,85 @@ employés.
 
 ![Les trois régimes de preuve employés selon la nature du livrable](figures/fig_6_1_regimes_de_preuve.png){width=100%}
 
-Le premier régime est celui de la **réconciliation**. Il s'applique aux reprises de données, où
-la question posée est : ce qui est arrivé correspond-il à ce qui est parti ? J'y ai eu
-recours sous plusieurs formes. Sur la migration des opérations, la validation itérative par
-paliers a servi de contrôle avant la masse. Sur la reprise des tiers, un panneau de compteurs
-intégré à la feuille pivot affichait en permanence les valeurs attendues, et la procédure
-impose de les vérifier avant tout export. Sur le projet analytique, la réconciliation des
-deux exports budgétaires a montré des totaux identiques à l'euro près sur les 118 opérations
-jointes, et un contrôle croisé des agrégats par deux moteurs indépendants a retrouvé les
-mêmes 1 561,8 M€ de dépenses budgétées et 1 754,8 M€ de recettes.
+La **réconciliation** s'applique aux reprises, où la question est : ce qui est arrivé
+correspond-il à ce qui est parti ? Elle a pris la forme de la validation par paliers sur la
+migration, d'un panneau de compteurs à vérifier avant tout export sur la reprise des tiers,
+et sur le projet analytique du recoupement de deux exports budgétaires — totaux identiques à
+l'euro près sur les 118 opérations jointes, et mêmes 1 561,8 M€ de dépenses budgétées
+retrouvés par deux moteurs indépendants.
 
-Le deuxième régime est celui de la **validation statistique**. Il s'applique aux modèles, où la
-question posée est : le résultat tient-il hors de l'échantillon sur lequel il a été construit ?
-J'y ai systématiquement associé trois précautions : une évaluation sur un échantillon test
-distinct, une comparaison à une référence naïve, et un contrôle des fuites entre les
-variables explicatives et la cible. La comparaison à la référence est celle qui m'a le plus
-servi : un score F1 de 0,3 ne veut rien dire dans l'absolu, mais il prend un sens précis
-lorsque la référence majoritaire, elle, ne détecte rien du tout.
+La **validation statistique** s'applique aux modèles, où la question est : le résultat tient-il
+hors de l'échantillon sur lequel il a été construit ? J'y ai systématiquement associé un
+échantillon test distinct, une comparaison à une référence naïve et un contrôle des fuites
+entre variables explicatives et cible. La comparaison à la référence est celle qui m'a le
+plus servi : un score F1 de 0,3 ne veut rien dire dans l'absolu, mais il prend un sens précis
+lorsque la référence majoritaire, elle, ne détecte rien.
 
-Le troisième régime est celui de la **recette par l'usage**. Il s'applique aux livrables
-destinés à un utilisateur, où la question posée est : la personne s'en sert-elle, et pour la
-bonne chose ? Sur le reporting juridique, le régime de preuve retenu est la validation par le
-service demandeur, seul juge de la conformité de la règle appliquée. Sur l'application, chaque
-page a été vérifiée par un cadre de test automatisé, y compris aux bornes des curseurs et sur
-les sélections vides, mais c'est le retour de l'entreprise sur le vocabulaire des écrans qui a
-constitué la véritable recette.
+La **recette par l'usage** s'applique aux livrables destinés à un utilisateur, où la question
+est : la personne s'en sert-elle, et pour la bonne chose ? Le reporting juridique a été validé
+par le service demandeur, seul juge de la conformité de la règle. L'application a été
+vérifiée page à page par un cadre de test automatisé, y compris aux bornes des curseurs et
+sur les sélections vides, mais c'est le retour de l'entreprise sur le vocabulaire des écrans
+qui a constitué la véritable recette.
 
 ### Ce que ces évaluations ne couvrent pas
 
-Il serait malhonnête de présenter ce dispositif comme complet, et je préfère en exposer les
-angles morts.
-
-La réconciliation prouve qu'une donnée est arrivée, pas qu'elle est juste. Les 1 434 tiers
-créés correspondent exactement à ce que le fichier de travail prévoyait, mais si une clé
-d'unicité était mal choisie, l'erreur passerait le contrôle sans être vue, puisque les
-compteurs, eux, tomberaient juste.
-
-La validation statistique mesure une performance sur des données passées, dans une
-conjoncture donnée. Rien ne garantit qu'un modèle calibré sur la période récente tienne si le
-marché change de régime.
-
-La recette par l'usage, enfin, ne dit rien à court terme sur l'utilité réelle d'un outil. Une
-page consultée n'est pas une décision prise. Il faudra plusieurs mois d'utilisation pour
-savoir si le Copilote Financier a changé quelque chose aux revues de gestion, et cette
-mesure-là, je n'ai pas pu la faire dans le temps de l'alternance.
+Ce dispositif a des angles morts, et je préfère les exposer. La réconciliation prouve qu'une
+donnée est arrivée, pas qu'elle est juste : si une clé d'unicité était mal choisie, l'erreur
+passerait le contrôle sans être vue, puisque les compteurs tomberaient juste. La validation
+statistique mesure une performance sur des données passées, dans une conjoncture donnée ;
+rien ne garantit qu'un modèle calibré sur la période récente tienne si le marché change de
+régime. La recette par l'usage, enfin, ne dit rien à court terme de l'utilité réelle d'un
+outil : une page consultée n'est pas une décision prise, et il faudra plusieurs mois pour
+savoir si le Copilote Financier a changé quelque chose aux revues de gestion.
 
 ## Les difficultés rencontrées
 
 ### Difficultés techniques
 
 Les difficultés techniques de l'année se ramènent presque toutes à une même situation : un
-système imposait une règle qui n'était écrite nulle part.
+système imposait une règle qui n'était écrite nulle part. L'ordre d'injection des objets dans
+l'ERP en est le cas le plus net, reconstitué par l'analyse des codes d'erreur ; le
+versionnement des budgets en est le second, qui a imposé une logique de requêtage dynamique
+pour cibler le bon enregistrement. Le refus des caractères accentués par le format d'import
+et l'impossibilité de porter les coordonnées des couples en CSV relèvent de la même famille,
+la solution ayant consisté dans le second cas à changer de porte d'entrée vers le système.
 
-L'ordre d'injection des objets dans l'ERP en est le cas le plus net. Il n'était pas documenté,
-et je l'ai reconstitué par l'analyse des codes d'erreur. Le versionnement des budgets en est
-le second : les identifiants système étant invisibles dans l'interface, et toute modification
-créant un nouvel objet plutôt que d'écraser l'ancien, il a fallu concevoir une logique de
-requêtage dynamique en trois temps pour cibler le bon enregistrement.
-
-Le refus des caractères accentués par le format d'import et l'impossibilité de porter les
-coordonnées des couples en CSV relèvent de la même famille. Dans le second cas, la solution a
-consisté à changer de porte d'entrée vers le système, en passant par l'API plutôt que par le
-fichier plat.
-
-Enfin, les pièges du tableur ont coûté un temps de recherche disproportionné à leur
-apparente banalité : le comptage qui prend une chaîne vide pour une valeur, le code de mise
-en forme des mois interprété comme des minutes, les heures parasites qui rendent deux dates
-identiques différentes. Ces quatre pièges partagent un trait qui en fait, à mes yeux, un vrai
-enseignement de méthode : **aucun ne produit de message d'erreur**. Ils se manifestent par un
-compteur qui ne tombe pas juste, et c'est la seule raison pour laquelle je les ai vus.
+Les pièges du tableur, enfin, ont coûté un temps de recherche disproportionné à leur
+apparente banalité. Ils partagent un trait qui en fait un vrai enseignement de méthode :
+**aucun ne produit de message d'erreur**. Ils se manifestent par un compteur qui ne tombe pas
+juste, et c'est la seule raison pour laquelle je les ai vus.
 
 ### Difficultés tenant à la donnée
 
-Trois difficultés relèvent de la donnée elle-même et non des outils.
-
-La première est l'**absence d'historique**. Les exports budgétaires sont une photographie à
-date, sans trace des révisions successives. Cette limite plafonne l'axe le plus attendu du
-projet analytique, et aucune méthode ne la contourne : on ne peut pas apprendre la dynamique
-d'une dérive sur une image fixe.
-
-La deuxième est la **qualité de saisie**. Le cas le plus parlant est celui d'une agence dont
-90 % des motifs de désistement sont enregistrés en « Autres motifs », ce qui rend ses
-désistements inanalysables tant que la saisie n'est pas fiabilisée. Ce constat n'était pas
-attendu, et il a produit une recommandation opérationnelle immédiate.
-
-La troisième est l'**impossibilité d'estimer certains paramètres en interne**. L'élasticité de
-la demande au prix, centrale pour la règle de remise, a le bon signe dans nos données mais
-n'y est pas significative. La valeur retenue vient de la littérature, et c'est une fragilité
-que le chapitre 5 expose plutôt que de la masquer.
+Trois difficultés relèvent de la donnée elle-même. L'**absence d'historique** d'abord : les
+exports budgétaires sont une photographie à date, sans trace des révisions successives, et
+cette limite plafonne l'axe le plus attendu du projet analytique. Aucune méthode ne la
+contourne, car on n'apprend pas la dynamique d'une dérive sur une image fixe. La **qualité de
+saisie** ensuite, dont le cas le plus parlant est celui d'une agence dont 90 % des motifs de
+désistement sont enregistrés en « Autres motifs » : ce constat inattendu a produit une
+recommandation opérationnelle immédiate. L'**impossibilité d'estimer certains paramètres en
+interne** enfin : l'élasticité de la demande au prix a le bon signe dans nos données mais n'y
+est pas significative, et la valeur retenue vient de la littérature.
 
 ### Difficultés organisationnelles
 
 La difficulté la plus constante de l'année n'a été ni technique ni statistique : c'est la
-**fragmentation du temps**. Les missions filées du chapitre 4 n'attendent pas la fin d'un
-chantier de reprise pour se manifester. Un fichier d'injection interrompu trois fois dans la
-journée pour une demande de tableau de bord avance moins vite qu'un fichier mené d'un trait,
-et surtout, il se reprend plus mal : il faut à chaque fois reconstituer où l'on en était dans
-une logique de formules imbriquées.
+**fragmentation du temps**. Un fichier d'injection interrompu trois fois dans la journée pour
+une demande de tableau de bord avance moins vite qu'un fichier mené d'un trait, et surtout il
+se reprend plus mal, puisqu'il faut à chaque fois reconstituer où l'on en était dans une
+logique de formules imbriquées. Ce que j'ai fini par mettre en place tient en peu de choses :
+réserver les plages longues aux travaux qui ne se découpent pas, regrouper les demandes
+courtes, et surtout écrire systématiquement où j'en étais avant d'interrompre une tâche.
+Cette dernière habitude est celle qui m'a le plus fait gagner de temps.
 
-Ce que j'ai fini par mettre en place tient en peu de choses, mais m'a coûté plusieurs mois à
-comprendre. J'ai réservé les plages longues aux travaux qui ne se découpent pas, regroupé les
-demandes courtes plutôt que de les traiter à leur arrivée, et surtout, j'ai commencé à écrire
-systématiquement où j'en étais avant d'interrompre une tâche. Cette dernière habitude est
-celle qui m'a le plus fait gagner de temps sur l'année.
-
-Une seconde difficulté organisationnelle mérite d'être signalée, parce qu'elle a modifié le
-projet : le **décalage entre le calendrier universitaire et le calendrier de l'entreprise**. Le
-projet de Machine Learning prévu au premier semestre n'a pas pu être mené, la migration ayant
-mobilisé l'essentiel de mon temps. Ce report, frustrant sur le moment, s'est révélé logique
-avec le recul, et il constitue le fil de ce mémoire.
+Une seconde difficulté a modifié le projet lui-même : le **décalage entre le calendrier
+universitaire et celui de l'entreprise**. Le projet de Machine Learning prévu au premier
+semestre n'a pas pu être mené, la migration ayant mobilisé l'essentiel de mon temps. Ce
+report, frustrant sur le moment, s'est révélé logique avec le recul, et il constitue le fil
+de ce mémoire.
 
 ## Résultats consolidés de l'année
-
-Le tableau suivant récapitule ce qui a été livré et se trouve aujourd'hui en service.
 
 | Livrable | Volume ou périmètre |
 |:-------------------------------------------------|:----------------------------|
@@ -2282,31 +1971,17 @@ Le tableau suivant récapitule ce qui a été livré et se trouve aujourd'hui en
 | Base de données analytique | Trois dimensions, quatre tables de faits, trois vues métier |
 | Application d'aide à la décision livrée | Cinq pages, 147 opérations de promotion suivies |
 
-Ces chiffres ne disent pourtant pas l'essentiel, et je préfère le formuler moi-même plutôt
-que de laisser le tableau parler seul. Ce que l'année a produit de plus durable n'est aucun
-de ces volumes : ce sont trois définitions écrites quelque part. La séquence d'injection
-valide pour l'ERP, la clé qui décide qu'un client est le même client, et la formule qui dit
-ce qu'est la marge d'une opération. Les données se réinjectent ; ces trois décisions-là, il
-faut les reprendre depuis le début si elles se perdent.
+Ces chiffres ne disent pourtant pas l'essentiel. Ce que l'année a produit de plus durable
+n'est aucun de ces volumes : ce sont trois définitions écrites quelque part. La séquence
+d'injection valide pour l'ERP, la clé qui décide qu'un client est le même client, et la
+formule qui dit ce qu'est la marge d'une opération. Les données se réinjectent ; ces trois
+décisions-là, il faut les reprendre depuis le début si elles se perdent.
 
-::: transition
-Ce chapitre aura relu l'année sous quatre angles : la conduite de projet, les outils, les
-régimes de preuve et les difficultés. Deux enseignements en ressortent, qu'aucune mission
-prise isolément ne donnait. Le premier est que l'arbitrage entre exhaustivité et continuité
-de service est revenu dans les quatre missions, et qu'il ne devient acceptable qu'à la
-condition d'écrire ce qu'on laisse de côté. Le second est que la nature du livrable commande
-le régime de preuve, et qu'appliquer à une reprise de données les critères d'un modèle
-statistique, ou l'inverse, revient à ne rien prouver du tout.
-
-Ces enseignements restent pourtant des enseignements de méthode. Un mémoire professionnel
-attend aussi une position sur le métier lui-même : ce qu'est un data scientist dans une
-entreprise qui n'a pas d'équipe data, ce que cette année m'a appris de la pratique
-professionnelle, et ce que je compte en faire.
-
-Le chapitre suivant y est consacré. Il livre ma réflexion sur le métier tel que je l'ai
-exercé, puis présente les perspectives des projets engagés et le projet professionnel qui en
-découle.
-:::
+Deux enseignements ressortent de cette relecture, qu'aucune mission prise isolément ne
+donnait : l'arbitrage entre exhaustivité et continuité de service n'est acceptable qu'à la
+condition d'écrire ce qu'on laisse de côté, et la nature du livrable commande le régime de
+preuve. Ce sont des enseignements de méthode. Le chapitre suivant porte sur le métier
+lui-même, et sur ce que je compte en faire.
 
 
 # Réflexion sur le métier, perspectives et projet professionnel
@@ -2331,10 +2006,9 @@ découle.
 :::
 
 Ce dernier chapitre quitte le récit des missions pour livrer la réflexion qu'elles ont
-produite. Il porte d'abord sur le métier de data scientist tel que je l'ai exercé, dans une
-entreprise qui n'a pas d'équipe data et où j'étais la seule personne à temps plein sur ces
-sujets. Il expose ensuite les perspectives des chantiers engagés, dont aucun n'est achevé, et
-se termine par le projet professionnel qui découle de ces deux années d'alternance.
+produite : sur le métier de data scientist tel que je l'ai exercé, dans une entreprise sans
+équipe data ; sur les perspectives des chantiers engagés, dont aucun n'est achevé ; et sur le
+projet professionnel qui en découle.
 
 ## Le métier de data scientist vu depuis une entreprise sans équipe data
 
@@ -2342,25 +2016,21 @@ se termine par le projet professionnel qui découle de ces deux années d'altern
 
 L'image que j'avais de ce métier en entrant en Master 2 était celle que donne le cursus : on
 reçoit un jeu de données et une question, on choisit une méthode, on évalue, on livre un
-modèle. Cette image n'est pas fausse, elle est simplement très minoritaire dans le temps
-réel.
+modèle. Cette image n'est pas fausse, elle est simplement très minoritaire dans le temps réel.
+Sur les quatre missions de l'année, une seule y correspond, et encore partiellement. Le poste
+que j'ai réellement occupé se rapproche de celui de gestionnaire d'applications tel que le
+décrivent les référentiels métier [1]. Ce qui a occupé le reste, c'est un travail de
+traduction dans les deux sens : traduire une gêne exprimée par un service en question
+calculable, puis traduire un résultat statistique en information sur laquelle quelqu'un peut
+décider.
 
-Sur les quatre missions de l'année, une seule correspond à cette description, et encore
-partiellement. Le poste que j'ai réellement occupé se rapproche davantage de celui de
-gestionnaire d'applications tel que le décrivent les référentiels métier [1] : comprendre les
-outils, les données qu'ils produisent et les besoins de ceux qui s'en servent. Ce qui a occupé
-le reste, c'est un travail de traduction, dans les deux sens. Traduire une gêne exprimée par un
-service en question calculable, d'abord. Traduire ensuite un résultat statistique en information
-sur laquelle quelqu'un peut décider. Entre ces deux traductions, la modélisation proprement dite
-occupe une place modeste.
-
-Cette traduction n'est pas une tâche annexe qu'on expédierait avant le vrai travail. Elle est
-le vrai travail, et elle est difficile pour une raison précise : les deux langues n'ont pas
-les mêmes catégories. Le service juridique parle de commandes payantes et gratuites ; la base
-ne connaît que des lignes sans position dans une séquence. La direction financière parle
-d'opérations qui dérivent ; les exports ne contiennent qu'un budget et un engagé à une date.
-Chaque fois, il a fallu construire la catégorie manquante, et ce sont ces constructions qui
-engagent le plus, parce qu'elles décident de ce que l'entreprise pourra observer ensuite.
+Cette traduction est le vrai travail, et elle est difficile pour une raison précise : les deux
+langues n'ont pas les mêmes catégories. Le service juridique parle de commandes payantes et
+gratuites ; la base ne connaît que des lignes sans position dans une séquence. La direction
+financière parle d'opérations qui dérivent ; les exports ne contiennent qu'un budget et un
+engagé à une date. Chaque fois, il a fallu construire la catégorie manquante, et ce sont ces
+constructions qui engagent le plus, parce qu'elles décident de ce que l'entreprise pourra
+observer ensuite.
 
 ### La place réelle de la modélisation
 
@@ -2387,43 +2057,32 @@ cette absence. Comprendre cela avant de choisir un algorithme, plutôt qu'après
 
 ### L'honnêteté sur ce qu'un résultat ne dit pas
 
-Le troisième constat porte sur une exigence que je n'attendais pas au même niveau : la
-rigueur dans l'énoncé des limites.
-
-Dans un exercice universitaire, présenter un modèle faible est un mauvais résultat. Dans une
+Le troisième constat porte sur une exigence que je n'attendais pas au même niveau. Dans un
+exercice universitaire, présenter un modèle faible est un mauvais résultat ; dans une
 entreprise, présenter un modèle faible **sans le dire** est bien pire, parce que quelqu'un
-décidera dessus. Un score de risque qui trie correctement une liste sans permettre de fonder
-une décision individuelle est utile, à condition que cette distinction soit portée à l'écran
-et non enfouie dans une annexe.
-
-C'est pourquoi j'ai fait de l'énoncé des limites une partie du livrable, au même titre que
-les résultats : le paramètre d'élasticité emprunté à la littérature, l'absence d'historique
-qui plafonne un axe entier, les intervalles de prévision qui ignorent l'incertitude sur les
-taux futurs. Cette pratique a un effet secondaire que je n'avais pas anticipé : elle rend les
-recommandations plus faciles à discuter, parce que l'interlocuteur sait sur quoi il peut
-s'appuyer.
+décidera dessus. J'ai donc fait de l'énoncé des limites une partie du livrable, au même titre
+que les résultats : le paramètre d'élasticité emprunté à la littérature, l'absence
+d'historique qui plafonne un axe entier, les intervalles de prévision qui ignorent
+l'incertitude sur les taux futurs. Cette pratique a un effet secondaire que je n'avais pas
+anticipé : elle rend les recommandations plus faciles à discuter, parce que l'interlocuteur
+sait sur quoi il peut s'appuyer.
 
 ## Ce que j'ai appris de la pratique professionnelle
 
 ### Documenter est un acte technique
 
 J'ai longtemps considéré la documentation comme une formalité qui suit le travail. Deux
-épisodes de l'année m'ont fait changer d'avis.
-
-Le premier est la note interne sur la séquence d'injection dans l'ERP, rédigée après l'avoir
-reconstituée par les codes d'erreur. Ce document a servi à la reprise des tiers six mois plus
-tard, et il aurait servi à quelqu'un d'autre si je n'avais pas été là.
-
-Le second est la note de procédure de l'import des tiers, qui commence par la liste des
-manipulations à ne jamais faire avant d'expliquer comment utiliser le fichier. Cet ordre n'est
-pas rhétorique : les quatre manipulations en question cassent le fichier sans produire le
-moindre message d'erreur, et un utilisateur qui ne les connaît pas produira des fichiers
-d'import faux en croyant bien faire.
+épisodes m'ont fait changer d'avis. La note interne sur la séquence d'injection, d'abord,
+rédigée après l'avoir reconstituée par les codes d'erreur : elle a servi à la reprise des
+tiers six mois plus tard, et elle aurait servi à quelqu'un d'autre si je n'avais pas été là.
+La note de procédure de l'import des tiers ensuite, qui énonce les manipulations à ne jamais
+faire avant d'expliquer comment utiliser le fichier — ordre qui n'est pas rhétorique,
+puisqu'elles cassent le fichier sans produire le moindre message d'erreur.
 
 J'en retire une formulation que j'assume : **documenter, ce n'est pas décrire ce qu'on a fait,
-c'est rendre le travail reprenable par quelqu'un d'autre**. La différence est concrète. Une
-description raconte les étapes ; une documentation utile énonce les règles, les pièges et les
-décisions, c'est-à-dire ce qui ne se déduit pas du résultat.
+c'est rendre le travail reprenable par quelqu'un d'autre**. Une description raconte les
+étapes ; une documentation utile énonce les règles, les pièges et les décisions, c'est-à-dire
+ce qui ne se déduit pas du résultat.
 
 ### Livrer, c'est faire adopter
 
@@ -2441,19 +2100,16 @@ n'en était pas le service après-vente.
 
 ## Perspectives des projets engagés
 
-Aucun des chantiers de cette année n'est achevé, et il serait malvenu de conclure ce mémoire
-en laissant croire le contraire. Trois perspectives se dégagent, dans un ordre de priorité qui
-n'est pas le mien mais celui de l'entreprise.
+Aucun des chantiers de cette année n'est achevé. Trois perspectives se dégagent, dans un ordre
+de priorité qui est celui de l'entreprise.
 
 ### Achever la reprise et historiser les données
 
-La migration vers SPO reste prioritaire. La stratégie des « coquilles vides », si elle a
-sauvé le démarrage de la facturation, doit maintenant laisser place à une reprise
-exhaustive : intégration des historiques budgétaires complets, vérifications approfondies de
-l'intégrité des données par contrôle de cohérence comptable, et phases de tests finaux avant
-la bascule définitive. Le fichier de reprise des tiers devra pour sa part être rejoué au moins
-une fois avant cette bascule, afin d'écarter les tiers créés entre-temps par les équipes
-commerciales.
+La migration vers SPO reste prioritaire. La stratégie des « coquilles vides », si elle a sauvé
+le démarrage de la facturation, doit laisser place à une reprise exhaustive : historiques
+budgétaires complets, contrôle de cohérence comptable et tests finaux avant la bascule
+définitive. Le fichier de reprise des tiers devra être rejoué avant cette bascule, pour
+écarter les tiers créés entre-temps par les équipes commerciales.
 
 À ce chantier s'ajoute la recommandation la plus structurante que je laisse à l'entreprise :
 **historiser les exports mensuels dans le nouvel ERP**. C'est l'absence de cet historique qui
@@ -2477,146 +2133,96 @@ Trois évolutions la rendraient durable.
 
 ### L'intégration à l'infrastructure Nexity
 
-Une mission structurante, non prévue initialement, vient s'ajouter à cette feuille de route :
-le passage vers l'infrastructure technique du groupe Nexity. Ce changement d'environnement
-engendrera des missions spécifiques d'adaptation de nos outils, qu'il s'agisse de la
-reconfiguration des connecteurs de bases de données, de l'adaptation des protocoles de
-sécurité pour les accès distants ou de la migration de certains scripts d'automatisation vers
-de nouveaux serveurs.
-
-Cette perspective a déjà influé sur mes choix techniques. Le test de montée en charge conduit
-dans le projet analytique n'avait pas d'autre objet que de savoir si l'architecture retenue
-tiendrait à une échelle supérieure, et de documenter le chemin à prendre le cas échéant.
+Une mission structurante, non prévue initialement, s'ajoute à cette feuille de route : le
+passage vers l'infrastructure technique du groupe Nexity, qui engendrera des adaptations de
+nos outils — reconfiguration des connecteurs de bases, protocoles de sécurité pour les accès
+distants, migration de scripts d'automatisation. Cette perspective a déjà influé sur mes choix
+techniques : le test de montée en charge conduit dans le projet analytique n'avait pas d'autre
+objet que de savoir si l'architecture retenue tiendrait à une échelle supérieure.
 
 ## Mon projet professionnel
 
 ### Le positionnement que je vise
 
-Ces deux années d'alternance ont déplacé mon projet, et je préfère le dire ainsi plutôt que
-de prétendre qu'il n'a pas bougé. J'y suis entrée en visant la data science au sens strict, la
-modélisation prédictive. J'en sors en visant un positionnement plus large et, je crois, plus
-juste au regard de ce dont les entreprises ont réellement besoin : **construire et fiabiliser
-les chaînes de données qui rendent la décision possible, puis les outiller**.
+Ces deux années ont déplacé mon projet. J'y suis entrée en visant la data science au sens
+strict, la modélisation prédictive ; j'en sors en visant un positionnement plus large :
+**construire et fiabiliser les chaînes de données qui rendent la décision possible, puis les
+outiller**. Il croise trois domaines que l'année m'a fait pratiquer ensemble :
+l'**ingénierie des données**, sur laquelle j'ai le plus progressé — reprises, migrations,
+interfaces de programmation, déduplication, modélisation d'une base analytique ;
+l'**analyse et la modélisation**, entendues comme le choix d'une méthode proportionnée à la
+donnée disponible et sa validation honnête ; la **restitution et le dialogue avec les
+métiers**, c'est-à-dire la traduction d'un besoin en spécification puis d'un résultat en écran.
+Un profil qui ne tiendrait que le premier produirait des pipelines que personne n'interroge ;
+un profil qui ne tiendrait que le deuxième modéliserait des données dont il ignore la
+provenance.
 
-Ce positionnement se situe à l'intersection de trois domaines que l'année m'a fait pratiquer
-ensemble.
-
-1. **L'ingénierie des données.** Reprises, migrations, interfaces de programmation, qualité et
-   déduplication, modélisation d'une base analytique. C'est la partie du travail sur laquelle
-   j'ai le plus progressé, et celle où je me sens aujourd'hui la plus solide.
-2. **L'analyse et la modélisation.** Le choix d'une méthode proportionnée à la donnée
-   disponible, sa validation honnête, et la lecture métier de ses coefficients.
-3. **La restitution et le dialogue avec les métiers.** La traduction d'un besoin en
-   spécification, puis d'un résultat en écran sur lequel on décide.
-
-Un profil qui ne tiendrait que le premier de ces domaines produirait des pipelines que
-personne n'interroge ; un profil qui ne tiendrait que le deuxième modéliserait des données
-dont il ignore la provenance. C'est la combinaison qui m'intéresse, et le secteur immobilier
-m'a donné pour l'exercer un terrain que je connais désormais : des cycles longs, des
-opérations portées par des sociétés dédiées, une gestion où la moindre définition de marge
-engage des montants importants.
-
-À court terme, ma priorité est de conduire à son terme ce que cette année a engagé. La
-reprise des historiques budgétaires, la bascule définitive vers SPO et l'adaptation des outils
-à l'infrastructure du groupe Nexity forment un ensemble cohérent, sur lequel ma connaissance
-du modèle de données constitue un avantage que personne d'autre n'a aujourd'hui dans
-l'entreprise. C'est donc au sein du groupe que je souhaite poursuivre en premier lieu, sur le
-périmètre données et système d'information.
-
-À moyen terme, je vise un poste d'ingénieure données orientée aide à la décision, dans une
-structure où la donnée de gestion est un enjeu réel et non un sujet d'affichage. Deux types
-d'organisations m'intéressent pour des raisons opposées et complémentaires : les entreprises
-de taille intermédiaire qui n'ont pas encore d'équipe data constituée, où le poste couvre
-toute la chaîne comme cette année, et les directions data structurées, où je pourrais combler
-la lacune que j'identifie plus bas en travaillant enfin à plusieurs sur un même chantier.
+À court terme, je souhaite poursuivre au sein du groupe, sur le périmètre données et système
+d'information : la reprise des historiques budgétaires, la bascule définitive vers SPO et
+l'adaptation des outils à l'infrastructure Nexity forment un ensemble sur lequel ma
+connaissance du modèle de données constitue un avantage que personne d'autre n'a aujourd'hui
+dans l'entreprise. À moyen terme, je vise un poste d'ingénieure données orientée aide à la
+décision, dans une entreprise de taille intermédiaire sans équipe data constituée, où le poste
+couvre toute la chaîne, ou dans une direction data structurée où je travaillerais enfin à
+plusieurs sur un même chantier.
 
 ### Les compétences qu'il me reste à consolider
 
 Il serait présomptueux de conclure sans nommer ce qui me manque, d'autant que l'année l'a
-rendu visible.
+rendu visible. L'**industrialisation** d'abord : j'ai construit des chaînes reproductibles,
+mais elles se lancent à la main, et passer à une exécution planifiée, surveillée et alertée en
+cas d'échec est ce qui sépare un livrable d'un service. La **profondeur statistique sur les
+données temporelles** ensuite : c'est l'axe où le projet du second semestre a donné les
+meilleurs résultats, et celui où j'ai le plus senti la limite de mes acquis. La **conduite d'un
+projet à plusieurs** enfin : deux ans seule sur les sujets data laissent hors champ les
+conventions de code partagées, la revue par un pair et la répartition d'un chantier entre
+plusieurs personnes.
 
-La première lacune est l'**industrialisation**. J'ai construit des chaînes de traitement
-reproductibles, mais elles se lancent à la main. Passer à une exécution planifiée, surveillée
-et alertée en cas d'échec est le pas suivant, et c'est celui qui sépare un livrable d'un
-service.
-
-La deuxième est la **profondeur statistique sur les données temporelles**. C'est l'axe où le
-projet du second semestre a donné les meilleurs résultats, et c'est aussi celui où j'ai le
-plus senti la limite de mes acquis. Les modèles de panel et les séries temporelles méritent
-mieux que l'usage que j'ai pu en faire en quelques semaines.
-
-La troisième, enfin, est la **conduite d'un projet à plusieurs**. J'ai travaillé seule sur les
-sujets data pendant deux ans, ce qui a des vertus mais laisse une compétence entière hors
-champ : les conventions de code partagées, la revue par un pair, la répartition d'un chantier
-entre plusieurs personnes. C'est une raison de plus pour souhaiter rejoindre, à terme, une
-équipe constituée.
-
-::: transition
-Ce chapitre aura livré ce qu'une année de pratique m'a appris du métier : qu'il consiste
-d'abord à traduire, que la modélisation y occupe une place plus modeste et plus précise que
-je ne le croyais, et qu'un résultat livré sans ses limites est un résultat dangereux. Il aura
-également exposé les trois chantiers qui se poursuivent après mon départ et le positionnement
-professionnel que je vise.
-
-Il reste à refermer l'ensemble. La conclusion qui suit reprend le fil des sept
-chapitres et revient sur la thèse annoncée en introduction, pour dire dans quelle mesure
-l'année l'a effectivement démontrée.
-:::
+Il reste à refermer l'ensemble. La conclusion revient sur la thèse annoncée en introduction,
+pour dire dans quelle mesure l'année l'a démontrée.
 
 
 # Conclusion {-}
 
-Ce mémoire témoigne d'une année charnière dans mon parcours d'alternance au sein du groupe
-Angelotti. Contrairement à mon année de Master 1, qui m'avait permis de découvrir
-l'analyse exploratoire des données dans un cadre relativement stable, cette deuxième année
-a été marquée par la complexité et l'urgence d'une transformation numérique de fond. Elle
-a été dominée par des enjeux d'ingénierie des données et d'architecture système, avant de
-revenir, au second semestre, à la modélisation statistique.
+Cette deuxième année d'alternance a été dominée par des enjeux d'ingénierie des données et
+d'architecture système, avant de revenir au second semestre à la modélisation statistique.
 
-Le premier semestre a été celui de la reconstruction du socle. La migration de la base
-Grimmo vers l'ERP SPO m'a confrontée à la réalité rugueuse du terrain. Il ne s'agissait
-pas simplement de transférer des données, mais de rétro-concevoir un modèle dont les
-règles n'étaient pas documentées, de résoudre des problèmes d'intégrité référentielle
-complexes avec la gestion des identifiants dynamiques et du versionnement, et de faire
-preuve d'agilité stratégique. L'adoption de la méthode des « coquilles vides » pour
-sécuriser le démarrage de la facturation illustre cette capacité à adapter la technique
-aux impératifs métiers. En parallèle, j'ai maintenu un haut niveau de service sur le
-reporting, illustré par la mise en œuvre d'une règle de gestion juridique complexe malgré
-les contraintes de nos outils, tout en participant à la sécurisation du système
-d'information via le déploiement du SSO.
+Le premier semestre a été celui de la reconstruction du socle. La migration de Grimmo vers
+l'ERP SPO ne consistait pas à transférer des données, mais à rétro-concevoir un modèle dont
+les règles n'étaient pas documentées, à résoudre des problèmes d'intégrité référentielle avec
+la gestion des identifiants dynamiques et du versionnement, et à adapter la technique aux
+impératifs métier — ce qu'illustre l'adoption des « coquilles vides » pour sécuriser le
+démarrage de la facturation. En parallèle, j'ai maintenu le service sur le reporting, avec la
+mise en œuvre d'une règle juridique complexe malgré les contraintes de nos outils, et
+participé au déploiement du SSO.
 
-Le second semestre a prolongé ce travail, puis l'a valorisé. La reprise des tiers a achevé
-de constituer le socle commercial du nouvel ERP, en créant 1 434 clients acquéreurs sans
-doublon détecté par les trois clés d'unicité retenues, et elle a fait le premier pas vers
-l'interopérabilité entre l'ERP et le CRM qui restait à construire.
-Le Copilote Financier a ensuite exploité ce socle pour outiller la direction financière
-sur trois questions de gestion, et il l'a fait de bout en bout, de la compréhension des
-exports jusqu'à une application que les contrôleurs de gestion ouvrent eux-mêmes.
+Le second semestre a prolongé ce travail, puis l'a valorisé. La reprise des tiers a achevé de
+constituer le socle commercial du nouvel ERP, en créant 1 434 clients acquéreurs sans doublon
+détecté par les trois clés d'unicité retenues. Le Copilote Financier a ensuite exploité ce
+socle pour outiller la direction financière sur trois questions de gestion, de bout en bout,
+de la compréhension des exports jusqu'à une application que les contrôleurs de gestion ouvrent
+eux-mêmes.
 
-Ce parcours en deux temps aura démontré la thèse annoncée en introduction. Il l'aura même
-fait deux fois plutôt qu'une. Une première fois en creux, lorsque la charge de la
-migration a repoussé le projet de modélisation au second semestre : tenter de modéliser
-des phénomènes financiers sur une base fragmentée entre l'ancien et le nouveau système
-aurait conduit à des résultats biaisés et non pérennes. Une seconde fois en plein, lorsque
-le projet de Data Science a donné des résultats solides sur le rythme d'écoulement, où les
-données avaient une profondeur temporelle, et des résultats modestes sur le risque de
-marge, où elles n'étaient qu'une photographie à date. La structure de la donnée commande
-ce que la modélisation peut en tirer : c'est le même énoncé dans les deux cas, obtenu par
-deux chemins indépendants.
+Ce parcours aura démontré la thèse annoncée en introduction, et il l'aura fait deux fois. Une
+première fois en creux, lorsque la charge de la migration a repoussé le projet de modélisation
+au second semestre : modéliser des phénomènes financiers sur une base fragmentée entre
+l'ancien et le nouveau système aurait donné des résultats biaisés et non pérennes. Une seconde
+fois en plein, lorsque le projet de Data Science a donné des résultats solides sur le rythme
+d'écoulement, où les données avaient une profondeur temporelle, et modestes sur le risque de
+marge, où elles n'étaient qu'une photographie à date. La structure de la donnée commande ce
+que la modélisation peut en tirer : c'est le même énoncé, obtenu par deux chemins
+indépendants.
 
-Il reste évidemment beaucoup à faire. La migration vers SPO n'est pas achevée,
-l'historique budgétaire reste à reprendre, l'intégration à l'infrastructure Nexity
-s'annonce, et le Copilote Financier ne deviendra un véritable outil de suivi que lorsque
-les exports auront été historisés sur une durée suffisante. Ce que cette année aura établi
-n'en dépend pas. Un projet de données ne se joue pas au moment du choix de l'algorithme
-mais bien avant, lorsqu'on décide ce qu'est un client, ce qu'est une marge, ou ce que
-contient réellement un fichier dont le nom annonce autre chose. Structurer une donnée et
-la modéliser ne sont pas deux métiers successifs, mais deux moments du même travail, et
-c'est le premier qui décide de ce que le second pourra en tirer.
+Il reste beaucoup à faire. La migration n'est pas achevée, l'historique budgétaire reste à
+reprendre, l'intégration à l'infrastructure Nexity s'annonce, et le Copilote Financier ne
+deviendra un véritable outil de suivi que lorsque les exports auront été historisés sur une
+durée suffisante. Ce que cette année aura établi n'en dépend pas. Un projet de données ne se
+joue pas au moment du choix de l'algorithme mais bien avant, lorsqu'on décide ce qu'est un
+client, ce qu'est une marge, ou ce que contient réellement un fichier dont le nom annonce
+autre chose. Structurer une donnée et la modéliser ne sont pas deux métiers successifs, mais
+deux moments du même travail, et c'est le premier qui décide de ce que le second pourra en
+tirer.
 
-C'est cette conviction, forgée sur le terrain plutôt qu'en cours, que j'emporte de ces
-deux années d'alternance, et c'est elle qui oriente le projet professionnel exposé au
-chapitre 7.
 
 # Bibliographie {-}
 

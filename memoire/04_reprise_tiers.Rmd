@@ -284,36 +284,25 @@ approximations : ils sont la traduction directe du modèle de données décrit e
 ### Génération et normalisation des fichiers d'import
 
 Une fois les six feuilles calculées, il restait à les transformer en fichiers réellement
-acceptés par SPO. Cette étape, que j'imaginais purement mécanique, a en réalité mobilisé
-plusieurs contraintes de format que la documentation ne mentionnait pas et que les premiers
-rejets ont fait apparaître.
+acceptés par SPO. Cette étape, que j'imaginais purement mécanique, a mobilisé quatre
+contraintes de format que la documentation ne mentionnait pas et que les premiers rejets ont
+fait apparaître : un encodage UTF-8 avec le point-virgule pour séparateur, seule
+configuration acceptée ; la conversion en ASCII pur de tous les noms, prénoms, adresses et
+professions, SPO refusant les caractères accentués ; la suppression de la seconde ligne
+d'en-tête des feuilles de travail ; et le découpage en lots de 200 tiers au maximum,
+homogènes en nature. Le détail de ces contraintes figure en annexe A.
 
-- **L'encodage et le séparateur.** Les fichiers doivent être enregistrés en CSV
-  (*Comma-Separated Values*, un format texte où les colonnes sont séparées par un
-  caractère) encodé en UTF-8, avec le point-virgule comme séparateur. C'est la seule
-  configuration acceptée par l'outil d'import.
-- **La normalisation des caractères.** SPO refuse les caractères accentués dans les
-  colonnes textuelles. Il a donc fallu convertir en ASCII pur l'ensemble des noms, prénoms,
-  adresses et professions, en remplaçant les caractères accentués par leur équivalent non
-  accentué. Cette contrainte est frustrante, puisqu'elle dégrade volontairement une donnée
-  correcte, mais elle est bloquante : sans elle, les lignes concernées sont rejetées.
-- **La structure de l'en-tête.** Les feuilles de travail comportent deux lignes de titre,
-  l'intitulé des colonnes et le type de données attendu. Seule la première doit être
-  conservée dans le fichier exporté.
-- **Le découpage en lots.** Les fichiers doivent être découpés en lots de 200 tiers au
-  maximum, et surtout être homogènes en nature : un même fichier ne peut pas contenir à la
-  fois des couples et des personnes physiques. Cette dernière règle a une conséquence
-  pratique importante, puisqu'elle impose de trier les lignes par nature avant de découper,
-  et c'est elle qui explique que l'import des couples s'est fait en cinq lots successifs.
+La dernière règle a une conséquence pratique : un même fichier ne pouvant mélanger couples et
+personnes physiques, il faut trier par nature avant de découper, ce qui explique que l'import
+des couples se soit fait en cinq lots successifs.
 
-J'ai consigné l'ensemble de ces contraintes dans la note de procédure remise à l'équipe, en
-même temps que la marche à suivre pour rejouer l'import si celui-ci devait être différé.
-Ce dernier point n'est pas anecdotique : entre la préparation du fichier et l'injection
-effective, d'autres tiers peuvent être créés dans SPO par les équipes commerciales. La
-procédure prévoit donc de redemander une extraction actualisée des tiers existants, de
-remplacer le contenu de la feuille de référence et de recalculer : les tiers devenus
-existants entre-temps sortent alors automatiquement du périmètre d'import. Le fichier reste
-ainsi utilisable dans le temps, ce qui était l'un de mes objectifs de conception.
+Ces contraintes sont consignées dans la note de procédure remise à l'équipe, avec la marche à
+suivre pour rejouer l'import s'il devait être différé — point qui n'est pas anecdotique,
+puisque d'autres tiers peuvent être créés dans SPO entre la préparation du fichier et
+l'injection. La procédure prévoit alors de redemander une extraction actualisée, de remplacer
+la feuille de référence et de recalculer : les tiers devenus existants sortent automatiquement
+du périmètre. Le fichier reste ainsi utilisable dans le temps, ce qui était l'un de mes
+objectifs de conception.
 
 ### Le contournement par API : 872 requêtes PATCH pour les coordonnées des couples
 
@@ -370,48 +359,29 @@ n'avait pas eu l'occasion de mobiliser.
 
 ## Traitement des cas particuliers et arbitrages
 
-Aussi automatisée soit-elle, une reprise de données laisse toujours un résidu de cas qui ne
-rentrent dans aucune règle. Les traiter est moins spectaculaire que de concevoir un
-mécanisme de déduplication, mais c'est une part réelle du travail, et surtout une part qui
-engage une décision. J'ai tenu à documenter chacun de ces arbitrages dans la note de
-procédure, pour que la trace en subsiste indépendamment de moi.
+Une chaîne pilotée par formules ne traite pas tout. Neuf tiers ont demandé une intervention
+manuelle, répartis en quatre familles : trois adresses hors de France, que SPO refusait de
+créer avec un pays étranger et qui ont donc été créées en France puis rectifiées dans l'ERP ;
+trois tiers dont la nature était mal renseignée dans Vadimm, corrigée dans la feuille pivot
+avant génération puisque la nature commande à la fois la clé d'unicité et la feuille de
+sortie ; un tiers relevant d'une opération de dation, déjà présent dans SPO et retiré du
+fichier ; et deux doublons portant deux adresses divergentes. L'annexe B donne le détail de
+chaque cas et de l'arbitrage retenu.
 
-**Les adresses étrangères :** Trois tiers avaient une adresse hors de France, dont un en
-Allemagne et un aux Émirats arabes unis. SPO refusait initialement la création d'un tiers avec un pays
-étranger renseigné directement dans le fichier d'import. Plutôt que de bloquer la chaîne
-pour ces trois cas, nous avons choisi de les créer avec le pays France par défaut, puis
-de rectifier le pays manuellement dans l'ERP après création, en vérifiant à chaque fois que
-la modification était bien prise en compte. C'est un compromis assumé : il fait passer une
-information provisoirement fausse dans le système, mais sur un périmètre connu, listé, et
-corrigé dans la foulée.
+Ce dernier cas est le seul qui ait demandé un arbitrage véritable. Une même personne y
+apparaissait deux fois avec deux adresses différentes, sans qu'il soit possible de déterminer
+automatiquement laquelle retenir : la déduplication savait dire qu'il s'agissait de la même
+personne, elle ne pouvait pas dire où cette personne habite aujourd'hui. Après vérification
+des dates dans Vadimm, nous avons conservé l'adresse rattachée à la vente la plus récente.
 
-**Les tiers mal classés :** Trois autres tiers étaient renseignés dans Vadimm avec une nature qui
-ne correspondait pas à la réalité. Deux étaient enregistrés comme personnes physiques alors
-qu'il s'agissait de sociétés, et un troisième comme personne physique alors qu'il
-s'agissait d'un couple mal saisi. J'ai modifié manuellement leur nature dans la feuille
-pivot avant génération des fichiers, ce qui a suffi à ce qu'ils soient créés correctement,
-puisque la nature commande à la fois la clé d'unicité et la feuille de sortie qui les
-reçoit. L'un d'eux, en revanche, était déjà créé dans SPO par un autre canal : il a été
-retiré du fichier d'import plutôt que reclassé.
-
-**Les exclusions ponctuelles :** Un tiers relevant d'une opération de dation, c'est-à-dire
-d'un paiement en biens plutôt qu'en numéraire, existait déjà dans SPO et a été retiré du
-fichier.
-
-**Les doublons avec adresses divergentes :** Deux cas ont demandé un arbitrage véritable.
-Une même personne y apparaissait deux fois avec deux adresses différentes, sans qu'il soit
-possible de déterminer automatiquement laquelle retenir : la déduplication savait dire
-qu'il s'agissait de la même personne, elle ne pouvait pas dire où cette personne habite
-aujourd'hui. L'explication la plus vraisemblable était un déménagement entre deux achats.
-Après vérification des dates dans Vadimm, nous avons tranché en conservant l'adresse
-rattachée à la vente la plus récente.
-
-Ces cas sont peu nombreux au regard des 1 434 tiers créés, et il serait tentant de les
+Ces neuf cas sont peu nombreux au regard des 1 434 tiers créés, et il serait tentant de les
 présenter comme des détails. Je crois au contraire qu'ils délimitent précisément ce que
-l'automatisation peut et ne peut pas faire. Les formules savent appliquer une règle ;
-elles ne savent pas décider laquelle de deux adresses également plausibles est la bonne.
-La valeur du fichier de travail n'est pas d'avoir supprimé la décision humaine, mais de
-l'avoir concentrée sur une poignée de cas identifiés, au lieu de la diluer sur 1 602 lignes.
+l'automatisation peut et ne peut pas faire. Les formules savent appliquer une règle ; elles
+ne savent pas décider laquelle de deux adresses également plausibles est la bonne. La valeur
+du fichier de travail n'est pas d'avoir supprimé la décision humaine, mais de l'avoir
+concentrée sur une poignée de cas identifiés au lieu de la diluer sur 1 602 lignes. J'ai tenu
+à documenter chacun de ces arbitrages dans la note de procédure, pour que la trace en subsiste
+indépendamment de moi.
 
 ## Bilan de l'import et points de vigilance pour la suite
 
@@ -440,85 +410,37 @@ seuls la contrainte de format qui a imposé le recours à l'API.
 > représentants ouvert, montrant les deux personnes du couple et les coordonnées ajoutées
 > par requête PATCH sur l'une d'elles. Anonymiser les noms.
 
-Au-delà du résultat, ce projet m'a laissé un ensemble de points de vigilance que j'ai
-documentés et qui valent, je crois, bien au-delà du cas de cet import.
+Au-delà du résultat, ce projet m'a laissé des points de vigilance qui valent bien au-delà du
+cas de cet import.
 
-Le premier concerne l'usage du fichier lui-même. Quatre manipulations le cassent silencieusement
-: modifier une feuille de sortie, dont le contenu est régénéré à chaque recalcul ; modifier les
-colonnes calculées de la feuille pivot, qui portent toute la logique de rang et de numérotation
-; insérer une ligne au milieu de la feuille pivot ou de la feuille de coordonnées, ce qui décale
-toutes les références ; et trier la feuille pivot, ce qui détruit la logique de rang, celle-ci
-étant calculée de façon cumulative sur l'ordre des lignes. Aucune de ces quatre manipulations ne
-produit de message d'erreur, les rendant d'autant plus dangereuses. C'est la raison pour
-laquelle la note de procédure les mentionne avant même d'expliquer comment utiliser le fichier.
+Quatre manipulations cassent le fichier sans produire le moindre message d'erreur : modifier
+une feuille de sortie, dont le contenu est régénéré à chaque recalcul ; modifier les colonnes
+calculées de la feuille pivot, qui portent la logique de rang et de numérotation ; insérer une
+ligne au milieu d'une feuille, ce qui décale toutes les références ; et trier la feuille
+pivot, dont la logique de rang est cumulative sur l'ordre des lignes. La note de procédure les
+énonce avant même d'expliquer comment se servir du fichier.
 
-Le second concerne un ensemble de pièges techniques que j'ai rencontrés en construisant les
-formules, et qui ont chacun coûté du temps de recherche avant d'être compris :
+Les pièges de formule rencontrés relèvent tous du même défaut, et c'est l'enseignement
+principal que j'en tire : dans une chaîne pilotée par formules, l'erreur ne se manifeste
+presque jamais par un message d'erreur, mais par un compteur qui ne tombe pas juste. Chaîne
+vide comptée comme une valeur, code de mois interprété comme des minutes, heures parasites
+rendant différentes deux dates identiques à l'affichage, cellule vide confondue avec chaîne
+vide : chacun a produit des compteurs surévalués, des clés de déduplication fausses ou des
+faux positifs, et aucun n'a signalé quoi que ce soit. Le détail de ces quatre pièges et de
+leur correction figure en annexe C.
 
-1. **Le comptage des chaînes vides.** Une formule de comptage conditionnel considère comme
-   une valeur la chaîne vide renvoyée par une autre formule. Les compteurs de contrôle
-   étaient donc systématiquement surévalués, jusqu'à ce que je restreigne le comptage aux
-   seules valeurs textuelles réelles.
-2. **Le format des dates.** Le code de mise en forme des mois peut être interprété comme
-   un code de minutes selon le contexte, produisant des clés de déduplication fausses
-   sans qu'aucune erreur soit signalée. J'ai remplacé toute mise en forme globale par une
-   recomposition explicite de l'année, du mois et du jour.
-3. **Les heures parasites dans les dates de naissance.** Certaines dates issues de
-   l'extraction portaient une heure non nulle, d'autres non. Deux dates identiques à
-   l'affichage étaient donc considérées comme différentes par le tableur, cassant la
-   déduplication des personnes physiques. La normalisation systématique des dates à
-   minuit a réglé le problème.
-4. **La différence entre cellule vide et chaîne vide.** Une cellule contenant une formule
-   qui renvoie une chaîne vide n'est pas une cellule vide, et les tests de vacuité ne la
-   détectent pas comme telle. Cette confusion est à l'origine de plusieurs faux positifs
-   dans les premières versions des formules d'exclusion.
+C'est pourquoi j'ai ajouté à la feuille pivot un panneau de contrôle affichant en permanence
+les compteurs clés, que la procédure impose de vérifier avant tout export : c'est le seul
+dispositif de détection dont je disposais. Un dernier point relève de la performance : avec
+environ 60 000 cellules de formules, le recalcul automatique devient pénible, et la procédure
+recommande de travailler en calcul manuel puis de forcer un recalcul complet avant chaque
+export.
 
-Ces quatre points ont un dénominateur commun, et c'est l'enseignement principal que j'en
-tire : dans une chaîne de traitement par formules, l'erreur ne se manifeste presque jamais
-par un message d'erreur. Elle se manifeste par un compteur qui ne tombe pas juste. C'est
-pourquoi j'ai ajouté à la feuille pivot un panneau de contrôle affichant en permanence les
-compteurs clés, et pourquoi la procédure impose de les vérifier avant tout export : tout
-écart entre ces compteurs et les valeurs attendues signale un problème à investiguer avant
-d'aller plus loin. Ce panneau est le seul dispositif de détection dont je disposais.
-
-Un dernier point de vigilance relève de la performance. Le fichier comporte environ 60 000
-cellules de formules, rendant le recalcul automatique pénible pendant les phases de
-modification. Basculer en calcul manuel pendant le travail, puis forcer un recalcul complet
-avant chaque export, est la manière de travailler que j'ai retenue et que la procédure
-recommande.
-
-::: transition
-Cette reprise des tiers achève, pour la partie qui me revenait, le travail de constitution
-du socle de données du nouvel ERP. Après les opérations et leurs tranches migrées au
-premier semestre, les 1 434 clients acquéreurs disposent désormais dans SPO d'une fiche
-unique, correctement typée, dotée de ses représentants, de son rôle et, lorsque la source
-les portait, de ses coordonnées.
-Le référentiel commercial du groupe est reconstitué, et il l'est selon des règles écrites,
-tracées et rejouables plutôt que par une saisie dont personne n'aurait pu, six mois plus
-tard, reconstituer la logique.
-
-Néanmoins, il serait excessif de présenter ce chantier comme achevé. La reprise des
-historiques budgétaires reste devant nous, et le fichier de travail devra probablement être
-rejoué au moins une fois avant la bascule définitive, à mesure que de nouveaux tiers sont
-créés dans l'ERP par les équipes commerciales. Le référentiel client est en revanche
-stabilisé, et c'est lui qui conditionne la suite.
-
-La valeur de ce travail ne se mesure pas au nombre de lignes importées. Elle tient d'abord
-au choix des trois clés d'unicité, qui décide de ce qu'est un client dans notre référentiel ;
-ensuite à la capacité à contourner une limite de format en changeant de porte d'entrée vers
-le système ; enfin à la documentation des arbitrages, qui rend la reprise vérifiable par
-quelqu'un d'autre que celle qui l'a faite.
-
-Les deux chapitres qui précèdent ont donc reconstitué, chacun de son côté, une moitié du
-socle de gestion du groupe : les opérations et leurs tranches d'une part, les clients
-acquéreurs d'autre part. Pendant que ce socle se reconstruisait, les services n'ont pas cessé
-pour autant d'avoir besoin de leurs indicateurs, et l'entreprise a continué de faire évoluer
-son infrastructure.
-
-Le chapitre suivant présente ces missions filées, menées en parallèle des deux chantiers de
-reprise : le maintien du système décisionnel, avec une demande du service juridique qui
-illustre bien la difficulté d'implanter une règle métier dans un outil qui ne l'attend pas,
-et la contribution au déploiement du Single Sign-On. On y verra apparaître, sur un terrain
-plus modeste, la même question que celle qui commandera le projet de Data Science : où écrit-on
-une règle pour que tout le monde consomme la même ?
-:::
+Le référentiel commercial du groupe est ainsi reconstitué selon des règles écrites et
+rejouables, plutôt que par une saisie dont la logique aurait été introuvable six mois plus
+tard. Le chantier n'est pas clos pour autant : la reprise des historiques budgétaires reste
+devant nous, et le fichier devra être rejoué avant la bascule définitive. Pendant que ce
+socle se reconstruisait, les services ont continué d'avoir besoin de leurs indicateurs. Le
+chapitre suivant présente ces missions filées, où se pose déjà, sur un terrain plus modeste,
+la question qui commandera le projet de Data Science : où écrit-on une règle pour que tout le
+monde consomme la même ?

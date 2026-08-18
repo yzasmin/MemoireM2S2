@@ -38,15 +38,11 @@ Nous avons donc opté pour une stratégie hybride :
 - Un traitement manuel pour les exceptions et les cas particuliers historiques ne pouvant
   entrer dans les gabarits standardisés.
 
-Cet arbitrage mérite d'être explicité, car il n'allait pas de soi. Automatiser suppose un
-investissement initial important, qui ne se rentabilise que si le volume est suffisant et si
-les données sont suffisamment homogènes. Sur 283 opérations, la première condition était
-remplie ; la seconde ne l'était que partiellement, et c'est précisément pourquoi la stratégie
-retenue est hybride plutôt qu'entièrement automatisée. Vouloir tout automatiser aurait
-conduit à écrire des règles pour des cas uniques, ce qui coûte plus cher que de les traiter
-à la main.
-
-Mon travail s'est structuré en deux phases techniques distinctes : une phase préparatoire
+Cet arbitrage n'allait pas de soi. Automatiser suppose un investissement initial qui ne se
+rentabilise que si le volume est suffisant et les données homogènes : sur 283 opérations, la
+première condition était remplie, la seconde seulement en partie. Vouloir tout automatiser
+aurait conduit à écrire des règles pour des cas uniques, ce qui coûte plus cher que de les
+traiter à la main. Mon travail s'est ensuite structuré en deux phases, une phase préparatoire
 d'appropriation et une phase opérationnelle d'industrialisation.
 
 ### Phase préparatoire : appropriation technique et tests unitaires
@@ -198,37 +194,28 @@ injection, que résume la Figure 2.4 :
 
 ![Le requêtage dynamique imposé par le versionnement des budgets](figures/fig_2_4_requetage_dynamique.png){width=100%}
 
-Cette contrainte forte m'a obligée à intégrer des vérifications programmatiques en amont de
-chaque écriture. Elle m'a surtout appris quelque chose de plus général sur les interfaces de
+Cette contrainte m'a surtout appris quelque chose de plus général sur les interfaces de
 programmation : une API ne se contente pas d'exposer des données, elle impose un modèle de
-comportement. Ici, le versionnement traduit une exigence d'auditabilité comptable
-parfaitement légitime, mais qui rend impossible toute écriture naïve. Comprendre l'intention
-derrière la contrainte est ce qui permet de la contourner proprement plutôt que de lutter
-contre elle.
+comportement. Le versionnement traduit ici une exigence d'auditabilité comptable parfaitement
+légitime, mais qui rend impossible toute écriture naïve. Comprendre l'intention derrière la
+contrainte est ce qui permet de la contourner proprement plutôt que de lutter contre elle.
 
 ## Adaptation stratégique : le déploiement en « coquilles vides »
 
-Face aux complexités techniques inhérentes à la gestion des identifiants et au versionnement,
-et compte tenu des délais stricts imposés par la direction, nous avons été confrontés à un
-arbitrage nécessaire entre perfection technique et urgence opérationnelle.
-
-La contrainte majeure provenait du besoin impératif des utilisateurs de réaliser la
-facturation électronique dès le basculement vers le nouvel outil. Pour que ce processus
-fonctionne, et notamment pour assurer le lien avec la Gestion Électronique des Documents
-(GED), il fallait que les opérations existent dans l'ERP, même si leur historique n'était pas
-encore intégralement reconstitué.
+Les complexités techniques exposées ci-dessus, jointes aux délais imposés par la direction,
+nous ont confrontés à un arbitrage entre perfection technique et urgence opérationnelle. La
+contrainte majeure venait du besoin des utilisateurs de facturer dès le basculement : pour que
+ce processus fonctionne, et notamment le lien avec la Gestion Électronique des Documents
+(GED), il fallait que les opérations existent dans l'ERP, même sans leur historique.
 
 ### Une approche agile par priorisation
 
-Nous avons donc décidé d'adopter une stratégie de déploiement dite en « coquilles vides ».
-Cette approche a consisté à dissocier le contenant, c'est-à-dire la structure de l'opération,
-du contenu, c'est-à-dire les données budgétaires détaillées.
-
-Concrètement, nous avons réorienté notre plan de migration pour prioriser la création massive
-des fiches opérations dans SPO. Nous avons injecté en priorité les données indispensables à
-la facturation, comme le code opération et le libellé, laissant temporairement de côté les
-données historiques plus complexes, budgets passés et détail des tranches, qui nécessitaient
-un temps de nettoyage supérieur.
+Nous avons donc adopté une stratégie de déploiement en « coquilles vides », qui dissocie le
+contenant — la structure de l'opération — du contenu, c'est-à-dire les données budgétaires
+détaillées. Le plan de migration a été réorienté pour créer massivement les fiches opérations
+et injecter en priorité ce qui est indispensable à la facturation, code opération et libellé,
+en laissant de côté les budgets passés et le détail des tranches, qui demandaient un temps de
+nettoyage supérieur.
 
 Cette décision est celle dont j'ai le plus appris en matière de conduite de projet. Elle
 suppose d'accepter qu'un système soit temporairement incomplet et de le documenter comme
@@ -239,28 +226,18 @@ transformé une dette implicite en dette suivie.
 
 ### Gains opérationnels et lissage de la charge
 
-Cette stratégie s'est révélée payante. Elle a permis de débloquer immédiatement la fonction
-de facturation et d'assurer la continuité de service sans attendre la finalisation totale de
-la migration. De plus, elle nous a offert un délai supplémentaire précieux pour traiter la
-reprise des données au fil de l'eau, dans un second temps, sans subir la pression de
-l'urgence quotidienne.
-
-Cette adaptation témoigne d'une gestion de projet agile, capable d'ajuster sa méthodologie
-pour répondre aux réalités du terrain.
+Cette stratégie a débloqué immédiatement la facturation et assuré la continuité de service
+sans attendre la finalisation de la migration. Elle a de plus offert un délai précieux pour
+traiter la reprise au fil de l'eau, sans la pression de l'urgence quotidienne.
 
 ## Bilan de la migration à la fin du premier semestre
 
-Ce travail d'initialisation de la migration vers SPO a constitué l'axe central du premier
-semestre. Il est essentiel de préciser qu'à la fin de cette période, nous n'étions qu'au
-début de ce vaste chantier.
-
-Nous avons réussi à modéliser et intégrer la structure fondamentale des dossiers, à savoir les
-opérations et leurs tranches de travaux, la création des tranches commerciales étant encore en
-cours à la fin du semestre. Une part conséquente du travail restait à accomplir : l'analyse et
-l'intégration des données financières et comptables, notamment la reprise détaillée des budgets
-et de l'historique des factures.
-
-Le tableau suivant récapitule l'état d'avancement à ce jalon.
+À la fin du premier semestre, nous n'étions qu'au début de ce chantier. La structure
+fondamentale des dossiers était modélisée et intégrée — opérations et tranches de travaux, la
+création des tranches commerciales étant encore en cours — mais une part conséquente du
+travail restait à accomplir : l'intégration des données financières et comptables, notamment
+la reprise détaillée des budgets et de l'historique des factures. Le tableau suivant
+récapitule l'état d'avancement à ce jalon.
 
 | Objet du modèle SPO | État à la fin du premier semestre |
 |:--------------------------------|:--------------------------------------------|
@@ -277,20 +254,10 @@ reprise, l'avancement ne se mesure pas au nombre d'enregistrements créés, mais
 modèle cible réellement couverte. Créer 283 opérations sans leurs budgets, ce n'est pas avoir
 fait la moitié du travail, c'est avoir rendu la seconde moitié possible.
 
-::: transition
-La migration vers SPO a occupé l'essentiel de mon premier semestre, et elle a défini le
-niveau d'exigence technique du reste de l'année. J'y ai appris à lire un modèle de données
-inconnu par ses messages d'erreur, à respecter une intégrité référentielle non documentée, et
-à arbitrer entre l'exhaustivité et la continuité de service.
-
-Néanmoins, le socle ainsi constitué restait incomplet sur un point qui allait vite se faire
-sentir. Les opérations existaient, mais les clients qui achètent dans ces opérations, eux,
-n'étaient pas encore dans le nouvel ERP. Or reprendre des clients n'est pas reprendre des
-structures de gestion : il s'agit de personnes, avec ce que cela implique de
-risques de doublons et d'exigence de qualité.
-
-Le chapitre suivant présente donc la reprise des tiers, conduite au second semestre. On y
-verra que le problème central n'y était plus l'ordre d'injection, mais une question
-préalable et bien plus difficile à trancher : à partir de quoi décide-t-on que deux lignes
-désignent la même personne ?
-:::
+Cette migration a défini le niveau d'exigence technique du reste de l'année : lire un modèle
+de données inconnu par ses messages d'erreur, respecter une intégrité référentielle non
+documentée, arbitrer entre exhaustivité et continuité de service. Le socle restait pourtant
+incomplet : les opérations existaient, mais pas les clients qui y achètent. Le chapitre
+suivant expose cette reprise des tiers, où la question centrale n'est plus l'ordre
+d'injection mais celle-ci : à partir de quoi décide-t-on que deux lignes désignent la même
+personne ?

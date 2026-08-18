@@ -34,12 +34,11 @@ formulé, puis les données dont je disposais réellement, l'architecture retenu
 exploitables, les trois axes d'analyse et leurs résultats, la plateforme qui les restitue aux
 contrôleurs de gestion, et enfin les limites que je considère comme faisant partie du livrable.
 
-Une décision a orienté tout le projet, et il vaut mieux l'énoncer d'emblée parce qu'elle
-explique la forme de ce qui suit. La taille des données disponibles, 267 opérations et
-quatre exports totalisant 32 Mo, ne justifie pas un empilement de modèles. J'ai donc
-retenu un petit nombre de méthodes simples, chacune choisie pour une question précise et
-validée sérieusement, plutôt qu'un catalogue d'algorithmes dont aucun n'aurait pu être
-correctement évalué à cette échelle.
+Une décision a orienté tout le projet : la taille des données disponibles, 267 opérations et
+quatre exports totalisant 32 Mo, ne justifie pas un empilement de modèles. J'ai donc retenu un
+petit nombre de méthodes simples, chacune choisie pour une question précise et validée
+sérieusement, plutôt qu'un catalogue d'algorithmes dont aucun n'aurait pu être correctement
+évalué à cette échelle.
 
 ## Contexte
 
@@ -56,32 +55,28 @@ quelles opérations méritent l'attention en priorité. C'est ce manque qui a mo
 
 ### Problème métier
 
-Trois questions structurent les revues de gestion, et les tableurs actuels n'y répondent
-pas.
+Trois questions structurent les revues de gestion, et les tableurs actuels n'y répondent pas.
 
-La première porte sur la marge. Quelles opérations examiner en priorité, parce que leur
-marge d'engagement dérive, et sur quels postes cette dérive se joue-t-elle, pour combien
-d'euros ? La question suppose de comparer des dizaines d'opérations entre elles, ce
-qu'aucun tableur individuel ne permet.
+La première porte sur la **marge** : quelles opérations examiner en priorité parce que leur
+marge d'engagement dérive, sur quels postes et pour combien d'euros ? Y répondre suppose de
+comparer des dizaines d'opérations entre elles, ce qu'aucun tableur individuel ne permet.
 
-La deuxième porte sur le rythme de vente. Quel volume de réservations budgéter pour 2026 ?
-La période récente a montré à quel point la demande est sensible au coût du crédit : le
-taux moyen des crédits habitat est passé d'environ 1,1 % à un pic de 3,6 % fin 2023, avant
-de refluer vers 3,1 % mi-2026, et le rythme du groupe est tombé d'environ 150 à moins de
-115 réservations par mois en 2023. Reste à savoir ce qui, dans cette chute, revient à la
+La deuxième porte sur le **rythme de vente** : quel volume de réservations budgéter pour 2026 ?
+La période récente a montré la sensibilité de la demande au coût du crédit, le taux moyen des
+crédits habitat étant passé d'environ 1,1 % à un pic de 3,6 % fin 2023 avant de refluer vers
+3,1 % mi-2026, tandis que le rythme du groupe tombait d'environ 150 à moins de 115
+réservations par mois en 2023. Reste à savoir ce qui, dans cette chute, revient à la
 conjoncture et ce qui revient aux programmes eux-mêmes.
 
-La troisième porte sur le prix. Quels lots du stock faut-il repricer, c'est-à-dire réviser
-à la hausse ou à la baisse ? La question n'est
-pas théorique, puisque 45 % des 2 157 désistements enregistrés ont pour motif un problème
-de financement ou un refus de prêt, et que les remises sont aujourd'hui accordées au cas
-par cas.
+La troisième porte sur le **prix** : quels lots du stock faut-il réviser, à la hausse ou à la
+baisse ? La question n'est pas théorique, puisque 45 % des 2 157 désistements enregistrés ont
+pour motif un problème de financement ou un refus de prêt, et que les remises sont aujourd'hui
+accordées au cas par cas.
 
-Il faut souligner ce que ces trois questions ont en commun. Face à des besoins de ce type,
-la tentation serait de partir sur un projet d'apprentissage automatique de grande ampleur.
-C'est pourtant un problème de contrôle de gestion outillé par la donnée, et rien d'autre.
-Le matériau disponible se résume à 267 opérations et quatre exports Excel, soit une
-photographie à date.
+Ces trois questions ont un point commun. Face à des besoins de ce type, la tentation serait de
+partir sur un projet d'apprentissage automatique de grande ampleur ; c'est pourtant un problème
+de contrôle de gestion outillé par la donnée, et rien d'autre, le matériau disponible se
+résumant à 267 opérations et quatre exports Excel, soit une photographie à date.
 
 #### Besoins par axe et exigences non fonctionnelles
 
@@ -546,14 +541,7 @@ haut, historiser les exports mensuels et fiabiliser la saisie des motifs de dés
 exactement de la même nature que le travail décrit aux chapitres 2 et 3. Ce sont des travaux
 de structure, faits pour rendre possible une analyse à venir.
 
-::: transition
-Une succession de récits de mission ne fait pourtant pas un bilan. Les questions que pose un
-jury à un mémoire professionnel sont d'un autre ordre : comment ces projets ont-ils été
-conduits, avec quelles méthodes et quelles technologies, comment ai-je su que le résultat
-était bon, et qu'est-ce qui n'a pas fonctionné ? Elles ne se traitent pas au fil de chaque
-chapitre sans l'alourdir.
-
-Le chapitre suivant leur est donc consacré. Il relit transversalement les quatre missions,
-sous l'angle de la conduite de projet, des outils, de l'évaluation des résultats et des
-difficultés rencontrées.
-:::
+Une succession de récits de mission ne fait pourtant pas un bilan. Comment ces projets
+ont-ils été conduits, avec quelles méthodes, comment ai-je su que le résultat était bon, et
+qu'est-ce qui n'a pas fonctionné ? Le chapitre suivant relit transversalement les quatre
+missions sous ces angles.

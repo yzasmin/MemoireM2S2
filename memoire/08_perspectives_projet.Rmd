@@ -20,10 +20,9 @@
 :::
 
 Ce dernier chapitre quitte le récit des missions pour livrer la réflexion qu'elles ont
-produite. Il porte d'abord sur le métier de data scientist tel que je l'ai exercé, dans une
-entreprise qui n'a pas d'équipe data et où j'étais la seule personne à temps plein sur ces
-sujets. Il expose ensuite les perspectives des chantiers engagés, dont aucun n'est achevé, et
-se termine par le projet professionnel qui découle de ces deux années d'alternance.
+produite : sur le métier de data scientist tel que je l'ai exercé, dans une entreprise sans
+équipe data ; sur les perspectives des chantiers engagés, dont aucun n'est achevé ; et sur le
+projet professionnel qui en découle.
 
 ## Le métier de data scientist vu depuis une entreprise sans équipe data
 
@@ -31,25 +30,21 @@ se termine par le projet professionnel qui découle de ces deux années d'altern
 
 L'image que j'avais de ce métier en entrant en Master 2 était celle que donne le cursus : on
 reçoit un jeu de données et une question, on choisit une méthode, on évalue, on livre un
-modèle. Cette image n'est pas fausse, elle est simplement très minoritaire dans le temps
-réel.
+modèle. Cette image n'est pas fausse, elle est simplement très minoritaire dans le temps réel.
+Sur les quatre missions de l'année, une seule y correspond, et encore partiellement. Le poste
+que j'ai réellement occupé se rapproche de celui de gestionnaire d'applications tel que le
+décrivent les référentiels métier [1]. Ce qui a occupé le reste, c'est un travail de
+traduction dans les deux sens : traduire une gêne exprimée par un service en question
+calculable, puis traduire un résultat statistique en information sur laquelle quelqu'un peut
+décider.
 
-Sur les quatre missions de l'année, une seule correspond à cette description, et encore
-partiellement. Le poste que j'ai réellement occupé se rapproche davantage de celui de
-gestionnaire d'applications tel que le décrivent les référentiels métier [1] : comprendre les
-outils, les données qu'ils produisent et les besoins de ceux qui s'en servent. Ce qui a occupé
-le reste, c'est un travail de traduction, dans les deux sens. Traduire une gêne exprimée par un
-service en question calculable, d'abord. Traduire ensuite un résultat statistique en information
-sur laquelle quelqu'un peut décider. Entre ces deux traductions, la modélisation proprement dite
-occupe une place modeste.
-
-Cette traduction n'est pas une tâche annexe qu'on expédierait avant le vrai travail. Elle est
-le vrai travail, et elle est difficile pour une raison précise : les deux langues n'ont pas
-les mêmes catégories. Le service juridique parle de commandes payantes et gratuites ; la base
-ne connaît que des lignes sans position dans une séquence. La direction financière parle
-d'opérations qui dérivent ; les exports ne contiennent qu'un budget et un engagé à une date.
-Chaque fois, il a fallu construire la catégorie manquante, et ce sont ces constructions qui
-engagent le plus, parce qu'elles décident de ce que l'entreprise pourra observer ensuite.
+Cette traduction est le vrai travail, et elle est difficile pour une raison précise : les deux
+langues n'ont pas les mêmes catégories. Le service juridique parle de commandes payantes et
+gratuites ; la base ne connaît que des lignes sans position dans une séquence. La direction
+financière parle d'opérations qui dérivent ; les exports ne contiennent qu'un budget et un
+engagé à une date. Chaque fois, il a fallu construire la catégorie manquante, et ce sont ces
+constructions qui engagent le plus, parce qu'elles décident de ce que l'entreprise pourra
+observer ensuite.
 
 ### La place réelle de la modélisation
 
@@ -76,43 +71,32 @@ cette absence. Comprendre cela avant de choisir un algorithme, plutôt qu'après
 
 ### L'honnêteté sur ce qu'un résultat ne dit pas
 
-Le troisième constat porte sur une exigence que je n'attendais pas au même niveau : la
-rigueur dans l'énoncé des limites.
-
-Dans un exercice universitaire, présenter un modèle faible est un mauvais résultat. Dans une
+Le troisième constat porte sur une exigence que je n'attendais pas au même niveau. Dans un
+exercice universitaire, présenter un modèle faible est un mauvais résultat ; dans une
 entreprise, présenter un modèle faible **sans le dire** est bien pire, parce que quelqu'un
-décidera dessus. Un score de risque qui trie correctement une liste sans permettre de fonder
-une décision individuelle est utile, à condition que cette distinction soit portée à l'écran
-et non enfouie dans une annexe.
-
-C'est pourquoi j'ai fait de l'énoncé des limites une partie du livrable, au même titre que
-les résultats : le paramètre d'élasticité emprunté à la littérature, l'absence d'historique
-qui plafonne un axe entier, les intervalles de prévision qui ignorent l'incertitude sur les
-taux futurs. Cette pratique a un effet secondaire que je n'avais pas anticipé : elle rend les
-recommandations plus faciles à discuter, parce que l'interlocuteur sait sur quoi il peut
-s'appuyer.
+décidera dessus. J'ai donc fait de l'énoncé des limites une partie du livrable, au même titre
+que les résultats : le paramètre d'élasticité emprunté à la littérature, l'absence
+d'historique qui plafonne un axe entier, les intervalles de prévision qui ignorent
+l'incertitude sur les taux futurs. Cette pratique a un effet secondaire que je n'avais pas
+anticipé : elle rend les recommandations plus faciles à discuter, parce que l'interlocuteur
+sait sur quoi il peut s'appuyer.
 
 ## Ce que j'ai appris de la pratique professionnelle
 
 ### Documenter est un acte technique
 
 J'ai longtemps considéré la documentation comme une formalité qui suit le travail. Deux
-épisodes de l'année m'ont fait changer d'avis.
-
-Le premier est la note interne sur la séquence d'injection dans l'ERP, rédigée après l'avoir
-reconstituée par les codes d'erreur. Ce document a servi à la reprise des tiers six mois plus
-tard, et il aurait servi à quelqu'un d'autre si je n'avais pas été là.
-
-Le second est la note de procédure de l'import des tiers, qui commence par la liste des
-manipulations à ne jamais faire avant d'expliquer comment utiliser le fichier. Cet ordre n'est
-pas rhétorique : les quatre manipulations en question cassent le fichier sans produire le
-moindre message d'erreur, et un utilisateur qui ne les connaît pas produira des fichiers
-d'import faux en croyant bien faire.
+épisodes m'ont fait changer d'avis. La note interne sur la séquence d'injection, d'abord,
+rédigée après l'avoir reconstituée par les codes d'erreur : elle a servi à la reprise des
+tiers six mois plus tard, et elle aurait servi à quelqu'un d'autre si je n'avais pas été là.
+La note de procédure de l'import des tiers ensuite, qui énonce les manipulations à ne jamais
+faire avant d'expliquer comment utiliser le fichier — ordre qui n'est pas rhétorique,
+puisqu'elles cassent le fichier sans produire le moindre message d'erreur.
 
 J'en retire une formulation que j'assume : **documenter, ce n'est pas décrire ce qu'on a fait,
-c'est rendre le travail reprenable par quelqu'un d'autre**. La différence est concrète. Une
-description raconte les étapes ; une documentation utile énonce les règles, les pièges et les
-décisions, c'est-à-dire ce qui ne se déduit pas du résultat.
+c'est rendre le travail reprenable par quelqu'un d'autre**. Une description raconte les
+étapes ; une documentation utile énonce les règles, les pièges et les décisions, c'est-à-dire
+ce qui ne se déduit pas du résultat.
 
 ### Livrer, c'est faire adopter
 
@@ -130,19 +114,16 @@ n'en était pas le service après-vente.
 
 ## Perspectives des projets engagés
 
-Aucun des chantiers de cette année n'est achevé, et il serait malvenu de conclure ce mémoire
-en laissant croire le contraire. Trois perspectives se dégagent, dans un ordre de priorité qui
-n'est pas le mien mais celui de l'entreprise.
+Aucun des chantiers de cette année n'est achevé. Trois perspectives se dégagent, dans un ordre
+de priorité qui est celui de l'entreprise.
 
 ### Achever la reprise et historiser les données
 
-La migration vers SPO reste prioritaire. La stratégie des « coquilles vides », si elle a
-sauvé le démarrage de la facturation, doit maintenant laisser place à une reprise
-exhaustive : intégration des historiques budgétaires complets, vérifications approfondies de
-l'intégrité des données par contrôle de cohérence comptable, et phases de tests finaux avant
-la bascule définitive. Le fichier de reprise des tiers devra pour sa part être rejoué au moins
-une fois avant cette bascule, afin d'écarter les tiers créés entre-temps par les équipes
-commerciales.
+La migration vers SPO reste prioritaire. La stratégie des « coquilles vides », si elle a sauvé
+le démarrage de la facturation, doit laisser place à une reprise exhaustive : historiques
+budgétaires complets, contrôle de cohérence comptable et tests finaux avant la bascule
+définitive. Le fichier de reprise des tiers devra être rejoué avant cette bascule, pour
+écarter les tiers créés entre-temps par les équipes commerciales.
 
 À ce chantier s'ajoute la recommandation la plus structurante que je laisse à l'entreprise :
 **historiser les exports mensuels dans le nouvel ERP**. C'est l'absence de cet historique qui
@@ -166,88 +147,50 @@ Trois évolutions la rendraient durable.
 
 ### L'intégration à l'infrastructure Nexity
 
-Une mission structurante, non prévue initialement, vient s'ajouter à cette feuille de route :
-le passage vers l'infrastructure technique du groupe Nexity. Ce changement d'environnement
-engendrera des missions spécifiques d'adaptation de nos outils, qu'il s'agisse de la
-reconfiguration des connecteurs de bases de données, de l'adaptation des protocoles de
-sécurité pour les accès distants ou de la migration de certains scripts d'automatisation vers
-de nouveaux serveurs.
-
-Cette perspective a déjà influé sur mes choix techniques. Le test de montée en charge conduit
-dans le projet analytique n'avait pas d'autre objet que de savoir si l'architecture retenue
-tiendrait à une échelle supérieure, et de documenter le chemin à prendre le cas échéant.
+Une mission structurante, non prévue initialement, s'ajoute à cette feuille de route : le
+passage vers l'infrastructure technique du groupe Nexity, qui engendrera des adaptations de
+nos outils — reconfiguration des connecteurs de bases, protocoles de sécurité pour les accès
+distants, migration de scripts d'automatisation. Cette perspective a déjà influé sur mes choix
+techniques : le test de montée en charge conduit dans le projet analytique n'avait pas d'autre
+objet que de savoir si l'architecture retenue tiendrait à une échelle supérieure.
 
 ## Mon projet professionnel
 
 ### Le positionnement que je vise
 
-Ces deux années d'alternance ont déplacé mon projet, et je préfère le dire ainsi plutôt que
-de prétendre qu'il n'a pas bougé. J'y suis entrée en visant la data science au sens strict, la
-modélisation prédictive. J'en sors en visant un positionnement plus large et, je crois, plus
-juste au regard de ce dont les entreprises ont réellement besoin : **construire et fiabiliser
-les chaînes de données qui rendent la décision possible, puis les outiller**.
+Ces deux années ont déplacé mon projet. J'y suis entrée en visant la data science au sens
+strict, la modélisation prédictive ; j'en sors en visant un positionnement plus large :
+**construire et fiabiliser les chaînes de données qui rendent la décision possible, puis les
+outiller**. Il croise trois domaines que l'année m'a fait pratiquer ensemble :
+l'**ingénierie des données**, sur laquelle j'ai le plus progressé — reprises, migrations,
+interfaces de programmation, déduplication, modélisation d'une base analytique ;
+l'**analyse et la modélisation**, entendues comme le choix d'une méthode proportionnée à la
+donnée disponible et sa validation honnête ; la **restitution et le dialogue avec les
+métiers**, c'est-à-dire la traduction d'un besoin en spécification puis d'un résultat en écran.
+Un profil qui ne tiendrait que le premier produirait des pipelines que personne n'interroge ;
+un profil qui ne tiendrait que le deuxième modéliserait des données dont il ignore la
+provenance.
 
-Ce positionnement se situe à l'intersection de trois domaines que l'année m'a fait pratiquer
-ensemble.
-
-1. **L'ingénierie des données.** Reprises, migrations, interfaces de programmation, qualité et
-   déduplication, modélisation d'une base analytique. C'est la partie du travail sur laquelle
-   j'ai le plus progressé, et celle où je me sens aujourd'hui la plus solide.
-2. **L'analyse et la modélisation.** Le choix d'une méthode proportionnée à la donnée
-   disponible, sa validation honnête, et la lecture métier de ses coefficients.
-3. **La restitution et le dialogue avec les métiers.** La traduction d'un besoin en
-   spécification, puis d'un résultat en écran sur lequel on décide.
-
-Un profil qui ne tiendrait que le premier de ces domaines produirait des pipelines que
-personne n'interroge ; un profil qui ne tiendrait que le deuxième modéliserait des données
-dont il ignore la provenance. C'est la combinaison qui m'intéresse, et le secteur immobilier
-m'a donné pour l'exercer un terrain que je connais désormais : des cycles longs, des
-opérations portées par des sociétés dédiées, une gestion où la moindre définition de marge
-engage des montants importants.
-
-À court terme, ma priorité est de conduire à son terme ce que cette année a engagé. La
-reprise des historiques budgétaires, la bascule définitive vers SPO et l'adaptation des outils
-à l'infrastructure du groupe Nexity forment un ensemble cohérent, sur lequel ma connaissance
-du modèle de données constitue un avantage que personne d'autre n'a aujourd'hui dans
-l'entreprise. C'est donc au sein du groupe que je souhaite poursuivre en premier lieu, sur le
-périmètre données et système d'information.
-
-À moyen terme, je vise un poste d'ingénieure données orientée aide à la décision, dans une
-structure où la donnée de gestion est un enjeu réel et non un sujet d'affichage. Deux types
-d'organisations m'intéressent pour des raisons opposées et complémentaires : les entreprises
-de taille intermédiaire qui n'ont pas encore d'équipe data constituée, où le poste couvre
-toute la chaîne comme cette année, et les directions data structurées, où je pourrais combler
-la lacune que j'identifie plus bas en travaillant enfin à plusieurs sur un même chantier.
+À court terme, je souhaite poursuivre au sein du groupe, sur le périmètre données et système
+d'information : la reprise des historiques budgétaires, la bascule définitive vers SPO et
+l'adaptation des outils à l'infrastructure Nexity forment un ensemble sur lequel ma
+connaissance du modèle de données constitue un avantage que personne d'autre n'a aujourd'hui
+dans l'entreprise. À moyen terme, je vise un poste d'ingénieure données orientée aide à la
+décision, dans une entreprise de taille intermédiaire sans équipe data constituée, où le poste
+couvre toute la chaîne, ou dans une direction data structurée où je travaillerais enfin à
+plusieurs sur un même chantier.
 
 ### Les compétences qu'il me reste à consolider
 
 Il serait présomptueux de conclure sans nommer ce qui me manque, d'autant que l'année l'a
-rendu visible.
+rendu visible. L'**industrialisation** d'abord : j'ai construit des chaînes reproductibles,
+mais elles se lancent à la main, et passer à une exécution planifiée, surveillée et alertée en
+cas d'échec est ce qui sépare un livrable d'un service. La **profondeur statistique sur les
+données temporelles** ensuite : c'est l'axe où le projet du second semestre a donné les
+meilleurs résultats, et celui où j'ai le plus senti la limite de mes acquis. La **conduite d'un
+projet à plusieurs** enfin : deux ans seule sur les sujets data laissent hors champ les
+conventions de code partagées, la revue par un pair et la répartition d'un chantier entre
+plusieurs personnes.
 
-La première lacune est l'**industrialisation**. J'ai construit des chaînes de traitement
-reproductibles, mais elles se lancent à la main. Passer à une exécution planifiée, surveillée
-et alertée en cas d'échec est le pas suivant, et c'est celui qui sépare un livrable d'un
-service.
-
-La deuxième est la **profondeur statistique sur les données temporelles**. C'est l'axe où le
-projet du second semestre a donné les meilleurs résultats, et c'est aussi celui où j'ai le
-plus senti la limite de mes acquis. Les modèles de panel et les séries temporelles méritent
-mieux que l'usage que j'ai pu en faire en quelques semaines.
-
-La troisième, enfin, est la **conduite d'un projet à plusieurs**. J'ai travaillé seule sur les
-sujets data pendant deux ans, ce qui a des vertus mais laisse une compétence entière hors
-champ : les conventions de code partagées, la revue par un pair, la répartition d'un chantier
-entre plusieurs personnes. C'est une raison de plus pour souhaiter rejoindre, à terme, une
-équipe constituée.
-
-::: transition
-Ce chapitre aura livré ce qu'une année de pratique m'a appris du métier : qu'il consiste
-d'abord à traduire, que la modélisation y occupe une place plus modeste et plus précise que
-je ne le croyais, et qu'un résultat livré sans ses limites est un résultat dangereux. Il aura
-également exposé les trois chantiers qui se poursuivent après mon départ et le positionnement
-professionnel que je vise.
-
-Il reste à refermer l'ensemble. La conclusion qui suit reprend le fil des sept
-chapitres et revient sur la thèse annoncée en introduction, pour dire dans quelle mesure
-l'année l'a effectivement démontrée.
-:::
+Il reste à refermer l'ensemble. La conclusion revient sur la thèse annoncée en introduction,
+pour dire dans quelle mesure l'année l'a démontrée.

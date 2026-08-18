@@ -101,91 +101,55 @@ concevoir l'architecture du Copilote Financier.
 
 ### Enjeux et réalisation opérationnelle
 
-Au-delà de l'exploitation des données, j'ai également eu l'opportunité de participer à la
-sécurisation de leur accès. En parallèle de mes missions principales, j'ai collaboré avec
-l'administratrice des systèmes et outils SI sur un projet d'infrastructure transverse : le
-déploiement du SSO (Single Sign-On).
+En parallèle de mes missions principales, j'ai collaboré avec l'administratrice des systèmes
+et outils SI sur un projet d'infrastructure transverse : le déploiement du SSO
+(*Single Sign-On*), technologie permettant d'accéder à plusieurs applications avec une seule
+authentification. L'enjeu était double pour le groupe : réduire le nombre de mots de passe à
+mémoriser et renforcer la sécurité des accès aux outils sensibles.
 
-Le SSO est une technologie permettant à un utilisateur d'accéder à plusieurs applications
-avec une seule authentification. Pour le groupe Angelotti, l'enjeu était double :
-simplifier l'expérience utilisateur en réduisant le nombre de mots de passe à mémoriser,
-et renforcer la sécurité des accès aux outils sensibles.
-
-Mon rôle a été à la fois opérationnel et pédagogique. J'ai pris en charge le déploiement
-de la solution logicielle sur les postes de travail, en ciblant deux périmètres clés :
-l'agence de Perpignan et le service financier du siège. Cette mission m'a demandé de
-coordonner mes interventions avec les plannings des collaborateurs pour minimiser l'impact
-sur leur travail. Concrètement, j'ai procédé à l'installation du connecteur sur chaque
-poste, vérifié la bonne synchronisation avec l'annuaire de l'entreprise, et accompagné les
-utilisateurs lors de leur première connexion pour m'assurer de la bonne prise en main de
-l'outil. Nous avons volontairement commencé par ces deux périmètres avant d'envisager une
-généralisation, afin de mesurer les difficultés réelles sur un échantillon restreint.
+Mon rôle a été opérationnel et pédagogique. J'ai pris en charge le déploiement sur les postes
+de travail de deux périmètres, l'agence de Perpignan et le service financier du siège :
+installation du connecteur, vérification de la synchronisation avec l'annuaire d'entreprise,
+et accompagnement des utilisateurs lors de leur première connexion. Nous avons volontairement
+commencé par ces deux périmètres avant d'envisager une généralisation, afin de mesurer les
+difficultés réelles sur un échantillon restreint.
 
 ### Ce qu'une mission d'administration système apprend sur la donnée
 
-Cette expérience m'a permis de mieux appréhender les problématiques de gestion de parc
-informatique et de gouvernance des accès, des aspects souvent invisibles mais cruciaux
-pour la cohérence du Système d'Information.
+Cette expérience m'a fait appréhender les problématiques de gestion de parc et de gouvernance
+des accès, souvent invisibles mais cruciales pour la cohérence du système d'information. Elle
+m'a surtout appris quelque chose que je n'attendais pas d'une mission de déploiement.
+L'annuaire d'entreprise sur lequel repose le SSO est un référentiel d'identités : il répond,
+pour les collaborateurs, à la question que je me posais pour les clients au chapitre 3, à
+savoir comment garantir qu'une personne n'existe qu'une fois et qu'on sait la reconnaître.
+Voir ce problème résolu du côté de l'infrastructure, par un annuaire centralisé et une
+synchronisation automatique, éclaire par contraste la situation côté données de gestion, où
+aucun référentiel de ce type n'existait avant la reprise des tiers.
 
-Elle m'a aussi appris quelque chose que je n'attendais pas d'une mission de déploiement.
-L'annuaire d'entreprise, sur lequel repose le SSO, est un référentiel d'identités : il
-répond, pour les collaborateurs, à la même question que celle que je me posais pour les
-clients au chapitre 3, à savoir comment garantir qu'une personne n'existe qu'une fois et
-qu'on sait la reconnaître. Voir ce problème résolu, du côté de l'infrastructure, par un
-annuaire centralisé et une synchronisation automatique, éclaire par contraste la situation
-côté données de gestion, où aucun référentiel de ce type n'existait avant la reprise des
-tiers.
-
-Enfin, l'accompagnement des utilisateurs lors de leur première connexion a été instructif
-à sa manière. Une solution techniquement correcte qui déroute l'utilisateur au moment de
-s'en servir n'est pas une solution livrée. Ce constat, fait ici sur une fenêtre
-d'authentification, s'est retrouvé mot pour mot au moment de livrer l'application d'aide à
-la décision.
+L'accompagnement des utilisateurs a été instructif à sa manière : une solution techniquement
+correcte qui déroute l'utilisateur au moment de s'en servir n'est pas une solution livrée. Ce
+constat, fait ici sur une fenêtre d'authentification, s'est retrouvé mot pour mot au moment de
+livrer l'application d'aide à la décision.
 
 ## Ce que les missions filées coûtent et ce qu'elles rapportent
 
-Ces missions transverses, bien que chronophages, sont complémentaires au travail de fond
-sur la donnée et participent à ma compréhension des enjeux stratégiques du groupe. Il
-serait malhonnête de ne pas dire ce qu'elles ont coûté : elles fragmentent le temps, et un
-chantier de reprise interrompu trois fois dans la journée pour une demande de tableau de
-bord avance moins vite qu'un chantier mené d'un trait.
+Il serait malhonnête de ne pas dire ce que ces missions transverses ont coûté : elles
+fragmentent le temps, et un chantier de reprise interrompu trois fois dans la journée pour
+une demande de tableau de bord avance moins vite qu'un chantier mené d'un trait. Elles
+rapportent cependant trois choses que je n'aurais pas obtenues autrement.
 
-Elles rapportent cependant trois choses que je n'aurais pas obtenues autrement.
+La première est une **connaissance du métier** que la seule fréquentation des bases ne donne
+pas : on ne comprend pas ce qu'est une commande gratuite en lisant une table, on le comprend
+en écoutant le service juridique expliquer pourquoi la règle existe. La deuxième est une
+**crédibilité** auprès des services : avoir répondu à leurs demandes courantes pendant un an
+est ce qui a rendu possible, au second semestre, un échange direct avec la direction
+financière sur ses besoins d'aide à la décision. La troisième est une **vision de
+l'architecture** du système d'information dans son ensemble, depuis l'authentification des
+postes jusqu'aux tableaux de bord. C'est elle qui m'a permis de concevoir le projet du second
+semestre comme une chaîne complète plutôt que comme une suite de modèles.
 
-La première est une **connaissance du métier** que la seule fréquentation des bases de
-données ne donne pas. On ne comprend pas ce qu'est une commande gratuite en lisant une
-table ; on le comprend en écoutant le service juridique expliquer pourquoi la règle
-existe.
-
-La deuxième est une **crédibilité** auprès des services. Avoir répondu à leurs demandes
-courantes pendant un an est ce qui a rendu possible, au second semestre, un échange direct
-avec la direction financière sur ses besoins d'aide à la décision.
-
-La troisième est une **vision de l'architecture** du système d'information dans son
-ensemble, depuis l'authentification des postes jusqu'aux tableaux de bord, en passant par
-les bases de gestion. Cette vision d'ensemble est précisément ce qui manque le plus
-souvent à un profil purement analytique, et c'est elle qui m'a permis de concevoir le
-projet du second semestre comme une chaîne complète plutôt que comme une suite de modèles.
-
-::: transition
-Ces activités filées illustrent la diversité des missions inhérentes au métier de
-gestionnaire d'information. Au-delà des projets structurels de reprise, j'ai dû faire preuve
-d'agilité pour répondre aux besoins quotidiens des services métiers. La demande du service
-juridique a particulièrement mis en exergue ma capacité à contourner des limitations
-techniques par une modélisation logique rigoureuse, transformant une contrainte d'outil en
-une solution pérenne pour l'entreprise.
-
-Ces solutions restent pourtant des contournements, et il faut le reconnaître. Une règle
-recalculée à chaque affichage tient tant que personne d'autre n'en a besoin ; un tableau
-de bord construit sur un fichier écrasé chaque nuit tient tant que le format ne change
-pas. Ces contournements auront néanmoins rendu un service précis : ils ont maintenu le
-système décisionnel en état de marche pendant les douze mois qu'a duré la reconstruction
-du socle.
-
-Ce socle étant désormais fiable, le chapitre suivant présente ce qu'il devient possible d'en
-faire. Il expose le projet de Data Science mené au second semestre, le Copilote Financier,
-et
-la manière dont les questions rencontrées jusqu'ici, la définition partagée d'une notion, la
-reformulation d'un besoin métier, la prise en main par l'utilisateur, s'y retrouvent toutes,
-déplacées d'un cran.
-:::
+Ces solutions restent des contournements, et il faut le reconnaître : une règle recalculée à
+chaque affichage tient tant que personne d'autre n'en a besoin. Elles auront néanmoins
+maintenu le système décisionnel en état de marche pendant les douze mois qu'a duré la
+reconstruction du socle. Ce socle étant désormais fiable, le chapitre suivant expose ce qu'il
+devient possible d'en faire.

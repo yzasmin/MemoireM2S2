@@ -1,69 +1,31 @@
 # Introduction {-}
 
-Dans un environnement économique et technologique en perpétuelle évolution, la
-transformation numérique est devenue un levier de performance incontournable pour les
-acteurs de l'immobilier. La capacité à centraliser, fiabiliser et exploiter la donnée ne
-constitue plus seulement un avantage concurrentiel, mais une nécessité structurelle pour
-piloter efficacement l'activité. C'est dans cette dynamique que s'inscrit le groupe
-Angelotti, acteur de l'aménagement et de la promotion immobilière en Occitanie et en
-région PACA, qui poursuit sa stratégie de modernisation de son système d'information.
+Le groupe Angelotti, acteur de l'aménagement et de la promotion immobilière en Occitanie et
+en région PACA, poursuit depuis plusieurs années la modernisation de son système
+d'information. Après une première année d'alternance consacrée à la migration du CRM Vadimm,
+ma deuxième année de Master MIASHS au sein de la Holding SPA a coïncidé avec l'étape la plus
+lourde de cette transformation : la refonte complète de l'ERP métier, passant de l'outil
+historique Grimmo à la solution SPO éditée par Salvia. Ce changement d'échelle m'a conduite
+d'un rôle d'assistance opérationnelle vers des missions d'ingénierie, centrées sur
+l'interopérabilité des systèmes.
 
-Après une première année d'alternance consacrée à la migration du CRM Vadimm et à
-l'initiation au Machine Learning, ma deuxième année de Master MIASHS au sein de la Holding
-SPA marque une nouvelle étape. La transition numérique du groupe s'est accélérée cette
-année avec la refonte complète de son ERP métier, passant de l'outil historique Grimmo à
-la solution SPO éditée par Salvia. Ce changement d'échelle m'a conduite à évoluer d'un
-rôle d'assistance opérationnelle vers des missions d'ingénierie plus techniques. Le cœur
-du travail s'est déplacé vers l'interopérabilité des systèmes.
+Ce mémoire présente les travaux réalisés durant cette année, du premier jour de la migration
+jusqu'à la livraison d'une application d'aide à la décision. Il témoigne d'un mouvement en
+deux temps : le passage de la Data Science exploratoire au Data Engineering appliqué, puis le
+retour à la modélisation une fois les données reconstituées. L'ordre compte, et c'est de lui
+que je tire la thèse de ce mémoire, énoncée d'emblée pour que le lecteur puisse en juger au
+fil des chapitres : **la structure de la donnée commande ce que la modélisation peut en
+tirer**. Ce n'est pas une position théorique, c'est un constat que l'année a produit deux
+fois. La première en creux, lorsque la charge de la migration a repoussé le projet de Machine
+Learning au second semestre. La seconde en plein, lorsque ce projet a donné des résultats
+solides là où les données avaient une profondeur temporelle, et modestes là où elles
+n'étaient qu'une photographie à date.
 
-Ce mémoire présente l'ensemble des travaux réalisés durant cette année, du premier jour de
-la migration jusqu'à la livraison d'une application d'aide à la décision. Il témoigne d'un
-mouvement en deux temps dans mes missions : le passage de la Data Science exploratoire au
-Data Engineering appliqué, puis le retour à la modélisation une fois les données
-reconstituées. L'ordre compte. Avant de pouvoir modéliser ou prédire, il est impératif de
-construire une architecture de données robuste et cohérente. J'ai ainsi été confrontée à
-des défis techniques majeurs, impliquant l'automatisation de flux complexes, la gestion de
-règles de gestion dynamiques et l'industrialisation des processus de reprise.
-
-C'est de cette expérience que je tire la thèse de ce mémoire, et je préfère l'énoncer
-d'emblée pour que le lecteur puisse en juger au fil des chapitres : **la structure de la
-donnée commande ce que la modélisation peut en tirer**. Ce n'est pas une position
-théorique. C'est un constat que l'année a produit deux fois. La première, en creux,
-lorsque la charge de la migration a repoussé le projet de Machine Learning au second
-semestre. La seconde, en plein, lorsque le projet de Data Science a donné des résultats
-solides là où les données avaient une profondeur temporelle, et des résultats modestes là
-où elles n'étaient qu'une photographie à date.
-
-Ce document s'articule autour de sept chapitres, qui suivent la progression de mes
-responsabilités :
-
-- Le **chapitre 1** pose le contexte, dans sa double dimension. Le contexte métier d'abord,
-  celui d'un promoteur-aménageur dont l'activité s'étale sur des cycles longs ; le contexte
-  data ensuite, celui d'un système d'information en pleine mutation, où la donnée était
-  répartie entre plusieurs outils qui ne se parlaient pas.
-- Le **chapitre 2** présente le projet central du premier semestre : la migration des données
-  opérationnelles vers l'ERP SPO. J'y détaille la stratégie d'automatisation mise en œuvre
-  pour traiter une volumétrie critique de 283 opérations, en insistant sur les défis
-  algorithmiques posés par l'usage des API et sur la nécessité de maintenir la continuité de
-  service pour la facturation.
-- Le **chapitre 3** prolonge ce travail au second semestre avec la reprise des tiers, c'est-à-dire
-  des clients acquéreurs. J'y expose la conception d'une chaîne de traitement pilotée par
-  formules, les trois mécanismes algorithmiques qui la font fonctionner, et le contournement
-  par API qui a permis de dépasser une limite du format d'import.
-- Le **chapitre 4** aborde le maintien et l'évolution du système décisionnel, ainsi que les
-  missions transverses d'infrastructure. J'y expose comment j'ai dû concevoir des reportings
-  intégrant des règles juridiques complexes, en contournant les limitations techniques des
-  outils pour répondre aux besoins précis des services.
-- Le **chapitre 5** présente le projet de Data Science mené au second semestre : le Copilote
-  Financier, un outil d'aide à la décision construit sur les données de gestion pour la
-  direction financière.
-- Le **chapitre 6** prend de la hauteur sur ces quatre missions. Il expose la méthodologie de
-  conduite de projet que j'ai suivie, les technologies et les méthodes mobilisées, la manière
-  dont j'ai évalué mes propres résultats, et les difficultés que j'ai rencontrées.
-- Le **chapitre 7**, enfin, livre ma réflexion sur le métier de data scientist tel que je l'ai
-  pratiqué, et présente les perspectives ainsi que mon projet professionnel.
-
-À travers ce mémoire, mon objectif n'est pas seulement de présenter mon travail de cette
-seconde année. Il est aussi de montrer comment les métiers liés à la donnée évoluent, et
-comment la data science peut accompagner concrètement les transformations d'un secteur qui
-ne l'attendait pas.
+Sept chapitres suivent la progression de mes responsabilités. Le chapitre 1 pose le contexte
+métier et le contexte data. Les chapitres 2 à 5 exposent les quatre missions de l'année dans
+leur ordre d'apparition : la migration des opérations vers SPO, la reprise des tiers, les
+missions de reporting et d'infrastructure menées en parallèle, puis le projet de Data
+Science, le Copilote Financier. Le chapitre 6 relit ces missions transversalement, sous
+l'angle de la conduite de projet, des technologies employées, de l'évaluation des résultats
+et des difficultés rencontrées. Le chapitre 7 livre ma réflexion sur le métier de data
+scientist tel que je l'ai pratiqué, et présente les perspectives et mon projet professionnel.
