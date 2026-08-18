@@ -87,13 +87,13 @@ qu'aucun tableur individuel ne permet.
 
 La deuxième porte sur le rythme de vente. Quel volume de réservations budgéter pour 2026 ?
 La période récente a montré à quel point la demande est sensible au coût du crédit : le
-taux moyen des crédits habitat est passé d'environ 1,1 % à un pic de 3,6 % fin 2023, avant
-de refluer vers 3,1 % mi-2026, et le rythme du groupe est tombé d'environ 150 à moins de
+taux moyen des crédits habitat est passé d'environ 1,1 % à un pic de 3,6 % fin 2023, avant
+de refluer vers 3,1 % mi-2026, et le rythme du groupe est tombé d'environ 150 à moins de
 115 réservations par mois en 2023. Reste à savoir ce qui, dans cette chute, revient à la
 conjoncture et ce qui revient aux programmes eux-mêmes.
 
 La troisième porte sur le prix. Quels lots du stock faut-il repricer ? La question n'est
-pas théorique, puisque 45 % des 2 157 désistements enregistrés ont pour motif un problème
+pas théorique, puisque 45 % des 2 157 désistements enregistrés ont pour motif un problème
 de financement ou un refus de prêt, et que les remises sont aujourd'hui accordées au cas
 par cas.
 
@@ -258,7 +258,7 @@ confiance des ménages. Tout l'axe B repose sur cette correction. Sans elle, j'a
 
 Le véritable livrable de cette étape est la base SQL décrite en section 2.3 : les vues
 métier partagées, les index, et un contrôle croisé des agrégats qui retrouve les mêmes
-totaux par deux moteurs indépendants, soit 1 561,8 M€ de dépenses budgétées et 1 754,8 M€
+totaux par deux moteurs indépendants, soit 1 561,8 M€ de dépenses budgétées et 1 754,8 M€
 de recettes, à l'arrondi près. Ce contrôle n'est pas une coquetterie : il garantit que la
 base chargée dit bien la même chose que les exports d'origine.
 
@@ -293,14 +293,14 @@ initial et les signaux commerciaux, jamais l'engagé ni le facturé, qui sont pr
 qui définit la cible. Sans cette précaution, le modèle aurait « prédit » sa propre
 définition.
 
-Sur le périmètre exploitable, soit les 123 opérations engagées à au moins 60 % et dont la
-marge budgétée dépasse 50 k€, plus d'un tiers des opérations, 36,6 % exactement, n'a aucun
-dépassement engagé. Mais 28 % franchissent le seuil de dérive matérielle, que j'ai fixé à
-2 % de la marge, et deux cas extrêmes dépassent la moitié de la marge budgétée. La
+Sur le périmètre exploitable, soit les 123 opérations engagées à au moins 60 % et dont la
+marge budgétée dépasse 50 k€, plus d'un tiers des opérations, 36,6 % exactement, n'a aucun
+dépassement engagé. Mais 28 % franchissent le seuil de dérive matérielle, que j'ai fixé à
+2 % de la marge, et deux cas extrêmes dépassent la moitié de la marge budgétée. La
 Figure 2.3 donne la distribution complète et situe ce seuil, avec à droite le détail des
 opérations en dérive.
 
-![Distribution de la variation de marge « committée » sur les 123 opérations du périmètre, et seuil de dérive matérielle à -2 %](figures/fig_2_3_distribution_variation_marge.png){width=95%}
+![Distribution de la variation de marge « committée » sur les 123 opérations du périmètre, et seuil de dérive matérielle à -2 %](figures/fig_2_3_distribution_variation_marge.png){width=95%}
 
 La partie la plus utile de cet axe pour l'entreprise n'est pas un modèle appris : c'est le
 tableau descriptif des dépassements engagés en euros, par opération et par poste, calculé
@@ -310,7 +310,7 @@ La modélisation vient en complément, comme score de tri. Une régression du ta
 variation atteint un coefficient de détermination de 0,08 sur l'échantillon test. Le
 résultat est modeste, et je le présente tel quel : la structure du budget initial
 prédispose à la dérive mais ne la détermine pas, l'aléa de chantier faisant le reste. Une
-classification des opérations « à risque », c'est-à-dire dont la dérive dépasse 2 %,
+classification des opérations « à risque », c'est-à-dire dont la dérive dépasse 2 %,
 atteint un score F1 de l'ordre de 0,30 à 0,34 en validation croisée stratifiée, c'est-à-dire
 sur des découpages qui conservent la proportion d'opérations à risque, contre 0 pour la
 référence majoritaire, qui ne détecte rien du tout. J'ai confronté quatre
@@ -339,7 +339,7 @@ la conjoncture. Deux enseignements en ressortent. D'une part, les deux tiers de 
 tiennent au programme lui-même, avec un coefficient de corrélation intraclasse de 0,66 : la
 localisation, le produit et le prix pèsent davantage que le contexte macroéconomique.
 D'autre part, l'effet du taux d'intérêt est fortement significatif : **une hausse d'un point
-de taux réduit les réservations mensuelles d'environ 19 %**, pour un coefficient de -0,216
+de taux réduit les réservations mensuelles d'environ 19 %**, pour un coefficient de -0,216
 associé à une p-valeur inférieure à 10^-15^. La régression naïve, qui ignore la structure en
 panel, surestime cet effet ; le modèle à effets aléatoires le corrige.
 
@@ -361,19 +361,19 @@ exigeante sur ce point, ne produit tout simplement pas d'effet mesurable. Il ind
 ensuite que les scénarios doivent combiner les deux modèles : la série temporelle fournit
 la trajectoire de référence, avec sa dynamique et sa saisonnalité, et l'élasticité estimée
 sur le panel traduit chaque scénario de taux en effet sur le rythme. Sur cette base,
-présentée en Figure 2.4, une détente à 2,5 % fin 2026 redonnerait environ +6 % de rythme en
-moyenne sur douze mois, tandis qu'une remontée à 3,5 % en retirerait 3 %.
+présentée en Figure 2.4, une détente à 2,5 % fin 2026 redonnerait environ +6 % de rythme en
+moyenne sur douze mois, tandis qu'une remontée à 3,5 % en retirerait 3 %.
 
-![Prévision d'intensité de vente à douze mois sous trois scénarios de taux 2026, avec intervalle à 80 %](figures/fig_2_4_scenarios_taux_2026.png){width=95%}
+![Prévision d'intensité de vente à douze mois sous trois scénarios de taux 2026, avec intervalle à 80 %](figures/fig_2_4_scenarios_taux_2026.png){width=95%}
 
 À l'échelle d'un programme pris isolément, la courbe des réservations cumulées suit une
 forme en S, que j'ai ajustée par une fonction logistique à trois paramètres. Sur les 28
 opérations terminées du périmètre, cet ajustement bat la droite dans 25 cas, comme
 l'illustre la Figure 2.5 sur quatre programmes. Il fournit surtout un indicateur
-directement utile à la trésorerie : le délai d'atteinte de 90 % du potentiel de vente, dont
+directement utile à la trésorerie : le délai d'atteinte de 90 % du potentiel de vente, dont
 la médiane est proche de vingt mois.
 
-![Réservations cumulées et courbes logistiques ajustées sur quatre opérations terminées, avec le repère des 90 % du potentiel](figures/fig_2_5_courbes_logistiques.png){width=95%}
+![Réservations cumulées et courbes logistiques ajustées sur quatre opérations terminées, avec le repère des 90 % du potentiel](figures/fig_2_5_courbes_logistiques.png){width=95%}
 
 La limite de cet indicateur est connue et vérifiée : en début de commercialisation, le
 potentiel n'est pas identifiable, l'ajustement pouvant alors produire n'importe quelle
@@ -387,13 +387,13 @@ question est volontairement le plus simple qui fonctionne. Il s'agit d'une régr
 linéaire du logarithme du prix au mètre carré des 5 064 appartements transigés
 depuis 2016, expliqué par leurs caractéristiques, à savoir la surface, l'étage,
 l'exposition, le type de produit, l'agence, la commune et la proximité du littoral, ainsi
-que par leur année de réservation. Ce modèle explique 88,6 % de la variance sur
-l'échantillon test, avec une erreur type d'environ 11 % sur le prix.
+que par leur année de réservation. Ce modèle explique 88,6 % de la variance sur
+l'échantillon test, avec une erreur type d'environ 11 % sur le prix.
 
 Son intérêt principal n'est pas sa performance mais sa lisibilité : ses coefficients se
 lisent comme des prix implicites, ce qui permet de les discuter avec la direction
-commerciale. On y lit une prime d'étage de +6 %, une prime d'exposition sud, une décote de
-63 % pour le logement social, qui s'explique par des prix réglementés, et un effet millésime
+commerciale. On y lit une prime d'étage de +6 %, une prime d'exposition sud, une décote de
+63 % pour le logement social, qui s'explique par des prix réglementés, et un effet millésime
 d'environ +19 points entre 2016 et 2023, suivi d'un plateau. La Figure 2.6 représente cet
 effet millésime année par année.
 
@@ -414,7 +414,7 @@ bande de tolérance.
 
 La recommandation de remise est ensuite posée comme une petite optimisation sous
 contrainte : maximiser le revenu attendu à douze mois d'une opération, en ajustant chaque
-prix dans des bornes commerciales de -10 à +5 %, sous un objectif d'accélération de
+prix dans des bornes commerciales de -10 à +5 %, sous un objectif d'accélération de
 l'écoulement, la demande réagissant au prix avec une élasticité fixée à -1.
 
 Ce paramètre d'élasticité est la fragilité assumée de l'axe, et je préfère l'exposer que la
@@ -423,11 +423,11 @@ n'est pas significative sur les 95 opérations disponibles. La valeur retenue vi
 la littérature sur le logement neuf, et non de nos données.
 
 Le résultat, lui, est robuste et contre-intuitif. À cette élasticité, la remise optimale
-est uniforme en euros sur tous les lots, de l'ordre de 23 k€ par lot sur l'opération
+est uniforme en euros sur tous les lots, de l'ordre de 23 k€ par lot sur l'opération
 d'application. Elle est donc proportionnellement plus forte sur les petits lots, à
 l'inverse de la pratique actuelle des remises accordées au cas par cas. Sur l'opération
-test, qui compte 18 appartements en stock, viser +8 % d'écoulement déplace le volume
-attendu de 6,8 à 7,4 lots pour un revenu quasi inchangé, en recul de 0,3 %. L'intérêt de la
+test, qui compte 18 appartements en stock, viser +8 % d'écoulement déplace le volume
+attendu de 6,8 à 7,4 lots pour un revenu quasi inchangé, en recul de 0,3 %. L'intérêt de la
 manœuvre n'est donc pas le revenu immédiat mais la vitesse, et l'économie de frais de
 portage que l'objectif ne compte pas.
 
@@ -442,13 +442,13 @@ remises non structurées réellement utilisable.
 
 Le deuxième porte sur les motifs de désistement, analysés par agence. Le profil obtenu
 révèle un problème de qualité de saisie plus qu'un fait commercial : à Salon-de-Provence,
-90 % des motifs sont enregistrés en « Autres motifs », rendant les désistements de cette
+90 % des motifs sont enregistrés en « Autres motifs », rendant les désistements de cette
 agence inanalysables tant que la saisie n'est pas fiabilisée.
 
 Le troisième porte sur la structure du réseau de vente, qui se révèle très concentrée. Deux
-acteurs, le réseau interne et un prescripteur externe, portent à eux seuls 51,6 % des
-dossiers attribués, avec des taux de désistement allant du simple au triple : 9 % pour le
-réseau interne contre 29,6 % pour le prescripteur externe. L'écart a une traduction
+acteurs, le réseau interne et un prescripteur externe, portent à eux seuls 51,6 % des
+dossiers attribués, avec des taux de désistement allant du simple au triple : 9 % pour le
+réseau interne contre 29,6 % pour le prescripteur externe. L'écart a une traduction
 financière immédiate, puisque chaque commission versée sur un dossier qui n'aboutit pas est
 une dépense sans recette.
 
@@ -466,7 +466,7 @@ restreint aux 147 opérations de promotion, et aucun terme de modélisation à l
 La page **Vue d'ensemble**, présentée en Figure 2.8, donne la situation en quelques
 secondes : 147 opérations suivies, dont 10 en alerte et 2 à surveiller parmi les 68
 opérations en cours suffisamment engagées, 421 lots principaux en stock, un rythme récent
-de 4,8 réservations par opération et par mois, pour un taux de crédit à 3,11 %.
+de 4,8 réservations par opération et par mois, pour un taux de crédit à 3,11 %.
 
 ![Plateforme, page « Vue d'ensemble »](figures/fig_2_8_plateforme_vue_ensemble.png){width=100%}
 
