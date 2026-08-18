@@ -211,10 +211,10 @@ d'analyse et l'application s'appuient tous deux sur cette base.
 Trois vues SQL y encapsulent les calculs partagés : la marge budgétée contre la marge
 engagée par opération, les réservations par opération et par mois, et l'état du stock. Ce
 choix est plus structurant qu'il n'y paraît. La définition de la marge est écrite une seule
-fois, dans la vue, et les notebooks comme la plateforme consomment la même. C'est
-exactement le problème que j'avais rencontré sur les reportings décrits dans mon mémoire de
-mi-parcours, où la même notion pouvait être calculée différemment selon l'outil qui
-l'interrogeait.
+fois, dans la vue, et les notebooks comme la plateforme consomment la même. J'avais
+rencontré la difficulté inverse sur les reportings du premier semestre, exposés dans mon
+mémoire de mi-parcours : faute de pouvoir écrire une règle de gestion quelque part une fois
+pour toutes, il fallait la recalculer à chaque génération du tableau.
 
 Une seule commande reconstruit l'ensemble depuis les exports bruts, en quelques secondes.
 L'analyse complète est versionnée et ré-exécutable de bout en bout, ce qui signifie que
