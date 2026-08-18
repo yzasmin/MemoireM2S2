@@ -13,61 +13,58 @@
 - 4.3 Ce que les missions filées coûtent et ce qu'elles rapportent
 :::
 
-Si les deux chantiers de reprise ont constitué la majeure partie de mon année, j'ai maintenu
-en parallèle mes activités de gestionnaire d'information, assurant la continuité des
-missions
-de reporting initiées en Master 1, tout en prenant part à des projets d'infrastructure
-système. Ce chapitre détaille ces activités filées, qui sont essentielles au bon
-fonctionnement quotidien des services et qui ont couru sur les deux semestres.
+Si les deux chantiers de reprise ont constitué la majeure partie de mon année, j'ai
+maintenu en parallèle mes activités de gestionnaire d'information, assurant la continuité
+des missions de reporting initiées en Master 1, tout en prenant part à des projets
+d'infrastructure système. Ce chapitre détaille ces activités filées, qui sont essentielles
+au bon fonctionnement quotidien des services et qui ont couru sur les deux semestres.
 
 Elles méritent un chapitre propre pour une raison de fond, et pas seulement par souci
 d'exhaustivité. C'est en les menant que j'ai rencontré, sous une forme miniature, le
-problème
-qui commande tout le projet de Data Science exposé au chapitre 5 : lorsqu'une règle de
-gestion n'a nulle part où être écrite, elle finit par être recalculée partout, différemment.
+problème qui commande tout le projet de Data Science exposé au chapitre 5 : lorsqu'une
+règle de gestion n'a nulle part où être écrite, elle finit par être recalculée partout,
+différemment.
 
 ## Le maintien opérationnel du reporting
 
 ### Traduire un besoin métier en indicateur exploitable
 
 Dans la continuité de ma première année d'alternance, j'ai conservé la charge de la
-réalisation des demandes de reporting pour les différents services du groupe. Cette mission
-consiste à traduire des besoins métiers parfois abstraits en indicateurs visuels
-exploitables
-et fiables.
+réalisation des demandes de reporting pour les différents services du groupe. Cette
+mission consiste à traduire des besoins métiers parfois abstraits en indicateurs visuels
+exploitables et fiables.
 
-Le travail commence rarement par une spécification. Il commence par une phrase du type « on
-n'arrive pas à savoir combien on a facturé sur cette opération », ou par un tableau que
+Le travail commence rarement par une spécification. Il commence par une phrase du type «
+on n'arrive pas à savoir combien on a facturé sur cette opération », ou par un tableau que
 quelqu'un refait à la main tous les mois. La première partie du travail consiste donc à
 reformuler la demande jusqu'à ce qu'elle soit calculable : de quelles lignes parle-t-on
-exactement, sur quelle période, et que fait-on des cas limites ? Cette reformulation est la
-partie du reporting que je sous-estimais en arrivant, et c'est celle qui décide de
+exactement, sur quelle période, et que fait-on des cas limites ? Cette reformulation est
+la partie du reporting que je sous-estimais en arrivant, et c'est celle qui décide de
 l'utilité du résultat.
 
 ### Une complexité métier : la règle de facturation juridique
 
-Un exemple significatif de ce travail est la demande du service juridique. Le besoin portait
-sur la visualisation et le suivi des commandes clients, afin de déterminer avec précision ce
-qui doit être facturé ou non.
+Un exemple significatif de ce travail est la demande du service juridique. Le besoin
+portait sur la visualisation et le suivi des commandes clients, afin de déterminer avec
+précision ce qui doit être facturé ou non.
 
 La complexité de cette demande ne réside pas dans la donnée brute, mais dans l'application
 d'une règle de gestion spécifique. Il s'agit d'une alternance conditionnelle stricte où la
-première commande est payante, la deuxième est gratuite, la troisième est payante, et ainsi
-de suite. Cette logique, simple à énoncer pour un humain, devient un véritable défi
-lorsqu'il
-faut l'automatiser dans un outil décisionnel sans modifier l'architecture des données.
+première commande est payante, la deuxième est gratuite, la troisième est payante, et
+ainsi de suite. Cette logique, simple à énoncer pour un humain, devient un véritable défi
+lorsqu'il faut l'automatiser dans un outil décisionnel sans modifier l'architecture des
+données.
 
-La difficulté tient à ce que la règle ne porte pas sur une ligne, mais sur la position d'une
-ligne dans une séquence. Aucune colonne de la base ne contient l'information « c'est la
-deuxième commande de ce client sur ce lot » : cette information n'existe que si on la
+La difficulté tient à ce que la règle ne porte pas sur une ligne, mais sur la position
+d'une ligne dans une séquence. Aucune colonne de la base ne contient l'information « c'est
+la deuxième commande de ce client sur ce lot » : cette information n'existe que si on la
 calcule, et elle change dès qu'une commande est ajoutée ou annulée.
 
 ### Contraintes techniques et modélisation dynamique
 
 Mon travail a consisté à trouver la manière la plus optimale d'implémenter cette logique
-avec
-nos logiciels existants. En effet, je faisais face à des contraintes techniques fortes qui
-limitaient mes options :
+avec nos logiciels existants. En effet, je faisais face à des contraintes techniques
+fortes qui limitaient mes options :
 
 1. **Pas de droits d'écriture sur la base.** Je ne possède pas les droits nécessaires pour
    créer des champs de statut directement dans la base de données SQL, ce qui interdisait la
@@ -78,23 +75,22 @@ limitaient mes options :
    jour des données.
 
 Ces deux contraintes se conjuguent pour interdire toute solution qui consisterait à
-*stocker* le résultat. Il fallait donc concevoir une méthode de calcul dynamique. L'objectif
-était de créer un algorithme au sein de MyReport qui, lors de la génération du tableau,
-effectue un traitement en temps réel. Le système doit d'abord identifier les opérations et
-les lots, puis classer leurs commandes par ordre chronologique. Il attribue ensuite un
-rang à
-chaque commande et applique une condition logique : si le rang est impair, le statut est
-défini comme « Payant », et s'il est pair, il devient « Gratuit ». La Figure 4.1 représente
-cette chaîne de calcul.
+*stocker* le résultat. Il fallait donc concevoir une méthode de calcul dynamique.
+L'objectif était de créer un algorithme au sein de MyReport qui, lors de la génération du
+tableau, effectue un traitement en temps réel. Le système doit d'abord identifier les
+opérations et les lots, puis classer leurs commandes par ordre chronologique. Il attribue
+ensuite un rang à chaque commande et applique une condition logique : si le rang est
+impair, le statut est défini comme « Payant », et s'il est pair, il devient « Gratuit ».
+La Figure 4.1 représente cette chaîne de calcul.
 
 ![La règle de facturation juridique traduite en calcul de rang, exécuté à chaque génération du tableau](figures/fig_4_1_regle_facturation.png){width=100%}
 
 Cette approche permet de répondre au besoin métier sans altérer la structure des données
-sources, garantissant ainsi l'intégrité du système tout en offrant la flexibilité demandée.
-Elle a cependant un coût qu'il faut assumer : la règle est recalculée à chaque affichage, et
-elle n'existe nulle part ailleurs que dans la définition du tableau. Si un autre service a
-besoin de la même notion, il devra la redemander, et rien ne garantit qu'elle sera implantée
-à l'identique.
+sources, garantissant ainsi l'intégrité du système tout en offrant la flexibilité
+demandée. Elle a cependant un coût qu'il faut assumer : la règle est recalculée à chaque
+affichage, et elle n'existe nulle part ailleurs que dans la définition du tableau. Si un
+autre service a besoin de la même notion, il devra la redemander, et rien ne garantit
+qu'elle sera implantée à l'identique.
 
 C'est exactement le problème que le projet de Data Science résoudra, au chapitre 5, en
 écrivant les définitions partagées une seule fois dans des vues de base de données. La
@@ -111,28 +107,25 @@ l'administratrice des systèmes et outils SI sur un projet d'infrastructure tran
 déploiement du SSO (Single Sign-On).
 
 Le SSO est une technologie permettant à un utilisateur d'accéder à plusieurs applications
-avec une seule authentification. Pour le groupe Angelotti, l'enjeu était double : simplifier
-l'expérience utilisateur en réduisant le nombre de mots de passe à mémoriser, et renforcer
-la
-sécurité des accès aux outils sensibles.
+avec une seule authentification. Pour le groupe Angelotti, l'enjeu était double :
+simplifier l'expérience utilisateur en réduisant le nombre de mots de passe à mémoriser,
+et renforcer la sécurité des accès aux outils sensibles.
 
-Mon rôle a été à la fois opérationnel et pédagogique. J'ai pris en charge le déploiement de
-la solution logicielle sur les postes de travail, en ciblant deux périmètres clés : l'agence
-de Perpignan et le service financier du siège. Cette mission m'a demandé de coordonner mes
-interventions avec les plannings des collaborateurs pour minimiser l'impact sur leur
-travail.
-Concrètement, j'ai procédé à l'installation du connecteur sur chaque poste, vérifié la bonne
-synchronisation avec l'annuaire de l'entreprise, et accompagné les utilisateurs lors de leur
-première connexion pour m'assurer de la bonne prise en main de l'outil. Nous avons
-volontairement
-commencé par ces deux périmètres avant d'envisager une généralisation, afin de mesurer les
-difficultés réelles sur un échantillon restreint.
+Mon rôle a été à la fois opérationnel et pédagogique. J'ai pris en charge le déploiement
+de la solution logicielle sur les postes de travail, en ciblant deux périmètres clés :
+l'agence de Perpignan et le service financier du siège. Cette mission m'a demandé de
+coordonner mes interventions avec les plannings des collaborateurs pour minimiser l'impact
+sur leur travail. Concrètement, j'ai procédé à l'installation du connecteur sur chaque
+poste, vérifié la bonne synchronisation avec l'annuaire de l'entreprise, et accompagné les
+utilisateurs lors de leur première connexion pour m'assurer de la bonne prise en main de
+l'outil. Nous avons volontairement commencé par ces deux périmètres avant d'envisager une
+généralisation, afin de mesurer les difficultés réelles sur un échantillon restreint.
 
 ### Ce qu'une mission d'administration système apprend sur la donnée
 
 Cette expérience m'a permis de mieux appréhender les problématiques de gestion de parc
-informatique et de gouvernance des accès, des aspects souvent invisibles mais cruciaux pour
-la cohérence du Système d'Information.
+informatique et de gouvernance des accès, des aspects souvent invisibles mais cruciaux
+pour la cohérence du Système d'Information.
 
 Elle m'a aussi appris quelque chose que je n'attendais pas d'une mission de déploiement.
 L'annuaire d'entreprise, sur lequel repose le SSO, est un référentiel d'identités : il
@@ -143,38 +136,36 @@ annuaire centralisé et une synchronisation automatique, éclaire par contraste 
 côté données de gestion, où aucun référentiel de ce type n'existait avant la reprise des
 tiers.
 
-Enfin, l'accompagnement des utilisateurs lors de leur première connexion a été instructif à
-sa manière. Une solution techniquement correcte qui déroute l'utilisateur au moment de s'en
-servir n'est pas une solution livrée. Ce constat, fait ici sur une fenêtre
+Enfin, l'accompagnement des utilisateurs lors de leur première connexion a été instructif
+à sa manière. Une solution techniquement correcte qui déroute l'utilisateur au moment de
+s'en servir n'est pas une solution livrée. Ce constat, fait ici sur une fenêtre
 d'authentification, s'est retrouvé mot pour mot au moment de livrer l'application d'aide à
-la
-décision.
+la décision.
 
 ## Ce que les missions filées coûtent et ce qu'elles rapportent
 
-Ces missions transverses, bien que chronophages, sont complémentaires au travail de fond sur
-la donnée et participent à ma compréhension des enjeux stratégiques du groupe. Il serait
-malhonnête de ne pas dire ce qu'elles ont coûté : elles fragmentent le temps, et un chantier
-de reprise interrompu trois fois dans la journée pour une demande de tableau de bord avance
-moins vite qu'un chantier mené d'un trait.
+Ces missions transverses, bien que chronophages, sont complémentaires au travail de fond
+sur la donnée et participent à ma compréhension des enjeux stratégiques du groupe. Il
+serait malhonnête de ne pas dire ce qu'elles ont coûté : elles fragmentent le temps, et un
+chantier de reprise interrompu trois fois dans la journée pour une demande de tableau de
+bord avance moins vite qu'un chantier mené d'un trait.
 
 Elles rapportent cependant trois choses que je n'aurais pas obtenues autrement.
 
 La première est une **connaissance du métier** que la seule fréquentation des bases de
-données
-ne donne pas. On ne comprend pas ce qu'est une commande gratuite en lisant une table ; on le
-comprend en écoutant le service juridique expliquer pourquoi la règle existe.
+données ne donne pas. On ne comprend pas ce qu'est une commande gratuite en lisant une
+table ; on le comprend en écoutant le service juridique expliquer pourquoi la règle
+existe.
 
 La deuxième est une **crédibilité** auprès des services. Avoir répondu à leurs demandes
 courantes pendant un an est ce qui a rendu possible, au second semestre, un échange direct
 avec la direction financière sur ses besoins d'aide à la décision.
 
 La troisième est une **vision de l'architecture** du système d'information dans son
-ensemble,
-depuis l'authentification des postes jusqu'aux tableaux de bord, en passant par les bases de
-gestion. Cette vision d'ensemble est précisément ce qui manque le plus souvent à un profil
-purement analytique, et c'est elle qui m'a permis de concevoir le projet du second semestre
-comme une chaîne complète plutôt que comme une suite de modèles.
+ensemble, depuis l'authentification des postes jusqu'aux tableaux de bord, en passant par
+les bases de gestion. Cette vision d'ensemble est précisément ce qui manque le plus
+souvent à un profil purement analytique, et c'est elle qui m'a permis de concevoir le
+projet du second semestre comme une chaîne complète plutôt que comme une suite de modèles.
 
 ::: transition
 Ces activités filées illustrent la diversité des missions inhérentes au métier de
@@ -185,10 +176,11 @@ techniques par une modélisation logique rigoureuse, transformant une contrainte
 une solution pérenne pour l'entreprise.
 
 Néanmoins, ces solutions restent des contournements, et il faut le reconnaître. Une règle
-recalculée à chaque affichage tient tant que personne d'autre n'en a besoin ; un tableau de
-bord construit sur un fichier écrasé chaque nuit tient tant que le format ne change pas.
-Cependant, ces contournements auront rendu un service précis : ils ont maintenu le système
-décisionnel en état de marche pendant les douze mois qu'a duré la reconstruction du socle.
+recalculée à chaque affichage tient tant que personne d'autre n'en a besoin ; un tableau
+de bord construit sur un fichier écrasé chaque nuit tient tant que le format ne change
+pas. Cependant, ces contournements auront rendu un service précis : ils ont maintenu le
+système décisionnel en état de marche pendant les douze mois qu'a duré la reconstruction
+du socle.
 
 Ce socle étant désormais fiable, le chapitre suivant présente ce qu'il devient possible d'en
 faire. Il expose le projet de Data Science mené au second semestre, le Copilote Financier,

@@ -1,55 +1,52 @@
 # Conclusion {-}
 
 Ce mémoire témoigne d'une année charnière dans mon parcours d'alternance au sein du groupe
-Angelotti. Contrairement à mon année de Master 1, qui m'avait permis de découvrir l'analyse
-exploratoire des données dans un cadre relativement stable, cette deuxième année a été
-marquée par la complexité et l'urgence d'une transformation numérique de fond. Elle a été
-dominée par des enjeux d'ingénierie des données et d'architecture système, avant de revenir,
-au second semestre, à la modélisation statistique.
+Angelotti. Contrairement à mon année de Master 1, qui m'avait permis de découvrir
+l'analyse exploratoire des données dans un cadre relativement stable, cette deuxième année
+a été marquée par la complexité et l'urgence d'une transformation numérique de fond. Elle
+a été dominée par des enjeux d'ingénierie des données et d'architecture système, avant de
+revenir, au second semestre, à la modélisation statistique.
 
 Le premier semestre a été celui de la reconstruction du socle. La migration de la base
-Grimmo vers l'ERP SPO m'a confrontée à la réalité rugueuse du terrain. Il ne s'agissait pas
-simplement de transférer des données, mais de rétro-concevoir un modèle dont les règles
-n'étaient pas documentées, de résoudre des problèmes d'intégrité référentielle complexes
-avec
-la gestion des identifiants dynamiques et du versionnement, et de faire preuve d'agilité
-stratégique. L'adoption de la méthode des « coquilles vides » pour sécuriser le démarrage de
-la facturation illustre cette capacité à adapter la technique aux impératifs métiers. En
-parallèle, j'ai maintenu un haut niveau de service sur le reporting, illustré par la mise en
-œuvre d'une règle de gestion juridique complexe malgré les contraintes de nos outils, tout
-en
-participant à la sécurisation du système d'information via le déploiement du SSO.
+Grimmo vers l'ERP SPO m'a confrontée à la réalité rugueuse du terrain. Il ne s'agissait
+pas simplement de transférer des données, mais de rétro-concevoir un modèle dont les
+règles n'étaient pas documentées, de résoudre des problèmes d'intégrité référentielle
+complexes avec la gestion des identifiants dynamiques et du versionnement, et de faire
+preuve d'agilité stratégique. L'adoption de la méthode des « coquilles vides » pour
+sécuriser le démarrage de la facturation illustre cette capacité à adapter la technique
+aux impératifs métiers. En parallèle, j'ai maintenu un haut niveau de service sur le
+reporting, illustré par la mise en œuvre d'une règle de gestion juridique complexe malgré
+les contraintes de nos outils, tout en participant à la sécurisation du système
+d'information via le déploiement du SSO.
 
 Le second semestre a prolongé ce travail, puis l'a valorisé. La reprise des tiers a achevé
-de
-constituer le socle commercial du nouvel ERP, en créant 1 434 clients acquéreurs sans
-doublon, et elle a réalisé l'interopérabilité entre l'ERP et le CRM qui restait à faire. Le
-Copilote Financier a ensuite exploité ce socle pour outiller la direction financière sur
-trois questions de gestion, et il l'a fait de bout en bout, de la compréhension des exports
-jusqu'à une application que les contrôleurs de gestion ouvrent eux-mêmes.
+de constituer le socle commercial du nouvel ERP, en créant 1 434 clients acquéreurs sans
+doublon, et elle a réalisé l'interopérabilité entre l'ERP et le CRM qui restait à faire.
+Le Copilote Financier a ensuite exploité ce socle pour outiller la direction financière
+sur trois questions de gestion, et il l'a fait de bout en bout, de la compréhension des
+exports jusqu'à une application que les contrôleurs de gestion ouvrent eux-mêmes.
 
 Ce parcours en deux temps aura démontré la thèse annoncée en introduction. Il l'aura même
 fait deux fois plutôt qu'une. Une première fois en creux, lorsque la charge de la
-migration a
-repoussé le projet de modélisation au second semestre : tenter de modéliser des phénomènes
-financiers sur une base fragmentée entre l'ancien et le nouveau système aurait conduit à des
-résultats biaisés et non pérennes. Une seconde fois en plein, lorsque le projet de Data
-Science a donné des résultats solides sur le rythme d'écoulement, où les données avaient une
-profondeur temporelle, et des résultats modestes sur le risque de marge, où elles n'étaient
-qu'une photographie à date. La structure de la donnée commande ce que la modélisation peut
-en
-tirer : c'est le même énoncé dans les deux cas, obtenu par deux chemins indépendants.
+migration a repoussé le projet de modélisation au second semestre : tenter de modéliser
+des phénomènes financiers sur une base fragmentée entre l'ancien et le nouveau système
+aurait conduit à des résultats biaisés et non pérennes. Une seconde fois en plein, lorsque
+le projet de Data Science a donné des résultats solides sur le rythme d'écoulement, où les
+données avaient une profondeur temporelle, et des résultats modestes sur le risque de
+marge, où elles n'étaient qu'une photographie à date. La structure de la donnée commande
+ce que la modélisation peut en tirer : c'est le même énoncé dans les deux cas, obtenu par
+deux chemins indépendants.
 
-Il reste évidemment beaucoup à faire. La migration vers SPO n'est pas achevée, l'historique
-budgétaire reste à reprendre, l'intégration à l'infrastructure Nexity s'annonce, et le
-Copilote Financier ne deviendra un véritable outil de suivi que lorsque les exports auront
-été historisés sur une durée suffisante. Ce que cette année aura établi n'en dépend pas.
-Un projet de données ne se joue pas au moment du choix de l'algorithme
+Il reste évidemment beaucoup à faire. La migration vers SPO n'est pas achevée,
+l'historique budgétaire reste à reprendre, l'intégration à l'infrastructure Nexity
+s'annonce, et le Copilote Financier ne deviendra un véritable outil de suivi que lorsque
+les exports auront été historisés sur une durée suffisante. Ce que cette année aura établi
+n'en dépend pas. Un projet de données ne se joue pas au moment du choix de l'algorithme
 mais bien avant, lorsqu'on décide ce qu'est un client, ce qu'est une marge, ou ce que
-contient
-réellement un fichier dont le nom annonce autre chose. Structurer une donnée et la modéliser
-ne sont pas deux métiers successifs, mais deux moments du même travail, et c'est le premier
-qui décide de ce que le second pourra en tirer.
+contient réellement un fichier dont le nom annonce autre chose. Structurer une donnée et
+la modéliser ne sont pas deux métiers successifs, mais deux moments du même travail, et
+c'est le premier qui décide de ce que le second pourra en tirer.
 
-C'est cette conviction, forgée sur le terrain plutôt qu'en cours, que j'emporte de ces deux
-années d'alternance, et c'est elle qui oriente le projet professionnel exposé au chapitre 7.
+C'est cette conviction, forgée sur le terrain plutôt qu'en cours, que j'emporte de ces
+deux années d'alternance, et c'est elle qui oriente le projet professionnel exposé au
+chapitre 7.

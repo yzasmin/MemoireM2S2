@@ -5,36 +5,34 @@ transformation numérique est devenue un levier de performance incontournable po
 acteurs de l'immobilier. La capacité à centraliser, fiabiliser et exploiter la donnée ne
 constitue plus seulement un avantage concurrentiel, mais une nécessité structurelle pour
 piloter efficacement l'activité. C'est dans cette dynamique que s'inscrit le groupe
-Angelotti, acteur de l'aménagement et de la promotion immobilière en Occitanie et en région
-PACA, qui poursuit sa stratégie de modernisation de son système d'information.
+Angelotti, acteur de l'aménagement et de la promotion immobilière en Occitanie et en
+région PACA, qui poursuit sa stratégie de modernisation de son système d'information.
 
 Après une première année d'alternance consacrée à la migration du CRM Vadimm et à
 l'initiation au Machine Learning, ma deuxième année de Master MIASHS au sein de la Holding
-SPA marque une nouvelle étape. La transition numérique du groupe s'est accélérée cette année
-avec la refonte complète de son ERP métier, passant de l'outil historique Grimmo à la
-solution SPO éditée par Salvia. Ce changement d'échelle m'a conduite à évoluer d'un rôle
-d'assistance opérationnelle vers des missions d'ingénierie plus techniques. Le cœur du
-travail s'est déplacé vers l'interopérabilité des systèmes.
+SPA marque une nouvelle étape. La transition numérique du groupe s'est accélérée cette
+année avec la refonte complète de son ERP métier, passant de l'outil historique Grimmo à
+la solution SPO éditée par Salvia. Ce changement d'échelle m'a conduite à évoluer d'un
+rôle d'assistance opérationnelle vers des missions d'ingénierie plus techniques. Le cœur
+du travail s'est déplacé vers l'interopérabilité des systèmes.
 
 Ce mémoire présente l'ensemble des travaux réalisés durant cette année, du premier jour de
 la migration jusqu'à la livraison d'une application d'aide à la décision. Il témoigne d'un
 mouvement en deux temps dans mes missions : le passage de la Data Science exploratoire au
 Data Engineering appliqué, puis le retour à la modélisation une fois les données
 reconstituées. L'ordre compte. Avant de pouvoir modéliser ou prédire, il est impératif de
-construire une
-architecture de données robuste et cohérente. J'ai ainsi été confrontée à des défis
-techniques majeurs, impliquant l'automatisation de flux complexes, la gestion de règles de
-gestion dynamiques et l'industrialisation des processus de reprise.
+construire une architecture de données robuste et cohérente. J'ai ainsi été confrontée à
+des défis techniques majeurs, impliquant l'automatisation de flux complexes, la gestion de
+règles de gestion dynamiques et l'industrialisation des processus de reprise.
 
 C'est de cette expérience que je tire la thèse de ce mémoire, et je préfère l'énoncer
 d'emblée pour que le lecteur puisse en juger au fil des chapitres : **la structure de la
-donnée commande ce que la modélisation peut en tirer**. Ce n'est pas une position théorique.
-C'est un constat que l'année a produit deux fois. La première, en creux, lorsque la charge
-de
-la migration a repoussé le projet de Machine Learning au second semestre. La seconde, en
-plein, lorsque le projet de Data Science a donné des résultats solides là où les données
-avaient une profondeur temporelle, et des résultats modestes là où elles n'étaient qu'une
-photographie à date.
+donnée commande ce que la modélisation peut en tirer**. Ce n'est pas une position
+théorique. C'est un constat que l'année a produit deux fois. La première, en creux,
+lorsque la charge de la migration a repoussé le projet de Machine Learning au second
+semestre. La seconde, en plein, lorsque le projet de Data Science a donné des résultats
+solides là où les données avaient une profondeur temporelle, et des résultats modestes là
+où elles n'étaient qu'une photographie à date.
 
 Ce document s'articule autour de sept chapitres, qui suivent la progression de mes
 responsabilités :
