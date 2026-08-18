@@ -473,7 +473,30 @@ sourcerait une affirmation de la conclusion. **À décider.**
 
 ---
 
-## 6. Chaîne de production des documents
+## 6. Les trois audits
+
+**Résumé en une ligne.** Chaque chapitre a été audité séparément par un relecteur à
+contexte neuf, puis les deux ensemble ; les rapports sont dans `audits/` et portent en tête
+la suite qui leur a été donnée.
+
+- `audits/audit_1_chapitre_1.md` — chapitre 1 seul, confronté à la note de synthèse SPO.
+  Deux défauts bloquants levés : la contradiction de volumétrie et l'affirmation que les
+  budgets avaient été migrés au premier semestre.
+- `audits/audit_2_chapitre_2.md` — chapitre 2 seul, confronté au brouillon. Confirme le
+  respect strict du sommaire imposé, la conservation exacte de tous les chiffres du
+  brouillon sans aucune invention, et la disparition complète de l'encadré de note de
+  rédaction. Dix-neuf formulations hors périmètre retirées.
+- `audits/audit_3_ensemble.md` — les deux chapitres ensemble : cohérence, ouverture du
+  chapitre 1 vers le chapitre 2, absence de redite avec le mémoire de mi-parcours, tenue de
+  la conclusion générale.
+
+Un quatrième relecteur, également à contexte neuf, avait vérifié l'analyse de style de la
+section 1 avant toute rédaction, et un cinquième avait dressé l'inventaire de ce que le
+dépôt contient au-delà du brouillon, dont la section 5 rend compte.
+
+---
+
+## 7. Chaîne de production des documents
 
 **Résumé en une ligne.** Les deux chapitres sont écrits en R Markdown sans bloc de code R et
 rendus par pandoc, avec un gabarit LaTeX qui reproduit la mise en forme du mémoire de
