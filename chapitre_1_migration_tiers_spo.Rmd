@@ -43,7 +43,7 @@ chapoffset: 0
 :::
 
 Ce chapitre détaille la reprise des tiers, c'est-à-dire des clients acquéreurs, depuis
-notre système historique vers le nouvel ERP du groupe, SPO. Cette mission prolonge
+notre CRM Vadimm vers le nouvel ERP du groupe, SPO. Cette mission prolonge
 directement le chantier de migration exposé dans mon mémoire de mi-parcours, mais elle en
 change la nature : il ne s'agissait plus d'injecter des structures de gestion, opérations,
 tranches et budgets, mais des personnes, avec ce que cela implique de risques de doublons
@@ -58,23 +58,23 @@ contournées, puis le bilan de l'import et les enseignements que j'en retire.
 
 Le remplacement de l'ERP historique du groupe par SPO, décrit dans mon mémoire de
 mi-parcours, s'est fait par lots successifs. Après la création des opérations
-immobilières, de leurs tranches et de leurs budgets, il restait à reprendre les données
-commerciales, et en premier lieu les clients. Dans SPO, ces clients sont désignés par le
-terme générique de *tiers* : la même entité de base sert à représenter un acquéreur, une
-société, un prescripteur ou un fournisseur, et se voit ensuite attribuer un ou plusieurs
+immobilières et de leurs tranches, il restait à reprendre les données commerciales, et en
+premier lieu les clients. Dans SPO (Suivi des Programmes Opérationnels), ces clients sont
+désignés par le terme générique de *tiers* : la même entité de base sert à représenter un
+acquéreur particulier comme une société, et se voit ensuite attribuer un ou plusieurs
 rôles. Reprendre les tiers signifiait donc alimenter le socle sur lequel toute la gestion
 commerciale allait s'appuyer.
 
 Le périmètre m'a été fixé de la manière suivante : importer dans SPO l'ensemble des clients
 ayant déjà acheté un bien chez Angelotti. La matière première provenait de notre CRM
 (*Customer Relationship Management*, l'outil de gestion de la relation client) Vadimm, sous
-la forme d'une extraction de toutes les ventes enregistrées. Cette extraction comptait
-**1 602 lignes**, auxquelles s'ajoutait une seconde extraction, réalisée avec MyReport
-Builder, portant les coordonnées de contact des acquéreurs et de leurs co-acquéreurs :
-adresses postales, courriels et numéros de téléphone.
+la forme de deux extractions complémentaires : celle des ventes enregistrées, qui porte
+1 557 lignes, et celle des coordonnées de contact des acquéreurs et de leurs co-acquéreurs,
+qui en porte 1 602. Le périmètre de travail ainsi constitué compte **1 602 lignes**, et
+c'est de ce total que part toute la chaîne de traitement.
 
-La difficulté n'était pas la volumétrie, qui reste modeste au regard des 283 opérations
-traitées au premier semestre. Elle tenait à la nature même de la donnée. Concrètement, une
+La difficulté ne tenait pas au volume, comparable à celui des 283 opérations du périmètre
+de migration engagé au premier semestre. Elle tenait à la nature même de la donnée. Concrètement, une
 ligne de l'extraction Vadimm ne décrit pas un client, elle décrit une vente. Un même
 acquéreur qui a acheté trois lots apparaît donc trois fois, et rien dans le fichier ne le
 signale.
@@ -94,19 +94,18 @@ acquéreur aurait été rattaché à plusieurs identifiants, et il serait devenu
 reconstituer son historique ou de lui adresser un courrier unique.
 
 La seconde est externe. Au moment de préparer l'import, SPO n'était pas vide : environ
-13 000 tiers y avaient déjà été créés, soit par des saisies manuelles réalisées par les
-équipes commerciales depuis le démarrage de l'outil, soit par d'autres canaux d'alimentation.
-Injecter mes 1 602 lignes sans les confronter à cet existant aurait produit des doublons
+13 000 tiers y avaient déjà été créés, par saisie ou par d'autres canaux d'alimentation.
+Injecter ces 1 602 lignes sans les confronter à cet existant aurait produit des doublons
 d'une autre nature, plus insidieux parce qu'ils auraient opposé une fiche importée et une
 fiche saisie, toutes deux légitimes en apparence.
 
 Face à cette double contrainte, une reprise manuelle était exclue. Vérifier ligne à ligne
-qu'un acquéreur n'existe ni ailleurs dans le fichier ni déjà dans un référentiel de 13 000
+qu'un acquéreur n'existe ni ailleurs dans le fichier ni déjà dans un référentiel de 13 000
 tiers représentait un volume de contrôles incompatible avec les délais, et surtout un
 risque d'erreur humaine que rien n'aurait permis de tracer ensuite. J'ai donc fait le choix
 de construire un fichier de travail qui automatise entièrement ces contrôles par formules,
-de manière à ce que la décision d'importer ou non une ligne soit calculée et non prise au
-cas par cas.
+de sorte que la décision d'importer ou non une ligne soit calculée et non prise au cas par
+cas.
 
 ## Conception du fichier de travail : une chaîne de traitement pilotée par formules
 
@@ -120,8 +119,8 @@ recopiée à la main entre les deux. Cette architecture se décompose en trois �
 présente la Figure 1.1.
 
 1. **Les feuilles sources** : trois feuilles en lecture seule qui reçoivent les extractions
-   telles quelles. La feuille `VADIMM` porte les 1 557 lignes de ventes reprises du CRM, la
-   feuille `Builder coordonnée` les 1 602 lignes de coordonnées des acquéreurs et
+   telles quelles. La feuille `VADIMM` porte les 1 557 lignes de ventes reprises du CRM, la
+   feuille `Builder coordonnée` les 1 602 lignes de coordonnées des acquéreurs et
    co-acquéreurs, et la feuille `SPO` l'extraction des tiers déjà existants dans l'ERP, qui
    sert de référentiel de comparaison.
 2. **La feuille pivot `BuilderTiers`** : c'est le cœur du dispositif. Elle reçoit
@@ -169,7 +168,8 @@ courriel, le téléphone, les représentants et les rôles sont autant d'objets 
 chacun son propre fichier d'import. La Figure 1.2, reprise de mon mémoire de mi-parcours,
 montre l'interface du module DirectAPI avec la ressource « Tiers » sélectionnée : on y lit
 directement cette décomposition, puisque l'écran propose un emplacement de fichier distinct
-pour les tiers, les représentants, les adresses, les courriels, les téléphones et les rôles.
+par objet rattaché. Six d'entre eux correspondent aux six feuilles de sortie de mon fichier,
+les deux autres, les RIB et les sites web, n'étant pas alimentés par cette reprise.
 
 ![L'interface du module DirectAPI, ressource « Tiers » : chaque objet rattaché appelle son propre fichier d'import](figures/fig_1_2_directapi_tiers.png){width=78%}
 
@@ -184,9 +184,9 @@ l'import.
 
 La feuille pivot repose sur trois mécanismes qui s'enchaînent : d'abord identifier les
 doublons internes, ensuite écarter les tiers déjà créés dans SPO, enfin distribuer les
-lignes retenues vers les six feuilles de sortie. Ces trois mécanismes sont l'apport
-méthodologique de ce travail, et ce sont eux qui font la différence entre un simple fichier
-de mise en forme et un véritable outil de reprise.
+lignes retenues vers les six feuilles de sortie. Ces trois mécanismes sont ce qui distingue
+un fichier de mise en forme d'un outil de reprise, puisqu'ils déplacent la décision
+d'importer une ligne de l'opérateur vers une règle écrite.
 
 ### La déduplication par clés d'unicité différenciées selon la nature du tiers
 
@@ -196,21 +196,21 @@ j'ai le plus hésité, et celui qui commande la qualité de tout le résultat.
 
 Une clé unique appliquée à l'ensemble du fichier ne pouvait pas convenir, précisément parce
 que les trois natures de tiers ne s'identifient pas de la même façon. Deux sociétés peuvent
-porter des raisons sociales très proches sans être la même entité, alors que deux personnes
-homonymes nées le même jour à la même adresse sont, en pratique, la même personne. J'ai
+porter des raisons sociales très proches sans être la même entité, alors qu'il devient très
+improbable que deux lignes partageant nom, prénom, date de naissance et adresse désignent
+deux personnes distinctes. J'ai
 donc retenu **trois clés d'unicité distinctes**, une par nature, calculées chacune dans sa
 propre colonne de la feuille pivot :
 
-1. **Pour un couple** : le nom et le prénom de l'acquéreur principal du dossier de vente,
-   désigné ADV dans nos extractions, complétés du nom et du prénom du co-acquéreur, désigné
-   CO. C'est la combinaison des deux identités qui fait l'unicité, et non chacune prise
+1. **Pour un couple** : le nom et le prénom de l'acquéreur principal, désigné ADV dans nos
+   extractions du nom du dossier de vente auquel il est rattaché, complétés du nom et du
+   prénom du co-acquéreur, désigné CO. C'est la combinaison des deux identités qui fait l'unicité, et non chacune prise
    isolément.
 2. **Pour une personne physique** : le nom, le prénom, la date de naissance et l'adresse.
-   La date de naissance sépare les homonymes ; l'adresse ajoute une sécurité pour les cas
-   où elle n'est pas renseignée de façon fiable.
+   La date de naissance sépare les homonymes, et l'adresse ajoute un second point de
+   comparaison.
 3. **Pour une personne morale** : la raison sociale et le SIRET. Le SIRET est l'identifiant
-   légal, il suffirait seul, mais il n'est pas toujours renseigné dans les données
-   historiques : la raison sociale prend alors le relais.
+   légal de l'établissement, et la raison sociale le double lorsqu'il fait défaut.
 
 Chaque colonne calcule un **rang** : la première occurrence d'un tiers reçoit le rang 1,
 les occurrences suivantes les rangs 2, 3, et ainsi de suite. Seules les lignes de rang 1
@@ -247,26 +247,26 @@ supprime entièrement ce risque.
 
 Lorsque l'une de ces trois formules renvoie un code tiers de SPO, du type `T00012666`, la
 ligne est automatiquement exclue de l'import. Sur ce projet, **40 tiers** ont ainsi été
-détectés comme déjà existants et écartés. Rapporté aux 1 474 tiers uniques, le volume peut
+détectés comme déjà existants et écartés. Rapporté aux 1 474 tiers uniques, le volume peut
 sembler faible, mais chacun de ces 40 cas aurait produit un doublon durable dans le
 référentiel client de l'entreprise.
 
-La Figure 1.3 récapitule l'effet cumulé de ces deux premiers mécanismes. Des 1 602 lignes
-brutes issues de Vadimm, la déduplication interne en écarte 128 qui correspondent à des
-achats répétés, ramenant le total à 1 474 tiers uniques ; l'exclusion des tiers déjà présents
-dans SPO en retire 40 de plus, pour un total de **1 434 tiers à créer**. Chaque étage de
+La Figure 1.3 récapitule l'effet cumulé de ces deux premiers mécanismes. Des 1 602 lignes
+du périmètre de départ, la déduplication interne en écarte 128 qui correspondent à des
+achats répétés, ramenant le total à 1 474 tiers uniques ; l'exclusion des tiers déjà présents
+dans SPO en retire 40 de plus, pour un total de **1 434 tiers à créer**. Chaque étage de
 ce filtrage correspond à une règle explicite, écrite dans une colonne du fichier, donc
 vérifiable et reproductible.
 
-![De 1 602 lignes brutes à 1 434 tiers créés : l'effet des deux filtres successifs](figures/fig_1_3_entonnoir_volumetrie.png){width=92%}
+![De 1 602 lignes de départ à 1 434 tiers créés : l'effet des deux filtres successifs](figures/fig_1_3_entonnoir_volumetrie.png){width=92%}
 
 ### La propagation vers les feuilles de sortie par numérotation séquentielle
 
 Restait à alimenter les six feuilles de sortie à partir des lignes retenues. La difficulté
 tient à ce que ces feuilles n'ont ni la même population ni le même nombre de lignes. La
 feuille des tiers reçoit un enregistrement par tiers créé, mais la feuille des adresses ne
-concerne que les personnes physiques et morales, celle des courriels seulement celles dont
-le courriel est renseigné, et celle des représentants deux lignes par couple plus une par
+concerne que les personnes physiques et morales, celle des courriels seulement celles de
+ces personnes dont le courriel est renseigné, et celle des représentants deux lignes par couple plus une par
 société. Il fallait donc, pour chaque feuille, une numérotation qui lui soit propre.
 
 Le mécanisme que j'ai retenu attribue à chaque ligne de la feuille pivot un **numéro
@@ -285,19 +285,20 @@ rattachée au mauvais tiers parce qu'une ligne a été insérée quelque part sa
 suive.
 
 La Figure 1.4 donne la volumétrie effectivement produite par chacune des six feuilles. On
-y lit directement le modèle de données décrit plus haut : 1 434 lignes pour la liste
-maîtresse des tiers et autant pour l'attribution du rôle « Client », mais 1 871 lignes de
+y lit directement le modèle de données décrit plus haut : 1 434 lignes pour la liste
+maîtresse des tiers et autant pour l'attribution du rôle « Client », mais 1 871 lignes de
 représentants, puisque chaque couple en compte deux, et seulement 553 adresses, 538
 téléphones et 469 courriels, ces trois derniers fichiers ne portant que les personnes
-physiques et morales.
+physiques et morales. Ces écarts de volumétrie d'un fichier à l'autre ne sont donc pas des
+approximations : ils sont la traduction directe du modèle de données décrit en 1.2.2.
 
 ![Les six fichiers d'import produits par la feuille pivot](figures/fig_1_4_volumetrie_fichiers_import.png){width=95%}
 
 **[Emplacement réservé pour une figure — capture d'écran de la feuille `BuilderTiers`,
 montrant côte à côte les colonnes de données reprises et les colonnes calculées : les trois
-rangs de déduplication avec des valeurs 1 et 2 visibles, une ligne portant un code SPO dans
-les colonnes de matching, et le panneau de contrôle avec ses compteurs. À insérer ici, avec
-renumérotation des figures suivantes.]**
+rangs de déduplication avec des valeurs 1 et 2 visibles, et une ligne portant un code SPO
+dans les colonnes de rapprochement. À insérer ici, avec renumérotation des figures
+suivantes.]**
 
 ## De la préparation à l'injection : procédure et contraintes techniques
 
@@ -305,14 +306,13 @@ renumérotation des figures suivantes.]**
 
 Une fois les six feuilles calculées, il restait à les transformer en fichiers réellement
 acceptés par SPO. Cette étape, que j'imaginais purement mécanique, a en réalité mobilisé
-plusieurs contraintes de format qu'aucune documentation ne mentionnait et que j'ai
-découvertes par rejets successifs.
+plusieurs contraintes de format que la documentation ne mentionnait pas et que les premiers
+rejets ont fait apparaître.
 
 - **L'encodage et le séparateur.** Les fichiers doivent être enregistrés en CSV
   (*Comma-Separated Values*, un format texte où les colonnes sont séparées par un
-  caractère) encodé en UTF-8, avec le point-virgule comme séparateur. C'est la
-  configuration attendue par l'outil d'import ; toute autre combinaison produit un fichier
-  lu comme une colonne unique.
+  caractère) encodé en UTF-8, avec le point-virgule comme séparateur. C'est la seule
+  configuration acceptée par l'outil d'import.
 - **La normalisation des caractères.** SPO refuse les caractères accentués dans les
   colonnes textuelles. Il a donc fallu convertir en ASCII pur l'ensemble des noms, prénoms,
   adresses et professions, en remplaçant les caractères accentués par leur équivalent non
@@ -325,7 +325,7 @@ découvertes par rejets successifs.
   maximum, et surtout être homogènes en nature : un même fichier ne peut pas contenir à la
   fois des couples et des personnes physiques. Cette dernière règle a une conséquence
   pratique importante, puisqu'elle impose de trier les lignes par nature avant de découper,
-  et c'est elle qui explique que l'import des couples se soit fait en cinq lots successifs.
+  et c'est elle qui explique que l'import des couples s'est fait en cinq lots successifs.
 
 J'ai consigné l'ensemble de ces contraintes dans la note de procédure remise à l'équipe, en
 même temps que la marche à suivre pour rejouer l'import si celui-ci devait être différé.
@@ -346,17 +346,16 @@ couples. La raison en est logique au regard du modèle de données décrit en 1.
 couple, ces coordonnées ne sont pas des attributs du tiers mais des attributs de ses
 représentants, et les fichiers d'import de coordonnées ne savent viser qu'un tiers. Le
 résultat est que, sur les 881 couples créés, les fichiers CSV pouvaient produire l'identité
-et les représentants, mais laissaient les coordonnées de contact vides. Concrètement,
+et les représentants, mais ne pouvaient pas porter les coordonnées de contact. Concrètement,
 plus de six tiers sur dix se seraient retrouvés dans l'ERP sans adresse électronique ni
 numéro de téléphone, ce qui aurait vidé une bonne partie de l'intérêt de la reprise pour
 les équipes commerciales.
 
-Trois options s'offraient à moi. La première, saisir ces coordonnées à la main après
+Deux voies restaient praticables. La première, saisir ces coordonnées à la main après
 l'import, représentait plusieurs centaines de saisies et reconduisait exactement le risque
-d'erreur que le fichier automatisé visait à supprimer. La deuxième, demander à l'éditeur
-une évolution du format d'import, était sans rapport avec les délais du projet. La
-troisième consistait à passer par l'API de SPO, que j'avais déjà pratiquée pour la reprise
-des budgets au premier semestre. C'est celle que j'ai retenue.
+d'erreur que le fichier automatisé visait à supprimer. La seconde consistait à passer par
+l'API de SPO, que j'avais déjà pratiquée au premier semestre. C'est celle que j'ai
+retenue.
 
 L'API expose en effet une opération de modification partielle au format **JSON Patch**,
 normalisé par la RFC 6902. Ce format permet de décrire une modification non pas en
@@ -370,12 +369,11 @@ La démarche s'est déroulée en trois temps :
 
 1. **Génération des requêtes.** J'ai construit dans le fichier de travail, par formules et
    sur le même principe de numérotation séquentielle que les feuilles de sortie, le corps
-   de chaque requête à partir des coordonnées présentes dans la feuille des coordonnées.
+   de chaque requête à partir des données présentes dans la feuille `Builder coordonnée`.
 2. **Constitution de la collection.** J'ai regroupé ces requêtes dans une collection
-   Postman, l'outil de test et d'exécution de requêtes que j'utilisais déjà pour mes
-   essais unitaires. La collection compte **872 requêtes PATCH**, organisées en cinq lots
-   correspondant aux cinq fichiers d'import de couples, afin que l'ordre d'exécution suive
-   exactement l'ordre de création.
+   Postman, l'outil de test et d'exécution de requêtes. La collection compte
+   **872 requêtes PATCH**, organisées en cinq lots correspondant aux cinq fichiers d'import
+   de couples.
 3. **Exécution et contrôle.** Les cinq lots ont été exécutés après la création des couples,
    et l'intégralité des 872 requêtes est passée sans erreur.
 
@@ -389,8 +387,8 @@ jusque-là : dans un projet de reprise, la limite d'un format d'import n'est pas
 nécessairement une limite du système. Le fichier plat et l'API sont deux portes d'entrée
 vers le même modèle de données, et elles n'offrent pas les mêmes possibilités. Savoir
 basculer de l'une à l'autre au bon moment, plutôt que d'accepter une perte de données ou de
-retomber dans la saisie manuelle, est une compétence que ce projet m'a fait acquérir bien
-plus que la précédente reprise.
+retomber dans la saisie manuelle, est une compétence que la reprise du premier semestre
+n'avait pas eu l'occasion de mobiliser.
 
 ## Traitement des cas particuliers et arbitrages
 
@@ -430,12 +428,12 @@ aujourd'hui. L'explication la plus vraisemblable était un déménagement entre 
 Après vérification des dates dans Vadimm, nous avons tranché en conservant l'adresse
 rattachée à la vente la plus récente.
 
-Ces cas sont peu nombreux au regard des 1 434 tiers créés, et il serait tentant de les
+Ces cas sont peu nombreux au regard des 1 434 tiers créés, et il serait tentant de les
 présenter comme des détails. Je crois au contraire qu'ils délimitent précisément ce que
 l'automatisation peut et ne peut pas faire. Les formules savent appliquer une règle ;
 elles ne savent pas décider laquelle de deux adresses également plausibles est la bonne.
 La valeur du fichier de travail n'est pas d'avoir supprimé la décision humaine, mais de
-l'avoir concentrée sur une poignée de cas identifiés, au lieu de la diluer sur 1 602 lignes.
+l'avoir concentrée sur une poignée de cas identifiés, au lieu de la diluer sur 1 602 lignes.
 
 ## Bilan de l'import et points de vigilance pour la suite
 
@@ -444,21 +442,21 @@ suivant récapitule ce qui a été créé dans SPO.
 
 | Objet créé | Volume | Canal |
 |:---------------------------------------|-------:|:-----------------|
-| Tiers                                  |  1 434 | Import CSV       |
+| Tiers                                  |  1 434 | Import CSV       |
 | Adresses                               |    553 | Import CSV       |
 | Courriels des personnes physiques et morales |    469 | Import CSV  |
 | Téléphones des personnes physiques et morales |   538 | Import CSV |
-| Représentants des couples et des sociétés |  1 871 | Import CSV    |
-| Rôles « Client »                       |  1 434 | Import CSV       |
-| Coordonnées des couples                |    872 | Requêtes PATCH   |
+| Représentants des couples et des sociétés |  1 871 | Import CSV    |
+| Rôles « Client »                       |  1 434 | Import CSV       |
+| Coordonnées des couples                | 872 requêtes | Requêtes PATCH |
 
-Les 1 434 tiers créés se répartissent en **881 couples**, **462 personnes physiques** et
+Les 1 434 tiers créés se répartissent en **881 couples**, **462 personnes physiques** et
 **91 personnes morales**, répartition que représente la Figure 1.5. Cette structure n'est
 pas un simple constat de volumétrie : elle justifie a posteriori l'attention portée au
 traitement des couples, qui représentent plus de six tiers sur dix et concentrent à eux
 seuls la contrainte de format qui a imposé le recours à l'API.
 
-![Répartition des 1 434 tiers créés selon leur nature](figures/fig_1_5_repartition_natures.png){width=92%}
+![Répartition des 1 434 tiers créés selon leur nature](figures/fig_1_5_repartition_natures.png){width=92%}
 
 **[Emplacement réservé pour une figure — capture d'écran d'une fiche de couple dans SPO,
 onglet des représentants ouvert, montrant les deux personnes du couple et les coordonnées
@@ -467,13 +465,14 @@ ajoutées par requête PATCH sur l'une d'elles. Anonymiser les noms. À insérer
 Au-delà du résultat, ce projet m'a laissé un ensemble de points de vigilance que j'ai
 documentés et qui valent, je crois, bien au-delà du cas de cet import.
 
-Le premier concerne l'usage du fichier lui-même. Trois manipulations le cassent
+Le premier concerne l'usage du fichier lui-même. Quatre manipulations le cassent
 silencieusement : modifier une feuille de sortie, dont le contenu est régénéré à chaque
-recalcul ; insérer une ligne au milieu de la feuille pivot ou de la feuille de coordonnées,
-ce qui décale toutes les références ; et trier la feuille pivot, ce qui détruit la logique
-de rang, celle-ci étant calculée de façon cumulative sur l'ordre des lignes. Aucune de ces
-trois manipulations ne produit de message d'erreur, les rendant d'autant plus
-dangereuses. C'est la raison pour laquelle la note de procédure les mentionne avant même
+recalcul ; modifier les colonnes calculées de la feuille pivot, qui portent toute la logique
+de rang et de numérotation ; insérer une ligne au milieu de la feuille pivot ou de la
+feuille de coordonnées, ce qui décale toutes les références ; et trier la feuille pivot, ce
+qui détruit la logique de rang, celle-ci étant calculée de façon cumulative sur l'ordre des
+lignes. Aucune de ces quatre manipulations ne produit de message d'erreur, les rendant
+d'autant plus dangereuses. C'est la raison pour laquelle la note de procédure les mentionne avant même
 d'expliquer comment utiliser le fichier.
 
 Le second concerne un ensemble de pièges techniques que j'ai rencontrés en construisant les
@@ -506,7 +505,7 @@ compteurs clés, et pourquoi la procédure impose de les vérifier avant tout ex
 d'aller plus loin. Ce panneau est le seul dispositif de détection dont je disposais, et il
 a effectivement révélé plusieurs anomalies que rien d'autre n'aurait signalées.
 
-Un dernier point de vigilance relève de la performance. Le fichier comporte environ 60 000
+Un dernier point de vigilance relève de la performance. Le fichier comporte environ 60 000
 cellules de formules, rendant le recalcul automatique pénible pendant les phases de
 modification. Basculer en calcul manuel pendant le travail, puis forcer un recalcul complet
 avant chaque export, est la manière de travailler que j'ai retenue et que la procédure
@@ -514,8 +513,8 @@ recommande.
 
 ::: transition
 Cette reprise des tiers achève, pour la partie qui me revenait, le travail de constitution
-du socle de données du nouvel ERP. Après les opérations, les tranches et les budgets migrés
-au premier semestre, les 1 434 clients acquéreurs disposent désormais dans SPO d'une fiche
+du socle de données du nouvel ERP. Après les opérations et leurs tranches migrées au
+premier semestre, les 1 434 clients acquéreurs disposent désormais dans SPO d'une fiche
 unique, correctement typée, dotée de ses coordonnées, de ses représentants et de son rôle.
 Le référentiel commercial du groupe est reconstitué, et il l'est selon des règles écrites,
 tracées et rejouables plutôt que par une saisie dont personne n'aurait pu, six mois plus
@@ -524,15 +523,16 @@ tard, reconstituer la logique.
 Néanmoins, il serait excessif de présenter ce chantier comme achevé. La reprise des
 historiques budgétaires reste devant nous, et le fichier de travail devra probablement être
 rejoué au moins une fois avant la bascule définitive, à mesure que de nouveaux tiers sont
-créés dans l'ERP par les équipes commerciales. Cependant, la donnée client est désormais
-fiable, et c'est ce qui compte pour la suite.
+créés dans l'ERP par les équipes commerciales. Le référentiel client est en revanche
+stabilisé, et c'est lui qui conditionne la suite.
 
 Ce chapitre aura montré, je l'espère, que la valeur de ce travail ne se mesure pas au
 nombre de lignes importées. Elle tient d'abord au choix des trois clés d'unicité, qui
 décide de ce qu'est un client dans notre référentiel ; ensuite à la capacité à contourner
 une limite de format en changeant de porte d'entrée vers le système ; enfin à la
 documentation des arbitrages, qui rend la reprise vérifiable par quelqu'un d'autre que
-celle qui l'a faite. Ce sont trois compétences d'ingénierie des données, et non de saisie.
+celle qui l'a faite. Ces trois points relèvent de l'ingénierie des données plus que de la
+saisie.
 
 Cette étape était aussi un prérequis. Je concluais mon mémoire de mi-parcours en avançant
 que la qualité de l'architecture de données est le socle indispensable de toute

@@ -117,7 +117,7 @@ def figure_chaine_traitement():
 # --------------------------------------------------------------------------
 def figure_entonnoir():
     etapes = [
-        ("Lignes brutes issues de VADIMM", 1602, BLEU),
+        ("Lignes brutes du périmètre de départ", 1602, BLEU),
         ("Tiers uniques après déduplication", 1474, VIOLET),
         ("Tiers créés dans SPO", 1434, VERT),
     ]
@@ -133,13 +133,13 @@ def figure_entonnoir():
     ax.set_xlim(0, 1750)
     ax.set_ylim(-0.55, 2.65)
     ax.set_xlabel("nombre de lignes")
-    ax.set_title("De l'extraction VADIMM aux tiers créés dans SPO")
+    ax.set_title("Du périmètre de départ aux tiers créés dans SPO")
     ax.grid(axis="y", visible=False)
 
     # Les écarts sont écrits dans l'espace laissé libre entre deux barres.
     for y_texte, valeur, texte in [
         (1.5, 1474, "− 128 doublons internes, écartés par les clés d'unicité"),
-        (0.5, 1434, "− 40 tiers déjà présents dans SPO, exclus par le matching"),
+        (0.5, 1434, "− 40 tiers déjà présents dans SPO, exclus par le rapprochement"),
     ]:
         ax.annotate(texte, xy=(valeur, y_texte + 0.28), xytext=(valeur - 30, y_texte),
                     ha="right", va="center", fontsize=8.6, color=ENCRE_2,

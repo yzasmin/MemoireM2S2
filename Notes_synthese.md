@@ -296,16 +296,29 @@ chapitre, et je consigne ici ce qu'il faudrait vérifier.
 1. **« Trois tiers avaient une adresse hors France » mais le tableau n'en liste que deux**
    (`T_AR_0863` ROLIN et `T_AR_1209` ABU DHABI). Le chapitre décrit donc le traitement sans
    avancer de décompte, pour ne pas trancher à la place de la source.
-2. **Le total des lignes sources ne se recoupe pas.** La feuille `VADIMM` compte 1 557
-   lignes et la feuille `Builder coordonnée` 1 602, et c'est 1 602 qui est retenu comme
-   volumétrie brute de départ. L'écart de 45 lignes n'est pas expliqué dans la note ; le
-   chapitre parle de « 1 602 lignes brutes » sans le commenter.
-3. **Les 40 exclusions ne sont pas ventilées** entre les trois formules de matching
+2. **Le total des lignes sources ne se recoupe pas, et la note se contredit.** Sa section 1
+   annonce « Lignes brutes issues de VADIMM : 1 602 », tandis que sa section 3 donne 1 557
+   lignes à la feuille `VADIMM` et 1 602 à la feuille `Builder coordonnée`. Le chapitre
+   contenait d'abord la même contradiction ; il présente désormais 1 602 comme le
+   **périmètre de travail** constitué des deux extractions, en donnant les deux comptes.
+   L'écart de 45 lignes entre les deux feuilles reste à expliquer dans la note d'origine.
+3. **881 couples créés mais 872 requêtes PATCH.** L'écart de neuf n'est expliqué nulle part
+   dans la note. Le chapitre n'affirme pas une requête par couple, il se contente du
+   décompte de la note, mais un jury peut poser la question : il faut préparer la réponse
+   (vraisemblablement les couples sans courriel ni téléphone renseignés).
+4. **Les 40 exclusions ne sont pas ventilées** entre les trois formules de rapprochement
    (personnes morales, personnes physiques, couples). Le chapitre reste au total.
-4. **Le prénom « Sarah »**, cité dans la note pour la validation des doublons à adresses
+5. **Le prénom « Sarah »**, cité dans la note pour la validation des doublons à adresses
    divergentes, n'a pas été repris : je ne connais pas son rôle exact et un mémoire n'est
    pas le lieu de nommer une collègue sans son accord. Le chapitre écrit « nous avons
    tranché », ce qui reste fidèle au fait qu'il s'agit d'un arbitrage à deux.
+6. **La note interdit quatre manipulations du fichier, pas trois** : modifier une feuille de
+   sortie, modifier les colonnes calculées R à AC, insérer une ligne, trier la feuille pivot.
+   Le chapitre les énumère désormais toutes les quatre.
+7. **Le mémoire de mi-parcours ne dit pas que les budgets ont été migrés au premier
+   semestre**, au contraire : la stratégie des « coquilles vides » les laissait de côté et sa
+   conclusion annonce la reprise des historiques budgétaires comme un chantier à venir. Le
+   chapitre 1 ne mentionne donc plus que les opérations et leurs tranches.
 
 ### 4.2 Entre le brouillon du chapitre 2 et le dépôt
 

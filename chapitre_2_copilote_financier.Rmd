@@ -93,7 +93,7 @@ de refluer vers 3,1 % mi-2026, et le rythme du groupe est tombé d'environ 150 �
 conjoncture et ce qui revient aux programmes eux-mêmes.
 
 La troisième porte sur le prix. Quels lots du stock faut-il repricer ? La question n'est
-pas théorique, puisque 45 % des 2 157 désistements enregistrés ont pour motif un problème
+pas théorique, puisque 45 % des 2 157 désistements enregistrés ont pour motif un problème
 de financement ou un refus de prêt, et que les remises sont aujourd'hui accordées au cas
 par cas, sans grille ni justification chiffrée.
 
@@ -156,26 +156,26 @@ Quatre exports du système de gestion constituent le point de départ du projet.
 
 | Export | Grain | Volumétrie | Usage |
 |:-------|:------|:-----------|:------|
-| Grille de Prix Avec Désistements | lot × dossier de vente | 16 467 lignes, 196 opérations | ventes, prix, dates, désistements |
-| Budget & EFR | poste analytique | 65 000 lignes, 267 opérations | budget, engagé, facturé par poste |
-| A_DM_BUDGET_MONTANT_GESTION_LIVE | poste budgétaire | 79 106 lignes | contrôle de cohérence |
-| 06_Informations Lots | dossier désisté | 2 164 lignes | détail des désistements |
+| Grille de Prix Avec Désistements | lot × dossier de vente | 16 467 lignes, 196 opérations | ventes, prix, dates, désistements |
+| Budget & EFR | poste analytique | 65 000 lignes, 267 opérations | budget, engagé, facturé par poste |
+| A_DM_BUDGET_MONTANT_GESTION_LIVE | poste budgétaire | 79 106 lignes | contrôle de cohérence |
+| 06_Informations Lots | dossier désisté | 2 164 lignes | détail des désistements |
 
 Comprendre ces exports m'a demandé plus de temps que les modéliser. Ce déséquilibre m'a
 d'abord surprise, puis m'a paru normal : c'est à cette étape que se jouait la fiabilité de
 tout le reste. Trois constats l'illustrent.
 
 Le premier concerne le fichier « 06_Informations Lots ». Malgré son nom, il ne contient
-pas les lots : il ne porte que des dossiers désistés, 2 157 au motif « Désisté » et 7 au
+pas les lots : il ne porte que des dossiers désistés, 2 157 au motif « Désisté » et 7 au
 motif « Résolution de vente ». La table maîtresse des lots est en réalité la grille de
 prix. Prendre ce fichier pour ce que son nom annonce aurait faussé toute l'analyse du
 stock.
 
-Le deuxième concerne le fichier « Budget & EFR ». Il affiche 65 000 lignes, un chiffre rond
+Le deuxième concerne le fichier « Budget & EFR ». Il affiche 65 000 lignes, un chiffre rond
 qui évoquait immédiatement une troncature à l'export. J'ai donc réconcilié ce fichier avec
 le fichier LIVE, et la vérification a montré le contraire de ce que je craignais : les
 totaux sont identiques à l'euro près sur les 118 opérations jointes, avec un écart médian
-nul. Les 65 000 lignes se décomposent en 64 788 postes de détail et 212 lignes de synthèse.
+nul. Les 65 000 lignes se décomposent en 64 788 postes de détail et 212 lignes de synthèse.
 Le chiffre rond n'était qu'une coïncidence.
 
 Le troisième concerne le nettoyage proprement dit, qui a traité les défauts classiques d'un
@@ -204,8 +204,8 @@ L'architecture retenue tient en une chaîne courte et entièrement rejouable. Le
 exports et les trois sources externes alimentent un script de nettoyage, qui charge une
 base SQLite organisée en schéma en étoile, c'est-à-dire autour de tables de faits
 rattachées à des tables de dimensions. On y trouve trois dimensions, les opérations, les
-communes et la conjoncture mensuelle, et quatre tables de faits : 64 788 lignes
-budgétaires, 14 123 lots, 14 428 dossiers de vente et 2 164 désistements. Les notebooks
+communes et la conjoncture mensuelle, et quatre tables de faits : 64 788 lignes
+budgétaires, 14 123 lots, 14 428 dossiers de vente et 2 164 désistements. Les notebooks
 d'analyse et l'application s'appuient tous deux sur cette base.
 
 Trois vues SQL y encapsulent les calculs partagés : la marge budgétée contre la marge
@@ -259,13 +259,13 @@ confiance des ménages. Tout l'axe B repose sur cette correction. Sans elle, j'a
 
 Le véritable livrable de cette étape est la base SQL décrite en section 2.3 : les vues
 métier partagées, les index, et un contrôle croisé des agrégats qui retrouve les mêmes
-totaux par deux moteurs indépendants, soit 1 561,8 M€ de dépenses budgétées et 1 754,8 M€
+totaux par deux moteurs indépendants, soit 1 561,8 M€ de dépenses budgétées et 1 754,8 M€
 de recettes, à l'arrondi près. Ce contrôle n'est pas une coquetterie : il garantit que la
 base chargée dit bien la même chose que les exports d'origine.
 
 J'ai ensuite évalué Spark comme piste de montée en charge, l'entreprise appartenant à un
 groupe dont le périmètre de données dépasse largement le sien. Le test est concluant,
-mais par la négative. Sur notre volumétrie, 64 788 lignes représentant 9 Mo en mémoire,
+mais par la négative. Sur notre volumétrie, 64 788 lignes représentant 9 Mo en mémoire,
 l'agrégation chronométrée est environ cinquante fois plus lente qu'avec pandas. Le rapport
 mesuré est de 58, après 24 secondes de démarrage de la machine virtuelle Java ; une
 exécution antérieure donnait 28. Le chiffre varie donc avec la machine, mais la conclusion
@@ -331,7 +331,7 @@ ordonner une revue de gestion, mais ne permet pas de fonder une décision à lui
 C'est l'axe dont les résultats sont les plus solides, et celui qui sert le plus directement
 la décision budgétaire.
 
-Le rythme de vente est modélisé sur un panel opération × mois, soit 3 230 observations
+Le rythme de vente est modélisé sur un panel opération × mois, soit 3 230 observations
 portant sur 160 opérations. J'ai pris soin d'y réintroduire les mois à zéro réservation,
 entre la première et la dernière vente de chaque programme : les omettre reviendrait à ne
 compter que les mois où quelque chose s'est passé, et donc à surestimer le rythme.
@@ -381,7 +381,7 @@ valeur. L'outil n'est donc proposé que sur les programmes suffisamment avancés
 ### Axe C
 
 Le modèle de prix est volontairement le plus simple qui fonctionne. Il s'agit d'une
-régression linéaire du logarithme du prix au mètre carré des 5 064 appartements transigés
+régression linéaire du logarithme du prix au mètre carré des 5 064 appartements transigés
 depuis 2016, expliqué par leurs caractéristiques, à savoir la surface, l'étage,
 l'exposition, le type de produit, l'agence, la commune et la proximité du littoral, ainsi
 que par leur année de réservation. Ce modèle explique 88,6 % de la variance sur
@@ -433,7 +433,7 @@ portage que l'objectif ne compte pas.
 
 Trois constats simples, obtenus avec des moyens simples, complètent le dispositif.
 
-Le premier est un moteur de recherche par similarité, construit sur les 9 688 commentaires
+Le premier est un moteur de recherche par similarité, construit sur les 9 688 commentaires
 libres de vente. Une requête formulée en langage courant, comme « refus de prêt banque » ou
 « remise prix hors pack », remonte les dossiers concernés. C'est un outil d'audit des
 remises non structurées réellement utilisable.
