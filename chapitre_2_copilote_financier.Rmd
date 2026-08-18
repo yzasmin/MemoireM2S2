@@ -95,14 +95,13 @@ conjoncture et ce qui revient aux programmes eux-mêmes.
 La troisième porte sur le prix. Quels lots du stock faut-il repricer ? La question n'est
 pas théorique, puisque 45 % des 2 157 désistements enregistrés ont pour motif un problème
 de financement ou un refus de prêt, et que les remises sont aujourd'hui accordées au cas
-par cas, sans grille ni justification chiffrée.
+par cas.
 
 Il faut souligner ce que ces trois questions ont en commun. Face à des besoins de ce type,
 la tentation serait de partir sur un projet d'apprentissage automatique de grande ampleur.
-C'est pourtant un problème de contrôle de gestion outillé par la donnée, et rien d'autre. Le matériau disponible se résume à 267 opérations et quatre exports Excel, soit
-une photographie à date. Cette lucidité initiale sur la nature du problème a évité, je
-crois, une bonne partie des erreurs que j'aurais pu commettre en cherchant à appliquer des
-méthodes disproportionnées.
+C'est pourtant un problème de contrôle de gestion outillé par la donnée, et rien d'autre.
+Le matériau disponible se résume à 267 opérations et quatre exports Excel, soit une
+photographie à date.
 
 #### Besoins par axe et exigences non fonctionnelles
 
@@ -119,12 +118,10 @@ J'ai formalisé ces besoins en trois axes de travail, complétés d'un axe trans
 4. **Axe transverse** : tirer des signaux simples des commentaires de vente et de la
    structure du réseau de vendeurs.
 
-Quatre exigences non fonctionnelles ont cadré le travail, et je les ai posées avant de
-commencer plutôt qu'après coup. La **reproductibilité** d'abord : tout doit se reconstruire
+Quatre exigences non fonctionnelles ont cadré le travail. La **reproductibilité** d'abord : tout doit se reconstruire
 depuis les exports bruts par un seul script, sans étape manuelle intermédiaire.
 L'**interprétabilité** ensuite : chaque score doit être accompagné des variables qui le
-déterminent, faute de quoi un contrôleur de gestion n'a aucune raison de lui faire
-confiance. La **confidentialité** également : aucune donnée nominative de client n'est
+déterminent. La **confidentialité** également : aucune donnée nominative de client n'est
 affichée ni modélisée. L'**acceptation d'un petit échantillon** enfin : à cette taille, des
 modèles simples validés en validation croisée valent mieux que des architectures complexes
 dont on ne saurait pas mesurer la performance réelle.
@@ -198,6 +195,10 @@ l'analyse puisse être rejouée sur des séries actualisées :
    les coordonnées géographiques, obtenu par l'API publique `geo.api.gouv.fr` et enrichi
    d'une distance au littoral que j'ai calculée.
 
+Ce détour par le script plutôt que par le téléchargement manuel a un coût en temps au
+départ, mais c'est lui qui rend l'exigence de reproductibilité tenable jusqu'au bout de la
+chaîne.
+
 ## Architecture technique
 
 L'architecture retenue tient en une chaîne courte et entièrement rejouable. Les quatre
@@ -211,10 +212,9 @@ d'analyse et l'application s'appuient tous deux sur cette base.
 Trois vues SQL y encapsulent les calculs partagés : la marge budgétée contre la marge
 engagée par opération, les réservations par opération et par mois, et l'état du stock. Ce
 choix est plus structurant qu'il n'y paraît. La définition de la marge est écrite une seule
-fois, dans la vue, et les notebooks comme la plateforme consomment la même. J'avais
-rencontré la difficulté inverse sur les reportings du premier semestre, exposés dans mon
-mémoire de mi-parcours : faute de pouvoir écrire une règle de gestion quelque part une fois
-pour toutes, il fallait la recalculer à chaque génération du tableau.
+fois, dans la vue, et les notebooks comme la plateforme consomment la même. C'est la
+situation inverse de celle que décrit mon mémoire de mi-parcours, où la règle de gestion,
+ne pouvant être écrite nulle part, devait être recalculée à chaque génération du tableau.
 
 Une seule commande reconstruit l'ensemble depuis les exports bruts, en quelques secondes.
 L'analyse complète est versionnée et ré-exécutable de bout en bout, ce qui signifie que
@@ -228,13 +228,13 @@ Au-delà du nettoyage décrit en section 2.2, l'exploration a produit deux résu
 directement orienté la modélisation.
 
 Le premier concerne la distribution des prix. Le prix au mètre carré des appartements est
-fortement asymétrique, avec un coefficient d'asymétrie de 19,2, interdisant d'appliquer
-telle quelle une régression linéaire. Après passage au logarithme, la
+fortement asymétrique, avec un coefficient d'asymétrie de 19,2, ce qui interdisait
+d'appliquer telle quelle une régression linéaire. Après passage au logarithme, la
 distribution devient proche d'une loi normale : le coefficient d'asymétrie tombe à 0,39 et
 le diagramme quantile-quantile, qui compare la distribution observée à la distribution
-théorique, devient presque rectiligne. La Figure 2.1 montre les deux distributions côte à
-côte. C'est ce constat qui a conduit l'axe C à modéliser le logarithme du prix plutôt que
-le prix lui-même.
+théorique, devient presque rectiligne. La Figure 2.1 rassemble les deux distributions et
+les diagrammes quantile-quantile correspondants. C'est ce constat qui a conduit l'axe C à
+modéliser le logarithme du prix plutôt que le prix lui-même.
 
 ![Prix au mètre carré des appartements : distribution brute et après transformation logarithmique](figures/fig_2_1_prix_m2_log.png){width=100%}
 
@@ -242,8 +242,7 @@ Le second résultat est une leçon de méthode, et c'est peut-être le passage d
 j'ai le plus appris. En calculant la corrélation entre les réservations mensuelles du
 groupe et le taux des crédits habitat, j'obtenais une valeur quasi nulle, de +0,07. Prise
 au premier degré, cette valeur signifiait que la conjoncture n'explique rien du rythme de
-vente, ce qui contredisait à la fois l'intuition des équipes commerciales et tout ce que
-l'on sait du marché.
+vente, ce qui contredisait tout ce que l'on sait du marché.
 
 En réalité, la série brute est brouillée par la croissance du portefeuille. Le nombre
 d'opérations en commercialisation a fortement augmenté sur la période, soutenant le volume
@@ -264,17 +263,16 @@ de recettes, à l'arrondi près. Ce contrôle n'est pas une coquetterie : il gar
 base chargée dit bien la même chose que les exports d'origine.
 
 J'ai ensuite évalué Spark comme piste de montée en charge, l'entreprise appartenant à un
-groupe dont le périmètre de données dépasse largement le sien. Le test est concluant,
-mais par la négative. Sur notre volumétrie, 64 788 lignes représentant 9 Mo en mémoire,
+groupe dont le périmètre de données dépasse largement le sien. Le test aboutit à une
+conclusion négative, et c'est en cela qu'il est utile. Sur notre volumétrie, 64 788 lignes représentant 9 Mo en mémoire,
 l'agrégation chronométrée est environ cinquante fois plus lente qu'avec pandas. Le rapport
 mesuré est de 58, après 24 secondes de démarrage de la machine virtuelle Java ; une
 exécution antérieure donnait 28. Le chiffre varie donc avec la machine, mais la conclusion
 non.
 
-SQLite et pandas constituent la bonne architecture à cette échelle, et il faut savoir le
-dire plutôt que d'ajouter une technologie parce qu'elle figure au programme. L'intérêt du
-test est ailleurs : le chemin de montée en charge est identifié et documenté, si le
-périmètre devait un jour s'étendre à celui du groupe Nexity.
+SQLite et pandas constituent donc la bonne architecture à cette échelle. L'intérêt du test
+est ailleurs : le chemin de montée en charge est identifié, si le périmètre devait un jour
+s'étendre à celui du groupe Nexity.
 
 ### Axe A
 
@@ -293,43 +291,43 @@ Cette définition impose une précaution sur les variables explicatives, et j'y 
 dès la construction du jeu de données. Concrètement, le modèle n'utilise que le budget
 initial et les signaux commerciaux, jamais l'engagé ni le facturé, qui sont précisément ce
 qui définit la cible. Sans cette précaution, le modèle aurait « prédit » sa propre
-définition, avec des performances flatteuses et parfaitement trompeuses.
+définition.
 
 Sur le périmètre exploitable, soit les 123 opérations engagées à au moins 60 % et dont la
 marge budgétée dépasse 50 k€, plus d'un tiers des opérations, 36,6 % exactement, n'a aucun
 dépassement engagé. Mais 28 % franchissent le seuil de dérive matérielle, que j'ai fixé à
 2 % de la marge, et deux cas extrêmes dépassent la moitié de la marge budgétée. La
-Figure 2.3 donne la distribution complète et situe ce seuil.
+Figure 2.3 donne la distribution complète et situe ce seuil, avec à droite le détail des
+opérations en dérive.
 
-![Distribution de la variation de marge engagée sur les 123 opérations du périmètre, et seuil de dérive matérielle à -2 %](figures/fig_2_3_distribution_variation_marge.png){width=95%}
+![Distribution de la variation de marge « committée » sur les 123 opérations du périmètre, et seuil de dérive matérielle à -2 %](figures/fig_2_3_distribution_variation_marge.png){width=95%}
 
-Un point mérite d'être dit clairement, parce qu'il va à l'encontre de ce qu'on attend d'un
-projet de Data Science. La partie la plus utile de cet axe pour l'entreprise n'est pas un
-modèle appris : c'est le tableau descriptif des dépassements engagés en euros, par
-opération et par poste, calculé en SQL pur. C'est lui qui alimente la page « Alertes
-marge » de la plateforme, et c'est lui que les contrôleurs de gestion consultent.
+La partie la plus utile de cet axe pour l'entreprise n'est pas un modèle appris : c'est le
+tableau descriptif des dépassements engagés en euros, par opération et par poste, calculé
+en SQL pur. C'est lui qui alimente la page « Alertes marge » de la plateforme.
 
 La modélisation vient en complément, comme score de tri. Une régression du taux de
 variation atteint un coefficient de détermination de 0,08 sur l'échantillon test. Le
 résultat est modeste, et je le présente tel quel : la structure du budget initial
 prédispose à la dérive mais ne la détermine pas, l'aléa de chantier faisant le reste. Une
 classification des opérations « à risque », c'est-à-dire dont la dérive dépasse 2 %,
-atteint un score F1 de l'ordre de 0,30 à 0,34 en validation croisée stratifiée, contre 0
-pour la référence majoritaire, qui ne détecte rien du tout. J'ai confronté quatre
+atteint un score F1 de l'ordre de 0,30 à 0,34 en validation croisée stratifiée, c'est-à-dire
+sur des découpages qui conservent la proportion d'opérations à risque, contre 0 pour la
+référence majoritaire, qui ne détecte rien du tout. J'ai confronté quatre
 classifieurs classiques, la régression logistique, le séparateur à vaste marge, l'arbre de
 décision et la forêt aléatoire ; à 123 observations, leurs écarts de performance ne sont
 pas significatifs, et le choix s'est porté sur la forêt aléatoire, dont les probabilités
 alimentent les niveaux d'alerte de la plateforme.
 
 Il faut donc lire ce dispositif pour ce qu'il est : un outil de hiérarchisation de
-l'attention, pas un oracle. Un score F1 de 0,3 contre une référence à 0 signifie que le
-modèle détecte quelque chose là où l'approche naïve ne détecte rien, ce qui est utile pour
-ordonner une revue de gestion, mais ne permet pas de fonder une décision à lui seul.
+l'attention, pas un oracle.
 
 ### Axe B
 
-C'est l'axe dont les résultats sont les plus solides, et celui qui sert le plus directement
-la décision budgétaire.
+Budgéter les réservations de 2026 suppose de distinguer, dans le rythme de vente, ce qui
+relève de la conjoncture et ce qui relève du programme lui-même. C'est l'axe dont les
+résultats sont les plus solides, et celui qui sert le plus directement la décision
+budgétaire.
 
 Le rythme de vente est modélisé sur un panel opération × mois, soit 3 230 observations
 portant sur 160 opérations. J'ai pris soin d'y réintroduire les mois à zéro réservation,
@@ -345,17 +343,20 @@ de taux réduit les réservations mensuelles d'environ 19 %**, pour un coefficie
 associé à une p-valeur inférieure à 10^-15^. La régression naïve, qui ignore la structure en
 panel, surestime cet effet ; le modèle à effets aléatoires le corrige.
 
-Un garde-fou mérite d'être raconté, parce qu'il fonde la manière dont les scénarios sont
+J'ai posé un garde-fou méthodologique, qui fonde la manière dont les scénarios sont
 construits. Sur la série agrégée du groupe, qui compte 114 mois, j'ai mené une régression
-dynamique à erreurs ARIMA dans les règles de l'art : vérification que les résidus sont
-assimilables à un bruit blanc d'abord, sélection du modèle par le critère AICc ensuite.
+dynamique à erreurs ARIMA, c'est-à-dire une régression dont les résidus sont eux-mêmes
+modélisés comme une série temporelle, dans les règles de l'art : vérification que ces
+résidus sont assimilables à un bruit blanc d'abord, sélection du modèle par le critère AICc
+ensuite, qui arbitre entre qualité d'ajustement et nombre de paramètres.
 Cette approche ne parvient pas à identifier l'effet du taux, dont le coefficient y est
 indiscernable de zéro, avec une p-valeur de 0,82. L'explication tient à la nature de la
 série : les variations du taux sont trop lentes pour être identifiées sur une seule série
 de cette longueur.
 
 Ce résultat négatif dit deux choses. Il confirme d'abord que la significativité obtenue sur
-le panel n'est pas un artefact de régression fallacieuse, puisque la voie temporelle, plus
+le panel n'est pas un artefact de régression fallacieuse, c'est-à-dire d'une corrélation
+née de la seule tendance commune des deux séries, puisque la voie temporelle, plus
 exigeante sur ce point, ne produit tout simplement pas d'effet mesurable. Il indique
 ensuite que les scénarios doivent combiner les deux modèles : la série temporelle fournit
 la trajectoire de référence, avec sa dynamique et sa saisonnalité, et l'élasticité estimée
@@ -380,15 +381,17 @@ valeur. L'outil n'est donc proposé que sur les programmes suffisamment avancés
 
 ### Axe C
 
-Le modèle de prix est volontairement le plus simple qui fonctionne. Il s'agit d'une
-régression linéaire du logarithme du prix au mètre carré des 5 064 appartements transigés
+Repricer le stock suppose d'abord de savoir à quel prix un lot devrait se vendre, ce
+qu'aucune grille commerciale ne dit. Le modèle que j'ai construit pour répondre à cette
+question est volontairement le plus simple qui fonctionne. Il s'agit d'une régression
+linéaire du logarithme du prix au mètre carré des 5 064 appartements transigés
 depuis 2016, expliqué par leurs caractéristiques, à savoir la surface, l'étage,
 l'exposition, le type de produit, l'agence, la commune et la proximité du littoral, ainsi
 que par leur année de réservation. Ce modèle explique 88,6 % de la variance sur
 l'échantillon test, avec une erreur type d'environ 11 % sur le prix.
 
 Son intérêt principal n'est pas sa performance mais sa lisibilité : ses coefficients se
-lisent comme des prix implicites, permettant de les discuter avec la direction
+lisent comme des prix implicites, ce qui permet de les discuter avec la direction
 commerciale. On y lit une prime d'étage de +6 %, une prime d'exposition sud, une décote de
 63 % pour le logement social, qui s'explique par des prix réglementés, et un effet millésime
 d'environ +19 points entre 2016 et 2023, suivi d'un plateau. La Figure 2.6 représente cet
@@ -397,9 +400,8 @@ effet millésime année par année.
 ![Effet millésime du modèle de prix : prime par année de réservation, référence 2016](figures/fig_2_6_effet_millesime.png){width=88%}
 
 Ce plateau mérite d'être commenté, car il recoupe l'axe B. Les prix du neuf n'ont pas
-baissé avec la remontée des taux : c'est le volume qui s'est ajusté. Les deux axes disent
-donc la même chose par deux chemins indépendants, renforçant la confiance que l'on peut
-accorder à l'un comme à l'autre. J'ai également testé une variante régularisée du
+baissé avec la remontée des taux : c'est le volume qui s'est ajusté, en parfaite cohérence
+avec l'axe B. J'ai également testé une variante régularisée du
 modèle, sans gain : avec cinq mille observations pour une trentaine de coefficients, il n'y
 avait rien à stabiliser.
 
@@ -441,9 +443,7 @@ remises non structurées réellement utilisable.
 Le deuxième porte sur les motifs de désistement, analysés par agence. Le profil obtenu
 révèle un problème de qualité de saisie plus qu'un fait commercial : à Salon-de-Provence,
 90 % des motifs sont enregistrés en « Autres motifs », rendant les désistements de cette
-agence inanalysables tant que la saisie n'est pas fiabilisée. Ce constat n'est pas un
-résultat d'analyse au sens strict, mais c'est une information directement actionnable, et
-elle n'aurait pas été visible sans ce travail.
+agence inanalysables tant que la saisie n'est pas fiabilisée.
 
 Le troisième porte sur la structure du réseau de vente, qui se révèle très concentrée. Deux
 acteurs, le réseau interne et un prescripteur externe, portent à eux seuls 51,6 % des
@@ -454,7 +454,7 @@ une dépense sans recette.
 
 J'ai enfin tenté de prédire le désistement à partir du seul texte du commentaire, avec un
 contrôle de fuite soigneux pour ne pas utiliser d'information postérieure au désistement.
-Ce résultat plafonne à un score F1 de 0,34 : le texte seul ne suffit pas, et il est donc
+Cette tentative plafonne à un score F1 de 0,34 : le texte seul ne suffit pas, et il est donc
 traité comme un signal d'appoint et non comme un prédicteur.
 
 ## Plateforme Streamlit
@@ -545,9 +545,9 @@ la reconstitution d'un référentiel client dans un nouvel ERP, avec ses clés d
 contournements de format et ses arbitrages documentés. Le second raconte ce que l'on peut
 faire d'un patrimoine de données une fois qu'il est fiable, et ce que l'on ne peut pas en
 faire lorsqu'il lui manque une dimension. Le lien entre les deux n'est pas rhétorique : les
-recommandations qui terminent le chapitre 2, historiser les exports mensuels et fiabiliser
-la saisie des motifs de désistement, sont exactement de la même nature que le travail
-décrit au chapitre 1. Ce sont des travaux de structure, faits pour rendre possible une
+deux recommandations de ce chapitre, historiser les exports mensuels et fiabiliser la
+saisie des motifs de désistement, sont exactement de la même nature que le travail décrit
+au chapitre 1. Ce sont des travaux de structure, faits pour rendre possible une
 analyse à venir.
 
 Cette année d'alternance m'aura donc fait parcourir un cycle complet. Le premier semestre a
@@ -557,15 +557,14 @@ vides. La reprise des tiers, exposée au chapitre 1, en a été le prolongement 
 d'une certaine manière, l'aboutissement, puisqu'elle a achevé de constituer le socle
 commercial du nouvel outil. Le second semestre a été celui de la valorisation, avec un
 projet de Data Science mené de bout en bout, de la compréhension des exports jusqu'à une
-application utilisée par la direction financière.
+application destinée à la direction financière.
 
 Ce que je retire de ce parcours tient en peu de mots. Un projet de données ne se joue pas
 au moment du choix de l'algorithme mais bien avant, lorsqu'on décide ce qu'est un client,
 ce qu'est une marge, ou ce que contient réellement un fichier dont le nom annonce autre
-chose. Ce sont des décisions modestes en apparence, invisibles dans le résultat final, et
-pourtant ce sont elles qui déterminent si le résultat vaut quelque chose. Le métier de
-gestionnaire d'information, tel que je l'ai pratiqué cette année, consiste largement à
-prendre ces décisions-là, à les écrire, et à les rendre vérifiables par d'autres.
+chose. Le métier de gestionnaire d'information, tel que je l'ai pratiqué cette année,
+consiste largement à prendre ces décisions-là, à les écrire, et à les rendre vérifiables
+par d'autres.
 
 Il reste évidemment beaucoup à faire. La migration vers SPO n'est pas achevée, l'historique
 budgétaire reste à reprendre, et le Copilote Financier ne deviendra un véritable outil de

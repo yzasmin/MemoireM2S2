@@ -344,6 +344,28 @@ parce qu'un jury peut les relever.
 | « 3,1 % mi-2026 » | La série de la Banque centrale européenne n'est publiée que jusqu'en avril 2026 dans le dépôt ; les valeurs de mai et juin sont un report de la dernière valeur connue. |
 | Diagnostic du stock : « 103 dans le marché, 8 au-dessus, 16 en dessous » | Conforme au notebook. **Mais la plateforme affiche 111 / 4 / 12**, parce qu'elle ajuste le modèle sur tout le corpus et utilise une bande de ±13,1 % au lieu de ±11,1 %. Si une capture de la page « Pilotage des prix » est ajoutée un jour, les deux chiffrages se contrediront à l'écran. |
 
+### 4.3 Défauts internes aux figures du chapitre 2, non corrigeables sans réexécuter l'analyse
+
+Les neuf figures du chapitre 2 sont les sorties exécutées des notebooks : les regénérer
+supposerait de relancer l'analyse, avec un risque de divergence des chiffres. Je les ai donc
+reprises telles quelles, et je note ici ce qu'il faudrait corriger à la prochaine exécution.
+
+- **Séparateur décimal** : les figures 2.4, 2.6, 2.8 et 2.9 affichent un point là où le texte
+  met une virgule (« 3.1 % », « 99.95% », « 62.81% »), et la figure 2.7 colle le signe
+  pourcent au nombre.
+- **Figure 2.3** : le titre de l'image porte « committée », anglicisme que la légende du
+  chapitre reprend entre guillemets pour ne pas contredire l'image. À franciser en
+  « engagée » dans le notebook, puis dans la légende.
+- **Figure 2.6** : le titre de l'image parle de modèle « hédonique », terme qui n'apparaît
+  nulle part dans le chapitre. À harmoniser dans un sens ou dans l'autre.
+- **Figure 2.1** : l'image annonce « n=5137 » alors que la section 2.4.5 parle de 5 064
+  appartements. Il ne s'agit pas d'une contradiction, les deux échantillons n'étant pas les
+  mêmes, mais un lecteur peut buter dessus. Une note de bas de page réglerait la question.
+- **Figure 2.6** : la prime redescend d'environ deux points après 2023 avant de remonter ;
+  le mot « plateau », repris du brouillon, en est une lecture généreuse.
+
+---
+
 ### 4.3 Vérifications qui, elles, sont conformes
 
 Le contrôle croisé a confirmé sans écart : 267 opérations ; 32 Mo d'exports (32,1 Mo
