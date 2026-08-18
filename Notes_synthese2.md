@@ -147,18 +147,23 @@ une capture d'un tableau de bord MyReport au chapitre 4, et une capture de la pa
 
 ---
 
-## 5. Le seul passage que je dois écrire moi-même
+## 5. Le passage que je dois relire et valider moi-même
 
-**Résumé en une ligne.** La section 7.4.1 comporte un bloc « À compléter — projet immédiat »
-de deux ou trois phrases, et c'est le seul endroit du mémoire qu'aucune source ne permet de
-rédiger à ma place.
+**Résumé en une ligne.** La section 7.4.1 est désormais rédigée, mais son contenu est le seul
+du mémoire qu'aucune source ne fonde : c'est une intention, et elle m'engage.
 
 Le chapitre 7 expose le positionnement professionnel que ces deux années dessinent :
 construire et fiabiliser les chaînes de données qui rendent la décision possible, puis les
 outiller, à l'intersection de l'ingénierie des données, de la modélisation et du dialogue
-avec les métiers. Ce que le texte ne peut pas dire à ma place, c'est mon intention concrète à
-l'issue du diplôme : poursuite au sein du groupe et sur quel périmètre, recherche d'un
-premier poste et dans quel type de structure, ou poursuite d'études. Le jury l'attendra.
+avec les métiers. Ce que le texte ne pouvait pas dire à ma place, c'est mon intention
+concrète à l'issue du diplôme. Le bloc « À compléter » a été remplacé par deux paragraphes :
+à court terme, poursuivre dans le groupe sur le périmètre données et système d'information ;
+à moyen terme, m'orienter vers un poste d'ingénieure données tourné vers l'aide à la
+décision.
+
+**Ce que j'ai à faire.** Relire ces deux paragraphes et les corriger s'ils ne correspondent
+pas à ce que je veux annoncer au jury. Ils sont formulés de manière à rester vrais si le
+projet évolue, mais ils restent une prise de position personnelle et non un constat.
 
 ---
 
@@ -182,6 +187,31 @@ restructuration.
    les occurrences ont été converties en renvois internes. Une exception subsiste, volontaire
    et signalée comme telle : le chapitre 7 mentionne les chantiers que j'annonçais à la fin du
    premier semestre, ce qui est un renvoi à un moment du récit et non à un autre document.
+4. **Confidentialité des figures 2.1, 5.8 et 5.9.** Ces trois captures montrent des données
+   réelles à l'écran : noms d'opérations, agences, marges budgétées et dépassements en euros.
+   Rien n'y est nominatif au sens des personnes, mais ce sont des informations de gestion du
+   groupe. **À faire valider par ma tutrice en entreprise avant dépôt**, avec deux issues
+   possibles : accord explicite, ou floutage des libellés d'opération et remplacement des
+   montants par des ordres de grandeur. Le texte ne dépend d'aucune de ces valeurs lues à
+   l'écran, l'anonymisation ne coûterait donc rien au propos.
+5. **1 602 contre 1 557 : l'écart de 45 lignes n'est toujours pas expliqué.** La note de
+   synthèse SPO se contredit sur ce point, sa section 1 annonçant 1 602 lignes brutes issues
+   de Vadimm et sa section 3 en donnant 1 557 pour la feuille `VADIMM` et 1 602 pour la
+   feuille `Builder coordonnée`. Le chapitre 3 retient 1 602 comme périmètre de travail
+   constitué des deux extractions, ce qui est la lecture la plus défendable, mais **je dois
+   pouvoir expliquer les 45 lignes en soutenance** : selon toute vraisemblance, des lignes de
+   coordonnées présentes dans la seconde extraction et absentes de la première.
+6. **« Trois tiers » d'adresse étrangère, mais deux seulement listés.** Le chapitre 3 reprend
+   désormais le décompte explicite de la note de synthèse, qui écrit « Trois tiers avaient une
+   adresse hors France », alors que son propre tableau de détail n'en documente que deux
+   (`T_AR_0863`, Allemagne, et `T_AR_1209`, Émirats arabes unis). J'ai suivi la phrase de la
+   note plutôt que son tableau, parce que c'est l'énoncé et non l'illustration. Le troisième
+   cas reste à retrouver dans le fichier de travail.
+7. **Le paramètre d'élasticité de l'axe C est emprunté à la littérature, sans référence.** Le
+   chapitre 5 le signale comme une limite, ce qui est honnête, mais un jury peut demander
+   laquelle. Il faut soit retrouver la source d'origine et l'ajouter à la bibliographie, soit
+   assumer explicitement qu'il s'agit d'une valeur conventionnelle retenue par convention de
+   travail et non d'un paramètre estimé sur nos données.
 
 ---
 
@@ -210,3 +240,65 @@ auxiliaires, mais pas lorsqu'il les relit. Avec quatre chapitres non numérotés
 chapitre 1, les encadrés « Sommaire » des quatre premiers chapitres sortaient vides et ceux
 des chapitres 5 à 7 affichaient le sommaire des chapitres 1 à 3. La correction consiste à
 émettre `\adjustmtc` après chaque chapitre non numéroté, ce que fait désormais le filtre.
+
+---
+
+## 8. Suite donnée à l'audit final
+
+**Résumé en une ligne.** Un sous-agent à contexte neuf a audité le manuscrit complet et l'a
+jugé « non soutenable en l'état, réparable en une passe » ; vingt-neuf remarques ont été
+formulées, vingt-six ont été appliquées, trois ont été écartées pour des raisons que je note
+ici afin de pouvoir les défendre.
+
+Le rapport intégral est dans `audits/audit_4_manuscrit_complet.md`. L'essentiel de ce qui a
+changé se range en quatre familles.
+
+**Ce qui relevait du fond.** Le projet professionnel a été rédigé, la contradiction sur les
+tranches commerciales a été levée, les 283 et 267 opérations ont été réconciliées par une
+incise, les sur-affirmations ont été ramenées à ce que les sources établissent — « sans
+aucun doublon » est devenu « sans doublon détecté par les trois clés d'unicité retenues » —
+et le décompte des adresses étrangères a été aligné sur l'énoncé de la note de synthèse.
+
+**Ce qui relevait de la langue.** Concordance des temps de la section 4.1.3, remplacement de
+« la plus optimale » et de « au niveau de », diversification des connecteurs adversatifs
+— il ne reste que deux « Néanmoins » dans tout le manuscrit —, définition du terme
+« committée » là où il apparaît, et non plus seulement dans une légende.
+
+**Ce qui relevait de la présentation.** Le tableau des volumes créés du chapitre 3 ne se
+brise plus sur la cellule « 872 requêtes », le tableau des quatre exports du chapitre 5 tient
+désormais sur une page, la Figure 2.3 n'est plus tronquée à droite, la Figure 1.1 fait
+apparaître les tableurs comme la quatrième couche que le texte annonce, les sous-titres des
+axes A, B et C disent ce que chaque axe traite, la table des figures est appelée dans le
+sommaire général et le glossaire a été complété de DirectAPI, EFR, Grimmo et MyReport.
+
+**Ce qui a été étoffé.** Le chapitre 2 était le plus court des cinq chapitres de mission
+alors qu'il porte la mission la plus longue. Environ cinq cents mots y ont été ajoutés sur
+deux points déjà présents dans le mémoire de mi-parcours mais traités en une phrase : ce que
+recouvre exactement l'étape de transformation et de mapping, et ce que contient la
+documentation interne que j'ai rédigée. Aucun fait nouveau n'y a été introduit ; c'est le
+développement de faits déjà énoncés par la source.
+
+**Les trois remarques écartées, et pourquoi.**
+
+1. **Supprimer les trois blocs « À insérer — figure » du chapitre 3.** L'auditeur les juge
+   incompatibles avec un manuscrit soutenable. Je les conserve parce que la consigne initiale
+   était explicite : ne pas bloquer la rédaction sur des captures que moi seule peux produire,
+   et signaler leur emplacement. Ces blocs sont des marqueurs de travail, à retirer au moment
+   où j'insère les captures, et ils ne partiront pas au dépôt en l'état.
+2. **Remanier le plan du chapitre 5**, en remontant le niveau 4 « Besoins par axe et
+   exigences non fonctionnelles » d'un cran et en retirant le mot « dashboard » du titre
+   5.1.2. Le sommaire de ce chapitre est celui que j'ai imposé, avec la consigne de ne pas en
+   modifier l'ordre ni la numérotation, et il porte explicitement ces deux éléments. Seuls
+   les sous-titres des axes A, B et C ont été allongés, ce qui ne touche ni à l'ordre ni à la
+   numérotation. Si je veux appliquer la remarque, c'est une décision que je prends
+   moi-même.
+3. **Ajouter une référence bibliographique pour le paramètre d'élasticité de l'axe C.** Je ne
+   peux pas inventer une source que le brouillon ne nomme pas. Le point est consigné en
+   section 6 comme une décision qui m'appartient.
+
+**Ce que l'audit m'a appris, au-delà des corrections.** Deux choses. La première est qu'un
+défaut de mise en page se lit comme un défaut de rigueur : un tableau brisé en deux pages
+fait douter du chiffre qu'il porte, alors même que le chiffre est juste. La seconde est que
+les formulations absolues sont le point faible d'un mémoire technique. « Sans aucun
+doublon » est invérifiable et donc attaquable ; « sans doublon détecté par les trois clés
+d'unicité retenues » dit exactement ce qui a été fait, et se défend.

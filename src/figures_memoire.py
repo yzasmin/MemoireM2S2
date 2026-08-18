@@ -258,34 +258,52 @@ def _cadre(figsize, xmax=100, ymax=60):
 # Figure 1.1 — Le système d'information et la circulation de la donnée
 # --------------------------------------------------------------------------
 def figure_systeme_information():
-    fig, ax = _cadre((11.6, 5.2), ymax=62)
+    fig, ax = _cadre((11.6, 7.0), ymax=88)
 
-    _boite(ax, 1, 33, 27, 25, "Gestion des opérations",
+    _boite(ax, 1, 55, 27, 25, "Gestion des opérations",
            ["Grimmo, l'ERP historique", "", "SPO, le nouvel ERP",
             "opérations, tranches, budgets"], BLEU, "#eef4fc")
-    _boite(ax, 1, 3, 27, 25, "Relation commerciale",
+    _boite(ax, 1, 25, 27, 25, "Relation commerciale",
            ["Vadimm, le CRM", "", "acquéreurs, réservations,",
             "désistements, coordonnées"], BLEU, "#eef4fc")
-    _boite(ax, 37, 18, 24, 25, "Restitution",
+    _boite(ax, 37, 40, 24, 25, "Restitution",
            ["MyReport", "", "requêtes sur les bases",
             "et tableaux de bord"], VIOLET, "#f3f2fa")
-    _boite(ax, 70, 18, 29, 25, "Usages métier",
+    _boite(ax, 70, 40, 29, 25, "Usages métier",
            ["Direction financière,", "service juridique,",
-            "équipes commerciales", "", "et leurs tableurs"], VERT, "#eef9f4")
+            "équipes commerciales"], VERT, "#eef9f4")
 
-    _fleche(ax, 28.5, 45, 36.5, 33)
-    _fleche(ax, 28.5, 15, 36.5, 28)
-    _fleche(ax, 61.5, 30.5, 69.5, 30.5)
+    _fleche(ax, 28.5, 67, 36.5, 55)
+    _fleche(ax, 28.5, 37, 36.5, 50)
+    _fleche(ax, 61.5, 52.5, 69.5, 52.5)
 
-    # repères des chapitres
-    reperes = [(14.5, 31.0, "chapitre 2"), (14.5, 1.0, "chapitre 3"),
-               (49.0, 16.0, "chapitre 4"), (84.5, 16.0, "chapitre 5")]
+    # La quatrième couche : les tableurs, qui comblent ce que les outils
+    # ne se transmettent pas.
+    _boite(ax, 1, 1, 98, 15, "Les tableurs, quatrième couche du système",
+           ["Suivi des dérives budgétaires opération par opération, sur des "
+            "fichiers individuels, sans vision transverse.",
+            "Ils font le lien partout où les trois outils précédents ne se "
+            "parlent pas."],
+           JAUNE, "#fdf7e8", taille_ligne=8.4, interligne=4.2)
+
+    for x, y0, y1 in ((14.5, 16.4, 25.0), (14.5, 50.0, 55.0),
+                      (49.0, 16.4, 40.0), (84.5, 16.4, 40.0)):
+        ax.plot([x, x], [y0, y1], linestyle=(0, (3, 3)), linewidth=1.3,
+                color=ENCRE_2, zorder=1)
+
+    # repères des chapitres, décalés des traits pointillés
+    reperes = [(4.0, 53.0, "chapitre 2"), (4.0, 23.0, "chapitre 3"),
+               (39.5, 38.0, "chapitre 4"), (72.5, 38.0, "chapitre 5")]
     for x, y, t in reperes:
-        ax.text(x, y, t, ha="center", va="top", fontsize=8,
+        ax.text(x, y, t, ha="left", va="top", fontsize=8,
                 color=ENCRE, fontweight="bold")
 
-    ax.text(50, 60.5, "Les flèches indiquent la circulation de la donnée ; "
-            "les repères, le chapitre où la mission correspondante est exposée.",
+    ax.text(50, 86.5, "Les flèches pleines indiquent la circulation de la "
+            "donnée, les traits pointillés les échanges qui passent par les "
+            "tableurs ;",
+            ha="center", va="center", fontsize=8, color=ENCRE_2, style="italic")
+    ax.text(50, 83.0, "les repères signalent le chapitre où la mission "
+            "correspondante est exposée.",
             ha="center", va="center", fontsize=8, color=ENCRE_2, style="italic")
     _enregistrer(fig, "fig_1_1_systeme_information.png")
 
@@ -333,8 +351,8 @@ def figure_frise_missions():
 def figure_sequence_injection():
     etapes = ["Opération", "Tranches\nde travaux", "Tranches\ncommerciales", "Budget"]
     fig, ax = _cadre((11.2, 3.2), ymax=40)
-    largeur, ecart = 19.0, 8.0
-    x = 1.0
+    largeur, ecart = 18.0, 6.0
+    x = 2.5
     for i, etape in enumerate(etapes):
         ax.add_patch(mpatches.FancyBboxPatch(
             (x, 14), largeur, 18, boxstyle="round,pad=0.0,rounding_size=1.4",

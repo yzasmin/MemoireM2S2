@@ -12,7 +12,7 @@ Grimmo vers l'ERP SPO m'a confrontée à la réalité rugueuse du terrain. Il ne
 pas simplement de transférer des données, mais de rétro-concevoir un modèle dont les
 règles n'étaient pas documentées, de résoudre des problèmes d'intégrité référentielle
 complexes avec la gestion des identifiants dynamiques et du versionnement, et de faire
-preuve d'agilité stratégique. L'adoption de la méthode des « coquilles vides » pour
+preuve d'agilité stratégique. L'adoption de la méthode des « coquilles vides » pour
 sécuriser le démarrage de la facturation illustre cette capacité à adapter la technique
 aux impératifs métiers. En parallèle, j'ai maintenu un haut niveau de service sur le
 reporting, illustré par la mise en œuvre d'une règle de gestion juridique complexe malgré
@@ -20,8 +20,9 @@ les contraintes de nos outils, tout en participant à la sécurisation du systè
 d'information via le déploiement du SSO.
 
 Le second semestre a prolongé ce travail, puis l'a valorisé. La reprise des tiers a achevé
-de constituer le socle commercial du nouvel ERP, en créant 1 434 clients acquéreurs sans
-doublon, et elle a réalisé l'interopérabilité entre l'ERP et le CRM qui restait à faire.
+de constituer le socle commercial du nouvel ERP, en créant 1 434 clients acquéreurs sans
+doublon détecté par les trois clés d'unicité retenues, et elle a fait le premier pas vers
+l'interopérabilité entre l'ERP et le CRM qui restait à construire.
 Le Copilote Financier a ensuite exploité ce socle pour outiller la direction financière
 sur trois questions de gestion, et il l'a fait de bout en bout, de la compréhension des
 exports jusqu'à une application que les contrôleurs de gestion ouvrent eux-mêmes.

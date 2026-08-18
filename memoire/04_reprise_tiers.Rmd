@@ -22,8 +22,10 @@
 
 Ce chapitre détaille la reprise des tiers, c'est-à-dire des clients acquéreurs, depuis notre
 CRM Vadimm vers le nouvel ERP du groupe. Conduite au second semestre, cette mission prolonge
-directement le chantier exposé au chapitre précédent, et elle réalise l'interopérabilité entre
-l'ERP et le CRM que je n'avais pu qu'annoncer à la fin du premier semestre. Elle en change
+directement le chantier exposé au chapitre précédent, et elle constitue le premier pas vers
+l'interopérabilité entre l'ERP et le CRM que je n'avais pu qu'annoncer à la fin du premier
+semestre : elle transfère le référentiel client, la synchronisation permanente sans double
+saisie restant à construire. Elle en change
 toutefois la nature : il ne s'agissait plus d'injecter des structures de gestion, opérations,
 tranches et budgets, mais des personnes, avec ce que cela implique de risques de doublons et
 d'exigence de qualité. J'y expose la conception du fichier de travail que j'ai construit
@@ -143,7 +145,7 @@ La seconde caractéristique est qu'un tiers n'est pas un enregistrement unique m
 ensemble d'objets liés. La fiche principale ne porte que l'identité ; l'adresse, le
 courriel, le téléphone, les représentants et les rôles sont autant d'objets rattachés, avec
 chacun son propre fichier d'import. La Figure 2.2, présentée au chapitre précédent, montre
-précisément l'interface du module DirectAPI avec la ressource « Tiers » sélectionnée : on y
+précisément l'interface du module DirectAPI avec la ressource « Tiers » sélectionnée : on y
 lit directement cette décomposition, puisque l'écran propose un emplacement de fichier
 distinct par objet rattaché. Six d'entre eux correspondent aux six feuilles de sortie de mon
 fichier, les deux autres, les RIB et les sites web, n'étant pas alimentés par cette reprise.
@@ -261,7 +263,7 @@ suive.
 
 La Figure 3.3 donne la volumétrie effectivement produite par chacune des six feuilles. On
 y lit directement le modèle de données décrit plus haut : 1 434 lignes pour la liste
-maîtresse des tiers et autant pour l'attribution du rôle « Client », mais 1 871 lignes de
+maîtresse des tiers et autant pour l'attribution du rôle « Client », mais 1 871 lignes de
 représentants, puisque chaque couple en compte deux, et seulement 553 adresses, 538
 téléphones et 469 courriels, ces trois derniers fichiers ne portant que les personnes
 physiques et morales. Ces écarts de volumétrie d'un fichier à l'autre ne sont donc pas des
@@ -333,7 +335,7 @@ l'API de SPO, que j'avais déjà pratiquée au premier semestre. C'est celle que
 retenue.
 
 L'API expose en effet une opération de modification partielle au format **JSON Patch**,
-normalisé par la RFC 6902. Ce format permet de décrire une modification non pas en
+normalisé par la RFC 6902 [3]. Ce format permet de décrire une modification non pas en
 renvoyant l'objet entier, mais sous la forme d'une liste d'opérations élémentaires, chacune
 indiquant l'action à effectuer, le chemin de la propriété visée dans l'objet et la valeur à
 appliquer. C'est exactement ce dont j'avais besoin : ajouter un courriel et un téléphone
@@ -372,10 +374,10 @@ mécanisme de déduplication, mais c'est une part réelle du travail, et surtout
 engage une décision. J'ai tenu à documenter chacun de ces arbitrages dans la note de
 procédure, pour que la trace en subsiste indépendamment de moi.
 
-**Les adresses étrangères :** Quelques acquéreurs résidaient hors de France, en Allemagne
+**Les adresses étrangères :** Trois tiers avaient une adresse hors de France, en Allemagne
 et aux Émirats arabes unis. SPO refusait initialement la création d'un tiers avec un pays
 étranger renseigné directement dans le fichier d'import. Plutôt que de bloquer la chaîne
-pour ces quelques cas, nous avons choisi de les créer avec le pays France par défaut, puis
+pour ces trois cas, nous avons choisi de les créer avec le pays France par défaut, puis
 de rectifier le pays manuellement dans l'ERP après création, en vérifiant à chaque fois que
 la modification était bien prise en compte. C'est un compromis assumé : il fait passer une
 information provisoirement fausse dans le système, mais sur un périmètre connu, listé, et
@@ -414,15 +416,15 @@ l'avoir concentrée sur une poignée de cas identifiés, au lieu de la diluer su
 L'intégralité des imports CSV et des requêtes PATCH a été exécutée avec succès. Le tableau
 suivant récapitule ce qui a été créé dans SPO.
 
-| Objet créé | Volume | Canal |
-|:---------------------------------------|-------:|:-----------------|
-| Tiers                                  |  1 434 | Import CSV       |
-| Adresses                               |    553 | Import CSV       |
-| Courriels des personnes physiques et morales |    469 | Import CSV  |
-| Téléphones des personnes physiques et morales |   538 | Import CSV |
-| Représentants des couples et des sociétés |  1 871 | Import CSV    |
-| Rôles « Client »                       |  1 434 | Import CSV       |
-| Coordonnées des couples                | 872 requêtes | Requêtes PATCH |
+| Objet créé dans SPO                      | Volume | Canal          |
+|:-----------------------------------------|-------:|:---------------|
+| Tiers                                     |  1 434 | Import CSV     |
+| Adresses                                  |    553 | Import CSV     |
+| Courriels (personnes physiques et morales) |    469 | Import CSV     |
+| Téléphones (personnes physiques et morales) |    538 | Import CSV     |
+| Représentants (couples et sociétés)       |  1 871 | Import CSV     |
+| Rôles « Client »                          |  1 434 | Import CSV     |
+| Coordonnées des couples                   |    872 | Requêtes PATCH |
 
 Les 1 434 tiers créés se répartissent en **881 couples**, **462 personnes physiques** et
 **91 personnes morales**, répartition que représente la Figure 3.4. Cette structure n'est

@@ -14,9 +14,9 @@
 - 5.4 Notebooks et résultats
     - 5.4.1 Exploration et nettoyage des données brutes
     - 5.4.2 SQL et Spark
-    - 5.4.3 Axe A
-    - 5.4.4 Axe B
-    - 5.4.5 Axe C
+    - 5.4.3 Axe A — risque de dérive de marge
+    - 5.4.4 Axe B — vitesse d'écoulement
+    - 5.4.5 Axe C — prix du stock
     - 5.4.6 Signaux faibles (texte et réseau)
 - 5.5 Plateforme Streamlit
 - 5.6 Périmètre et limites
@@ -24,7 +24,7 @@
 :::
 
 Ce chapitre présente le projet de Data Science annoncé à la fin du premier semestre : le
-« Copilote Financier », un outil d'aide à la décision construit sur les données de gestion du
+« Copilote Financier », un outil d'aide à la décision construit sur les données de gestion du
 groupe Angelotti pour sa direction financière. Le périmètre envisagé au départ, la prédiction
 de la rentabilité des opérations d'aménagement, a été redéfini en cours de projet : la prédiction de la marge à terminaison subsiste
 comme premier axe de travail, mais le besoin exprimé par la direction financière l'a
@@ -50,8 +50,8 @@ chantier et la commercialisation le font dériver au fil des mois. Les appels d'
 reviennent plus chers qu'anticipé, des acquéreurs se désistent, le rythme de vente
 ralentit sous l'effet de la conjoncture.
 
-La direction financière suit ces dérives. Néanmoins, elle les suit opération par opération,
-sur tableurs, sans vision transverse. Personne ne dispose d'une vue d'ensemble permettant
+La direction financière suit ces dérives opération par opération, sur tableurs, sans vision
+transverse. Personne ne dispose d'une vue d'ensemble permettant
 de dire, à un instant donné, quelles opérations méritent l'attention en priorité. C'est ce manque
 qui a motivé le projet.
 
@@ -130,26 +130,34 @@ mots affichés.
 
 ### Données internes
 
-Quatre exports du système de gestion constituent le point de départ du projet.
+Quatre exports du système de gestion constituent le point de départ du projet. Leur
+périmètre de 267 opérations ne recouvre pas exactement les 283 opérations reprises au
+chapitre 2 : les deux décomptes sont établis à des dates différentes et sur des critères
+différents, la migration portant sur les dossiers actifs à reprendre et les exports sur les
+opérations disposant d'un budget analytique au moment de l'extraction.
 
-| Export | Grain | Volumétrie | Usage |
-|:-------|:------|:-----------|:------|
-| Grille de Prix Avec Désistements | lot × dossier de vente | 16 467 lignes, 196 opérations | ventes, prix, dates, désistements |
-| Budget & EFR | poste analytique | 65 000 lignes, 267 opérations | budget, engagé, facturé par poste |
-| A_DM_BUDGET_MONTANT_GESTION_LIVE | poste budgétaire | 79 106 lignes | contrôle de cohérence |
-| 06_Informations Lots | dossier désisté | 2 164 lignes | détail des désistements |
+| Export                     | Grain                | Volumétrie                | Usage                            |
+|:---------------------------|:---------------------|:--------------------------|:---------------------------------|
+| Grille de prix             | lot × dossier de vente | 16 467 lignes, 196 opérations | ventes, prix, dates, désistements |
+| Budget & EFR               | poste analytique     | 65 000 lignes, 267 opérations | budget, engagé et facturé par poste |
+| Budget LIVE                | poste budgétaire     | 79 106 lignes            | contrôle de cohérence            |
+| 06_Informations Lots       | dossier désisté      | 2 164 lignes             | détail des désistements          |
+
+Deux intitulés sont abrégés dans ce tableau : l'export de la grille de prix
+s'appelle « Grille de Prix Avec Désistements » dans le système de gestion, et le fichier de
+contrôle « A_DM_BUDGET_MONTANT_GESTION_LIVE », désigné ci-après comme le fichier LIVE.
 
 Comprendre ces exports m'a demandé plus de temps que les modéliser. Ce déséquilibre m'a
 d'abord surprise, puis m'a paru normal : c'est à cette étape que se jouait la fiabilité de
 tout le reste. Trois constats l'illustrent.
 
-Le premier concerne le fichier « 06_Informations Lots ». Malgré son nom, il ne contient
-pas les lots : il ne porte que des dossiers désistés, 2 157 au motif « Désisté » et 7 au
-motif « Résolution de vente ». La table maîtresse des lots est en réalité la grille de
+Le premier concerne le fichier « 06_Informations Lots ». Malgré son nom, il ne contient
+pas les lots : il ne porte que des dossiers désistés, 2 157 au motif « Désisté » et 7 au
+motif « Résolution de vente ». La table maîtresse des lots est en réalité la grille de
 prix. Prendre ce fichier pour ce que son nom annonce aurait faussé toute l'analyse du
 stock.
 
-Le deuxième concerne le fichier « Budget & EFR ». Il affiche 65 000 lignes, un chiffre rond
+Le deuxième concerne le fichier « Budget & EFR ». Il affiche 65 000 lignes, un chiffre rond
 qui évoquait immédiatement une troncature à l'export. J'ai donc réconcilié ce fichier avec
 le fichier LIVE, et la vérification a montré le contraire de ce que je craignais : les
 totaux sont identiques à l'euro près sur les 118 opérations jointes, avec un écart médian
@@ -157,8 +165,8 @@ nul. Les 65 000 lignes se décomposent en 64 788 postes de détail et 212 lign
 Le chiffre rond n'était qu'une coïncidence.
 
 Le troisième concerne le nettoyage proprement dit, qui a traité les défauts classiques d'un
-export de gestion. Les natures de lot ont été harmonisées, les libellés « appt »,
-« Appartement » ou « stat » étant regroupés en huit familles. Les doublons orthographiques
+export de gestion. Les natures de lot ont été harmonisées, les libellés « appt »,
+« Appartement » ou « stat » étant regroupés en huit familles. Les doublons orthographiques
 de communes ont été fusionnés : 91 orthographes désignaient en réalité 90 communes. Enfin,
 les surfaces et les prix à zéro ont été convertis en valeurs manquantes plutôt que traités
 comme des zéros réels, un zéro de surface n'ayant aucun sens économique.
@@ -170,10 +178,10 @@ script, et non par téléchargement manuel, pour qu'elles restent re-télécharg
 l'analyse puisse être rejouée sur des séries actualisées :
 
 1. **Le taux moyen des crédits habitat en France**, série mensuelle de la Banque centrale
-   européenne, de 2015 à 2026.
-2. **L'indicateur de confiance des ménages**, publié par Eurostat, sur la même période.
+   européenne [4], de 2015 à 2026.
+2. **L'indicateur de confiance des ménages**, publié par Eurostat [5], sur la même période.
 3. **Un référentiel des 90 communes d'implantation** du groupe, comprenant la population et
-   les coordonnées géographiques, obtenu par l'API publique `geo.api.gouv.fr` et enrichi
+   les coordonnées géographiques, obtenu par l'API publique `geo.api.gouv.fr` [6] et enrichi
    d'une distance au littoral que j'ai calculée.
 
 Ce détour par le script plutôt que par le téléchargement manuel a un coût en temps au
@@ -231,9 +239,9 @@ vente, ce qui contredisait tout ce que l'on sait du marché.
 En réalité, la série brute est brouillée par la croissance du portefeuille. Le nombre
 d'opérations en commercialisation a fortement augmenté sur la période, soutenant le volume
 total de réservations même lorsque la demande par programme s'effondre. Rapportées
-au nombre d'opérations actives, les réservations racontent l'inverse, comme le montre la
-Figure 5.2 : la corrélation passe à -0,34 avec le taux d'intérêt et à +0,44 avec la
-confiance des ménages. Tout l'axe B repose sur cette correction. Sans elle, j'aurais conclu
+au nombre d'opérations actives, les réservations racontent l'inverse. La Figure 5.2 donne
+cette série d'intensité corrigée ; sa corrélation avec le taux d'intérêt passe à -0,34 et
+celle avec la confiance des ménages à +0,44. Tout l'axe B repose sur cette correction. Sans elle, j'aurais conclu
 à l'absence d'effet de la conjoncture, et j'aurais eu tort.
 
 ![Intensité de vente, mesurée en réservations par opération active : l'effet de la remontée des taux apparaît une fois l'effet de portefeuille neutralisé](figures/fig_5_2_intensite_vente.png){width=100%}
@@ -258,7 +266,7 @@ SQLite et pandas constituent donc la bonne architecture à cette échelle. L'int
 est ailleurs : le chemin de montée en charge est identifié, si le périmètre devait un jour
 s'étendre à celui du groupe Nexity.
 
-### Axe A
+### Axe A — risque de dérive de marge
 
 La difficulté de l'axe A n'était pas le modèle mais la définition de la cible. Les exports
 dont je disposais sont une photographie à date, sans historique des révisions budgétaires :
@@ -269,12 +277,14 @@ J'ai donc mesuré la dérive par les dépassements déjà engagés, poste par po
 à terminaison sont estimées par le maximum de l'engagé et du budget de chaque poste, selon
 un principe qui se formule simplement : un dépassement engagé est acquis, et le budget
 restant sera dépensé. La variation de marge rapporte ensuite la marge ainsi recalculée à la
-marge budgétée.
+marge budgétée. Cette grandeur est appelée dans le projet la variation de marge
+« committée », par emprunt à la notion comptable de coût engagé : elle ne mesure pas une
+dérive anticipée, mais la part de dérive que les engagements déjà pris rendent acquise.
 
 Cette définition impose une précaution sur les variables explicatives, et j'y ai veillé
 dès la construction du jeu de données. Concrètement, le modèle n'utilise que le budget
 initial et les signaux commerciaux, jamais l'engagé ni le facturé, qui sont précisément ce
-qui définit la cible. Sans cette précaution, le modèle aurait « prédit » sa propre
+qui définit la cible. Sans cette précaution, le modèle aurait « prédit » sa propre
 définition.
 
 Sur le périmètre exploitable, soit les 123 opérations engagées à au moins 60 % et dont la
@@ -284,17 +294,17 @@ dépassement engagé. Mais 28 % franchissent le seuil de dérive matérielle, q
 Figure 5.3 donne la distribution complète et situe ce seuil, avec à droite le détail des
 opérations en dérive.
 
-![Distribution de la variation de marge « committée » sur les 123 opérations du périmètre, et seuil de dérive matérielle à -2 %](figures/fig_5_3_distribution_variation_marge.png){width=95%}
+![Distribution de la variation de marge « committée » sur les 123 opérations du périmètre, et seuil de dérive matérielle à -2 %](figures/fig_5_3_distribution_variation_marge.png){width=95%}
 
 La partie la plus utile de cet axe pour l'entreprise n'est pas un modèle appris : c'est le
 tableau descriptif des dépassements engagés en euros, par opération et par poste, calculé
-en SQL pur. C'est lui qui alimente la page « Alertes marge » de la plateforme.
+en SQL pur. C'est lui qui alimente la page « Alertes marge » de la plateforme.
 
 La modélisation vient en complément, comme score de tri. Une régression du taux de
 variation atteint un coefficient de détermination de 0,08 sur l'échantillon test. Le
 résultat est modeste, et je le présente tel quel : la structure du budget initial
 prédispose à la dérive mais ne la détermine pas, l'aléa de chantier faisant le reste. Une
-classification des opérations « à risque », c'est-à-dire dont la dérive dépasse 2 %,
+classification des opérations « à risque », c'est-à-dire dont la dérive dépasse 2 %,
 atteint un score F1, qui combine en une seule valeur la capacité à détecter les cas à
 risque et celle à ne pas en signaler à tort, de l'ordre de 0,30 à 0,34 en validation
 croisée stratifiée, c'est-à-dire
@@ -308,7 +318,7 @@ alimentent les niveaux d'alerte de la plateforme.
 Il faut donc lire ce dispositif pour ce qu'il est : un outil de hiérarchisation de
 l'attention, pas un oracle.
 
-### Axe B
+### Axe B — vitesse d'écoulement
 
 Budgéter les réservations de 2026 suppose de distinguer, dans le rythme de vente, ce qui
 relève de la conjoncture et ce qui relève du programme lui-même. C'est l'axe dont les
@@ -366,7 +376,7 @@ La limite de cet indicateur est connue et vérifiée : en début de commercialis
 potentiel n'est pas identifiable, l'ajustement pouvant alors produire n'importe quelle
 valeur. L'outil n'est donc proposé que sur les programmes suffisamment avancés.
 
-### Axe C
+### Axe C — prix du stock
 
 Repricer le stock suppose d'abord de savoir à quel prix chaque lot devrait se vendre. Le
 modèle que j'ai construit pour répondre à cette question est volontairement le plus simple
@@ -424,13 +434,13 @@ portage que l'objectif ne compte pas.
 Trois constats simples, obtenus avec des moyens simples, complètent le dispositif.
 
 Le premier est un moteur de recherche par similarité, construit sur les 9 688 commentaires
-libres de vente. Une requête formulée en langage courant, comme « refus de prêt banque » ou
-« remise prix hors pack », remonte les dossiers concernés. C'est un outil d'audit des
+libres de vente. Une requête formulée en langage courant, comme « refus de prêt banque » ou
+« remise prix hors pack », remonte les dossiers concernés. C'est un outil d'audit des
 remises non structurées réellement utilisable.
 
 Le deuxième porte sur les motifs de désistement, analysés par agence. Le profil obtenu
 révèle un problème de qualité de saisie plus qu'un fait commercial : à Salon-de-Provence,
-90 % des motifs sont enregistrés en « Autres motifs », rendant les désistements de cette
+90 % des motifs sont enregistrés en « Autres motifs », rendant les désistements de cette
 agence inanalysables tant que la saisie n'est pas fiabilisée.
 
 Le troisième porte sur la structure du réseau de vente, qui se révèle très concentrée. Deux
@@ -453,17 +463,17 @@ restreint aux 147 opérations de promotion, et aucun terme de modélisation à l
 
 La page **Vue d'ensemble**, présentée en Figure 5.8, donne la situation en quelques
 secondes : 147 opérations suivies, dont 10 en alerte et 2 à surveiller parmi les 68
-opérations en cours suffisamment engagées, 421 lots principaux en stock, un rythme récent
+opérations en cours suffisamment engagées, les 56 autres étant conformes, 421 lots principaux en stock, un rythme récent
 de 4,8 réservations par opération et par mois, pour un taux de crédit à 3,11 %.
 
-![Plateforme, page « Vue d'ensemble »](figures/fig_5_8_plateforme_vue_ensemble.png){width=100%}
+![Plateforme, page « Vue d'ensemble »](figures/fig_5_8_plateforme_vue_ensemble.png){width=100%}
 
 La page **Alertes marge**, présentée en Figure 5.9, classe les opérations par niveau
 d'alerte, le score de l'axe A étant traduit en trois niveaux. Elle affiche surtout, pour
 chaque opération, les dépassements déjà engagés en euros et les postes concernés. C'est la
 page la plus consultée, et il faut redire qu'elle repose sur du SQL et non sur un modèle.
 
-![Plateforme, page « Alertes marge » : niveaux d'alerte et dépassements engagés en euros](figures/fig_5_9_plateforme_alertes_marge.png){width=100%}
+![Plateforme, page « Alertes marge » : niveaux d'alerte et dépassements engagés en euros](figures/fig_5_9_plateforme_alertes_marge.png){width=100%}
 
 Les trois autres pages transposent les axes restants. La page **Rythme de vente** fait de
 l'axe B un simulateur : un curseur de taux 2026 produit une phrase de résultat fondée sur
@@ -539,17 +549,13 @@ exactement de la même nature que le travail décrit aux chapitres 2 et 3. Ce so
 de structure, faits pour rendre possible une analyse à venir.
 
 ::: transition
-Les cinq premiers chapitres de ce mémoire ont exposé le contexte, puis les quatre missions de
-l'année, chacune avec ses résultats et ses limites. Ils l'ont fait mission par mission, dans
-l'ordre où elles se sont présentées.
+Une succession de récits de mission ne fait pourtant pas un bilan. Les questions que pose un
+jury à un mémoire professionnel sont d'un autre ordre : comment ces projets ont-ils été
+conduits, avec quelles méthodes et quelles technologies, comment ai-je su que le résultat
+était bon, et qu'est-ce qui n'a pas fonctionné ? Elles ne se traitent pas au fil de chaque
+chapitre sans l'alourdir.
 
-Néanmoins, une succession de récits ne fait pas un bilan. Les questions que pose un jury à un
-mémoire professionnel sont d'un autre ordre : comment ces projets ont-ils été conduits, avec
-quelles méthodes et quelles technologies, comment ai-je su que le résultat était bon, et
-qu'est-ce qui n'a pas fonctionné ? Cependant, ces questions ne se traitent pas au fil de
-chaque chapitre sans les alourdir.
-
-Le chapitre suivant leur est donc consacré. Il prend de la hauteur sur les quatre missions et
-les relit transversalement, sous l'angle de la conduite de projet, des outils, de
-l'évaluation des résultats et des difficultés rencontrées.
+Le chapitre suivant leur est donc consacré. Il relit transversalement les quatre missions,
+sous l'angle de la conduite de projet, des outils, de l'évaluation des résultats et des
+difficultés rencontrées.
 :::

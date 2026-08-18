@@ -8,6 +8,7 @@ titrememoire: "Du Data Engineering à la Data Science"
 soustitre: "Fiabiliser la donnée d'un promoteur-aménageur, puis la mettre au service de la décision"
 auteurmajuscule: "SAOUD Yasmina"
 annee: "2025-2026"
+moissoutenance: "Septembre 2026"
 tutriceentreprise: "Mme Cruanas"
 tutriceuniversitaire: "Mme Trottier"
 motscles: "Ingénierie des données, migration d'ERP, reprise de données, API, reporting, aide à la décision, machine learning, immobilier"
@@ -66,20 +67,24 @@ la reprise des données opérationnelles vers le nouvel ERP, sur un périmètre 
 opérations immobilières, en m'appuyant sur les interfaces de programmation de l'éditeur. J'y
 expose les difficultés algorithmiques rencontrées, notamment la gestion des identifiants
 dynamiques et du versionnement des données budgétaires, ainsi que la stratégie de
-déploiement en « coquilles vides » adoptée pour garantir la continuité de la facturation. En
+déploiement en « coquilles vides » adoptée pour garantir la continuité de la facturation. En
 parallèle, j'ai assuré le maintien du système décisionnel et participé au déploiement du
 Single Sign-On sur deux périmètres du groupe.
 
 Le second semestre a prolongé ce travail de structure, puis l'a valorisé. J'ai d'abord
 conduit la reprise des tiers, c'est-à-dire des clients acquéreurs, en concevant une chaîne
-de traitement entièrement pilotée par formules qui a permis de créer 1 434 tiers dans SPO à
-partir de 1 602 lignes brutes, sans aucun doublon. J'ai ensuite mené de bout en bout un
-projet de Data Science, le « Copilote Financier », qui outille la direction financière sur
+de traitement entièrement pilotée par formules qui a permis de créer 1 434 tiers dans SPO à
+partir de 1 602 lignes brutes, sans doublon détecté par les trois clés d'unicité retenues. J'ai ensuite mené de bout en bout un
+projet de Data Science, le « Copilote Financier », qui outille la direction financière sur
 trois questions de gestion : le risque de dérive des marges, le rythme d'écoulement des
 programmes et le pilotage des prix du stock.
 
-Ce mémoire tire de cette année une thèse qu'il s'attache à démontrer plutôt qu'à énoncer :
-la structure de la donnée commande ce que la modélisation peut en tirer. Il se termine par
+Ce mémoire relit ensuite ces quatre missions transversalement, sous l'angle de la conduite de
+projet, des technologies et des méthodes employées, des régimes de preuve mobilisés pour
+évaluer chaque livrable et des difficultés rencontrées.
+
+De cette année, il tire une thèse qu'il s'attache à démontrer plutôt qu'à énoncer : la
+structure de la donnée commande ce que la modélisation peut en tirer. Il se termine par
 une réflexion sur le métier de data scientist tel que je l'ai pratiqué, et sur le projet
 professionnel qui en découle.
 
@@ -93,14 +98,18 @@ professionnel qui en découle.
 | API | Interface de programmation applicative, qui permet à deux logiciels d'échanger des données sans passer par leur interface utilisateur. |
 | CRM | *Customer Relationship Management*, outil de gestion de la relation client. Chez Angelotti, il s'agit de Vadimm. |
 | Désistement | Renoncement d'un acquéreur à une réservation avant l'acte de vente. |
+| DirectAPI | Module de l'éditeur Salvia permettant d'injecter dans l'ERP des fichiers plats, sans passer par la saisie manuelle. |
+| EFR | État Financier de Référence, l'un des exports budgétaires du système de gestion, qui donne pour chaque poste le budget, l'engagé et le facturé. |
 | ERP | *Enterprise Resource Planning*, progiciel de gestion intégré couvrant l'ensemble des processus de l'entreprise. |
+| Grimmo | ERP métier historique du groupe, remplacé cette année par SPO. |
 | Fiabilisation des données | Ensemble des vérifications et corrections visant à garantir la cohérence et la justesse des données. |
 | GED | Gestion Électronique des Documents. |
 | Lot | Terrain ou logement mis en vente, issu d'un découpage foncier ou d'un programme immobilier. |
+| MyReport | Outil décisionnel du groupe, qui requête les bases de données sources et produit les tableaux de bord des services. |
 | Macro-lot | Ensemble de lots vendus groupés, souvent destiné à un promoteur ou investisseur pour un projet plus large. |
 | Promotion immobilière | Activité consistant à concevoir, financer, construire et commercialiser des logements ou bâtiments neufs. |
 | Reporting | Création de tableaux de bord ou d'indicateurs à partir des données de gestion, souvent automatisée. |
-| Salvia | Éditeur de logiciels spécialisés dans la gestion immobilière, dont SPO et GR Immo. |
+| Salvia | Éditeur de logiciels spécialisés dans la gestion immobilière, dont SPO. |
 | SPO | Suivi des Programmes Opérationnels, l'ERP métier qui remplace Grimmo depuis cette année. |
 | SSO | *Single Sign-On*, authentification unique donnant accès à plusieurs applications. |
 | Surface habitable | Surface mesurée en mètres carrés, utilisée pour évaluer la taille d'un lot et estimer son prix. |
@@ -111,6 +120,7 @@ professionnel qui en découle.
 \clearpage
 \tableofcontents
 \clearpage
+\addcontentsline{toc}{chapter}{Table des figures}
 \listoffigures
 \clearpage
 \pagenumbering{arabic}
@@ -281,7 +291,10 @@ visible mais tout aussi structurante : les tableurs.
    opération, sur des fichiers individuels, sans vision transverse.
 
 La Figure 1.1 représente cette organisation et situe l'endroit où mes missions sont
-intervenues. On y lit le problème central : la donnée existait, en quantité, mais elle était
+intervenues. Les trois outils y occupent le haut du schéma, reliés par les flèches qui
+figurent la circulation normale de la donnée ; les tableurs y forment la bande du bas, et
+les traits pointillés qui les rattachent aux trois outils marquent les échanges qui ne
+passent par aucun système. On y lit le problème central : la donnée existait, en quantité, mais elle était
 répartie entre des outils qui ne partageaient ni les mêmes identifiants, ni les mêmes
 définitions. Le même client pouvait exister dans le CRM et dans l'ERP sans qu'aucun lien ne
 les rattache ; la même notion de marge pouvait être calculée différemment selon l'outil qui
@@ -374,11 +387,11 @@ L'année s'organise en quatre missions, réparties sur deux semestres, que prés
 Figure 1.2. Leur enchaînement n'a rien d'arbitraire : chacune conditionne la suivante.
 
 1. **La migration des données opérationnelles vers SPO** (premier semestre, chapitre 2) a
-   consisté à reprendre les 283 opérations, leurs tranches et leurs budgets depuis la base
-   historique. C'est le socle : sans les opérations, rien d'autre ne peut exister dans le
+   consisté à reprendre les 283 opérations et leurs tranches depuis la base historique, les
+   budgets détaillés étant reportés à un second temps. C'est le socle : sans les opérations, rien d'autre ne peut exister dans le
    nouvel ERP.
 2. **La reprise des tiers** (second semestre, chapitre 3) a complété ce socle par le volet
-   commercial, en créant dans SPO les 1 434 clients acquéreurs du groupe.
+   commercial, en créant dans SPO les 1 434 clients acquéreurs du groupe.
 3. **Le maintien du système décisionnel et les missions SI transverses** (les deux semestres,
    chapitre 4) ont couru en parallèle sur toute l'année, pour que les services continuent de
    disposer de leurs indicateurs pendant que le socle se reconstruisait.
@@ -417,7 +430,7 @@ modèle de données que personne, dans l'entreprise, ne connaissait encore.
 - 2.2 Les défis techniques majeurs : dépendances et identifiants
     - 2.2.1 La gestion des dépendances hiérarchiques
     - 2.2.2 La complexité algorithmique des identifiants et du versionnement
-- 2.3 Adaptation stratégique : le déploiement en « coquilles vides »
+- 2.3 Adaptation stratégique : le déploiement en « coquilles vides »
     - 2.3.1 Une approche agile par priorisation
     - 2.3.2 Gains opérationnels et lissage de la charge
 - 2.4 Bilan de la migration à la fin du premier semestre
@@ -460,13 +473,13 @@ d'appropriation et une phase opérationnelle d'industrialisation.
 
 Avant de pouvoir manipuler les données de masse, il était indispensable de maîtriser le
 modèle de données cible. Ma première tâche a consisté à analyser en profondeur la
-documentation technique de l'API de Salvia. L'enjeu était de comprendre la structure des
+documentation technique de l'API de Salvia [2]. L'enjeu était de comprendre la structure des
 objets attendus par l'ERP et leurs interdépendances.
 
 La Figure 2.1 montre l'interface de SPO sur le dossier d'une opération. On y lit directement
-le modèle de données : une opération est un conteneur, auquel se rattachent son
-identification, ses intervenants, ses versions, ses tranches, son budget, sa
-commercialisation et sa trésorerie. Cette arborescence n'est pas une commodité d'affichage,
+le modèle de données : une opération est un conteneur, auquel se rattachent notamment
+son identification, ses indicateurs, son foncier, ses intervenants, ses versions, ses
+tranches, son budget, son planning, sa commercialisation et sa trésorerie. Cette arborescence n'est pas une commodité d'affichage,
 c'est la structure même que l'API attend, et la comprendre était le préalable à toute
 injection.
 
@@ -477,6 +490,13 @@ d'injection final à ce stade, j'ai testé manuellement les différents endpoint
 terminaison), pour décortiquer la mécanique de création d'une donnée. Cette étape m'a permis
 de valider quels champs étaient obligatoires et de comprendre la logique séquentielle imposée
 par le logiciel.
+
+Deux informations distinctes sont sorties de ces tests, et il est utile de les séparer. La
+première tient au contenu de chaque objet : quels champs l'ERP exige pour accepter une
+création, et lesquels il tolère vides. La documentation de l'éditeur les décrit, mais la
+description reste théorique tant qu'on n'a pas vu le service la refuser. La seconde tient à
+l'enchaînement des objets entre eux, c'est-à-dire à l'ordre dans lequel il faut les créer ;
+elle n'était pas documentée du tout, et c'est elle qui a occupé la suite du travail.
 
 Cette phase peut sembler improductive : elle ne crée aucune donnée et ne produit aucun
 livrable visible. Je la considère pourtant comme la plus rentable de tout le projet. Chaque
@@ -491,7 +511,7 @@ d'import, qui permet le paramétrage des flux et le suivi des injections, est pr
 Figure 2.2. Mon rôle a été de construire l'intégralité du pipeline d'alimentation de cet
 outil.
 
-![L'interface utilisateur du module DirectAPI, ici sur la ressource « Tiers »](figures/fig_2_2_directapi.png){width=78%}
+![L'interface utilisateur du module DirectAPI, ici sur la ressource « Tiers »](figures/fig_2_2_directapi.png){width=78%}
 
 Concrètement, j'ai conçu des maquettes d'injection Excel complexes, servant de pont entre
 l'ancien et le nouveau système. Ce pipeline de données se décompose en trois étapes clés :
@@ -504,12 +524,39 @@ l'ancien et le nouveau système. Ce pipeline de données se décompose en trois 
    paramétrage extraites de SPO ou sur des fichiers de mapping que j'ai constitués.
 3. **Chargement** : les maquettes finalisées étaient ensuite injectées via DirectAPI.
 
+L'étape de transformation mérite qu'on s'y arrête, car c'est celle qui a demandé le plus de
+travail et celle dont dépendait la validité de tout le reste. Mapper un champ n'est pas le
+renommer. Une valeur venue de Grimmo n'entre dans SPO que si elle appartient à la
+nomenclature que le nouveau système reconnaît : un libellé de poste budgétaire, un type de
+tranche, une nature d'opération y sont des valeurs contrôlées, et non du texte libre. Le
+travail a donc consisté, champ par champ, à établir la correspondance entre ce que l'ancien
+système contenait et ce que le nouveau accepte.
+
+Ces correspondances n'ont pas toutes la même origine, et la distinction a des conséquences
+pratiques. Certaines proviennent de tables de paramétrage extraites de SPO : ce sont les
+listes de valeurs que l'ERP tient lui-même, donc des références sûres, qu'il suffit
+d'interroger. D'autres, en revanche, sont des fichiers de mapping que j'ai constitués, parce
+qu'aucune table ne les fournissait : la mise en regard des libellés de l'ancien système avec
+ceux du nouveau relevait alors d'un arbitrage, tranché avec les services concernés puis
+consigné. La différence est importante au moment de rendre des comptes : dans le premier cas,
+une divergence est une erreur de lecture ; dans le second, c'est une décision qu'il faut
+pouvoir justifier.
+
+Le choix d'Excel comme moteur de transformation, plutôt qu'un script, découle de l'arbitrage
+exposé plus haut. La fonction RechercheX y joue exactement le rôle d'une jointure : elle va
+chercher, dans la table de correspondance, la valeur cible associée à la valeur source. Sa
+vertu, dans ce contexte, est d'être lisible par les personnes qui connaissent le métier et
+non le code. Lorsqu'un poste budgétaire ressortait mal traduit, la responsable concernée
+pouvait ouvrir la maquette, voir la formule et pointer la ligne fautive de la table de
+correspondance. Un script aurait produit le même résultat, mais aurait déplacé la
+vérification vers moi seule.
+
 Pour sécuriser ce processus, j'ai appliqué une méthode de validation itérative : nous avons
 d'abord migré 3 opérations pilotes, puis un lot de 12, afin de corriger les éventuels rejets
 avant de lancer la migration de masse. Cette progression par paliers a une vertu que je n'ai
 mesurée qu'après coup : elle rend les erreurs lisibles. Sur trois opérations, un rejet
-s'analyse en quelques minutes ; sur deux cents, les messages se mélangent et il devient
-difficile de savoir quelle règle a été violée.
+s'analyse en quelques minutes ; sur plusieurs dizaines, les messages se mélangent et il
+devient difficile de savoir quelle règle a été violée.
 
 ## Les défis techniques majeurs : dépendances et identifiants
 
@@ -528,10 +575,10 @@ J'ai découvert cette logique empiriquement, en analysant les codes d'erreur ren
 l'API lors de mes premiers tests d'injection. Il est apparu qu'il fallait respecter une
 séquence de création immuable :
 
-1. Création de l'Opération (le conteneur principal).
-2. Création des Tranches de Travaux.
-3. Création des Tranches Commerciales.
-4. Création du Budget associé.
+1. Création de l'opération, le conteneur principal.
+2. Création des tranches de travaux.
+3. Création des tranches commerciales.
+4. Création du budget associé.
 
 La Figure 2.3 représente cette séquence et les dépendances qu'elle traduit. Toute tentative
 d'injection ne respectant pas cet ordre se soldait par un échec, le système ne trouvant pas
@@ -540,11 +587,21 @@ l'objet parent nécessaire.
 ![La séquence d'injection imposée par l'intégrité référentielle de l'ERP](figures/fig_2_3_sequence_injection.png){width=95%}
 
 Face à ce manque de clarté initial, j'ai pris l'initiative de rédiger une documentation
-interne. Ce document, cartographiant ces étapes et les prérequis de chaque objet, sert de
-guide de référence, permettant d'éviter les erreurs de séquencement lors des phases de
-reprise ultérieures. C'est le premier livrable écrit de mon année qui n'était pas un fichier
-de données, et c'est celui qui a le plus servi aux autres : la reprise des tiers, exposée au
-chapitre 3, s'est appuyée directement dessus.
+interne. Ce document cartographie les étapes de la séquence et les prérequis de chaque objet,
+c'est-à-dire, pour chaque type de donnée à créer, ce qui doit exister avant lui. Il fixe donc
+par écrit une connaissance qui n'existait jusque-là que sous la forme de codes d'erreur
+interprétés, et il la rend transmissible : un guide de référence permettant d'éviter les
+erreurs de séquencement lors des phases de reprise ultérieures.
+
+Rédiger cette note n'était pas prévu au départ, et je ne l'ai pas fait par goût de la
+formalisation. Je l'ai fait parce que j'avais constaté que je redécouvrais deux fois la même
+contrainte, à quelques jours d'intervalle, faute de l'avoir notée. C'est le premier livrable
+écrit de mon année qui n'était pas un fichier de données, et c'est celui qui a le plus servi
+aux autres : la reprise des tiers, exposée au chapitre 3, s'est appuyée directement dessus,
+et n'a pas eu à refaire le travail de rétro-ingénierie. Cet épisode a modifié ma façon de
+travailler pour le reste de l'année. Une contrainte technique découverte empiriquement n'a de
+valeur, pour l'entreprise, que si elle est écrite quelque part ; sinon elle reste attachée à
+la personne qui l'a trouvée, et disparaît avec elle.
 
 ### La complexité algorithmique des identifiants et du versionnement
 
@@ -579,7 +636,7 @@ parfaitement légitime, mais qui rend impossible toute écriture naïve. Compren
 derrière la contrainte est ce qui permet de la contourner proprement plutôt que de lutter
 contre elle.
 
-## Adaptation stratégique : le déploiement en « coquilles vides »
+## Adaptation stratégique : le déploiement en « coquilles vides »
 
 Face aux complexités techniques inhérentes à la gestion des identifiants et au versionnement,
 et compte tenu des délais stricts imposés par la direction, nous avons été confrontés à un
@@ -593,7 +650,7 @@ encore intégralement reconstitué.
 
 ### Une approche agile par priorisation
 
-Nous avons donc décidé d'adopter une stratégie de déploiement dite en « coquilles vides ».
+Nous avons donc décidé d'adopter une stratégie de déploiement dite en « coquilles vides ».
 Cette approche a consisté à dissocier le contenant, c'est-à-dire la structure de l'opération,
 du contenu, c'est-à-dire les données budgétaires détaillées.
 
@@ -628,8 +685,8 @@ semestre. Il est essentiel de préciser qu'à la fin de cette période, nous n'�
 début de ce vaste chantier.
 
 Nous avons réussi à modéliser et intégrer la structure fondamentale des dossiers, à savoir
-les Opérations ainsi que leurs subdivisions en Tranches Travaux, puis en Tranches
-Commerciales. Une part conséquente du travail restait à accomplir : l'analyse et
+les opérations et leurs tranches de travaux, la création des tranches commerciales étant
+encore en cours à la fin du semestre. Une part conséquente du travail restait à accomplir : l'analyse et
 l'intégration des données financières et comptables, notamment la reprise détaillée des
 budgets et de l'historique des factures.
 
@@ -637,10 +694,10 @@ Le tableau suivant récapitule l'état d'avancement à ce jalon.
 
 | Objet du modèle SPO | État à la fin du premier semestre |
 |:--------------------------------|:--------------------------------------------|
-| Opérations | Créées sur l'ensemble du périmètre |
+| Opérations | Créées, hors budgets détaillés |
 | Tranches de travaux | Créées |
 | Tranches commerciales | En cours de création |
-| Budgets détaillés | Reportés, stratégie des « coquilles vides » |
+| Budgets détaillés | Reportés, stratégie des « coquilles vides » |
 | Historique des factures | Non repris à ce stade |
 | Tiers, clients acquéreurs | Non repris à ce stade, voir chapitre 3 |
 
@@ -658,8 +715,8 @@ inconnu par ses messages d'erreur, à respecter une intégrité référentielle 
 
 Néanmoins, le socle ainsi constitué restait incomplet sur un point qui allait vite se faire
 sentir. Les opérations existaient, mais les clients qui achètent dans ces opérations, eux,
-n'étaient pas encore dans le nouvel ERP. Cependant, reprendre des clients n'est pas
-reprendre des structures de gestion : il s'agit de personnes, avec ce que cela implique de
+n'étaient pas encore dans le nouvel ERP. Or reprendre des clients n'est pas reprendre des
+structures de gestion : il s'agit de personnes, avec ce que cela implique de
 risques de doublons et d'exigence de qualité.
 
 Le chapitre suivant présente donc la reprise des tiers, conduite au second semestre. On y
@@ -693,8 +750,10 @@ désignent la même personne ?
 
 Ce chapitre détaille la reprise des tiers, c'est-à-dire des clients acquéreurs, depuis notre
 CRM Vadimm vers le nouvel ERP du groupe. Conduite au second semestre, cette mission prolonge
-directement le chantier exposé au chapitre précédent, et elle réalise l'interopérabilité entre
-l'ERP et le CRM que je n'avais pu qu'annoncer à la fin du premier semestre. Elle en change
+directement le chantier exposé au chapitre précédent, et elle constitue le premier pas vers
+l'interopérabilité entre l'ERP et le CRM que je n'avais pu qu'annoncer à la fin du premier
+semestre : elle transfère le référentiel client, la synchronisation permanente sans double
+saisie restant à construire. Elle en change
 toutefois la nature : il ne s'agissait plus d'injecter des structures de gestion, opérations,
 tranches et budgets, mais des personnes, avec ce que cela implique de risques de doublons et
 d'exigence de qualité. J'y expose la conception du fichier de travail que j'ai construit
@@ -814,7 +873,7 @@ La seconde caractéristique est qu'un tiers n'est pas un enregistrement unique m
 ensemble d'objets liés. La fiche principale ne porte que l'identité ; l'adresse, le
 courriel, le téléphone, les représentants et les rôles sont autant d'objets rattachés, avec
 chacun son propre fichier d'import. La Figure 2.2, présentée au chapitre précédent, montre
-précisément l'interface du module DirectAPI avec la ressource « Tiers » sélectionnée : on y
+précisément l'interface du module DirectAPI avec la ressource « Tiers » sélectionnée : on y
 lit directement cette décomposition, puisque l'écran propose un emplacement de fichier
 distinct par objet rattaché. Six d'entre eux correspondent aux six feuilles de sortie de mon
 fichier, les deux autres, les RIB et les sites web, n'étant pas alimentés par cette reprise.
@@ -932,7 +991,7 @@ suive.
 
 La Figure 3.3 donne la volumétrie effectivement produite par chacune des six feuilles. On
 y lit directement le modèle de données décrit plus haut : 1 434 lignes pour la liste
-maîtresse des tiers et autant pour l'attribution du rôle « Client », mais 1 871 lignes de
+maîtresse des tiers et autant pour l'attribution du rôle « Client », mais 1 871 lignes de
 représentants, puisque chaque couple en compte deux, et seulement 553 adresses, 538
 téléphones et 469 courriels, ces trois derniers fichiers ne portant que les personnes
 physiques et morales. Ces écarts de volumétrie d'un fichier à l'autre ne sont donc pas des
@@ -1004,7 +1063,7 @@ l'API de SPO, que j'avais déjà pratiquée au premier semestre. C'est celle que
 retenue.
 
 L'API expose en effet une opération de modification partielle au format **JSON Patch**,
-normalisé par la RFC 6902. Ce format permet de décrire une modification non pas en
+normalisé par la RFC 6902 [3]. Ce format permet de décrire une modification non pas en
 renvoyant l'objet entier, mais sous la forme d'une liste d'opérations élémentaires, chacune
 indiquant l'action à effectuer, le chemin de la propriété visée dans l'objet et la valeur à
 appliquer. C'est exactement ce dont j'avais besoin : ajouter un courriel et un téléphone
@@ -1043,10 +1102,10 @@ mécanisme de déduplication, mais c'est une part réelle du travail, et surtout
 engage une décision. J'ai tenu à documenter chacun de ces arbitrages dans la note de
 procédure, pour que la trace en subsiste indépendamment de moi.
 
-**Les adresses étrangères :** Quelques acquéreurs résidaient hors de France, en Allemagne
+**Les adresses étrangères :** Trois tiers avaient une adresse hors de France, en Allemagne
 et aux Émirats arabes unis. SPO refusait initialement la création d'un tiers avec un pays
 étranger renseigné directement dans le fichier d'import. Plutôt que de bloquer la chaîne
-pour ces quelques cas, nous avons choisi de les créer avec le pays France par défaut, puis
+pour ces trois cas, nous avons choisi de les créer avec le pays France par défaut, puis
 de rectifier le pays manuellement dans l'ERP après création, en vérifiant à chaque fois que
 la modification était bien prise en compte. C'est un compromis assumé : il fait passer une
 information provisoirement fausse dans le système, mais sur un périmètre connu, listé, et
@@ -1085,15 +1144,15 @@ l'avoir concentrée sur une poignée de cas identifiés, au lieu de la diluer su
 L'intégralité des imports CSV et des requêtes PATCH a été exécutée avec succès. Le tableau
 suivant récapitule ce qui a été créé dans SPO.
 
-| Objet créé | Volume | Canal |
-|:---------------------------------------|-------:|:-----------------|
-| Tiers                                  |  1 434 | Import CSV       |
-| Adresses                               |    553 | Import CSV       |
-| Courriels des personnes physiques et morales |    469 | Import CSV  |
-| Téléphones des personnes physiques et morales |   538 | Import CSV |
-| Représentants des couples et des sociétés |  1 871 | Import CSV    |
-| Rôles « Client »                       |  1 434 | Import CSV       |
-| Coordonnées des couples                | 872 requêtes | Requêtes PATCH |
+| Objet créé dans SPO                      | Volume | Canal          |
+|:-----------------------------------------|-------:|:---------------|
+| Tiers                                     |  1 434 | Import CSV     |
+| Adresses                                  |    553 | Import CSV     |
+| Courriels (personnes physiques et morales) |    469 | Import CSV     |
+| Téléphones (personnes physiques et morales) |    538 | Import CSV     |
+| Représentants (couples et sociétés)       |  1 871 | Import CSV     |
+| Rôles « Client »                          |  1 434 | Import CSV     |
+| Coordonnées des couples                   |    872 | Requêtes PATCH |
 
 Les 1 434 tiers créés se répartissent en **881 couples**, **462 personnes physiques** et
 **91 personnes morales**, répartition que représente la Figure 3.4. Cette structure n'est
@@ -1228,9 +1287,8 @@ réalisation des demandes de reporting pour les différents services du groupe. 
 mission consiste à traduire des besoins métiers parfois abstraits en indicateurs visuels
 exploitables et fiables.
 
-Le travail commence rarement par une spécification. Il commence par une phrase du type «
-on n'arrive pas à savoir combien on a facturé sur cette opération », ou par un tableau que
-quelqu'un refait à la main tous les mois. La première partie du travail consiste donc à
+Le travail commence rarement par une spécification. Il commence par une gêne exprimée en
+réunion, ou par un tableau que quelqu'un refait à la main tous les mois. La première partie du travail consiste donc à
 reformuler la demande jusqu'à ce qu'elle soit calculable : de quelles lignes parle-t-on
 exactement, sur quelle période, et que fait-on des cas limites ? Cette reformulation est
 la partie du reporting que je sous-estimais en arrivant, et c'est celle qui décide de
@@ -1250,31 +1308,31 @@ lorsqu'il faut l'automatiser dans un outil décisionnel sans modifier l'architec
 données.
 
 La difficulté tient à ce que la règle ne porte pas sur une ligne, mais sur la position
-d'une ligne dans une séquence. Aucune colonne de la base ne contient l'information « c'est
-la deuxième commande de ce client sur ce lot » : cette information n'existe que si on la
+d'une ligne dans une séquence. Aucune colonne de la base ne contient l'information « c'est
+la deuxième commande de ce client sur ce lot » : cette information n'existe que si on la
 calcule, et elle change dès qu'une commande est ajoutée ou annulée.
 
 ### Contraintes techniques et modélisation dynamique
 
-Mon travail a consisté à trouver la manière la plus optimale d'implémenter cette logique
-avec nos logiciels existants. En effet, je faisais face à des contraintes techniques
-fortes qui limitaient mes options :
+Mon travail a consisté à trouver la manière la plus efficace d'implémenter cette logique
+avec nos logiciels existants. En effet, je faisais face à des contraintes techniques fortes
+qui limitaient mes options :
 
-1. **Pas de droits d'écriture sur la base.** Je ne possède pas les droits nécessaires pour
+1. **Pas de droits d'écriture sur la base.** Je ne possédais pas les droits nécessaires pour
    créer des champs de statut directement dans la base de données SQL, ce qui interdisait la
    solution la plus simple, à savoir matérialiser le statut au moment de l'enregistrement de
    la commande.
 2. **Pas de colonne statique dans les fichiers sources.** Je ne pouvais pas non plus ajouter
-   de colonnes dans les fichiers Excel sources, car ces derniers sont écrasés à chaque mise à
-   jour des données.
+   de colonnes dans les fichiers Excel sources, car ces derniers étaient écrasés à chaque
+   mise à jour des données.
 
-Ces deux contraintes se conjuguent pour interdire toute solution qui consisterait à
+Ces deux contraintes se conjuguaient pour interdire toute solution qui aurait consisté à
 *stocker* le résultat. Il fallait donc concevoir une méthode de calcul dynamique.
 L'objectif était de créer un algorithme au sein de MyReport qui, lors de la génération du
 tableau, effectue un traitement en temps réel. Le système doit d'abord identifier les
 opérations et les lots, puis classer leurs commandes par ordre chronologique. Il attribue
 ensuite un rang à chaque commande et applique une condition logique : si le rang est
-impair, le statut est défini comme « Payant », et s'il est pair, il devient « Gratuit ».
+impair, le statut est défini comme « Payant », et s'il est pair, il devient « Gratuit ».
 La Figure 4.1 représente cette chaîne de calcul.
 
 ![La règle de facturation juridique traduite en calcul de rang, exécuté à chaque génération du tableau](figures/fig_4_1_regle_facturation.png){width=100%}
@@ -1369,10 +1427,10 @@ juridique a particulièrement mis en exergue ma capacité à contourner des limi
 techniques par une modélisation logique rigoureuse, transformant une contrainte d'outil en
 une solution pérenne pour l'entreprise.
 
-Néanmoins, ces solutions restent des contournements, et il faut le reconnaître. Une règle
+Ces solutions restent pourtant des contournements, et il faut le reconnaître. Une règle
 recalculée à chaque affichage tient tant que personne d'autre n'en a besoin ; un tableau
 de bord construit sur un fichier écrasé chaque nuit tient tant que le format ne change
-pas. Cependant, ces contournements auront rendu un service précis : ils ont maintenu le
+pas. Ces contournements auront néanmoins rendu un service précis : ils ont maintenu le
 système décisionnel en état de marche pendant les douze mois qu'a duré la reconstruction
 du socle.
 
@@ -1401,9 +1459,9 @@ déplacées d'un cran.
 - 5.4 Notebooks et résultats
     - 5.4.1 Exploration et nettoyage des données brutes
     - 5.4.2 SQL et Spark
-    - 5.4.3 Axe A
-    - 5.4.4 Axe B
-    - 5.4.5 Axe C
+    - 5.4.3 Axe A — risque de dérive de marge
+    - 5.4.4 Axe B — vitesse d'écoulement
+    - 5.4.5 Axe C — prix du stock
     - 5.4.6 Signaux faibles (texte et réseau)
 - 5.5 Plateforme Streamlit
 - 5.6 Périmètre et limites
@@ -1411,7 +1469,7 @@ déplacées d'un cran.
 :::
 
 Ce chapitre présente le projet de Data Science annoncé à la fin du premier semestre : le
-« Copilote Financier », un outil d'aide à la décision construit sur les données de gestion du
+« Copilote Financier », un outil d'aide à la décision construit sur les données de gestion du
 groupe Angelotti pour sa direction financière. Le périmètre envisagé au départ, la prédiction
 de la rentabilité des opérations d'aménagement, a été redéfini en cours de projet : la prédiction de la marge à terminaison subsiste
 comme premier axe de travail, mais le besoin exprimé par la direction financière l'a
@@ -1437,8 +1495,8 @@ chantier et la commercialisation le font dériver au fil des mois. Les appels d'
 reviennent plus chers qu'anticipé, des acquéreurs se désistent, le rythme de vente
 ralentit sous l'effet de la conjoncture.
 
-La direction financière suit ces dérives. Néanmoins, elle les suit opération par opération,
-sur tableurs, sans vision transverse. Personne ne dispose d'une vue d'ensemble permettant
+La direction financière suit ces dérives opération par opération, sur tableurs, sans vision
+transverse. Personne ne dispose d'une vue d'ensemble permettant
 de dire, à un instant donné, quelles opérations méritent l'attention en priorité. C'est ce manque
 qui a motivé le projet.
 
@@ -1517,26 +1575,34 @@ mots affichés.
 
 ### Données internes
 
-Quatre exports du système de gestion constituent le point de départ du projet.
+Quatre exports du système de gestion constituent le point de départ du projet. Leur
+périmètre de 267 opérations ne recouvre pas exactement les 283 opérations reprises au
+chapitre 2 : les deux décomptes sont établis à des dates différentes et sur des critères
+différents, la migration portant sur les dossiers actifs à reprendre et les exports sur les
+opérations disposant d'un budget analytique au moment de l'extraction.
 
-| Export | Grain | Volumétrie | Usage |
-|:-------|:------|:-----------|:------|
-| Grille de Prix Avec Désistements | lot × dossier de vente | 16 467 lignes, 196 opérations | ventes, prix, dates, désistements |
-| Budget & EFR | poste analytique | 65 000 lignes, 267 opérations | budget, engagé, facturé par poste |
-| A_DM_BUDGET_MONTANT_GESTION_LIVE | poste budgétaire | 79 106 lignes | contrôle de cohérence |
-| 06_Informations Lots | dossier désisté | 2 164 lignes | détail des désistements |
+| Export                     | Grain                | Volumétrie                | Usage                            |
+|:---------------------------|:---------------------|:--------------------------|:---------------------------------|
+| Grille de prix             | lot × dossier de vente | 16 467 lignes, 196 opérations | ventes, prix, dates, désistements |
+| Budget & EFR               | poste analytique     | 65 000 lignes, 267 opérations | budget, engagé et facturé par poste |
+| Budget LIVE                | poste budgétaire     | 79 106 lignes            | contrôle de cohérence            |
+| 06_Informations Lots       | dossier désisté      | 2 164 lignes             | détail des désistements          |
+
+Deux intitulés sont abrégés dans ce tableau : l'export de la grille de prix
+s'appelle « Grille de Prix Avec Désistements » dans le système de gestion, et le fichier de
+contrôle « A_DM_BUDGET_MONTANT_GESTION_LIVE », désigné ci-après comme le fichier LIVE.
 
 Comprendre ces exports m'a demandé plus de temps que les modéliser. Ce déséquilibre m'a
 d'abord surprise, puis m'a paru normal : c'est à cette étape que se jouait la fiabilité de
 tout le reste. Trois constats l'illustrent.
 
-Le premier concerne le fichier « 06_Informations Lots ». Malgré son nom, il ne contient
-pas les lots : il ne porte que des dossiers désistés, 2 157 au motif « Désisté » et 7 au
-motif « Résolution de vente ». La table maîtresse des lots est en réalité la grille de
+Le premier concerne le fichier « 06_Informations Lots ». Malgré son nom, il ne contient
+pas les lots : il ne porte que des dossiers désistés, 2 157 au motif « Désisté » et 7 au
+motif « Résolution de vente ». La table maîtresse des lots est en réalité la grille de
 prix. Prendre ce fichier pour ce que son nom annonce aurait faussé toute l'analyse du
 stock.
 
-Le deuxième concerne le fichier « Budget & EFR ». Il affiche 65 000 lignes, un chiffre rond
+Le deuxième concerne le fichier « Budget & EFR ». Il affiche 65 000 lignes, un chiffre rond
 qui évoquait immédiatement une troncature à l'export. J'ai donc réconcilié ce fichier avec
 le fichier LIVE, et la vérification a montré le contraire de ce que je craignais : les
 totaux sont identiques à l'euro près sur les 118 opérations jointes, avec un écart médian
@@ -1544,8 +1610,8 @@ nul. Les 65 000 lignes se décomposent en 64 788 postes de détail et 212 lign
 Le chiffre rond n'était qu'une coïncidence.
 
 Le troisième concerne le nettoyage proprement dit, qui a traité les défauts classiques d'un
-export de gestion. Les natures de lot ont été harmonisées, les libellés « appt »,
-« Appartement » ou « stat » étant regroupés en huit familles. Les doublons orthographiques
+export de gestion. Les natures de lot ont été harmonisées, les libellés « appt »,
+« Appartement » ou « stat » étant regroupés en huit familles. Les doublons orthographiques
 de communes ont été fusionnés : 91 orthographes désignaient en réalité 90 communes. Enfin,
 les surfaces et les prix à zéro ont été convertis en valeurs manquantes plutôt que traités
 comme des zéros réels, un zéro de surface n'ayant aucun sens économique.
@@ -1557,10 +1623,10 @@ script, et non par téléchargement manuel, pour qu'elles restent re-télécharg
 l'analyse puisse être rejouée sur des séries actualisées :
 
 1. **Le taux moyen des crédits habitat en France**, série mensuelle de la Banque centrale
-   européenne, de 2015 à 2026.
-2. **L'indicateur de confiance des ménages**, publié par Eurostat, sur la même période.
+   européenne [4], de 2015 à 2026.
+2. **L'indicateur de confiance des ménages**, publié par Eurostat [5], sur la même période.
 3. **Un référentiel des 90 communes d'implantation** du groupe, comprenant la population et
-   les coordonnées géographiques, obtenu par l'API publique `geo.api.gouv.fr` et enrichi
+   les coordonnées géographiques, obtenu par l'API publique `geo.api.gouv.fr` [6] et enrichi
    d'une distance au littoral que j'ai calculée.
 
 Ce détour par le script plutôt que par le téléchargement manuel a un coût en temps au
@@ -1618,9 +1684,9 @@ vente, ce qui contredisait tout ce que l'on sait du marché.
 En réalité, la série brute est brouillée par la croissance du portefeuille. Le nombre
 d'opérations en commercialisation a fortement augmenté sur la période, soutenant le volume
 total de réservations même lorsque la demande par programme s'effondre. Rapportées
-au nombre d'opérations actives, les réservations racontent l'inverse, comme le montre la
-Figure 5.2 : la corrélation passe à -0,34 avec le taux d'intérêt et à +0,44 avec la
-confiance des ménages. Tout l'axe B repose sur cette correction. Sans elle, j'aurais conclu
+au nombre d'opérations actives, les réservations racontent l'inverse. La Figure 5.2 donne
+cette série d'intensité corrigée ; sa corrélation avec le taux d'intérêt passe à -0,34 et
+celle avec la confiance des ménages à +0,44. Tout l'axe B repose sur cette correction. Sans elle, j'aurais conclu
 à l'absence d'effet de la conjoncture, et j'aurais eu tort.
 
 ![Intensité de vente, mesurée en réservations par opération active : l'effet de la remontée des taux apparaît une fois l'effet de portefeuille neutralisé](figures/fig_5_2_intensite_vente.png){width=100%}
@@ -1645,7 +1711,7 @@ SQLite et pandas constituent donc la bonne architecture à cette échelle. L'int
 est ailleurs : le chemin de montée en charge est identifié, si le périmètre devait un jour
 s'étendre à celui du groupe Nexity.
 
-### Axe A
+### Axe A — risque de dérive de marge
 
 La difficulté de l'axe A n'était pas le modèle mais la définition de la cible. Les exports
 dont je disposais sont une photographie à date, sans historique des révisions budgétaires :
@@ -1656,12 +1722,14 @@ J'ai donc mesuré la dérive par les dépassements déjà engagés, poste par po
 à terminaison sont estimées par le maximum de l'engagé et du budget de chaque poste, selon
 un principe qui se formule simplement : un dépassement engagé est acquis, et le budget
 restant sera dépensé. La variation de marge rapporte ensuite la marge ainsi recalculée à la
-marge budgétée.
+marge budgétée. Cette grandeur est appelée dans le projet la variation de marge
+« committée », par emprunt à la notion comptable de coût engagé : elle ne mesure pas une
+dérive anticipée, mais la part de dérive que les engagements déjà pris rendent acquise.
 
 Cette définition impose une précaution sur les variables explicatives, et j'y ai veillé
 dès la construction du jeu de données. Concrètement, le modèle n'utilise que le budget
 initial et les signaux commerciaux, jamais l'engagé ni le facturé, qui sont précisément ce
-qui définit la cible. Sans cette précaution, le modèle aurait « prédit » sa propre
+qui définit la cible. Sans cette précaution, le modèle aurait « prédit » sa propre
 définition.
 
 Sur le périmètre exploitable, soit les 123 opérations engagées à au moins 60 % et dont la
@@ -1671,17 +1739,17 @@ dépassement engagé. Mais 28 % franchissent le seuil de dérive matérielle, q
 Figure 5.3 donne la distribution complète et situe ce seuil, avec à droite le détail des
 opérations en dérive.
 
-![Distribution de la variation de marge « committée » sur les 123 opérations du périmètre, et seuil de dérive matérielle à -2 %](figures/fig_5_3_distribution_variation_marge.png){width=95%}
+![Distribution de la variation de marge « committée » sur les 123 opérations du périmètre, et seuil de dérive matérielle à -2 %](figures/fig_5_3_distribution_variation_marge.png){width=95%}
 
 La partie la plus utile de cet axe pour l'entreprise n'est pas un modèle appris : c'est le
 tableau descriptif des dépassements engagés en euros, par opération et par poste, calculé
-en SQL pur. C'est lui qui alimente la page « Alertes marge » de la plateforme.
+en SQL pur. C'est lui qui alimente la page « Alertes marge » de la plateforme.
 
 La modélisation vient en complément, comme score de tri. Une régression du taux de
 variation atteint un coefficient de détermination de 0,08 sur l'échantillon test. Le
 résultat est modeste, et je le présente tel quel : la structure du budget initial
 prédispose à la dérive mais ne la détermine pas, l'aléa de chantier faisant le reste. Une
-classification des opérations « à risque », c'est-à-dire dont la dérive dépasse 2 %,
+classification des opérations « à risque », c'est-à-dire dont la dérive dépasse 2 %,
 atteint un score F1, qui combine en une seule valeur la capacité à détecter les cas à
 risque et celle à ne pas en signaler à tort, de l'ordre de 0,30 à 0,34 en validation
 croisée stratifiée, c'est-à-dire
@@ -1695,7 +1763,7 @@ alimentent les niveaux d'alerte de la plateforme.
 Il faut donc lire ce dispositif pour ce qu'il est : un outil de hiérarchisation de
 l'attention, pas un oracle.
 
-### Axe B
+### Axe B — vitesse d'écoulement
 
 Budgéter les réservations de 2026 suppose de distinguer, dans le rythme de vente, ce qui
 relève de la conjoncture et ce qui relève du programme lui-même. C'est l'axe dont les
@@ -1753,7 +1821,7 @@ La limite de cet indicateur est connue et vérifiée : en début de commercialis
 potentiel n'est pas identifiable, l'ajustement pouvant alors produire n'importe quelle
 valeur. L'outil n'est donc proposé que sur les programmes suffisamment avancés.
 
-### Axe C
+### Axe C — prix du stock
 
 Repricer le stock suppose d'abord de savoir à quel prix chaque lot devrait se vendre. Le
 modèle que j'ai construit pour répondre à cette question est volontairement le plus simple
@@ -1811,13 +1879,13 @@ portage que l'objectif ne compte pas.
 Trois constats simples, obtenus avec des moyens simples, complètent le dispositif.
 
 Le premier est un moteur de recherche par similarité, construit sur les 9 688 commentaires
-libres de vente. Une requête formulée en langage courant, comme « refus de prêt banque » ou
-« remise prix hors pack », remonte les dossiers concernés. C'est un outil d'audit des
+libres de vente. Une requête formulée en langage courant, comme « refus de prêt banque » ou
+« remise prix hors pack », remonte les dossiers concernés. C'est un outil d'audit des
 remises non structurées réellement utilisable.
 
 Le deuxième porte sur les motifs de désistement, analysés par agence. Le profil obtenu
 révèle un problème de qualité de saisie plus qu'un fait commercial : à Salon-de-Provence,
-90 % des motifs sont enregistrés en « Autres motifs », rendant les désistements de cette
+90 % des motifs sont enregistrés en « Autres motifs », rendant les désistements de cette
 agence inanalysables tant que la saisie n'est pas fiabilisée.
 
 Le troisième porte sur la structure du réseau de vente, qui se révèle très concentrée. Deux
@@ -1840,17 +1908,17 @@ restreint aux 147 opérations de promotion, et aucun terme de modélisation à l
 
 La page **Vue d'ensemble**, présentée en Figure 5.8, donne la situation en quelques
 secondes : 147 opérations suivies, dont 10 en alerte et 2 à surveiller parmi les 68
-opérations en cours suffisamment engagées, 421 lots principaux en stock, un rythme récent
+opérations en cours suffisamment engagées, les 56 autres étant conformes, 421 lots principaux en stock, un rythme récent
 de 4,8 réservations par opération et par mois, pour un taux de crédit à 3,11 %.
 
-![Plateforme, page « Vue d'ensemble »](figures/fig_5_8_plateforme_vue_ensemble.png){width=100%}
+![Plateforme, page « Vue d'ensemble »](figures/fig_5_8_plateforme_vue_ensemble.png){width=100%}
 
 La page **Alertes marge**, présentée en Figure 5.9, classe les opérations par niveau
 d'alerte, le score de l'axe A étant traduit en trois niveaux. Elle affiche surtout, pour
 chaque opération, les dépassements déjà engagés en euros et les postes concernés. C'est la
 page la plus consultée, et il faut redire qu'elle repose sur du SQL et non sur un modèle.
 
-![Plateforme, page « Alertes marge » : niveaux d'alerte et dépassements engagés en euros](figures/fig_5_9_plateforme_alertes_marge.png){width=100%}
+![Plateforme, page « Alertes marge » : niveaux d'alerte et dépassements engagés en euros](figures/fig_5_9_plateforme_alertes_marge.png){width=100%}
 
 Les trois autres pages transposent les axes restants. La page **Rythme de vente** fait de
 l'axe B un simulateur : un curseur de taux 2026 produit une phrase de résultat fondée sur
@@ -1926,19 +1994,15 @@ exactement de la même nature que le travail décrit aux chapitres 2 et 3. Ce so
 de structure, faits pour rendre possible une analyse à venir.
 
 ::: transition
-Les cinq premiers chapitres de ce mémoire ont exposé le contexte, puis les quatre missions de
-l'année, chacune avec ses résultats et ses limites. Ils l'ont fait mission par mission, dans
-l'ordre où elles se sont présentées.
+Une succession de récits de mission ne fait pourtant pas un bilan. Les questions que pose un
+jury à un mémoire professionnel sont d'un autre ordre : comment ces projets ont-ils été
+conduits, avec quelles méthodes et quelles technologies, comment ai-je su que le résultat
+était bon, et qu'est-ce qui n'a pas fonctionné ? Elles ne se traitent pas au fil de chaque
+chapitre sans l'alourdir.
 
-Néanmoins, une succession de récits ne fait pas un bilan. Les questions que pose un jury à un
-mémoire professionnel sont d'un autre ordre : comment ces projets ont-ils été conduits, avec
-quelles méthodes et quelles technologies, comment ai-je su que le résultat était bon, et
-qu'est-ce qui n'a pas fonctionné ? Cependant, ces questions ne se traitent pas au fil de
-chaque chapitre sans les alourdir.
-
-Le chapitre suivant leur est donc consacré. Il prend de la hauteur sur les quatre missions et
-les relit transversalement, sous l'angle de la conduite de projet, des outils, de
-l'évaluation des résultats et des difficultés rencontrées.
+Le chapitre suivant leur est donc consacré. Il relit transversalement les quatre missions,
+sous l'angle de la conduite de projet, des outils, de l'évaluation des résultats et des
+difficultés rencontrées.
 :::
 
 
@@ -1991,8 +2055,8 @@ de 200 lignes, homogènes en nature.
 
 Cette méthode a une propriété que j'ai appris à apprécier : **le coût d'une erreur y est
 proportionnel au palier où on la découvre**. Une règle non comprise coûte quelques minutes sur
-trois opérations, une demi-journée sur douze, et une reprise complète du fichier sur deux
-cents. Toute la valeur de la progression par paliers tient dans ce rapport.
+trois opérations, une demi-journée sur douze, et une reprise complète du fichier sur la
+totalité du périmètre. Toute la valeur de la progression par paliers tient dans ce rapport.
 
 Elle a aussi une limite qu'il faut nommer. Elle est lente à démarrer, et elle produit peu de
 livrable visible pendant les premières semaines. Il faut accepter de rendre compte d'un
@@ -2024,7 +2088,7 @@ cosmétique : elle a changé ce que l'écran affiche, donc ce sur quoi l'utilisa
 Un même arbitrage est revenu dans les quatre missions, sous des formes différentes, et c'est
 le premier enseignement transversal de l'année.
 
-Sur la migration des opérations, il a pris la forme des « coquilles vides » : livrer une
+Sur la migration des opérations, il a pris la forme des « coquilles vides » : livrer une
 structure incomplète pour débloquer la facturation, plutôt qu'un système complet trop tard.
 Sur la reprise des tiers, il a pris la forme du traitement manuel des cas particuliers :
 écrire une règle pour deux cas coûte plus cher que de les traiter à la main. Sur le
@@ -2049,7 +2113,7 @@ distinguant ce qui relève de l'outil de ce qui relève de la méthode.
 | Mission | Technologies | Méthodes |
 |:------------|:-------------------------------|:---------------------------------|
 | Migration des opérations | Excel et RechercheX, MyReport Builder, API REST de Salvia, module DirectAPI | Rétro-ingénierie du modèle cible par les codes d'erreur, mapping par tables de correspondance, validation itérative par paliers |
-| Reprise des tiers | Excel, environ 60 000 cellules de formules, CSV, API REST, JSON Patch, Postman | Déduplication par clés d'unicité différenciées, exclusion par rapprochement, numérotation séquentielle par destination |
+| Reprise des tiers | Excel, environ 60 000 cellules de formules, CSV, API REST, JSON Patch, Postman | Déduplication par clés d'unicité différenciées, exclusion par rapprochement, numérotation séquentielle par destination |
 | Reporting et SSO | MyReport, SQL en lecture, annuaire d'entreprise | Modélisation dynamique par calcul de rang, accompagnement utilisateur |
 | Copilote Financier | Python et pandas, SQLite en schéma en étoile, PySpark évalué, Streamlit | Régression linéaire et logistique, arbre, forêt aléatoire, séparateur à vaste marge, modèle à effets aléatoires sur panel, régression dynamique à erreurs ARIMA, ajustement logistique, recherche par similarité, optimisation sous contrainte |
 
@@ -2108,7 +2172,7 @@ intégré à la feuille pivot affichait en permanence les valeurs attendues, et 
 impose de les vérifier avant tout export. Sur le projet analytique, la réconciliation des
 deux exports budgétaires a montré des totaux identiques à l'euro près sur les 118 opérations
 jointes, et un contrôle croisé des agrégats par deux moteurs indépendants a retrouvé les
-mêmes 1 561,8 M€ de dépenses budgétées et 1 754,8 M€ de recettes.
+mêmes 1 561,8 M€ de dépenses budgétées et 1 754,8 M€ de recettes.
 
 Le deuxième régime est celui de la **validation statistique**. Il s'applique aux modèles, où la
 question posée est : le résultat tient-il hors de l'échantillon sur lequel il a été construit ?
@@ -2120,7 +2184,8 @@ lorsque la référence majoritaire, elle, ne détecte rien du tout.
 
 Le troisième régime est celui de la **recette par l'usage**. Il s'applique aux livrables
 destinés à un utilisateur, où la question posée est : la personne s'en sert-elle, et pour la
-bonne chose ? Sur le reporting juridique, c'est le service demandeur qui valide. Sur
+bonne chose ? Sur le reporting juridique, le régime de preuve retenu est la validation par le service
+demandeur, seul juge de la conformité de la règle appliquée. Sur
 l'application, chaque page a été vérifiée par un cadre de test automatisé, y compris aux
 bornes des curseurs et sur les sélections vides, mais c'est le retour de l'entreprise sur le
 vocabulaire des écrans qui a constitué la véritable recette.
@@ -2130,7 +2195,7 @@ vocabulaire des écrans qui a constitué la véritable recette.
 Il serait malhonnête de présenter ce dispositif comme complet, et je préfère en exposer les
 angles morts.
 
-La réconciliation prouve qu'une donnée est arrivée, pas qu'elle est juste. Les 1 434 tiers
+La réconciliation prouve qu'une donnée est arrivée, pas qu'elle est juste. Les 1 434 tiers
 créés correspondent exactement à ce que le fichier de travail prévoyait, mais si une clé
 d'unicité était mal choisie, l'erreur passerait le contrôle sans être vue, puisque les
 compteurs, eux, tomberaient juste.
@@ -2179,7 +2244,7 @@ projet analytique, et aucune méthode ne la contourne : on ne peut pas apprendre
 d'une dérive sur une image fixe.
 
 La deuxième est la **qualité de saisie**. Le cas le plus parlant est celui d'une agence dont
-90 % des motifs de désistement sont enregistrés en « Autres motifs », ce qui rend ses
+90 % des motifs de désistement sont enregistrés en « Autres motifs », ce qui rend ses
 désistements inanalysables tant que la saisie n'est pas fiabilisée. Ce constat n'était pas
 attendu, et il a produit une recommandation opérationnelle immédiate.
 
@@ -2216,9 +2281,9 @@ Le tableau suivant récapitule ce qui a été livré et se trouve aujourd'hui en
 | Livrable | Volume ou périmètre |
 |:-------------------------------------------------|:----------------------------|
 | Opérations immobilières créées dans SPO | 283 |
-| Tiers créés dans SPO, avec leurs objets rattachés | 1 434 |
+| Tiers créés dans SPO, avec leurs objets rattachés | 1 434 |
 | Adresses, courriels et téléphones importés | 553, 469 et 538 |
-| Représentants des couples et des sociétés | 1 871 |
+| Représentants des couples et des sociétés | 1 871 |
 | Coordonnées ajoutées par requête API | 872 requêtes, toutes passées |
 | Documentation interne produite | Séquence d'injection, procédure d'import des tiers |
 | Reportings maintenus et faits évoluer | Sur l'ensemble des services demandeurs |
@@ -2242,7 +2307,7 @@ condition d'écrire ce qu'on laisse de côté. Le second est que la nature du li
 le régime de preuve, et qu'appliquer à une reprise de données les critères d'un modèle
 statistique, ou l'inverse, revient à ne rien prouver du tout.
 
-Néanmoins, ces enseignements restent des enseignements de méthode. Un mémoire professionnel
+Ces enseignements restent pourtant des enseignements de méthode. Un mémoire professionnel
 attend aussi une position sur le métier lui-même : ce qu'est un data scientist dans une
 entreprise qui n'a pas d'équipe data, ce que cette année m'a appris de la pratique
 professionnelle, et ce que je compte en faire.
@@ -2314,7 +2379,7 @@ en SQL. Le modèle statistique intervient en complément, pour hiérarchiser l'a
 le fait avec des performances modestes que le chapitre 5 expose sans les farder.
 
 Je ne tire pas de ce constat que la modélisation serait inutile. J'en tire deux choses plus
-précises. La première est que **la valeur d'un projet data ne se mesure pas au niveau de
+précises. La première est que **la valeur d'un projet data ne se mesure pas au degré de
 sophistication des méthodes employées**, mais à l'écart entre ce que l'entreprise savait avant
 et après. À cette aune, le résultat le plus utile de l'année est peut-être le constat sur la
 qualité de saisie d'une agence, obtenu avec des moyens élémentaires.
@@ -2388,7 +2453,7 @@ n'est pas le mien mais celui de l'entreprise.
 
 ### Achever la reprise et historiser les données
 
-La migration vers SPO reste prioritaire. La stratégie des « coquilles vides », si elle a
+La migration vers SPO reste prioritaire. La stratégie des « coquilles vides », si elle a
 sauvé le démarrage de la facturation, doit maintenant laisser place à une reprise
 exhaustive : intégration des historiques budgétaires complets, vérifications approfondies de
 l'intégrité des données par contrôle de cohérence comptable, et phases de tests finaux avant
@@ -2457,10 +2522,19 @@ m'a donné pour l'exercer un terrain que je connais désormais : des cycles long
 opérations portées par des sociétés dédiées, une gestion où la moindre définition de marge
 engage des montants importants.
 
-> **À compléter — projet immédiat.** Préciser ici, en deux ou trois phrases, l'intention à
-> l'issue du diplôme : poursuite au sein du groupe et sur quel périmètre, recherche d'un
-> premier poste et dans quel type de structure, ou poursuite d'études. C'est le seul élément
-> de ce chapitre que je suis seule à pouvoir écrire, et le jury l'attendra.
+À court terme, ma priorité est de conduire à son terme ce que cette année a engagé. La
+reprise des historiques budgétaires, la bascule définitive vers SPO et l'adaptation des outils
+à l'infrastructure du groupe Nexity forment un ensemble cohérent, sur lequel ma connaissance
+du modèle de données constitue un avantage que personne d'autre n'a aujourd'hui dans
+l'entreprise. C'est donc au sein du groupe que je souhaite poursuivre en premier lieu, sur le
+périmètre données et système d'information.
+
+À moyen terme, je vise un poste d'ingénieure données orientée aide à la décision, dans une
+structure où la donnée de gestion est un enjeu réel et non un sujet d'affichage. Deux types
+d'organisations m'intéressent pour des raisons opposées et complémentaires : les entreprises
+de taille intermédiaire qui n'ont pas encore d'équipe data constituée, où le poste couvre
+toute la chaîne comme cette année, et les directions data structurées, où je pourrais combler
+la lacune que j'identifie plus bas en travaillant enfin à plusieurs sur un même chantier.
 
 ### Les compétences qu'il me reste à consolider
 
@@ -2490,7 +2564,7 @@ je ne le croyais, et qu'un résultat livré sans ses limites est un résultat da
 également exposé les trois chantiers qui se poursuivent après mon départ et le positionnement
 professionnel que je vise.
 
-Néanmoins, il reste à refermer l'ensemble. La conclusion qui suit reprend le fil des sept
+Il reste à refermer l'ensemble. La conclusion qui suit reprend le fil des sept
 chapitres et revient sur la thèse annoncée en introduction, pour dire dans quelle mesure
 l'année l'a effectivement démontrée.
 :::
@@ -2510,7 +2584,7 @@ Grimmo vers l'ERP SPO m'a confrontée à la réalité rugueuse du terrain. Il ne
 pas simplement de transférer des données, mais de rétro-concevoir un modèle dont les
 règles n'étaient pas documentées, de résoudre des problèmes d'intégrité référentielle
 complexes avec la gestion des identifiants dynamiques et du versionnement, et de faire
-preuve d'agilité stratégique. L'adoption de la méthode des « coquilles vides » pour
+preuve d'agilité stratégique. L'adoption de la méthode des « coquilles vides » pour
 sécuriser le démarrage de la facturation illustre cette capacité à adapter la technique
 aux impératifs métiers. En parallèle, j'ai maintenu un haut niveau de service sur le
 reporting, illustré par la mise en œuvre d'une règle de gestion juridique complexe malgré
@@ -2518,8 +2592,9 @@ les contraintes de nos outils, tout en participant à la sécurisation du systè
 d'information via le déploiement du SSO.
 
 Le second semestre a prolongé ce travail, puis l'a valorisé. La reprise des tiers a achevé
-de constituer le socle commercial du nouvel ERP, en créant 1 434 clients acquéreurs sans
-doublon, et elle a réalisé l'interopérabilité entre l'ERP et le CRM qui restait à faire.
+de constituer le socle commercial du nouvel ERP, en créant 1 434 clients acquéreurs sans
+doublon détecté par les trois clés d'unicité retenues, et elle a fait le premier pas vers
+l'interopérabilité entre l'ERP et le CRM qui restait à construire.
 Le Copilote Financier a ensuite exploité ce socle pour outiller la direction financière
 sur trois questions de gestion, et il l'a fait de bout en bout, de la compréhension des
 exports jusqu'à une application que les contrôleurs de gestion ouvrent eux-mêmes.
@@ -2551,31 +2626,22 @@ chapitre 7.
 
 # Bibliographie {-}
 
-[1] Pappers. (2025). *Consultation d'informations légales et financières des entreprises.*
-[En ligne]. Disponible sur : <https://www.pappers.fr/>.
-
-[2] Michael Page. (2025). *Fiche métier : Gestionnaire d'applications.* [En ligne].
+[1] Michael Page. (2025). *Fiche métier : gestionnaire d'applications.* [En ligne].
 Disponible sur :
-<https://www.michaelpage.fr/advice/métiers/systèmes-dinformation/fiche-métier-gestionnaire-dapplications>.
+<https://www.michaelpage.fr/advice/m%C3%A9tiers/syst%C3%A8mes-dinformation/fiche-m%C3%A9tier-gestionnaire-d%E2%80%99applications>.
 
-[3] Salvia Développement. (2025). *Site officiel de l'éditeur de la solution SPO.*
-[En ligne]. Disponible sur : <https://www.salviadeveloppement.fr/>.
+[2] Salvia Développement. (2025). *Documentation de l'API et site officiel de l'éditeur de
+la solution SPO.* [En ligne]. Disponible sur : <https://www.salviadeveloppement.fr/>.
 
-[4] Groupe Angelotti. (2023). *Notre engagement environnemental.* [En ligne]. Disponible
-sur : <https://www.angelotti.fr/le-groupe/notre-engagement-environnemental>.
-
-[5] Scribbr. (2025). *Assistance rédactionnelle et technique.* [En ligne]. Disponible sur :
-<https://www.scribbr.fr/>.
-
-[6] Bryan, P. et Nottingham, M. (2013). *JavaScript Object Notation (JSON) Patch,* RFC 6902,
+[3] Bryan, P. et Nottingham, M. (2013). *JavaScript Object Notation (JSON) Patch,* RFC 6902,
 Internet Engineering Task Force. [En ligne]. Disponible sur :
 <https://www.rfc-editor.org/rfc/rfc6902>.
 
-[7] Banque centrale européenne. *Taux d'intérêt des crédits à l'habitat en France, série
+[4] Banque centrale européenne. *Taux d'intérêt des crédits à l'habitat en France, série
 mensuelle.* [En ligne]. Disponible sur : <https://data.ecb.europa.eu/>.
 
-[8] Eurostat. *Indicateur de confiance des ménages.* [En ligne]. Disponible sur :
+[5] Eurostat. *Indicateur de confiance des ménages.* [En ligne]. Disponible sur :
 <https://ec.europa.eu/eurostat>.
 
-[9] Etalab. *API Découpage administratif, référentiel des communes françaises.* [En ligne].
+[6] Etalab. *API Découpage administratif, référentiel des communes françaises.* [En ligne].
 Disponible sur : <https://geo.api.gouv.fr/>.

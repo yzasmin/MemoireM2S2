@@ -47,8 +47,8 @@ de 200 lignes, homogènes en nature.
 
 Cette méthode a une propriété que j'ai appris à apprécier : **le coût d'une erreur y est
 proportionnel au palier où on la découvre**. Une règle non comprise coûte quelques minutes sur
-trois opérations, une demi-journée sur douze, et une reprise complète du fichier sur deux
-cents. Toute la valeur de la progression par paliers tient dans ce rapport.
+trois opérations, une demi-journée sur douze, et une reprise complète du fichier sur la
+totalité du périmètre. Toute la valeur de la progression par paliers tient dans ce rapport.
 
 Elle a aussi une limite qu'il faut nommer. Elle est lente à démarrer, et elle produit peu de
 livrable visible pendant les premières semaines. Il faut accepter de rendre compte d'un
@@ -80,7 +80,7 @@ cosmétique : elle a changé ce que l'écran affiche, donc ce sur quoi l'utilisa
 Un même arbitrage est revenu dans les quatre missions, sous des formes différentes, et c'est
 le premier enseignement transversal de l'année.
 
-Sur la migration des opérations, il a pris la forme des « coquilles vides » : livrer une
+Sur la migration des opérations, il a pris la forme des « coquilles vides » : livrer une
 structure incomplète pour débloquer la facturation, plutôt qu'un système complet trop tard.
 Sur la reprise des tiers, il a pris la forme du traitement manuel des cas particuliers :
 écrire une règle pour deux cas coûte plus cher que de les traiter à la main. Sur le
@@ -105,7 +105,7 @@ distinguant ce qui relève de l'outil de ce qui relève de la méthode.
 | Mission | Technologies | Méthodes |
 |:------------|:-------------------------------|:---------------------------------|
 | Migration des opérations | Excel et RechercheX, MyReport Builder, API REST de Salvia, module DirectAPI | Rétro-ingénierie du modèle cible par les codes d'erreur, mapping par tables de correspondance, validation itérative par paliers |
-| Reprise des tiers | Excel, environ 60 000 cellules de formules, CSV, API REST, JSON Patch, Postman | Déduplication par clés d'unicité différenciées, exclusion par rapprochement, numérotation séquentielle par destination |
+| Reprise des tiers | Excel, environ 60 000 cellules de formules, CSV, API REST, JSON Patch, Postman | Déduplication par clés d'unicité différenciées, exclusion par rapprochement, numérotation séquentielle par destination |
 | Reporting et SSO | MyReport, SQL en lecture, annuaire d'entreprise | Modélisation dynamique par calcul de rang, accompagnement utilisateur |
 | Copilote Financier | Python et pandas, SQLite en schéma en étoile, PySpark évalué, Streamlit | Régression linéaire et logistique, arbre, forêt aléatoire, séparateur à vaste marge, modèle à effets aléatoires sur panel, régression dynamique à erreurs ARIMA, ajustement logistique, recherche par similarité, optimisation sous contrainte |
 
@@ -164,7 +164,7 @@ intégré à la feuille pivot affichait en permanence les valeurs attendues, et 
 impose de les vérifier avant tout export. Sur le projet analytique, la réconciliation des
 deux exports budgétaires a montré des totaux identiques à l'euro près sur les 118 opérations
 jointes, et un contrôle croisé des agrégats par deux moteurs indépendants a retrouvé les
-mêmes 1 561,8 M€ de dépenses budgétées et 1 754,8 M€ de recettes.
+mêmes 1 561,8 M€ de dépenses budgétées et 1 754,8 M€ de recettes.
 
 Le deuxième régime est celui de la **validation statistique**. Il s'applique aux modèles, où la
 question posée est : le résultat tient-il hors de l'échantillon sur lequel il a été construit ?
@@ -176,7 +176,8 @@ lorsque la référence majoritaire, elle, ne détecte rien du tout.
 
 Le troisième régime est celui de la **recette par l'usage**. Il s'applique aux livrables
 destinés à un utilisateur, où la question posée est : la personne s'en sert-elle, et pour la
-bonne chose ? Sur le reporting juridique, c'est le service demandeur qui valide. Sur
+bonne chose ? Sur le reporting juridique, le régime de preuve retenu est la validation par le service
+demandeur, seul juge de la conformité de la règle appliquée. Sur
 l'application, chaque page a été vérifiée par un cadre de test automatisé, y compris aux
 bornes des curseurs et sur les sélections vides, mais c'est le retour de l'entreprise sur le
 vocabulaire des écrans qui a constitué la véritable recette.
@@ -186,7 +187,7 @@ vocabulaire des écrans qui a constitué la véritable recette.
 Il serait malhonnête de présenter ce dispositif comme complet, et je préfère en exposer les
 angles morts.
 
-La réconciliation prouve qu'une donnée est arrivée, pas qu'elle est juste. Les 1 434 tiers
+La réconciliation prouve qu'une donnée est arrivée, pas qu'elle est juste. Les 1 434 tiers
 créés correspondent exactement à ce que le fichier de travail prévoyait, mais si une clé
 d'unicité était mal choisie, l'erreur passerait le contrôle sans être vue, puisque les
 compteurs, eux, tomberaient juste.
@@ -235,7 +236,7 @@ projet analytique, et aucune méthode ne la contourne : on ne peut pas apprendre
 d'une dérive sur une image fixe.
 
 La deuxième est la **qualité de saisie**. Le cas le plus parlant est celui d'une agence dont
-90 % des motifs de désistement sont enregistrés en « Autres motifs », ce qui rend ses
+90 % des motifs de désistement sont enregistrés en « Autres motifs », ce qui rend ses
 désistements inanalysables tant que la saisie n'est pas fiabilisée. Ce constat n'était pas
 attendu, et il a produit une recommandation opérationnelle immédiate.
 
@@ -272,9 +273,9 @@ Le tableau suivant récapitule ce qui a été livré et se trouve aujourd'hui en
 | Livrable | Volume ou périmètre |
 |:-------------------------------------------------|:----------------------------|
 | Opérations immobilières créées dans SPO | 283 |
-| Tiers créés dans SPO, avec leurs objets rattachés | 1 434 |
+| Tiers créés dans SPO, avec leurs objets rattachés | 1 434 |
 | Adresses, courriels et téléphones importés | 553, 469 et 538 |
-| Représentants des couples et des sociétés | 1 871 |
+| Représentants des couples et des sociétés | 1 871 |
 | Coordonnées ajoutées par requête API | 872 requêtes, toutes passées |
 | Documentation interne produite | Séquence d'injection, procédure d'import des tiers |
 | Reportings maintenus et faits évoluer | Sur l'ensemble des services demandeurs |
@@ -298,7 +299,7 @@ condition d'écrire ce qu'on laisse de côté. Le second est que la nature du li
 le régime de preuve, et qu'appliquer à une reprise de données les critères d'un modèle
 statistique, ou l'inverse, revient à ne rien prouver du tout.
 
-Néanmoins, ces enseignements restent des enseignements de méthode. Un mémoire professionnel
+Ces enseignements restent pourtant des enseignements de méthode. Un mémoire professionnel
 attend aussi une position sur le métier lui-même : ce qu'est un data scientist dans une
 entreprise qui n'a pas d'équipe data, ce que cette année m'a appris de la pratique
 professionnelle, et ce que je compte en faire.

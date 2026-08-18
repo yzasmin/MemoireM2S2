@@ -34,9 +34,8 @@ réalisation des demandes de reporting pour les différents services du groupe. 
 mission consiste à traduire des besoins métiers parfois abstraits en indicateurs visuels
 exploitables et fiables.
 
-Le travail commence rarement par une spécification. Il commence par une phrase du type «
-on n'arrive pas à savoir combien on a facturé sur cette opération », ou par un tableau que
-quelqu'un refait à la main tous les mois. La première partie du travail consiste donc à
+Le travail commence rarement par une spécification. Il commence par une gêne exprimée en
+réunion, ou par un tableau que quelqu'un refait à la main tous les mois. La première partie du travail consiste donc à
 reformuler la demande jusqu'à ce qu'elle soit calculable : de quelles lignes parle-t-on
 exactement, sur quelle période, et que fait-on des cas limites ? Cette reformulation est
 la partie du reporting que je sous-estimais en arrivant, et c'est celle qui décide de
@@ -56,31 +55,31 @@ lorsqu'il faut l'automatiser dans un outil décisionnel sans modifier l'architec
 données.
 
 La difficulté tient à ce que la règle ne porte pas sur une ligne, mais sur la position
-d'une ligne dans une séquence. Aucune colonne de la base ne contient l'information « c'est
-la deuxième commande de ce client sur ce lot » : cette information n'existe que si on la
+d'une ligne dans une séquence. Aucune colonne de la base ne contient l'information « c'est
+la deuxième commande de ce client sur ce lot » : cette information n'existe que si on la
 calcule, et elle change dès qu'une commande est ajoutée ou annulée.
 
 ### Contraintes techniques et modélisation dynamique
 
-Mon travail a consisté à trouver la manière la plus optimale d'implémenter cette logique
-avec nos logiciels existants. En effet, je faisais face à des contraintes techniques
-fortes qui limitaient mes options :
+Mon travail a consisté à trouver la manière la plus efficace d'implémenter cette logique
+avec nos logiciels existants. En effet, je faisais face à des contraintes techniques fortes
+qui limitaient mes options :
 
-1. **Pas de droits d'écriture sur la base.** Je ne possède pas les droits nécessaires pour
+1. **Pas de droits d'écriture sur la base.** Je ne possédais pas les droits nécessaires pour
    créer des champs de statut directement dans la base de données SQL, ce qui interdisait la
    solution la plus simple, à savoir matérialiser le statut au moment de l'enregistrement de
    la commande.
 2. **Pas de colonne statique dans les fichiers sources.** Je ne pouvais pas non plus ajouter
-   de colonnes dans les fichiers Excel sources, car ces derniers sont écrasés à chaque mise à
-   jour des données.
+   de colonnes dans les fichiers Excel sources, car ces derniers étaient écrasés à chaque
+   mise à jour des données.
 
-Ces deux contraintes se conjuguent pour interdire toute solution qui consisterait à
+Ces deux contraintes se conjuguaient pour interdire toute solution qui aurait consisté à
 *stocker* le résultat. Il fallait donc concevoir une méthode de calcul dynamique.
 L'objectif était de créer un algorithme au sein de MyReport qui, lors de la génération du
 tableau, effectue un traitement en temps réel. Le système doit d'abord identifier les
 opérations et les lots, puis classer leurs commandes par ordre chronologique. Il attribue
 ensuite un rang à chaque commande et applique une condition logique : si le rang est
-impair, le statut est défini comme « Payant », et s'il est pair, il devient « Gratuit ».
+impair, le statut est défini comme « Payant », et s'il est pair, il devient « Gratuit ».
 La Figure 4.1 représente cette chaîne de calcul.
 
 ![La règle de facturation juridique traduite en calcul de rang, exécuté à chaque génération du tableau](figures/fig_4_1_regle_facturation.png){width=100%}
@@ -175,10 +174,10 @@ juridique a particulièrement mis en exergue ma capacité à contourner des limi
 techniques par une modélisation logique rigoureuse, transformant une contrainte d'outil en
 une solution pérenne pour l'entreprise.
 
-Néanmoins, ces solutions restent des contournements, et il faut le reconnaître. Une règle
+Ces solutions restent pourtant des contournements, et il faut le reconnaître. Une règle
 recalculée à chaque affichage tient tant que personne d'autre n'en a besoin ; un tableau
 de bord construit sur un fichier écrasé chaque nuit tient tant que le format ne change
-pas. Cependant, ces contournements auront rendu un service précis : ils ont maintenu le
+pas. Ces contournements auront néanmoins rendu un service précis : ils ont maintenu le
 système décisionnel en état de marche pendant les douze mois qu'a duré la reconstruction
 du socle.
 

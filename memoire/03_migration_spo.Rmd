@@ -10,7 +10,7 @@
 - 2.2 Les défis techniques majeurs : dépendances et identifiants
     - 2.2.1 La gestion des dépendances hiérarchiques
     - 2.2.2 La complexité algorithmique des identifiants et du versionnement
-- 2.3 Adaptation stratégique : le déploiement en « coquilles vides »
+- 2.3 Adaptation stratégique : le déploiement en « coquilles vides »
     - 2.3.1 Une approche agile par priorisation
     - 2.3.2 Gains opérationnels et lissage de la charge
 - 2.4 Bilan de la migration à la fin du premier semestre
@@ -53,13 +53,13 @@ d'appropriation et une phase opérationnelle d'industrialisation.
 
 Avant de pouvoir manipuler les données de masse, il était indispensable de maîtriser le
 modèle de données cible. Ma première tâche a consisté à analyser en profondeur la
-documentation technique de l'API de Salvia. L'enjeu était de comprendre la structure des
+documentation technique de l'API de Salvia [2]. L'enjeu était de comprendre la structure des
 objets attendus par l'ERP et leurs interdépendances.
 
 La Figure 2.1 montre l'interface de SPO sur le dossier d'une opération. On y lit directement
-le modèle de données : une opération est un conteneur, auquel se rattachent son
-identification, ses intervenants, ses versions, ses tranches, son budget, sa
-commercialisation et sa trésorerie. Cette arborescence n'est pas une commodité d'affichage,
+le modèle de données : une opération est un conteneur, auquel se rattachent notamment
+son identification, ses indicateurs, son foncier, ses intervenants, ses versions, ses
+tranches, son budget, son planning, sa commercialisation et sa trésorerie. Cette arborescence n'est pas une commodité d'affichage,
 c'est la structure même que l'API attend, et la comprendre était le préalable à toute
 injection.
 
@@ -70,6 +70,13 @@ d'injection final à ce stade, j'ai testé manuellement les différents endpoint
 terminaison), pour décortiquer la mécanique de création d'une donnée. Cette étape m'a permis
 de valider quels champs étaient obligatoires et de comprendre la logique séquentielle imposée
 par le logiciel.
+
+Deux informations distinctes sont sorties de ces tests, et il est utile de les séparer. La
+première tient au contenu de chaque objet : quels champs l'ERP exige pour accepter une
+création, et lesquels il tolère vides. La documentation de l'éditeur les décrit, mais la
+description reste théorique tant qu'on n'a pas vu le service la refuser. La seconde tient à
+l'enchaînement des objets entre eux, c'est-à-dire à l'ordre dans lequel il faut les créer ;
+elle n'était pas documentée du tout, et c'est elle qui a occupé la suite du travail.
 
 Cette phase peut sembler improductive : elle ne crée aucune donnée et ne produit aucun
 livrable visible. Je la considère pourtant comme la plus rentable de tout le projet. Chaque
@@ -84,7 +91,7 @@ d'import, qui permet le paramétrage des flux et le suivi des injections, est pr
 Figure 2.2. Mon rôle a été de construire l'intégralité du pipeline d'alimentation de cet
 outil.
 
-![L'interface utilisateur du module DirectAPI, ici sur la ressource « Tiers »](figures/fig_2_2_directapi.png){width=78%}
+![L'interface utilisateur du module DirectAPI, ici sur la ressource « Tiers »](figures/fig_2_2_directapi.png){width=78%}
 
 Concrètement, j'ai conçu des maquettes d'injection Excel complexes, servant de pont entre
 l'ancien et le nouveau système. Ce pipeline de données se décompose en trois étapes clés :
@@ -97,12 +104,39 @@ l'ancien et le nouveau système. Ce pipeline de données se décompose en trois 
    paramétrage extraites de SPO ou sur des fichiers de mapping que j'ai constitués.
 3. **Chargement** : les maquettes finalisées étaient ensuite injectées via DirectAPI.
 
+L'étape de transformation mérite qu'on s'y arrête, car c'est celle qui a demandé le plus de
+travail et celle dont dépendait la validité de tout le reste. Mapper un champ n'est pas le
+renommer. Une valeur venue de Grimmo n'entre dans SPO que si elle appartient à la
+nomenclature que le nouveau système reconnaît : un libellé de poste budgétaire, un type de
+tranche, une nature d'opération y sont des valeurs contrôlées, et non du texte libre. Le
+travail a donc consisté, champ par champ, à établir la correspondance entre ce que l'ancien
+système contenait et ce que le nouveau accepte.
+
+Ces correspondances n'ont pas toutes la même origine, et la distinction a des conséquences
+pratiques. Certaines proviennent de tables de paramétrage extraites de SPO : ce sont les
+listes de valeurs que l'ERP tient lui-même, donc des références sûres, qu'il suffit
+d'interroger. D'autres, en revanche, sont des fichiers de mapping que j'ai constitués, parce
+qu'aucune table ne les fournissait : la mise en regard des libellés de l'ancien système avec
+ceux du nouveau relevait alors d'un arbitrage, tranché avec les services concernés puis
+consigné. La différence est importante au moment de rendre des comptes : dans le premier cas,
+une divergence est une erreur de lecture ; dans le second, c'est une décision qu'il faut
+pouvoir justifier.
+
+Le choix d'Excel comme moteur de transformation, plutôt qu'un script, découle de l'arbitrage
+exposé plus haut. La fonction RechercheX y joue exactement le rôle d'une jointure : elle va
+chercher, dans la table de correspondance, la valeur cible associée à la valeur source. Sa
+vertu, dans ce contexte, est d'être lisible par les personnes qui connaissent le métier et
+non le code. Lorsqu'un poste budgétaire ressortait mal traduit, la responsable concernée
+pouvait ouvrir la maquette, voir la formule et pointer la ligne fautive de la table de
+correspondance. Un script aurait produit le même résultat, mais aurait déplacé la
+vérification vers moi seule.
+
 Pour sécuriser ce processus, j'ai appliqué une méthode de validation itérative : nous avons
 d'abord migré 3 opérations pilotes, puis un lot de 12, afin de corriger les éventuels rejets
 avant de lancer la migration de masse. Cette progression par paliers a une vertu que je n'ai
 mesurée qu'après coup : elle rend les erreurs lisibles. Sur trois opérations, un rejet
-s'analyse en quelques minutes ; sur deux cents, les messages se mélangent et il devient
-difficile de savoir quelle règle a été violée.
+s'analyse en quelques minutes ; sur plusieurs dizaines, les messages se mélangent et il
+devient difficile de savoir quelle règle a été violée.
 
 ## Les défis techniques majeurs : dépendances et identifiants
 
@@ -121,10 +155,10 @@ J'ai découvert cette logique empiriquement, en analysant les codes d'erreur ren
 l'API lors de mes premiers tests d'injection. Il est apparu qu'il fallait respecter une
 séquence de création immuable :
 
-1. Création de l'Opération (le conteneur principal).
-2. Création des Tranches de Travaux.
-3. Création des Tranches Commerciales.
-4. Création du Budget associé.
+1. Création de l'opération, le conteneur principal.
+2. Création des tranches de travaux.
+3. Création des tranches commerciales.
+4. Création du budget associé.
 
 La Figure 2.3 représente cette séquence et les dépendances qu'elle traduit. Toute tentative
 d'injection ne respectant pas cet ordre se soldait par un échec, le système ne trouvant pas
@@ -133,11 +167,21 @@ l'objet parent nécessaire.
 ![La séquence d'injection imposée par l'intégrité référentielle de l'ERP](figures/fig_2_3_sequence_injection.png){width=95%}
 
 Face à ce manque de clarté initial, j'ai pris l'initiative de rédiger une documentation
-interne. Ce document, cartographiant ces étapes et les prérequis de chaque objet, sert de
-guide de référence, permettant d'éviter les erreurs de séquencement lors des phases de
-reprise ultérieures. C'est le premier livrable écrit de mon année qui n'était pas un fichier
-de données, et c'est celui qui a le plus servi aux autres : la reprise des tiers, exposée au
-chapitre 3, s'est appuyée directement dessus.
+interne. Ce document cartographie les étapes de la séquence et les prérequis de chaque objet,
+c'est-à-dire, pour chaque type de donnée à créer, ce qui doit exister avant lui. Il fixe donc
+par écrit une connaissance qui n'existait jusque-là que sous la forme de codes d'erreur
+interprétés, et il la rend transmissible : un guide de référence permettant d'éviter les
+erreurs de séquencement lors des phases de reprise ultérieures.
+
+Rédiger cette note n'était pas prévu au départ, et je ne l'ai pas fait par goût de la
+formalisation. Je l'ai fait parce que j'avais constaté que je redécouvrais deux fois la même
+contrainte, à quelques jours d'intervalle, faute de l'avoir notée. C'est le premier livrable
+écrit de mon année qui n'était pas un fichier de données, et c'est celui qui a le plus servi
+aux autres : la reprise des tiers, exposée au chapitre 3, s'est appuyée directement dessus,
+et n'a pas eu à refaire le travail de rétro-ingénierie. Cet épisode a modifié ma façon de
+travailler pour le reste de l'année. Une contrainte technique découverte empiriquement n'a de
+valeur, pour l'entreprise, que si elle est écrite quelque part ; sinon elle reste attachée à
+la personne qui l'a trouvée, et disparaît avec elle.
 
 ### La complexité algorithmique des identifiants et du versionnement
 
@@ -172,7 +216,7 @@ parfaitement légitime, mais qui rend impossible toute écriture naïve. Compren
 derrière la contrainte est ce qui permet de la contourner proprement plutôt que de lutter
 contre elle.
 
-## Adaptation stratégique : le déploiement en « coquilles vides »
+## Adaptation stratégique : le déploiement en « coquilles vides »
 
 Face aux complexités techniques inhérentes à la gestion des identifiants et au versionnement,
 et compte tenu des délais stricts imposés par la direction, nous avons été confrontés à un
@@ -186,7 +230,7 @@ encore intégralement reconstitué.
 
 ### Une approche agile par priorisation
 
-Nous avons donc décidé d'adopter une stratégie de déploiement dite en « coquilles vides ».
+Nous avons donc décidé d'adopter une stratégie de déploiement dite en « coquilles vides ».
 Cette approche a consisté à dissocier le contenant, c'est-à-dire la structure de l'opération,
 du contenu, c'est-à-dire les données budgétaires détaillées.
 
@@ -221,8 +265,8 @@ semestre. Il est essentiel de préciser qu'à la fin de cette période, nous n'�
 début de ce vaste chantier.
 
 Nous avons réussi à modéliser et intégrer la structure fondamentale des dossiers, à savoir
-les Opérations ainsi que leurs subdivisions en Tranches Travaux, puis en Tranches
-Commerciales. Une part conséquente du travail restait à accomplir : l'analyse et
+les opérations et leurs tranches de travaux, la création des tranches commerciales étant
+encore en cours à la fin du semestre. Une part conséquente du travail restait à accomplir : l'analyse et
 l'intégration des données financières et comptables, notamment la reprise détaillée des
 budgets et de l'historique des factures.
 
@@ -230,10 +274,10 @@ Le tableau suivant récapitule l'état d'avancement à ce jalon.
 
 | Objet du modèle SPO | État à la fin du premier semestre |
 |:--------------------------------|:--------------------------------------------|
-| Opérations | Créées sur l'ensemble du périmètre |
+| Opérations | Créées, hors budgets détaillés |
 | Tranches de travaux | Créées |
 | Tranches commerciales | En cours de création |
-| Budgets détaillés | Reportés, stratégie des « coquilles vides » |
+| Budgets détaillés | Reportés, stratégie des « coquilles vides » |
 | Historique des factures | Non repris à ce stade |
 | Tiers, clients acquéreurs | Non repris à ce stade, voir chapitre 3 |
 
@@ -251,8 +295,8 @@ inconnu par ses messages d'erreur, à respecter une intégrité référentielle 
 
 Néanmoins, le socle ainsi constitué restait incomplet sur un point qui allait vite se faire
 sentir. Les opérations existaient, mais les clients qui achètent dans ces opérations, eux,
-n'étaient pas encore dans le nouvel ERP. Cependant, reprendre des clients n'est pas
-reprendre des structures de gestion : il s'agit de personnes, avec ce que cela implique de
+n'étaient pas encore dans le nouvel ERP. Or reprendre des clients n'est pas reprendre des
+structures de gestion : il s'agit de personnes, avec ce que cela implique de
 risques de doublons et d'exigence de qualité.
 
 Le chapitre suivant présente donc la reprise des tiers, conduite au second semestre. On y

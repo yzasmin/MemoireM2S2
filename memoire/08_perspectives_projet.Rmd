@@ -59,7 +59,7 @@ en SQL. Le modèle statistique intervient en complément, pour hiérarchiser l'a
 le fait avec des performances modestes que le chapitre 5 expose sans les farder.
 
 Je ne tire pas de ce constat que la modélisation serait inutile. J'en tire deux choses plus
-précises. La première est que **la valeur d'un projet data ne se mesure pas au niveau de
+précises. La première est que **la valeur d'un projet data ne se mesure pas au degré de
 sophistication des méthodes employées**, mais à l'écart entre ce que l'entreprise savait avant
 et après. À cette aune, le résultat le plus utile de l'année est peut-être le constat sur la
 qualité de saisie d'une agence, obtenu avec des moyens élémentaires.
@@ -133,7 +133,7 @@ n'est pas le mien mais celui de l'entreprise.
 
 ### Achever la reprise et historiser les données
 
-La migration vers SPO reste prioritaire. La stratégie des « coquilles vides », si elle a
+La migration vers SPO reste prioritaire. La stratégie des « coquilles vides », si elle a
 sauvé le démarrage de la facturation, doit maintenant laisser place à une reprise
 exhaustive : intégration des historiques budgétaires complets, vérifications approfondies de
 l'intégrité des données par contrôle de cohérence comptable, et phases de tests finaux avant
@@ -202,10 +202,19 @@ m'a donné pour l'exercer un terrain que je connais désormais : des cycles long
 opérations portées par des sociétés dédiées, une gestion où la moindre définition de marge
 engage des montants importants.
 
-> **À compléter — projet immédiat.** Préciser ici, en deux ou trois phrases, l'intention à
-> l'issue du diplôme : poursuite au sein du groupe et sur quel périmètre, recherche d'un
-> premier poste et dans quel type de structure, ou poursuite d'études. C'est le seul élément
-> de ce chapitre que je suis seule à pouvoir écrire, et le jury l'attendra.
+À court terme, ma priorité est de conduire à son terme ce que cette année a engagé. La
+reprise des historiques budgétaires, la bascule définitive vers SPO et l'adaptation des outils
+à l'infrastructure du groupe Nexity forment un ensemble cohérent, sur lequel ma connaissance
+du modèle de données constitue un avantage que personne d'autre n'a aujourd'hui dans
+l'entreprise. C'est donc au sein du groupe que je souhaite poursuivre en premier lieu, sur le
+périmètre données et système d'information.
+
+À moyen terme, je vise un poste d'ingénieure données orientée aide à la décision, dans une
+structure où la donnée de gestion est un enjeu réel et non un sujet d'affichage. Deux types
+d'organisations m'intéressent pour des raisons opposées et complémentaires : les entreprises
+de taille intermédiaire qui n'ont pas encore d'équipe data constituée, où le poste couvre
+toute la chaîne comme cette année, et les directions data structurées, où je pourrais combler
+la lacune que j'identifie plus bas en travaillant enfin à plusieurs sur un même chantier.
 
 ### Les compétences qu'il me reste à consolider
 
@@ -235,7 +244,7 @@ je ne le croyais, et qu'un résultat livré sans ses limites est un résultat da
 également exposé les trois chantiers qui se poursuivent après mon départ et le positionnement
 professionnel que je vise.
 
-Néanmoins, il reste à refermer l'ensemble. La conclusion qui suit reprend le fil des sept
+Il reste à refermer l'ensemble. La conclusion qui suit reprend le fil des sept
 chapitres et revient sur la thèse annoncée en introduction, pour dire dans quelle mesure
 l'année l'a effectivement démontrée.
 :::

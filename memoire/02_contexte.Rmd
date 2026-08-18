@@ -91,7 +91,10 @@ visible mais tout aussi structurante : les tableurs.
    opération, sur des fichiers individuels, sans vision transverse.
 
 La Figure 1.1 représente cette organisation et situe l'endroit où mes missions sont
-intervenues. On y lit le problème central : la donnée existait, en quantité, mais elle était
+intervenues. Les trois outils y occupent le haut du schéma, reliés par les flèches qui
+figurent la circulation normale de la donnée ; les tableurs y forment la bande du bas, et
+les traits pointillés qui les rattachent aux trois outils marquent les échanges qui ne
+passent par aucun système. On y lit le problème central : la donnée existait, en quantité, mais elle était
 répartie entre des outils qui ne partageaient ni les mêmes identifiants, ni les mêmes
 définitions. Le même client pouvait exister dans le CRM et dans l'ERP sans qu'aucun lien ne
 les rattache ; la même notion de marge pouvait être calculée différemment selon l'outil qui
@@ -184,11 +187,11 @@ L'année s'organise en quatre missions, réparties sur deux semestres, que prés
 Figure 1.2. Leur enchaînement n'a rien d'arbitraire : chacune conditionne la suivante.
 
 1. **La migration des données opérationnelles vers SPO** (premier semestre, chapitre 2) a
-   consisté à reprendre les 283 opérations, leurs tranches et leurs budgets depuis la base
-   historique. C'est le socle : sans les opérations, rien d'autre ne peut exister dans le
+   consisté à reprendre les 283 opérations et leurs tranches depuis la base historique, les
+   budgets détaillés étant reportés à un second temps. C'est le socle : sans les opérations, rien d'autre ne peut exister dans le
    nouvel ERP.
 2. **La reprise des tiers** (second semestre, chapitre 3) a complété ce socle par le volet
-   commercial, en créant dans SPO les 1 434 clients acquéreurs du groupe.
+   commercial, en créant dans SPO les 1 434 clients acquéreurs du groupe.
 3. **Le maintien du système décisionnel et les missions SI transverses** (les deux semestres,
    chapitre 4) ont couru en parallèle sur toute l'année, pour que les services continuent de
    disposer de leurs indicateurs pendant que le socle se reconstruisait.
