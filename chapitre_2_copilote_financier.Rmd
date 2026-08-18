@@ -381,9 +381,9 @@ valeur. L'outil n'est donc proposé que sur les programmes suffisamment avancés
 
 ### Axe C
 
-Repricer le stock suppose d'abord de savoir à quel prix un lot devrait se vendre, ce
-qu'aucune grille commerciale ne dit. Le modèle que j'ai construit pour répondre à cette
-question est volontairement le plus simple qui fonctionne. Il s'agit d'une régression
+Repricer le stock suppose d'abord de savoir à quel prix chaque lot devrait se vendre. Le
+modèle que j'ai construit pour répondre à cette question est volontairement le plus simple
+qui fonctionne. Il s'agit d'une régression
 linéaire du logarithme du prix au mètre carré des 5 064 appartements transigés
 depuis 2016, expliqué par leurs caractéristiques, à savoir la surface, l'étage,
 l'exposition, le type de produit, l'agence, la commune et la proximité du littoral, ainsi
