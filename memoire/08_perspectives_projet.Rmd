@@ -1,0 +1,241 @@
+# Réflexion sur le métier, perspectives et projet professionnel
+
+::: sommaire
+**Sommaire**
+
+- 7.1 Le métier de data scientist vu depuis une entreprise sans équipe data
+    - 7.1.1 Un traducteur avant d'être un modélisateur
+    - 7.1.2 La place réelle de la modélisation
+    - 7.1.3 L'honnêteté sur ce qu'un résultat ne dit pas
+- 7.2 Ce que j'ai appris de la pratique professionnelle
+    - 7.2.1 Documenter est un acte technique
+    - 7.2.2 Livrer, c'est faire adopter
+- 7.3 Perspectives des projets engagés
+    - 7.3.1 Achever la reprise et historiser les données
+    - 7.3.2 Faire vivre le Copilote Financier
+    - 7.3.3 L'intégration à l'infrastructure Nexity
+- 7.4 Mon projet professionnel
+    - 7.4.1 Le positionnement que je vise
+    - 7.4.2 Les compétences qu'il me reste à consolider
+:::
+
+Ce dernier chapitre quitte le récit des missions pour livrer la réflexion qu'elles ont
+produite. Il porte d'abord sur le métier de data scientist tel que je l'ai exercé, dans une
+entreprise qui n'a pas d'équipe data et où j'étais la seule personne à temps plein sur ces
+sujets. Il expose ensuite les perspectives des chantiers engagés, dont aucun n'est achevé, et
+se termine par le projet professionnel qui découle de ces deux années d'alternance.
+
+## Le métier de data scientist vu depuis une entreprise sans équipe data
+
+### Un traducteur avant d'être un modélisateur
+
+L'image que j'avais de ce métier en entrant en Master 2 était celle que donne le cursus : on
+reçoit un jeu de données et une question, on choisit une méthode, on évalue, on livre un
+modèle. Cette image n'est pas fausse, elle est simplement très minoritaire dans le temps
+réel.
+
+Sur les quatre missions de l'année, une seule correspond à cette description, et encore
+partiellement. Ce qui a occupé le reste, c'est un travail de traduction, dans les deux sens.
+Traduire une gêne exprimée par un service en question calculable, d'abord. Traduire ensuite
+un résultat statistique en information sur laquelle quelqu'un peut décider. Entre ces deux
+traductions, la modélisation proprement dite occupe une place modeste.
+
+Cette traduction n'est pas une tâche annexe qu'on expédierait avant le vrai travail. Elle est
+le vrai travail, et elle est difficile pour une raison précise : les deux langues n'ont pas
+les mêmes catégories. Le service juridique parle de commandes payantes et gratuites ; la base
+ne connaît que des lignes sans position dans une séquence. La direction financière parle
+d'opérations qui dérivent ; les exports ne contiennent qu'un budget et un engagé à une date.
+Chaque fois, il a fallu construire la catégorie manquante, et ce sont ces constructions qui
+engagent le plus, parce qu'elles décident de ce que l'entreprise pourra observer ensuite.
+
+### La place réelle de la modélisation
+
+Le second constat est plus inconfortable, et je le formule d'autant plus volontiers qu'il va
+contre ce que j'espérais démontrer en commençant le projet du second semestre.
+
+Dans le Copilote Financier, la page la plus consultée par les contrôleurs de gestion ne
+repose sur aucun modèle appris. C'est un tableau descriptif de dépassements en euros, calculé
+en SQL. Le modèle statistique intervient en complément, pour hiérarchiser l'attention, et il
+le fait avec des performances modestes que le chapitre 5 expose sans les farder.
+
+Je ne tire pas de ce constat que la modélisation serait inutile. J'en tire deux choses plus
+précises. La première est que **la valeur d'un projet data ne se mesure pas au niveau de
+sophistication des méthodes employées**, mais à l'écart entre ce que l'entreprise savait avant
+et après. À cette aune, le résultat le plus utile de l'année est peut-être le constat sur la
+qualité de saisie d'une agence, obtenu avec des moyens élémentaires.
+
+La seconde est que **le choix de la méthode se déduit de la donnée disponible, jamais de
+l'ambition du projet**. Sur le rythme de vente, la profondeur temporelle des données autorisait
+un modèle exigeant, et il a donné un résultat solide. Sur le risque de marge, l'absence
+d'historique interdisait tout modèle dynamique, et aucune sophistication n'aurait compensé
+cette absence. Comprendre cela avant de choisir un algorithme, plutôt qu'après l'avoir
+évalué, est ce que cette année m'a le mieux appris.
+
+### L'honnêteté sur ce qu'un résultat ne dit pas
+
+Le troisième constat porte sur une exigence que je n'attendais pas au même niveau : la
+rigueur dans l'énoncé des limites.
+
+Dans un exercice universitaire, présenter un modèle faible est un mauvais résultat. Dans une
+entreprise, présenter un modèle faible **sans le dire** est bien pire, parce que quelqu'un
+décidera dessus. Un score de risque qui trie correctement une liste sans permettre de fonder
+une décision individuelle est utile, à condition que cette distinction soit portée à l'écran
+et non enfouie dans une annexe.
+
+C'est pourquoi j'ai fait de l'énoncé des limites une partie du livrable, au même titre que
+les résultats : le paramètre d'élasticité emprunté à la littérature, l'absence d'historique
+qui plafonne un axe entier, les intervalles de prévision qui ignorent l'incertitude sur les
+taux futurs. Cette pratique a un effet secondaire que je n'avais pas anticipé : elle rend les
+recommandations plus faciles à discuter, parce que l'interlocuteur sait sur quoi il peut
+s'appuyer.
+
+## Ce que j'ai appris de la pratique professionnelle
+
+### Documenter est un acte technique
+
+J'ai longtemps considéré la documentation comme une formalité qui suit le travail. Deux
+épisodes de l'année m'ont fait changer d'avis.
+
+Le premier est la note interne sur la séquence d'injection dans l'ERP, rédigée après l'avoir
+reconstituée par les codes d'erreur. Ce document a servi à la reprise des tiers six mois plus
+tard, et il aurait servi à quelqu'un d'autre si je n'avais pas été là.
+
+Le second est la note de procédure de l'import des tiers, qui commence par la liste des
+manipulations à ne jamais faire avant d'expliquer comment utiliser le fichier. Cet ordre n'est
+pas rhétorique : les quatre manipulations en question cassent le fichier sans produire le
+moindre message d'erreur, et un utilisateur qui ne les connaît pas produira des fichiers
+d'import faux en croyant bien faire.
+
+J'en retire une formulation que j'assume : **documenter, ce n'est pas décrire ce qu'on a fait,
+c'est rendre le travail reprenable par quelqu'un d'autre**. La différence est concrète. Une
+description raconte les étapes ; une documentation utile énonce les règles, les pièges et les
+décisions, c'est-à-dire ce qui ne se déduit pas du résultat.
+
+### Livrer, c'est faire adopter
+
+La leçon la plus nette de l'année tient en un épisode : la première version de l'interface du
+Copilote Financier, techniquement correcte, était inutilisable par ceux à qui elle était
+destinée, parce qu'elle parlait de scores et de probabilités là où l'on attendait des niveaux
+d'alerte et des euros.
+
+Ce que j'en retiens dépasse le vocabulaire des écrans. Un livrable n'existe qu'à partir du
+moment où quelqu'un s'en sert, et la distance entre un résultat juste et un résultat utilisé
+ne se comble pas par de la pédagogie. Elle se comble en changeant le livrable. La même chose
+s'est vérifiée, sur un terrain bien plus modeste, lors du déploiement du SSO :
+l'accompagnement des utilisateurs à leur première connexion faisait partie du déploiement, il
+n'en était pas le service après-vente.
+
+## Perspectives des projets engagés
+
+Aucun des chantiers de cette année n'est achevé, et il serait malvenu de conclure ce mémoire
+en laissant croire le contraire. Trois perspectives se dégagent, dans un ordre de priorité qui
+n'est pas le mien mais celui de l'entreprise.
+
+### Achever la reprise et historiser les données
+
+La migration vers SPO reste prioritaire. La stratégie des « coquilles vides », si elle a
+sauvé le démarrage de la facturation, doit maintenant laisser place à une reprise
+exhaustive : intégration des historiques budgétaires complets, vérifications approfondies de
+l'intégrité des données par contrôle de cohérence comptable, et phases de tests finaux avant
+la bascule définitive. Le fichier de reprise des tiers devra pour sa part être rejoué au moins
+une fois avant cette bascule, afin d'écarter les tiers créés entre-temps par les équipes
+commerciales.
+
+À ce chantier s'ajoute la recommandation la plus structurante que je laisse à l'entreprise :
+**historiser les exports mensuels dans le nouvel ERP**. C'est l'absence de cet historique qui
+plafonne aujourd'hui l'analyse du risque de marge. Au bout d'un an de conservation, le score
+statique deviendrait un véritable suivi de trajectoire, et l'axe le plus attendu du Copilote
+Financier changerait de nature. Cette recommandation ne coûte presque rien à mettre en œuvre ;
+elle coûte seulement d'y penser maintenant plutôt que dans deux ans.
+
+### Faire vivre le Copilote Financier
+
+L'application livrée est fonctionnelle et reproductible, mais elle reste une photographie.
+Trois évolutions la rendraient durable.
+
+1. **L'historisation des données**, déjà évoquée, qui transformerait le score de risque en
+   suivi.
+2. **L'extension à l'aménagement foncier**, aujourd'hui exclu du périmètre de l'application. La
+   logique économique de cette activité étant différente, cette extension suppose un
+   traitement dédié plutôt qu'une simple levée de filtre.
+3. **La fiabilisation de la saisie des motifs de désistement**, sans laquelle les analyses
+   commerciales resteront partielles sur une partie du réseau.
+
+### L'intégration à l'infrastructure Nexity
+
+Une mission structurante, non prévue initialement, vient s'ajouter à cette feuille de route :
+le passage vers l'infrastructure technique du groupe Nexity. Ce changement d'environnement
+engendrera des missions spécifiques d'adaptation de nos outils, qu'il s'agisse de la
+reconfiguration des connecteurs de bases de données, de l'adaptation des protocoles de
+sécurité pour les accès distants ou de la migration de certains scripts d'automatisation vers
+de nouveaux serveurs.
+
+Cette perspective a déjà influé sur mes choix techniques. Le test de montée en charge conduit
+dans le projet analytique n'avait pas d'autre objet que de savoir si l'architecture retenue
+tiendrait à une échelle supérieure, et de documenter le chemin à prendre le cas échéant.
+
+## Mon projet professionnel
+
+### Le positionnement que je vise
+
+Ces deux années d'alternance ont déplacé mon projet, et je préfère le dire ainsi plutôt que
+de prétendre qu'il n'a pas bougé. J'y suis entrée en visant la data science au sens strict, la
+modélisation prédictive. J'en sors en visant un positionnement plus large et, je crois, plus
+juste au regard de ce dont les entreprises ont réellement besoin : **construire et fiabiliser
+les chaînes de données qui rendent la décision possible, puis les outiller**.
+
+Ce positionnement se situe à l'intersection de trois domaines que l'année m'a fait pratiquer
+ensemble.
+
+1. **L'ingénierie des données.** Reprises, migrations, interfaces de programmation, qualité et
+   déduplication, modélisation d'une base analytique. C'est la partie du travail sur laquelle
+   j'ai le plus progressé, et celle où je me sens aujourd'hui la plus solide.
+2. **L'analyse et la modélisation.** Le choix d'une méthode proportionnée à la donnée
+   disponible, sa validation honnête, et la lecture métier de ses coefficients.
+3. **La restitution et le dialogue avec les métiers.** La traduction d'un besoin en
+   spécification, puis d'un résultat en écran sur lequel on décide.
+
+Un profil qui ne tiendrait que le premier de ces domaines produirait des pipelines que
+personne n'interroge ; un profil qui ne tiendrait que le deuxième modéliserait des données
+dont il ignore la provenance. C'est la combinaison qui m'intéresse, et le secteur immobilier
+m'a donné pour l'exercer un terrain que je connais désormais : des cycles longs, des
+opérations portées par des sociétés dédiées, une gestion où la moindre définition de marge
+engage des montants importants.
+
+> **À compléter — projet immédiat.** Préciser ici, en deux ou trois phrases, l'intention à
+> l'issue du diplôme : poursuite au sein du groupe et sur quel périmètre, recherche d'un
+> premier poste et dans quel type de structure, ou poursuite d'études. C'est le seul élément
+> de ce chapitre que je suis seule à pouvoir écrire, et le jury l'attendra.
+
+### Les compétences qu'il me reste à consolider
+
+Il serait présomptueux de conclure sans nommer ce qui me manque, d'autant que l'année l'a
+rendu visible.
+
+La première lacune est l'**industrialisation**. J'ai construit des chaînes de traitement
+reproductibles, mais elles se lancent à la main. Passer à une exécution planifiée, surveillée
+et alertée en cas d'échec est le pas suivant, et c'est celui qui sépare un livrable d'un
+service.
+
+La deuxième est la **profondeur statistique sur les données temporelles**. C'est l'axe où le
+projet du second semestre a donné les meilleurs résultats, et c'est aussi celui où j'ai le
+plus senti la limite de mes acquis. Les modèles de panel et les séries temporelles méritent
+mieux que l'usage que j'ai pu en faire en quelques semaines.
+
+La troisième, enfin, est la **conduite d'un projet à plusieurs**. J'ai travaillé seule sur les
+sujets data pendant deux ans, ce qui a des vertus mais laisse une compétence entière hors
+champ : les conventions de code partagées, la revue par un pair, la répartition d'un chantier
+entre plusieurs personnes. C'est une raison de plus pour souhaiter rejoindre, à terme, une
+équipe constituée.
+
+::: transition
+Ce chapitre aura livré ce qu'une année de pratique m'a appris du métier : qu'il consiste
+d'abord à traduire, que la modélisation y occupe une place plus modeste et plus précise que
+je ne le croyais, et qu'un résultat livré sans ses limites est un résultat dangereux. Il aura
+également exposé les trois chantiers qui se poursuivent après mon départ et le positionnement
+professionnel que je vise.
+
+Néanmoins, il reste à refermer l'ensemble. La conclusion qui suit reprend le fil des sept
+chapitres et revient sur la thèse annoncée en introduction, pour dire dans quelle mesure
+l'année l'a effectivement démontrée.
+:::

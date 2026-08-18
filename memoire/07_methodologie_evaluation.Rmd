@@ -1,0 +1,309 @@
+# Conduite de projet, méthodes et évaluation : une lecture transversale de l'année
+
+::: sommaire
+**Sommaire**
+
+- 6.1 La conduite de projet : quatre missions, deux régimes
+    - 6.1.1 Le régime de la reprise : itératif et piloté par les rejets
+    - 6.1.2 Le régime du projet analytique : cadrer, explorer, restituer
+    - 6.1.3 Un arbitrage récurrent entre exhaustivité et continuité de service
+- 6.2 Technologies et méthodes mobilisées
+    - 6.2.1 La chaîne d'outils, mission par mission
+    - 6.2.2 Les choix que je referais, et ceux que je ne referais pas
+- 6.3 Comment j'ai évalué mon propre travail
+    - 6.3.1 Trois régimes de preuve selon la nature du livrable
+    - 6.3.2 Ce que ces évaluations ne couvrent pas
+- 6.4 Les difficultés rencontrées
+    - 6.4.1 Difficultés techniques
+    - 6.4.2 Difficultés tenant à la donnée
+    - 6.4.3 Difficultés organisationnelles
+- 6.5 Résultats consolidés de l'année
+:::
+
+Les cinq chapitres précédents ont exposé les missions dans l'ordre où elles se sont
+présentées. Ce chapitre les relit transversalement, sous quatre angles que le récit
+chronologique ne permet pas de traiter proprement : comment ces projets ont été conduits,
+avec quels outils et quelles méthodes, comment j'ai su que le résultat était bon, et ce qui
+n'a pas fonctionné.
+
+Cette relecture n'est pas un exercice imposé. Deux des enseignements que je retire de l'année
+ne sont visibles que dans la comparaison entre les missions, et resteraient invisibles si
+chacune était jugée seule.
+
+## La conduite de projet : quatre missions, deux régimes
+
+### Le régime de la reprise : itératif et piloté par les rejets
+
+Les deux chantiers de reprise, les opérations puis les tiers, ont été conduits selon la même
+méthode, et je ne l'avais pas choisie a priori : elle s'est imposée parce que le modèle cible
+était inconnu.
+
+Le principe en est simple. On ne peut pas spécifier complètement une reprise dont on ne
+connaît pas les règles d'acceptation. On avance donc par paliers de volume croissant, en
+traitant chaque rejet comme une information sur le modèle cible plutôt que comme une erreur à
+corriger. Sur la migration des opérations, cela a donné la progression de 3 opérations
+pilotes, puis 12, avant la masse. Sur la reprise des tiers, cela a donné le découpage en lots
+de 200 lignes, homogènes en nature.
+
+Cette méthode a une propriété que j'ai appris à apprécier : **le coût d'une erreur y est
+proportionnel au palier où on la découvre**. Une règle non comprise coûte quelques minutes sur
+trois opérations, une demi-journée sur douze, et une reprise complète du fichier sur deux
+cents. Toute la valeur de la progression par paliers tient dans ce rapport.
+
+Elle a aussi une limite qu'il faut nommer. Elle est lente à démarrer, et elle produit peu de
+livrable visible pendant les premières semaines. Il faut accepter de rendre compte d'un
+travail dont le résultat, à ce stade, est une documentation interne et non des données dans
+le système.
+
+### Le régime du projet analytique : cadrer, explorer, restituer
+
+Le projet du second semestre a suivi une logique différente, en trois temps nettement
+séparés.
+
+1. **Le cadrage.** Formuler les questions de gestion avant de regarder les données, et poser
+   les exigences non fonctionnelles avant de commencer. C'est à cette étape que j'ai décidé
+   que la reproductibilité, l'interprétabilité, la confidentialité et l'acceptation d'un
+   petit échantillon primeraient sur la performance brute.
+2. **L'exploration et la modélisation.** Comprendre ce que contiennent réellement les
+   exports, construire la base, puis traiter chaque question avec la méthode la plus simple
+   qui y réponde.
+3. **La restitution.** Traduire les résultats dans le langage de l'utilisateur et les livrer
+   dans un outil qu'il ouvre lui-même.
+
+Le point d'articulation le plus délicat se situe entre les étapes 2 et 3. La première version
+de l'interface, trop marquée par le vocabulaire de la modélisation, a dû être entièrement
+réécrite après un retour de l'entreprise. Cette réécriture n'était pas une correction
+cosmétique : elle a changé ce que l'écran affiche, donc ce sur quoi l'utilisateur décide.
+
+### Un arbitrage récurrent entre exhaustivité et continuité de service
+
+Un même arbitrage est revenu dans les quatre missions, sous des formes différentes, et c'est
+le premier enseignement transversal de l'année.
+
+Sur la migration des opérations, il a pris la forme des « coquilles vides » : livrer une
+structure incomplète pour débloquer la facturation, plutôt qu'un système complet trop tard.
+Sur la reprise des tiers, il a pris la forme du traitement manuel des cas particuliers :
+écrire une règle pour deux cas coûte plus cher que de les traiter à la main. Sur le
+reporting juridique, il a pris la forme du calcul dynamique : accepter de recalculer la règle
+à chaque affichage faute de pouvoir la stocker. Sur le projet analytique, enfin, il a pris la
+forme du périmètre restreint à la promotion immobilière, l'aménagement relevant d'une autre
+logique économique.
+
+Dans les quatre cas, la décision a consisté à livrer quelque chose d'utile et d'incomplet
+plutôt que rien de complet. Ce qui distingue cet arbitrage d'un renoncement, c'est
+uniquement le fait d'écrire ce qui a été laissé de côté. Une dette documentée est une dette
+suivie ; une dette implicite devient, quelques mois plus tard, une donnée que tout le monde
+croit absente.
+
+## Technologies et méthodes mobilisées
+
+### La chaîne d'outils, mission par mission
+
+Le tableau suivant récapitule les technologies et les méthodes effectivement employées, en
+distinguant ce qui relève de l'outil de ce qui relève de la méthode.
+
+| Mission | Technologies | Méthodes |
+|:------------|:-------------------------------|:---------------------------------|
+| Migration des opérations | Excel et RechercheX, MyReport Builder, API REST de Salvia, module DirectAPI | Rétro-ingénierie du modèle cible par les codes d'erreur, mapping par tables de correspondance, validation itérative par paliers |
+| Reprise des tiers | Excel, environ 60 000 cellules de formules, CSV, API REST, JSON Patch, Postman | Déduplication par clés d'unicité différenciées, exclusion par rapprochement, numérotation séquentielle par destination |
+| Reporting et SSO | MyReport, SQL en lecture, annuaire d'entreprise | Modélisation dynamique par calcul de rang, accompagnement utilisateur |
+| Copilote Financier | Python et pandas, SQLite en schéma en étoile, PySpark évalué, Streamlit | Régression linéaire et logistique, arbre, forêt aléatoire, séparateur à vaste marge, modèle à effets aléatoires sur panel, régression dynamique à erreurs ARIMA, ajustement logistique, recherche par similarité, optimisation sous contrainte |
+
+Deux remarques sur ce tableau.
+
+La première est que **la colonne des outils est beaucoup moins intéressante que celle des
+méthodes**, et c'est contre-intuitif quand on sort d'un cursus où l'on apprend des
+technologies. Excel figure dans deux missions sur quatre, non parce qu'il serait le bon outil
+dans l'absolu, mais parce que c'est l'outil que l'entreprise sait relire, corriger et
+maintenir sans moi. Un script Python aurait produit les mêmes fichiers d'import plus vite,
+et personne n'aurait pu le reprendre après mon départ.
+
+La seconde est que **la sophistication des méthodes décroît quand on se rapproche de
+l'utilisateur**. La partie la plus consultée du Copilote Financier repose sur du SQL
+descriptif, pas sur un modèle appris. Ce n'est pas un échec de la modélisation, c'est sa
+place réelle dans un outil de gestion.
+
+### Les choix que je referais, et ceux que je ne referais pas
+
+Trois choix me paraissent, avec le recul, avoir bien tenu.
+
+Le premier est **l'écriture des définitions partagées une seule fois**, dans les vues de la
+base du projet analytique. C'est la réponse directe au problème rencontré sur le reporting
+juridique, et c'est ce qui garantit que les notebooks et l'application disent la même chose.
+
+Le deuxième est **la documentation systématique des arbitrages**, aussi bien la note interne
+sur la séquence d'injection que la note de procédure de l'import des tiers. Ces documents
+sont ce qui rend le travail vérifiable par quelqu'un d'autre.
+
+Le troisième est **le refus d'ajouter une technologie sans nécessité**. Le test de montée en
+charge a montré que l'architecture légère retenue était la bonne à cette échelle ; conclure
+par la négative et le dire est un résultat.
+
+Un choix, en revanche, je ne le referais pas de la même façon. J'ai construit la première
+version de l'interface du Copilote Financier **avant** de la confronter aux utilisateurs, en
+supposant que des indicateurs correctement calculés seraient lisibles. Ils ne l'étaient pas.
+Aujourd'hui, je montrerais une maquette de l'écran avant d'écrire le premier modèle, parce
+que c'est l'écran qui détermine quelles grandeurs doivent être calculées, et non l'inverse.
+
+## Comment j'ai évalué mon propre travail
+
+### Trois régimes de preuve selon la nature du livrable
+
+L'évaluation d'un livrable dépend entièrement de sa nature, et c'est le second enseignement
+transversal de l'année. Une reprise de données, un tableau de bord et un modèle statistique
+ne se prouvent pas de la même manière. La Figure 6.1 représente les trois régimes que j'ai
+employés.
+
+![Les trois régimes de preuve employés selon la nature du livrable](figures/fig_6_1_regimes_de_preuve.png){width=100%}
+
+Le premier régime est celui de la **réconciliation**. Il s'applique aux reprises de données, où
+la question posée est : ce qui est arrivé correspond-il à ce qui est parti ? J'y ai eu
+recours sous plusieurs formes. Sur la migration des opérations, la validation itérative par
+paliers a servi de contrôle avant la masse. Sur la reprise des tiers, un panneau de compteurs
+intégré à la feuille pivot affichait en permanence les valeurs attendues, et la procédure
+impose de les vérifier avant tout export. Sur le projet analytique, la réconciliation des
+deux exports budgétaires a montré des totaux identiques à l'euro près sur les 118 opérations
+jointes, et un contrôle croisé des agrégats par deux moteurs indépendants a retrouvé les
+mêmes 1 561,8 M€ de dépenses budgétées et 1 754,8 M€ de recettes.
+
+Le deuxième régime est celui de la **validation statistique**. Il s'applique aux modèles, où la
+question posée est : le résultat tient-il hors de l'échantillon sur lequel il a été construit ?
+J'y ai systématiquement associé trois précautions : une évaluation sur un échantillon test
+distinct, une comparaison à une référence naïve, et un contrôle des fuites entre les
+variables explicatives et la cible. La comparaison à la référence est celle qui m'a le plus
+servi : un score F1 de 0,3 ne veut rien dire dans l'absolu, mais il prend un sens précis
+lorsque la référence majoritaire, elle, ne détecte rien du tout.
+
+Le troisième régime est celui de la **recette par l'usage**. Il s'applique aux livrables
+destinés à un utilisateur, où la question posée est : la personne s'en sert-elle, et pour la
+bonne chose ? Sur le reporting juridique, c'est le service demandeur qui valide. Sur
+l'application, chaque page a été vérifiée par un cadre de test automatisé, y compris aux
+bornes des curseurs et sur les sélections vides, mais c'est le retour de l'entreprise sur le
+vocabulaire des écrans qui a constitué la véritable recette.
+
+### Ce que ces évaluations ne couvrent pas
+
+Il serait malhonnête de présenter ce dispositif comme complet, et je préfère en exposer les
+angles morts.
+
+La réconciliation prouve qu'une donnée est arrivée, pas qu'elle est juste. Les 1 434 tiers
+créés correspondent exactement à ce que le fichier de travail prévoyait, mais si une clé
+d'unicité était mal choisie, l'erreur passerait le contrôle sans être vue, puisque les
+compteurs, eux, tomberaient juste.
+
+La validation statistique mesure une performance sur des données passées, dans une
+conjoncture donnée. Rien ne garantit qu'un modèle calibré sur la période récente tienne si le
+marché change de régime.
+
+La recette par l'usage, enfin, ne dit rien à court terme sur l'utilité réelle d'un outil. Une
+page consultée n'est pas une décision prise. Il faudra plusieurs mois d'utilisation pour
+savoir si le Copilote Financier a changé quelque chose aux revues de gestion, et cette
+mesure-là, je n'ai pas pu la faire dans le temps de l'alternance.
+
+## Les difficultés rencontrées
+
+### Difficultés techniques
+
+Les difficultés techniques de l'année se ramènent presque toutes à une même situation : un
+système imposait une règle qui n'était écrite nulle part.
+
+L'ordre d'injection des objets dans l'ERP en est le cas le plus net. Il n'était pas documenté,
+et je l'ai reconstitué par l'analyse des codes d'erreur. Le versionnement des budgets en est
+le second : les identifiants système étant invisibles dans l'interface, et toute modification
+créant un nouvel objet plutôt que d'écraser l'ancien, il a fallu concevoir une logique de
+requêtage dynamique en trois temps pour cibler le bon enregistrement.
+
+Le refus des caractères accentués par le format d'import et l'impossibilité de porter les
+coordonnées des couples en CSV relèvent de la même famille. Dans le second cas, la solution a
+consisté à changer de porte d'entrée vers le système, en passant par l'API plutôt que par le
+fichier plat.
+
+Enfin, les pièges du tableur ont coûté un temps de recherche disproportionné à leur
+apparente banalité : le comptage qui prend une chaîne vide pour une valeur, le code de mise
+en forme des mois interprété comme des minutes, les heures parasites qui rendent deux dates
+identiques différentes. Ces quatre pièges partagent un trait qui en fait, à mes yeux, un vrai
+enseignement de méthode : **aucun ne produit de message d'erreur**. Ils se manifestent par un
+compteur qui ne tombe pas juste, et c'est la seule raison pour laquelle je les ai vus.
+
+### Difficultés tenant à la donnée
+
+Trois difficultés relèvent de la donnée elle-même et non des outils.
+
+La première est l'**absence d'historique**. Les exports budgétaires sont une photographie à
+date, sans trace des révisions successives. Cette limite plafonne l'axe le plus attendu du
+projet analytique, et aucune méthode ne la contourne : on ne peut pas apprendre la dynamique
+d'une dérive sur une image fixe.
+
+La deuxième est la **qualité de saisie**. Le cas le plus parlant est celui d'une agence dont
+90 % des motifs de désistement sont enregistrés en « Autres motifs », ce qui rend ses
+désistements inanalysables tant que la saisie n'est pas fiabilisée. Ce constat n'était pas
+attendu, et il a produit une recommandation opérationnelle immédiate.
+
+La troisième est l'**impossibilité d'estimer certains paramètres en interne**. L'élasticité de
+la demande au prix, centrale pour la règle de remise, a le bon signe dans nos données mais
+n'y est pas significative. La valeur retenue vient de la littérature, et c'est une fragilité
+que le chapitre 5 expose plutôt que de la masquer.
+
+### Difficultés organisationnelles
+
+La difficulté la plus constante de l'année n'a été ni technique ni statistique : c'est la
+**fragmentation du temps**. Les missions filées du chapitre 4 n'attendent pas la fin d'un
+chantier de reprise pour se manifester. Un fichier d'injection interrompu trois fois dans la
+journée pour une demande de tableau de bord avance moins vite qu'un fichier mené d'un trait,
+et surtout, il se reprend plus mal : il faut à chaque fois reconstituer où l'on en était dans
+une logique de formules imbriquées.
+
+Ce que j'ai fini par mettre en place tient en peu de choses, mais m'a coûté plusieurs mois à
+comprendre. J'ai réservé les plages longues aux travaux qui ne se découpent pas, regroupé les
+demandes courtes plutôt que de les traiter à leur arrivée, et surtout, j'ai commencé à écrire
+systématiquement où j'en étais avant d'interrompre une tâche. Cette dernière habitude est
+celle qui m'a le plus fait gagner de temps sur l'année.
+
+Une seconde difficulté organisationnelle mérite d'être signalée, parce qu'elle a modifié le
+projet : le **décalage entre le calendrier universitaire et le calendrier de l'entreprise**. Le
+projet de Machine Learning prévu au premier semestre n'a pas pu être mené, la migration ayant
+mobilisé l'essentiel de mon temps. Ce report, frustrant sur le moment, s'est révélé logique
+avec le recul, et il constitue le fil de ce mémoire.
+
+## Résultats consolidés de l'année
+
+Le tableau suivant récapitule ce qui a été livré et se trouve aujourd'hui en service.
+
+| Livrable | Volume ou périmètre |
+|:-------------------------------------------------|:----------------------------|
+| Opérations immobilières créées dans SPO | 283 |
+| Tiers créés dans SPO, avec leurs objets rattachés | 1 434 |
+| Adresses, courriels et téléphones importés | 553, 469 et 538 |
+| Représentants des couples et des sociétés | 1 871 |
+| Coordonnées ajoutées par requête API | 872 requêtes, toutes passées |
+| Documentation interne produite | Séquence d'injection, procédure d'import des tiers |
+| Reportings maintenus et faits évoluer | Sur l'ensemble des services demandeurs |
+| Postes équipés du SSO | Agence de Perpignan et service financier du siège |
+| Base de données analytique | Trois dimensions, quatre tables de faits, trois vues métier |
+| Application d'aide à la décision livrée | Cinq pages, 147 opérations de promotion suivies |
+
+Ces chiffres ne disent pourtant pas l'essentiel, et je préfère le formuler moi-même plutôt
+que de laisser le tableau parler seul. Ce que l'année a produit de plus durable n'est aucun
+de ces volumes : ce sont trois définitions écrites quelque part. La séquence d'injection
+valide pour l'ERP, la clé qui décide qu'un client est le même client, et la formule qui dit
+ce qu'est la marge d'une opération. Les données se réinjectent ; ces trois décisions-là, il
+faut les reprendre depuis le début si elles se perdent.
+
+::: transition
+Ce chapitre aura relu l'année sous quatre angles : la conduite de projet, les outils, les
+régimes de preuve et les difficultés. Deux enseignements en ressortent, qu'aucune mission
+prise isolément ne donnait. Le premier est que l'arbitrage entre exhaustivité et continuité
+de service est revenu dans les quatre missions, et qu'il ne devient acceptable qu'à la
+condition d'écrire ce qu'on laisse de côté. Le second est que la nature du livrable commande
+le régime de preuve, et qu'appliquer à une reprise de données les critères d'un modèle
+statistique, ou l'inverse, revient à ne rien prouver du tout.
+
+Néanmoins, ces enseignements restent des enseignements de méthode. Un mémoire professionnel
+attend aussi une position sur le métier lui-même : ce qu'est un data scientist dans une
+entreprise qui n'a pas d'équipe data, ce que cette année m'a appris de la pratique
+professionnelle, et ce que je compte en faire.
+
+Le chapitre suivant y est consacré. Il livre ma réflexion sur le métier tel que je l'ai
+exercé, puis présente les perspectives des projets engagés et le projet professionnel qui en
+découle.
+:::

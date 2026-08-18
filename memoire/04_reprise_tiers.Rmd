@@ -1,54 +1,32 @@
----
-title: "La migration des tiers vers SPO"
-author: "Yasmina Saoud"
-date: ""
-lang: fr
-output:
-  pdf_document:
-    template: rendu/template_memoire.tex
-    latex_engine: pdflatex
-    number_sections: true
-    fig_caption: true
-    pandoc_args:
-      - --lua-filter=rendu/filtre_memoire.lua
-      - --top-level-division=chapter
-  word_document:
-    fig_caption: true
-    pandoc_args:
-      - --lua-filter=rendu/filtre_memoire.lua
-      - --top-level-division=chapter
-chapoffset: 0
----
-
-# La migration des tiers vers SPO
+# La reprise des tiers : une chaîne de traitement pilotée par formules
 
 ::: sommaire
 **Sommaire**
 
-- 1.1 Contexte et enjeux de la reprise des tiers
-    - 1.1.1 Du CRM Vadimm à l'ERP SPO : le périmètre des données clients
-    - 1.1.2 L'enjeu central : créer sans dupliquer
-- 1.2 Conception du fichier de travail : une chaîne de traitement pilotée par formules
-    - 1.2.1 Une architecture en trois temps : sources, feuille pivot, feuilles de sortie
-    - 1.2.2 Le modèle de données des tiers dans SPO : couples, personnes physiques, personnes morales
-- 1.3 Les trois mécanismes algorithmiques
-    - 1.3.1 La déduplication par clés d'unicité différenciées selon la nature du tiers
-    - 1.3.2 L'exclusion des tiers déjà présents dans SPO
-    - 1.3.3 La propagation vers les feuilles de sortie par numérotation séquentielle
-- 1.4 De la préparation à l'injection : procédure et contraintes techniques
-    - 1.4.1 Génération et normalisation des fichiers d'import
-    - 1.4.2 Le contournement par API : 872 requêtes PATCH pour les coordonnées des couples
-- 1.5 Traitement des cas particuliers et arbitrages
-- 1.6 Bilan de l'import et points de vigilance pour la suite
+- 3.1 Contexte et enjeux de la reprise des tiers
+    - 3.1.1 Du CRM Vadimm à l'ERP SPO : le périmètre des données clients
+    - 3.1.2 L'enjeu central : créer sans dupliquer
+- 3.2 Conception du fichier de travail : une chaîne de traitement pilotée par formules
+    - 3.2.1 Une architecture en trois temps : sources, feuille pivot, feuilles de sortie
+    - 3.2.2 Le modèle de données des tiers dans SPO : couples, personnes physiques, personnes morales
+- 3.3 Les trois mécanismes algorithmiques
+    - 3.3.1 La déduplication par clés d'unicité différenciées selon la nature du tiers
+    - 3.3.2 L'exclusion des tiers déjà présents dans SPO
+    - 3.3.3 La propagation vers les feuilles de sortie par numérotation séquentielle
+- 3.4 De la préparation à l'injection : procédure et contraintes techniques
+    - 3.4.1 Génération et normalisation des fichiers d'import
+    - 3.4.2 Le contournement par API : 872 requêtes PATCH pour les coordonnées des couples
+- 3.5 Traitement des cas particuliers et arbitrages
+- 3.6 Bilan de l'import et points de vigilance pour la suite
 :::
 
-Ce chapitre détaille la reprise des tiers, c'est-à-dire des clients acquéreurs, depuis
-notre CRM Vadimm vers le nouvel ERP du groupe, SPO. Cette mission, conduite au second
-semestre, prolonge directement le chantier de migration exposé dans mon mémoire de
-mi-parcours, et elle répond au chantier d'interopérabilité entre l'ERP et le CRM que j'y
-annonçais. Elle en change toutefois la nature : il ne s'agissait plus d'injecter des structures de gestion, opérations,
-tranches et budgets, mais des personnes, avec ce que cela implique de risques de doublons
-et d'exigence de qualité. J'y expose la conception du fichier de travail que j'ai construit
+Ce chapitre détaille la reprise des tiers, c'est-à-dire des clients acquéreurs, depuis notre
+CRM Vadimm vers le nouvel ERP du groupe. Conduite au second semestre, cette mission prolonge
+directement le chantier exposé au chapitre précédent, et elle réalise l'interopérabilité entre
+l'ERP et le CRM que je n'avais pu qu'annoncer à la fin du premier semestre. Elle en change
+toutefois la nature : il ne s'agissait plus d'injecter des structures de gestion, opérations,
+tranches et budgets, mais des personnes, avec ce que cela implique de risques de doublons et
+d'exigence de qualité. J'y expose la conception du fichier de travail que j'ai construit
 pour industrialiser cette reprise, les trois mécanismes algorithmiques sur lesquels il
 repose, les contraintes techniques du format d'import de SPO et la manière dont je les ai
 contournées, puis le bilan de l'import et les enseignements que j'en retire.
@@ -57,11 +35,10 @@ contournées, puis le bilan de l'import et les enseignements que j'en retire.
 
 ### Du CRM Vadimm à l'ERP SPO : le périmètre des données clients
 
-Le remplacement de l'ERP historique du groupe par SPO, décrit dans mon mémoire de
-mi-parcours, s'est fait par lots successifs. Après la création des opérations
-immobilières et de leurs tranches, il restait à reprendre les données commerciales, et en
-premier lieu les clients. Dans SPO (Suivi des Programmes Opérationnels), ces clients sont
-désignés par le terme générique de *tiers* : la même entité de base sert à représenter un
+Le remplacement de l'ERP historique du groupe par SPO, décrit au chapitre 2, s'est fait par
+lots successifs. Après la création des opérations immobilières et de leurs tranches, il
+restait à reprendre les données commerciales, et en premier lieu les clients. Dans SPO, ces
+clients sont désignés par le terme générique de *tiers* : la même entité de base sert à représenter un
 acquéreur particulier comme une société, et se voit ensuite attribuer un ou plusieurs
 rôles. Reprendre les tiers signifiait donc alimenter le socle sur lequel toute la gestion
 commerciale allait s'appuyer.
@@ -116,7 +93,7 @@ chaîne de traitement automatique, dans la lignée des maquettes d'injection que
 construites au premier semestre. Les données entrent d'un côté sous leur forme brute et
 ressortent de l'autre sous la forme exacte attendue par SPO, sans qu'aucune donnée soit
 recopiée à la main entre les deux. Cette architecture se décompose en trois étages, que
-présente la Figure 1.1.
+présente la Figure 3.1.
 
 1. **Les feuilles sources** : trois feuilles en lecture seule qui reçoivent les extractions
    telles quelles. La feuille `VADIMM` porte les 1 557 lignes de ventes reprises du CRM, la
@@ -131,7 +108,7 @@ présente la Figure 1.1.
    entièrement générée par formules à partir de la feuille pivot, et destinée à être
    exportée en CSV.
 
-![La chaîne de traitement à trois étages du fichier de travail](figures/fig_1_1_chaine_traitement.png){width=100%}
+![La chaîne de traitement à trois étages du fichier de travail](figures/fig_3_1_chaine_traitement.png){width=100%}
 
 Ce découpage répond à une règle que je me suis imposée dès la conception, et qui figure en
 tête de la note de procédure que j'ai rédigée pour l'équipe : on ne modifie jamais
@@ -165,13 +142,11 @@ se fait à des couples acquéreurs.
 La seconde caractéristique est qu'un tiers n'est pas un enregistrement unique mais un
 ensemble d'objets liés. La fiche principale ne porte que l'identité ; l'adresse, le
 courriel, le téléphone, les représentants et les rôles sont autant d'objets rattachés, avec
-chacun son propre fichier d'import. La Figure 1.2, reprise de mon mémoire de mi-parcours,
-montre l'interface du module DirectAPI avec la ressource « Tiers » sélectionnée : on y lit
-directement cette décomposition, puisque l'écran propose un emplacement de fichier distinct
-par objet rattaché. Six d'entre eux correspondent aux six feuilles de sortie de mon fichier,
-les deux autres, les RIB et les sites web, n'étant pas alimentés par cette reprise.
-
-![L'interface du module DirectAPI, ressource « Tiers » : chaque objet rattaché appelle son propre fichier d'import](figures/fig_1_2_directapi_tiers.png){width=78%}
+chacun son propre fichier d'import. La Figure 2.2, présentée au chapitre précédent, montre
+précisément l'interface du module DirectAPI avec la ressource « Tiers » sélectionnée : on y
+lit directement cette décomposition, puisque l'écran propose un emplacement de fichier
+distinct par objet rattaché. Six d'entre eux correspondent aux six feuilles de sortie de mon
+fichier, les deux autres, les RIB et les sites web, n'étant pas alimentés par cette reprise.
 
 C'est cette décomposition qui explique pourquoi mon fichier produit six feuilles de sortie
 et non une seule. Elle explique aussi une asymétrie qui reviendra plus loin : les adresses,
@@ -251,14 +226,14 @@ détectés comme déjà existants et écartés. Rapporté aux 1 474 tiers uniqu
 sembler faible, mais chacun de ces 40 cas aurait produit un doublon durable dans le
 référentiel client de l'entreprise.
 
-La Figure 1.3 récapitule l'effet cumulé de ces deux premiers mécanismes. Des 1 602 lignes
+La Figure 3.2 récapitule l'effet cumulé de ces deux premiers mécanismes. Des 1 602 lignes
 du périmètre de départ, la déduplication interne en écarte 128 qui correspondent à des
 achats répétés, ramenant le total à 1 474 tiers uniques ; l'exclusion des tiers déjà présents
 dans SPO en retire 40 de plus, pour un total de **1 434 tiers à créer**. Chaque étage de
 ce filtrage correspond à une règle explicite, écrite dans une colonne du fichier, donc
 vérifiable et reproductible.
 
-![De 1 602 lignes de départ à 1 434 tiers créés : l'effet des deux filtres successifs](figures/fig_1_3_entonnoir_volumetrie.png){width=92%}
+![De 1 602 lignes de départ à 1 434 tiers créés : l'effet des deux filtres successifs](figures/fig_3_2_entonnoir_volumetrie.png){width=92%}
 
 ### La propagation vers les feuilles de sortie par numérotation séquentielle
 
@@ -284,15 +259,15 @@ saisie manuelle, produit les incohérences les plus difficiles à détecter : un
 rattachée au mauvais tiers parce qu'une ligne a été insérée quelque part sans que le reste
 suive.
 
-La Figure 1.4 donne la volumétrie effectivement produite par chacune des six feuilles. On
+La Figure 3.3 donne la volumétrie effectivement produite par chacune des six feuilles. On
 y lit directement le modèle de données décrit plus haut : 1 434 lignes pour la liste
 maîtresse des tiers et autant pour l'attribution du rôle « Client », mais 1 871 lignes de
 représentants, puisque chaque couple en compte deux, et seulement 553 adresses, 538
 téléphones et 469 courriels, ces trois derniers fichiers ne portant que les personnes
 physiques et morales. Ces écarts de volumétrie d'un fichier à l'autre ne sont donc pas des
-approximations : ils sont la traduction directe du modèle de données décrit en 1.2.2.
+approximations : ils sont la traduction directe du modèle de données décrit en 3.2.2.
 
-![Les six fichiers d'import produits par la feuille pivot](figures/fig_1_4_volumetrie_fichiers_import.png){width=95%}
+![Les six fichiers d'import produits par la feuille pivot](figures/fig_3_3_volumetrie_fichiers_import.png){width=95%}
 
 > **À insérer — figure.** Capture d'écran de la feuille `BuilderTiers`, montrant côte à
 > côte les colonnes de données reprises et les colonnes calculées : les trois rangs de
@@ -342,7 +317,7 @@ C'est à ce stade que j'ai rencontré la contrainte la plus structurante du proj
 dont la résolution m'a le plus appris.
 
 Le format d'import CSV de SPO ne permet pas de porter les courriels et les téléphones des
-couples. La raison en est logique au regard du modèle de données décrit en 1.2.2 : pour un
+couples. La raison en est logique au regard du modèle de données décrit en 3.2.2 : pour un
 couple, ces coordonnées ne sont pas des attributs du tiers mais des attributs de ses
 représentants, et les fichiers d'import de coordonnées ne savent viser qu'un tiers. Le
 résultat est que, sur les 881 couples créés, les fichiers CSV pouvaient produire l'identité
@@ -378,7 +353,7 @@ La démarche s'est déroulée en trois temps :
 
 > **À insérer — figure.** Capture d'écran de la collection Postman : arborescence des cinq
 > lots et vue d'une requête PATCH sur son onglet *Body*, montrant la structure JSON Patch.
-> Masquer l'adresse du serveur et les identifiants, comme sur la Figure 1.2. Les figures
+> Masquer l'adresse du serveur et les identifiants, comme sur la Figure 2.2. Les figures
 > suivantes sont à renuméroter après insertion.
 
 Ce contournement m'a appris quelque chose que je n'avais pas formulé aussi clairement
@@ -450,12 +425,12 @@ suivant récapitule ce qui a été créé dans SPO.
 | Coordonnées des couples                | 872 requêtes | Requêtes PATCH |
 
 Les 1 434 tiers créés se répartissent en **881 couples**, **462 personnes physiques** et
-**91 personnes morales**, répartition que représente la Figure 1.5. Cette structure n'est
+**91 personnes morales**, répartition que représente la Figure 3.4. Cette structure n'est
 pas un simple constat de volumétrie : elle justifie a posteriori l'attention portée au
 traitement des couples, qui représentent plus de six tiers sur dix et concentrent à eux
 seuls la contrainte de format qui a imposé le recours à l'API.
 
-![Répartition des 1 434 tiers créés selon leur nature](figures/fig_1_5_repartition_natures.png){width=92%}
+![Répartition des 1 434 tiers créés selon leur nature](figures/fig_3_4_repartition_natures.png){width=92%}
 
 > **À insérer — figure.** Capture d'écran d'une fiche de couple dans SPO, onglet des
 > représentants ouvert, montrant les deux personnes du couple et les coordonnées ajoutées
@@ -531,14 +506,16 @@ ensuite à la capacité à contourner une limite de format en changeant de porte
 le système ; enfin à la documentation des arbitrages, qui rend la reprise vérifiable par
 quelqu'un d'autre que celle qui l'a faite.
 
-Cette étape était aussi un prérequis. Je concluais mon mémoire de mi-parcours en avançant
-que la qualité de l'architecture de données est le socle indispensable de toute
-modélisation, et que le report de mon projet de Data Science au second semestre était moins
-un retard qu'une conséquence logique de cet ordre des choses. Il est temps de le
-démontrer plutôt que de l'affirmer. Le chapitre suivant présente le projet auquel ce
-travail de structure ouvrait la voie : le Copilote Financier, un outil d'aide à la décision construit sur les
-données de gestion du groupe pour sa direction financière. On y verra que les mêmes
-questions reviennent, déplacées d'un cran : comprendre ce que contient réellement un export
-avant de le modéliser, écrire une définition une seule fois pour que tout le monde
-consomme la même, et savoir dire ce qu'un résultat ne permet pas de conclure.
+Les deux chapitres qui précèdent ont donc reconstitué, chacun de son côté, une moitié du
+socle de gestion du groupe : les opérations et leurs tranches d'une part, les clients
+acquéreurs d'autre part. Pendant que ce socle se reconstruisait, les services n'ont pas cessé
+pour autant d'avoir besoin de leurs indicateurs, et l'entreprise a continué de faire évoluer
+son infrastructure.
+
+Le chapitre suivant présente ces missions filées, menées en parallèle des deux chantiers de
+reprise : le maintien du système décisionnel, avec une demande du service juridique qui
+illustre bien la difficulté d'implanter une règle métier dans un outil qui ne l'attend pas,
+et la contribution au déploiement du Single Sign-On. On y verra apparaître, sur un terrain
+plus modeste, la même question que celle qui commandera le projet de Data Science : où écrit-on
+une règle pour que tout le monde consomme la même ?
 :::

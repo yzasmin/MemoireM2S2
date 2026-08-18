@@ -1,7 +1,7 @@
-% Gabarit LaTeX des chapitres du mémoire de fin d'études — Yasmina Saoud.
+% Gabarit LaTeX du mémoire de fin d'études — Yasmina Saoud, M2 MIASHS.
 % Reprend la mise en forme du mémoire de mi-parcours : classe report 12 pt,
-% Computer Modern, français, encadré « Sommaire » en ouverture de chapitre,
-% légendes « Figure X.Y – Titre » sous la figure.
+% Computer Modern, français, page de titre, encadré « Sommaire » en ouverture
+% de chapitre, légendes « Figure X.Y – Titre » sous la figure.
 \documentclass[12pt,a4paper]{report}
 
 \usepackage[T1]{fontenc}
@@ -26,6 +26,7 @@
 
 % --- Sommaire de chapitre (minitoc), intitulé et profondeur ---------------
 \setcounter{secnumdepth}{3}
+\setcounter{tocdepth}{2}
 \setcounter{minitocdepth}{3}
 \mtcsetdepth{minitoc}{3}
 \mtcsettitle{minitoc}{Sommaire}
@@ -34,7 +35,9 @@
 
 % --- Légendes des figures : « Figure 1.1 – Titre », sous la figure --------
 \captionsetup[figure]{labelsep=endash, font=small, justification=centering}
+\captionsetup[table]{labelsep=endash, font=small, justification=centering}
 \renewcommand{\figurename}{Figure}
+\renewcommand{\tablename}{Tableau}
 
 % --- Images : jamais plus larges que le texte, proportions conservées -----
 \makeatletter
@@ -63,7 +66,7 @@
 \providecommand{\real}[1]{#1}
 \makeatother
 
-% --- Encadré « Sommaire » rédigé à la main (secours si minitoc est absent) -
+% --- Encadré « Sommaire » de secours si minitoc est absent ----------------
 \newenvironment{sommaireboite}%
   {\par\vspace{0.8em}\noindent\rule{\linewidth}{0.4pt}\par\vspace{0.3em}}%
   {\par\vspace{0.3em}\noindent\rule{\linewidth}{0.4pt}\par\vspace{1em}}
@@ -84,7 +87,39 @@ $endfor$
 \date{$if(date)$$date$$endif$}
 
 \begin{document}
-\faketableofcontents
+
+$if(pagedetitre)$
+% ------------------------------------------------------------------ titre
+\begin{titlepage}
+\centering
+\vspace*{1.5cm}
+{\large UFR 6 \par}
+{\large Université Paul Valéry, Montpellier III \par}
+\vspace{2.5cm}
+{\Large Mémoire de fin d'études \par}
+\vspace{1.2cm}
+{\huge\bfseries $titrememoire$ \par}
+\vspace{0.6cm}
+{\Large $soustitre$ \par}
+\vspace{2.5cm}
+{\large Présenté par : $auteurmajuscule$ \par}
+\vspace{0.4cm}
+{\large Master MIASHS -- Année universitaire $annee$ \par}
+\vspace{0.4cm}
+{\large En collaboration avec : Holding SPA, Groupe Angelotti \par}
+\vspace{1.6cm}
+{\large Tutrice en entreprise : $tutriceentreprise$ \par}
+{\large Tutrice universitaire : $tutriceuniversitaire$ \par}
+\vfill
+{\large\bfseries Mots-clés \par}
+\vspace{0.3cm}
+{\large $motscles$ \par}
+\vspace{1.5cm}
+\end{titlepage}
+$endif$
+
+\pagenumbering{roman}
+\setcounter{page}{1}
 
 $body$
 

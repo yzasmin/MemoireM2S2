@@ -1,0 +1,262 @@
+# La migration vers SPO : enjeux d'industrialisation et défis techniques
+
+::: sommaire
+**Sommaire**
+
+- 2.1 Stratégie de reprise et méthodologie de travail
+    - 2.1.1 Un arbitrage initial : automatiser ou saisir
+    - 2.1.2 Phase préparatoire : appropriation technique et tests unitaires
+    - 2.1.3 Industrialisation des flux via DirectAPI
+- 2.2 Les défis techniques majeurs : dépendances et identifiants
+    - 2.2.1 La gestion des dépendances hiérarchiques
+    - 2.2.2 La complexité algorithmique des identifiants et du versionnement
+- 2.3 Adaptation stratégique : le déploiement en « coquilles vides »
+    - 2.3.1 Une approche agile par priorisation
+    - 2.3.2 Gains opérationnels et lissage de la charge
+- 2.4 Bilan de la migration à la fin du premier semestre
+:::
+
+Ce chapitre détaille la mission centrale du premier semestre : la migration des données
+opérationnelles de la base historique Grimmo vers le nouvel ERP du groupe, SPO, édité par
+Salvia. Ce projet visait un objectif critique : récupérer l'intégralité des opérations
+immobilières actives pour assurer la continuité de la gestion financière et comptable du
+groupe dans le nouvel environnement. J'y expose la stratégie de reprise retenue, les deux
+difficultés structurelles qui ont mobilisé l'essentiel de mon temps, et l'arbitrage
+stratégique qui a permis de tenir les délais sans sacrifier la continuité de service.
+
+## Stratégie de reprise et méthodologie de travail
+
+### Un arbitrage initial : automatiser ou saisir
+
+Le périmètre de la migration concernait un volume de 283 opérations immobilières. Face à
+cette volumétrie conséquente, une saisie manuelle intégrale aurait représenté un risque
+d'erreur humaine trop élevé et une charge de travail incompatible avec les délais impartis.
+Nous avons donc opté pour une stratégie hybride :
+
+- Une approche automatisée pour l'injection des gros volumes de données structurelles via
+  les API, afin de garantir rapidité et cohérence.
+- Un traitement manuel pour les exceptions et les cas particuliers historiques ne pouvant
+  entrer dans les gabarits standardisés.
+
+Cet arbitrage mérite d'être explicité, car il n'allait pas de soi. Automatiser suppose un
+investissement initial important, qui ne se rentabilise que si le volume est suffisant et si
+les données sont suffisamment homogènes. Sur 283 opérations, la première condition était
+remplie ; la seconde ne l'était que partiellement, et c'est précisément pourquoi la stratégie
+retenue est hybride plutôt qu'entièrement automatisée. Vouloir tout automatiser aurait
+conduit à écrire des règles pour des cas uniques, ce qui coûte plus cher que de les traiter
+à la main.
+
+Mon travail s'est structuré en deux phases techniques distinctes : une phase préparatoire
+d'appropriation et une phase opérationnelle d'industrialisation.
+
+### Phase préparatoire : appropriation technique et tests unitaires
+
+Avant de pouvoir manipuler les données de masse, il était indispensable de maîtriser le
+modèle de données cible. Ma première tâche a consisté à analyser en profondeur la
+documentation technique de l'API de Salvia. L'enjeu était de comprendre la structure des
+objets attendus par l'ERP et leurs interdépendances.
+
+La Figure 2.1 montre l'interface de SPO sur le dossier d'une opération. On y lit directement
+le modèle de données : une opération est un conteneur, auquel se rattachent son
+identification, ses intervenants, ses versions, ses tranches, son budget, sa
+commercialisation et sa trésorerie. Cette arborescence n'est pas une commodité d'affichage,
+c'est la structure même que l'API attend, et la comprendre était le préalable à toute
+injection.
+
+![L'interface de SPO sur le dossier d'une opération : l'arborescence de gauche donne le modèle de données cible](figures/fig_2_1_interface_spo.png){width=100%}
+
+J'ai ensuite mené une phase de tests unitaires d'appels API. N'utilisant pas encore l'outil
+d'injection final à ce stade, j'ai testé manuellement les différents endpoints (points de
+terminaison), pour décortiquer la mécanique de création d'une donnée. Cette étape m'a permis
+de valider quels champs étaient obligatoires et de comprendre la logique séquentielle imposée
+par le logiciel.
+
+Cette phase peut sembler improductive : elle ne crée aucune donnée et ne produit aucun
+livrable visible. Je la considère pourtant comme la plus rentable de tout le projet. Chaque
+règle découverte à ce stade sur un objet unique aurait coûté, découverte plus tard, un rejet
+sur plusieurs centaines de lignes et une reprise complète du fichier d'injection.
+
+### Industrialisation des flux via DirectAPI
+
+Une fois le fonctionnement théorique validé, nous avons déployé le module DirectAPI de
+l'éditeur, conçu pour interfacer des fichiers plats avec l'ERP. L'interface de cet outil
+d'import, qui permet le paramétrage des flux et le suivi des injections, est présentée en
+Figure 2.2. Mon rôle a été de construire l'intégralité du pipeline d'alimentation de cet
+outil.
+
+![L'interface utilisateur du module DirectAPI, ici sur la ressource « Tiers »](figures/fig_2_2_directapi.png){width=78%}
+
+Concrètement, j'ai conçu des maquettes d'injection Excel complexes, servant de pont entre
+l'ancien et le nouveau système. Ce pipeline de données se décompose en trois étapes clés :
+
+1. **Extraction** : j'ai utilisé MyReport Builder pour requêter directement notre base de
+   données source et extraire les données brutes nécessaires.
+2. **Transformation et mapping** : c'est le cœur du traitement. Dans Excel, j'ai mis en place
+   des formules de recherche avancées (RechercheX) pour mapper les anciens champs Grimmo vers
+   la nomenclature stricte de SPO. Ces correspondances s'appuyaient sur des tables de
+   paramétrage extraites de SPO ou sur des fichiers de mapping que j'ai constitués.
+3. **Chargement** : les maquettes finalisées étaient ensuite injectées via DirectAPI.
+
+Pour sécuriser ce processus, j'ai appliqué une méthode de validation itérative : nous avons
+d'abord migré 3 opérations pilotes, puis un lot de 12, afin de corriger les éventuels rejets
+avant de lancer la migration de masse. Cette progression par paliers a une vertu que je n'ai
+mesurée qu'après coup : elle rend les erreurs lisibles. Sur trois opérations, un rejet
+s'analyse en quelques minutes ; sur deux cents, les messages se mélangent et il devient
+difficile de savoir quelle règle a été violée.
+
+## Les défis techniques majeurs : dépendances et identifiants
+
+Au-delà de la volumétrie, la complexité de cette migration a résidé dans l'architecture même
+de la base de données cible. Ce projet ne s'est pas résumé à un simple transfert de données,
+mais a nécessité une véritable rétro-ingénierie des processus de l'ERP. J'ai été confrontée
+à deux difficultés structurelles majeures qui ont nécessité une analyse approfondie.
+
+### La gestion des dépendances hiérarchiques
+
+La première difficulté a été de décrypter l'ordre strict d'injection des données, une
+contrainte d'intégrité référentielle qui n'était pas explicite dans la documentation
+technique de l'éditeur.
+
+J'ai découvert cette logique empiriquement, en analysant les codes d'erreur renvoyés par
+l'API lors de mes premiers tests d'injection. Il est apparu qu'il fallait respecter une
+séquence de création immuable :
+
+1. Création de l'Opération (le conteneur principal).
+2. Création des Tranches de Travaux.
+3. Création des Tranches Commerciales.
+4. Création du Budget associé.
+
+La Figure 2.3 représente cette séquence et les dépendances qu'elle traduit. Toute tentative
+d'injection ne respectant pas cet ordre se soldait par un échec, le système ne trouvant pas
+l'objet parent nécessaire.
+
+![La séquence d'injection imposée par l'intégrité référentielle de l'ERP](figures/fig_2_3_sequence_injection.png){width=95%}
+
+Face à ce manque de clarté initial, j'ai pris l'initiative de rédiger une documentation
+interne. Ce document, cartographiant ces étapes et les prérequis de chaque objet, sert de
+guide de référence, permettant d'éviter les erreurs de séquencement lors des phases de
+reprise ultérieures. C'est le premier livrable écrit de mon année qui n'était pas un fichier
+de données, et c'est celui qui a le plus servi aux autres : la reprise des tiers, exposée au
+chapitre 3, s'est appuyée directement dessus.
+
+### La complexité algorithmique des identifiants et du versionnement
+
+La seconde difficulté, techniquement plus complexe, concernait la gestion des identifiants
+uniques (ID) dans le cadre des mises à jour de données, par exemple pour rectifier un montant
+de budget après sa création.
+
+Ces ID système n'étaient visibles nulle part dans l'interface utilisateur. De plus,
+l'architecture de l'API SPO repose sur un principe de versionnement et non d'écrasement
+simple, comme le ferait un UPDATE en SQL. Concrètement, lors de la modification d'un budget,
+le système ne met pas à jour la ligne existante : il clôture la version précédente et crée un
+nouveau budget avec un nouvel ID.
+
+Cette spécificité a rendu l'automatisation particulièrement délicate, car je ne pouvais me
+fier à aucun ID statique pour cibler une donnée. Pour contourner cette contrainte, j'ai dû
+concevoir et scripter une logique de requêtage dynamique en plusieurs étapes pour chaque
+injection, que résume la Figure 2.4 :
+
+1. **Appel GET** : interrogation de l'API pour récupérer la liste exhaustive de toutes les
+   versions de budgets liées à une opération donnée.
+2. **Traitement algorithmique** : tri des résultats pour identifier l'ID correspondant à
+   l'objet ayant la date de modification la plus récente, c'est-à-dire le budget actif.
+3. **Appel POST** : utilisation de cet ID spécifique pour effectuer la mise à jour finale.
+
+![Le requêtage dynamique imposé par le versionnement des budgets](figures/fig_2_4_requetage_dynamique.png){width=100%}
+
+Cette contrainte forte m'a obligée à intégrer des vérifications programmatiques en amont de
+chaque écriture. Elle m'a surtout appris quelque chose de plus général sur les interfaces de
+programmation : une API ne se contente pas d'exposer des données, elle impose un modèle de
+comportement. Ici, le versionnement traduit une exigence d'auditabilité comptable
+parfaitement légitime, mais qui rend impossible toute écriture naïve. Comprendre l'intention
+derrière la contrainte est ce qui permet de la contourner proprement plutôt que de lutter
+contre elle.
+
+## Adaptation stratégique : le déploiement en « coquilles vides »
+
+Face aux complexités techniques inhérentes à la gestion des identifiants et au versionnement,
+et compte tenu des délais stricts imposés par la direction, nous avons été confrontés à un
+arbitrage nécessaire entre perfection technique et urgence opérationnelle.
+
+La contrainte majeure provenait du besoin impératif des utilisateurs de réaliser la
+facturation électronique dès le basculement vers le nouvel outil. Pour que ce processus
+fonctionne, et notamment pour assurer le lien avec la Gestion Électronique des Documents
+(GED), il fallait que les opérations existent dans l'ERP, même si leur historique n'était pas
+encore intégralement reconstitué.
+
+### Une approche agile par priorisation
+
+Nous avons donc décidé d'adopter une stratégie de déploiement dite en « coquilles vides ».
+Cette approche a consisté à dissocier le contenant, c'est-à-dire la structure de l'opération,
+du contenu, c'est-à-dire les données budgétaires détaillées.
+
+Concrètement, nous avons réorienté notre plan de migration pour prioriser la création massive
+des fiches opérations dans SPO. Nous avons injecté en priorité les données indispensables à
+la facturation, comme le code opération et le libellé, laissant temporairement de côté les
+données historiques plus complexes, budgets passés et détail des tranches, qui nécessitaient
+un temps de nettoyage supérieur.
+
+Cette décision est celle dont j'ai le plus appris en matière de conduite de projet. Elle
+suppose d'accepter qu'un système soit temporairement incomplet et de le documenter comme
+tel, plutôt que de retarder la mise en service jusqu'à la complétude. Le risque est réel :
+une donnée manquante que personne ne signale finit par être considérée comme absente pour de
+bon. Nous l'avons couvert en tenant la liste de ce qui restait à reprendre, ce qui a
+transformé une dette implicite en dette suivie.
+
+### Gains opérationnels et lissage de la charge
+
+Cette stratégie s'est révélée payante. Elle a permis de débloquer immédiatement la fonction
+de facturation et d'assurer la continuité de service sans attendre la finalisation totale de
+la migration. De plus, elle nous a offert un délai supplémentaire précieux pour traiter la
+reprise des données au fil de l'eau, dans un second temps, sans subir la pression de
+l'urgence quotidienne.
+
+Cette adaptation témoigne d'une gestion de projet agile, capable d'ajuster sa méthodologie
+pour répondre aux réalités du terrain.
+
+## Bilan de la migration à la fin du premier semestre
+
+Ce travail d'initialisation de la migration vers SPO a constitué l'axe central du premier
+semestre. Il est essentiel de préciser qu'à la fin de cette période, nous n'étions qu'au
+début de ce vaste chantier.
+
+Nous avons réussi à modéliser et intégrer la structure fondamentale des dossiers, à savoir
+les Opérations ainsi que leurs subdivisions en Tranches Travaux, puis en Tranches
+Commerciales. Une part conséquente du travail restait à accomplir : l'analyse et
+l'intégration des données financières et comptables, notamment la reprise détaillée des
+budgets et de l'historique des factures.
+
+Le tableau suivant récapitule l'état d'avancement à ce jalon.
+
+| Objet du modèle SPO | État à la fin du premier semestre |
+|:--------------------------------|:--------------------------------------------|
+| Opérations | Créées sur l'ensemble du périmètre |
+| Tranches de travaux | Créées |
+| Tranches commerciales | En cours de création |
+| Budgets détaillés | Reportés, stratégie des « coquilles vides » |
+| Historique des factures | Non repris à ce stade |
+| Tiers, clients acquéreurs | Non repris à ce stade, voir chapitre 3 |
+
+Les fondations techniques étaient donc posées et les pipelines d'injection fonctionnels. Ce
+bilan appelle une remarque de méthode qui vaut au-delà de ce projet : sur un chantier de
+reprise, l'avancement ne se mesure pas au nombre d'enregistrements créés, mais à la part du
+modèle cible réellement couverte. Créer 283 opérations sans leurs budgets, ce n'est pas avoir
+fait la moitié du travail, c'est avoir rendu la seconde moitié possible.
+
+::: transition
+La migration vers SPO a occupé l'essentiel de mon premier semestre, et elle a défini le
+niveau d'exigence technique du reste de l'année. J'y ai appris à lire un modèle de données
+inconnu par ses messages d'erreur, à respecter une intégrité référentielle non documentée, et
+à arbitrer entre l'exhaustivité et la continuité de service.
+
+Néanmoins, le socle ainsi constitué restait incomplet sur un point qui allait vite se faire
+sentir. Les opérations existaient, mais les clients qui achètent dans ces opérations, eux,
+n'étaient pas encore dans le nouvel ERP. Cependant, reprendre des clients n'est pas
+reprendre des structures de gestion : il s'agit de personnes, avec ce que cela implique de
+risques de doublons et d'exigence de qualité.
+
+Le chapitre suivant présente donc la reprise des tiers, conduite au second semestre. On y
+verra que le problème central n'y était plus l'ordre d'injection, mais une question
+préalable et bien plus difficile à trancher : à partir de quoi décide-t-on que deux lignes
+désignent la même personne ?
+:::

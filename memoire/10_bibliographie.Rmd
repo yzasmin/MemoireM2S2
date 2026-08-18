@@ -1,0 +1,30 @@
+# Bibliographie {-}
+
+[1] Pappers. (2025). *Consultation d'informations légales et financières des entreprises.*
+[En ligne]. Disponible sur : <https://www.pappers.fr/>.
+
+[2] Michael Page. (2025). *Fiche métier : Gestionnaire d'applications.* [En ligne].
+Disponible sur :
+<https://www.michaelpage.fr/advice/métiers/systèmes-dinformation/fiche-métier-gestionnaire-dapplications>.
+
+[3] Salvia Développement. (2025). *Site officiel de l'éditeur de la solution SPO.*
+[En ligne]. Disponible sur : <https://www.salviadeveloppement.fr/>.
+
+[4] Groupe Angelotti. (2023). *Notre engagement environnemental.* [En ligne]. Disponible
+sur : <https://www.angelotti.fr/le-groupe/notre-engagement-environnemental>.
+
+[5] Scribbr. (2025). *Assistance rédactionnelle et technique.* [En ligne]. Disponible sur :
+<https://www.scribbr.fr/>.
+
+[6] Bryan, P. et Nottingham, M. (2013). *JavaScript Object Notation (JSON) Patch,* RFC 6902,
+Internet Engineering Task Force. [En ligne]. Disponible sur :
+<https://www.rfc-editor.org/rfc/rfc6902>.
+
+[7] Banque centrale européenne. *Taux d'intérêt des crédits à l'habitat en France, série
+mensuelle.* [En ligne]. Disponible sur : <https://data.ecb.europa.eu/>.
+
+[8] Eurostat. *Indicateur de confiance des ménages.* [En ligne]. Disponible sur :
+<https://ec.europa.eu/eurostat>.
+
+[9] Etalab. *API Découpage administratif, référentiel des communes françaises.* [En ligne].
+Disponible sur : <https://geo.api.gouv.fr/>.

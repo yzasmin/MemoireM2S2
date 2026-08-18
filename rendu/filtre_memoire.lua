@@ -66,6 +66,19 @@ function Pandoc(doc)
   return doc
 end
 
+
+-- Les chapitres non numérotés (remerciements, résumé, glossaire, introduction,
+-- conclusion, bibliographie) décalent le compteur interne de minitoc : sans
+-- \adjustmtc, les encadrés « Sommaire » des chapitres numérotés lisent le
+-- mauvais fichier et sortent vides.
+function Header(el)
+  if not FORMAT:match('latex') then return nil end
+  if el.level == 1 and el.classes:includes('unnumbered') then
+    return { el, pandoc.RawBlock('latex', '\\adjustmtc') }
+  end
+  return nil
+end
+
 function Div(el)
   if el.classes:includes('sommaire') then
     if FORMAT:match('latex') then

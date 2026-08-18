@@ -1,54 +1,32 @@
----
-title: "Le Copilote Financier"
-author: "Yasmina Saoud"
-date: ""
-lang: fr
-output:
-  pdf_document:
-    template: rendu/template_memoire.tex
-    latex_engine: pdflatex
-    number_sections: true
-    fig_caption: true
-    pandoc_args:
-      - --lua-filter=rendu/filtre_memoire.lua
-      - --top-level-division=chapter
-  word_document:
-    fig_caption: true
-    pandoc_args:
-      - --lua-filter=rendu/filtre_memoire.lua
-      - --top-level-division=chapter
-chapoffset: 1
----
-
 # Le Copilote Financier
 
 ::: sommaire
 **Sommaire**
 
-- 2.1 Contexte
-    - 2.1.1 Problème métier
-        - 2.1.1.1 Besoins par axe et exigences non fonctionnelles
-    - 2.1.2 Objectifs du dashboard
-- 2.2 Données disponibles
-    - 2.2.1 Données internes
-    - 2.2.2 Données externes
-- 2.3 Architecture technique
-- 2.4 Notebooks et résultats
-    - 2.4.1 Exploration et nettoyage des données brutes
-    - 2.4.2 SQL et Spark
-    - 2.4.3 Axe A
-    - 2.4.4 Axe B
-    - 2.4.5 Axe C
-    - 2.4.6 Signaux faibles (texte et réseau)
-- 2.5 Plateforme Streamlit
-- 2.6 Périmètre et limites
-- 2.7 Conclusion du chapitre et conclusion générale
+- 5.1 Contexte
+    - 5.1.1 Problème métier
+        - 5.1.1.1 Besoins par axe et exigences non fonctionnelles
+    - 5.1.2 Objectifs du dashboard
+- 5.2 Données disponibles
+    - 5.2.1 Données internes
+    - 5.2.2 Données externes
+- 5.3 Architecture technique
+- 5.4 Notebooks et résultats
+    - 5.4.1 Exploration et nettoyage des données brutes
+    - 5.4.2 SQL et Spark
+    - 5.4.3 Axe A
+    - 5.4.4 Axe B
+    - 5.4.5 Axe C
+    - 5.4.6 Signaux faibles (texte et réseau)
+- 5.5 Plateforme Streamlit
+- 5.6 Périmètre et limites
+- 5.7 Conclusion du chapitre
 :::
 
-Ce chapitre présente le projet de Data Science que j'annonçais en fin de mémoire de
-mi-parcours : le « Copilote Financier », un outil d'aide à la décision construit sur les
-données de gestion du groupe Angelotti pour sa direction financière. Le périmètre annoncé
-alors a été redéfini en cours de projet : la prédiction de la marge à terminaison subsiste
+Ce chapitre présente le projet de Data Science annoncé à la fin du premier semestre : le
+« Copilote Financier », un outil d'aide à la décision construit sur les données de gestion du
+groupe Angelotti pour sa direction financière. Le périmètre envisagé au départ, la prédiction
+de la rentabilité des opérations d'aménagement, a été redéfini en cours de projet : la prédiction de la marge à terminaison subsiste
 comme premier axe de travail, mais le besoin exprimé par la direction financière l'a
 élargie à deux autres questions, et la restitution a finalement été restreinte à la
 promotion immobilière. J'y expose d'abord le besoin métier tel qu'il m'a été formulé, puis les données dont je disposais réellement,
@@ -215,9 +193,10 @@ d'analyse et l'application s'appuient tous deux sur cette base.
 Trois vues SQL y encapsulent les calculs partagés : la marge budgétée contre la marge
 engagée par opération, les réservations par opération et par mois, et l'état du stock. Ce
 choix est plus structurant qu'il n'y paraît. La définition de la marge est écrite une seule
-fois, dans la vue, et les notebooks comme la plateforme consomment la même. C'est la
-situation inverse de celle que décrit mon mémoire de mi-parcours, où la règle de gestion,
-ne pouvant être écrite nulle part, devait être recalculée à chaque génération du tableau.
+fois, dans la vue, et les notebooks comme la plateforme consomment la même. C'est
+exactement la situation inverse de celle décrite au chapitre 4, où la règle de facturation
+juridique, ne pouvant être écrite nulle part, devait être recalculée à chaque génération du
+tableau.
 
 Une seule commande reconstruit l'ensemble depuis les exports bruts, en quelques secondes.
 L'analyse complète est versionnée et ré-exécutable de bout en bout, ce qui signifie que
@@ -229,7 +208,7 @@ vérifiable d'une suite de manipulations dont personne ne saurait refaire le che
 
 ### Exploration et nettoyage des données brutes
 
-Au-delà du nettoyage décrit en section 2.2, l'exploration a produit deux résultats qui ont
+Au-delà du nettoyage décrit en section 5.2, l'exploration a produit deux résultats qui ont
 directement orienté la modélisation.
 
 Le premier concerne la distribution des prix. Le prix au mètre carré des appartements est
@@ -237,11 +216,11 @@ fortement asymétrique, avec un coefficient d'asymétrie de 19,2, ce qui rendait
 impropre à une modélisation linéaire directe. Après passage au logarithme, la
 distribution devient proche d'une loi normale : le coefficient d'asymétrie tombe à 0,39 et
 le diagramme quantile-quantile, qui compare la distribution observée à la distribution
-théorique, devient presque rectiligne. La Figure 2.1 rassemble les deux distributions et
+théorique, devient presque rectiligne. La Figure 5.1 rassemble les deux distributions et
 les diagrammes quantile-quantile correspondants. C'est ce constat qui a conduit l'axe C à
 modéliser le logarithme du prix plutôt que le prix lui-même.
 
-![Prix au mètre carré des appartements : distribution brute et après transformation logarithmique](figures/fig_2_1_prix_m2_log.png){width=100%}
+![Prix au mètre carré des appartements : distribution brute et après transformation logarithmique](figures/fig_5_1_prix_m2_log.png){width=100%}
 
 Le second résultat est une leçon de méthode, et c'est peut-être le passage du projet dont
 j'ai le plus appris. En calculant la corrélation entre les réservations mensuelles du
@@ -253,15 +232,15 @@ En réalité, la série brute est brouillée par la croissance du portefeuille. 
 d'opérations en commercialisation a fortement augmenté sur la période, soutenant le volume
 total de réservations même lorsque la demande par programme s'effondre. Rapportées
 au nombre d'opérations actives, les réservations racontent l'inverse, comme le montre la
-Figure 2.2 : la corrélation passe à -0,34 avec le taux d'intérêt et à +0,44 avec la
+Figure 5.2 : la corrélation passe à -0,34 avec le taux d'intérêt et à +0,44 avec la
 confiance des ménages. Tout l'axe B repose sur cette correction. Sans elle, j'aurais conclu
 à l'absence d'effet de la conjoncture, et j'aurais eu tort.
 
-![Intensité de vente, mesurée en réservations par opération active : l'effet de la remontée des taux apparaît une fois l'effet de portefeuille neutralisé](figures/fig_2_2_intensite_vente.png){width=100%}
+![Intensité de vente, mesurée en réservations par opération active : l'effet de la remontée des taux apparaît une fois l'effet de portefeuille neutralisé](figures/fig_5_2_intensite_vente.png){width=100%}
 
 ### SQL et Spark
 
-Le véritable livrable de cette étape est la base SQL décrite en section 2.3 : les vues
+Le véritable livrable de cette étape est la base SQL décrite en section 5.3 : les vues
 métier partagées, les index, et un contrôle croisé des agrégats qui retrouve les mêmes
 totaux par deux moteurs indépendants, soit 1 561,8 M€ de dépenses budgétées et 1 754,8 M€
 de recettes, à l'arrondi près. Ce contrôle n'est pas une coquetterie : il garantit que la
@@ -302,10 +281,10 @@ Sur le périmètre exploitable, soit les 123 opérations engagées à au moins 6
 marge budgétée dépasse 50 k€, plus d'un tiers des opérations, 36,6 % exactement, n'a aucun
 dépassement engagé. Mais 28 % franchissent le seuil de dérive matérielle, que j'ai fixé à
 2 % de la marge, et deux cas extrêmes dépassent la moitié de la marge budgétée. La
-Figure 2.3 donne la distribution complète et situe ce seuil, avec à droite le détail des
+Figure 5.3 donne la distribution complète et situe ce seuil, avec à droite le détail des
 opérations en dérive.
 
-![Distribution de la variation de marge « committée » sur les 123 opérations du périmètre, et seuil de dérive matérielle à -2 %](figures/fig_2_3_distribution_variation_marge.png){width=95%}
+![Distribution de la variation de marge « committée » sur les 123 opérations du périmètre, et seuil de dérive matérielle à -2 %](figures/fig_5_3_distribution_variation_marge.png){width=95%}
 
 La partie la plus utile de cet axe pour l'entreprise n'est pas un modèle appris : c'est le
 tableau descriptif des dépassements engagés en euros, par opération et par poste, calculé
@@ -369,19 +348,19 @@ exigeante sur ce point, ne produit tout simplement pas d'effet mesurable. Il ind
 ensuite que les scénarios doivent combiner les deux modèles : la série temporelle fournit
 la trajectoire de référence, avec sa dynamique et sa saisonnalité, et l'élasticité estimée
 sur le panel traduit chaque scénario de taux en effet sur le rythme. Sur cette base,
-présentée en Figure 2.4, une détente à 2,5 % fin 2026 redonnerait environ +6 % de rythme en
+présentée en Figure 5.4, une détente à 2,5 % fin 2026 redonnerait environ +6 % de rythme en
 moyenne sur douze mois, tandis qu'une remontée à 3,5 % en retirerait 3 %.
 
-![Prévision d'intensité de vente à douze mois sous trois scénarios de taux 2026, avec intervalle à 80 %](figures/fig_2_4_scenarios_taux_2026.png){width=95%}
+![Prévision d'intensité de vente à douze mois sous trois scénarios de taux 2026, avec intervalle à 80 %](figures/fig_5_4_scenarios_taux_2026.png){width=95%}
 
 À l'échelle d'un programme pris isolément, la courbe des réservations cumulées suit une
 forme en S, que j'ai ajustée par une fonction logistique à trois paramètres. Sur les 28
 opérations terminées du périmètre, cet ajustement bat la droite dans 25 cas, comme
-l'illustre la Figure 2.5 sur quatre programmes. Il fournit surtout un indicateur
+l'illustre la Figure 5.5 sur quatre programmes. Il fournit surtout un indicateur
 directement utile à la trésorerie : le délai d'atteinte de 90 % du potentiel de vente, dont
 la médiane est proche de vingt mois.
 
-![Réservations cumulées et courbes logistiques ajustées sur quatre opérations terminées, avec le repère des 90 % du potentiel](figures/fig_2_5_courbes_logistiques.png){width=95%}
+![Réservations cumulées et courbes logistiques ajustées sur quatre opérations terminées, avec le repère des 90 % du potentiel](figures/fig_5_5_courbes_logistiques.png){width=95%}
 
 La limite de cet indicateur est connue et vérifiée : en début de commercialisation, le
 potentiel n'est pas identifiable, l'ajustement pouvant alors produire n'importe quelle
@@ -402,10 +381,10 @@ Son intérêt principal n'est pas sa performance mais sa lisibilité : ses coeff
 lisent comme des prix implicites, ce qui permet de les discuter avec la direction
 commerciale. On y lit une prime d'étage de +6 %, une prime d'exposition sud, une décote de
 63 % pour le logement social, qui s'explique par des prix réglementés, et un effet millésime
-d'environ +19 points entre 2016 et 2023, suivi d'un plateau. La Figure 2.6 représente cet
+d'environ +19 points entre 2016 et 2023, suivi d'un plateau. La Figure 5.6 représente cet
 effet millésime année par année.
 
-![Effet millésime du modèle de prix : prime par année de réservation, référence 2016](figures/fig_2_6_effet_millesime.png){width=88%}
+![Effet millésime du modèle de prix : prime par année de réservation, référence 2016](figures/fig_5_6_effet_millesime.png){width=88%}
 
 Ce plateau mérite d'être commenté, car il recoupe l'axe B. Les prix du neuf n'ont pas
 baissé avec la remontée des taux : c'est le volume qui s'est ajusté, en parfaite cohérence
@@ -415,10 +394,10 @@ avait rien à stabiliser.
 
 Appliqué aux 127 appartements en stock, ce modèle sert de détecteur. Au seuil d'une erreur
 type, 103 lots sont dans le marché, 8 se situent au-dessus du prix estimé et 16 en dessous.
-La Figure 2.7 confronte le prix de grille au prix de marché estimé et matérialise cette
+La Figure 5.7 confronte le prix de grille au prix de marché estimé et matérialise cette
 bande de tolérance.
 
-![Stock d'appartements : prix de grille contre prix de marché estimé, avec la bande à plus ou moins une erreur type](figures/fig_2_7_stock_prix_marche.png){width=88%}
+![Stock d'appartements : prix de grille contre prix de marché estimé, avec la bande à plus ou moins une erreur type](figures/fig_5_7_stock_prix_marche.png){width=88%}
 
 La recommandation de remise est ensuite posée comme une petite optimisation sous
 contrainte : maximiser le revenu attendu à douze mois d'une opération, en ajustant chaque
@@ -472,19 +451,19 @@ L'application finale est la meilleure réponse au risque de sur-complexité que 
 ouverture de ce chapitre : ce qui est livré au métier est simple. Cinq pages, un périmètre
 restreint aux 147 opérations de promotion, et aucun terme de modélisation à l'écran.
 
-La page **Vue d'ensemble**, présentée en Figure 2.8, donne la situation en quelques
+La page **Vue d'ensemble**, présentée en Figure 5.8, donne la situation en quelques
 secondes : 147 opérations suivies, dont 10 en alerte et 2 à surveiller parmi les 68
 opérations en cours suffisamment engagées, 421 lots principaux en stock, un rythme récent
 de 4,8 réservations par opération et par mois, pour un taux de crédit à 3,11 %.
 
-![Plateforme, page « Vue d'ensemble »](figures/fig_2_8_plateforme_vue_ensemble.png){width=100%}
+![Plateforme, page « Vue d'ensemble »](figures/fig_5_8_plateforme_vue_ensemble.png){width=100%}
 
-La page **Alertes marge**, présentée en Figure 2.9, classe les opérations par niveau
+La page **Alertes marge**, présentée en Figure 5.9, classe les opérations par niveau
 d'alerte, le score de l'axe A étant traduit en trois niveaux. Elle affiche surtout, pour
 chaque opération, les dépassements déjà engagés en euros et les postes concernés. C'est la
 page la plus consultée, et il faut redire qu'elle repose sur du SQL et non sur un modèle.
 
-![Plateforme, page « Alertes marge » : niveaux d'alerte et dépassements engagés en euros](figures/fig_2_9_plateforme_alertes_marge.png){width=100%}
+![Plateforme, page « Alertes marge » : niveaux d'alerte et dépassements engagés en euros](figures/fig_5_9_plateforme_alertes_marge.png){width=100%}
 
 Les trois autres pages transposent les axes restants. La page **Rythme de vente** fait de
 l'axe B un simulateur : un curseur de taux 2026 produit une phrase de résultat fondée sur
@@ -532,7 +511,7 @@ frontière entre les deux activités ressort d'ailleurs d'elle-même dès l'anal
 exploratoire, constituant une validation involontaire du choix de périmètre demandé par
 l'entreprise.
 
-## Conclusion du chapitre et conclusion générale
+## Conclusion du chapitre
 
 Le Copilote Financier répond aux trois questions posées en ouverture, mais il n'y répond
 pas avec la même force, et je crois qu'il est plus honnête de le dire que de présenter un
@@ -543,43 +522,34 @@ discutable avec la direction commerciale, à la réserve près d'un paramètre d
 emprunté à la littérature. L'axe A, enfin, ne dépasse pas le stade du score de tri, et sa
 partie la plus utilisée n'est pas un modèle mais une requête SQL.
 
-Ce déséquilibre n'est pas un accident de parcours, c'est une conséquence directe de la
-donnée disponible. Là où j'avais une profondeur temporelle, le modèle a produit un résultat
+Ce déséquilibre n'est pas un accident de parcours, c'est une conséquence directe de la donnée
+disponible. Là où j'avais une profondeur temporelle, le modèle a produit un résultat
 exploitable ; là où je n'avais qu'une photographie à date, il n'a pas pu en produire. Cette
-observation est, pour moi, l'apport principal du projet, et elle rejoint la thèse que
-j'avançais en fin de mémoire de mi-parcours : la structure de la donnée commande ce que la
-modélisation peut en tirer.
+observation est, pour moi, l'apport principal du projet, et elle vérifie la thèse annoncée en
+introduction : la structure de la donnée commande ce que la modélisation peut en tirer.
 
-Les deux chapitres de ce mémoire se répondent précisément sur ce point. Le premier raconte
-la reconstitution d'un référentiel client dans un nouvel ERP, avec ses clés d'unicité, ses
-contournements de format et ses arbitrages documentés. Le second raconte ce que l'on peut
-faire d'un patrimoine de données une fois qu'il est fiable, et ce que l'on ne peut pas en
-faire lorsqu'il lui manque une dimension. Le lien entre les deux n'est pas rhétorique : les
-deux recommandations de ce chapitre, historiser les exports mensuels et fiabiliser la
-saisie des motifs de désistement, sont exactement de la même nature que le travail décrit
-au chapitre 1. Ce sont des travaux de structure, faits pour rendre possible une
-analyse à venir.
+Ce chapitre et les deux chantiers de reprise qui le précèdent se répondent précisément sur ce
+point. Les chapitres 2 et 3 racontent la reconstitution d'un socle de gestion dans un nouvel
+ERP, avec ses séquences d'injection, ses clés d'unicité, ses contournements de format et ses
+arbitrages documentés. Celui-ci raconte ce que l'on peut faire d'un patrimoine de données une
+fois qu'il est fiable, et ce que l'on ne peut pas en faire lorsqu'il lui manque une
+dimension. Le lien entre eux n'est pas rhétorique : les deux recommandations formulées plus
+haut, historiser les exports mensuels et fiabiliser la saisie des motifs de désistement, sont
+exactement de la même nature que le travail décrit aux chapitres 2 et 3. Ce sont des travaux
+de structure, faits pour rendre possible une analyse à venir.
 
-Cette année d'alternance m'aura donc fait parcourir un cycle complet. Le premier semestre a
-été celui de l'ingénierie des données, avec la migration des opérations vers SPO et sa
-stratégie de déploiement en coquilles vides. La reprise des tiers, exposée au chapitre 1,
-l'a prolongée au second semestre : elle a achevé de constituer le socle commercial du
-nouvel outil, et elle a réalisé le chantier d'interopérabilité entre l'ERP et le CRM que
-j'annonçais en fin de mémoire de mi-parcours. Le second semestre aura donc été celui de la
-valorisation autant que celui de l'achèvement du socle, avec un projet de Data Science mené
-de bout en bout, de la compréhension des exports jusqu'à une application destinée à la
-direction financière.
+::: transition
+Les cinq premiers chapitres de ce mémoire ont exposé le contexte, puis les quatre missions de
+l'année, chacune avec ses résultats et ses limites. Ils l'ont fait mission par mission, dans
+l'ordre où elles se sont présentées.
 
-Ce que je retire de ce parcours tient en peu de mots. Un projet de données ne se joue pas
-au moment du choix de l'algorithme mais bien avant, lorsqu'on décide ce qu'est un client,
-ce qu'est une marge, ou ce que contient réellement un fichier dont le nom annonce autre
-chose. Le métier de gestionnaire d'information, tel que je l'ai pratiqué cette année,
-consiste largement à prendre ces décisions-là, à les écrire, et à les rendre vérifiables
-par d'autres.
+Néanmoins, une succession de récits ne fait pas un bilan. Les questions que pose un jury à un
+mémoire professionnel sont d'un autre ordre : comment ces projets ont-ils été conduits, avec
+quelles méthodes et quelles technologies, comment ai-je su que le résultat était bon, et
+qu'est-ce qui n'a pas fonctionné ? Cependant, ces questions ne se traitent pas au fil de
+chaque chapitre sans les alourdir.
 
-Il reste évidemment beaucoup à faire. La migration vers SPO n'est pas achevée, l'historique
-budgétaire reste à reprendre, et le Copilote Financier ne deviendra un véritable outil de
-suivi que lorsque les exports auront été historisés sur une durée suffisante. Ce que cette
-année aura établi ne dépend pourtant pas de ces échéances : structurer une donnée et la
-modéliser ne sont pas deux métiers successifs, mais deux moments du même travail, et c'est
-le premier qui décide de ce que le second pourra en tirer.
+Le chapitre suivant leur est donc consacré. Il prend de la hauteur sur les quatre missions et
+les relit transversalement, sous l'angle de la conduite de projet, des outils, de
+l'évaluation des résultats et des difficultés rencontrées.
+:::

@@ -1,0 +1,30 @@
+---
+title: "Du Data Engineering à la Data Science"
+author: "Yasmina Saoud"
+date: ""
+lang: fr
+pagedetitre: true
+titrememoire: "Du Data Engineering à la Data Science"
+soustitre: "Fiabiliser la donnée d'un promoteur-aménageur, puis la mettre au service de la décision"
+auteurmajuscule: "SAOUD Yasmina"
+annee: "2025-2026"
+tutriceentreprise: "Mme Cruanas"
+tutriceuniversitaire: "Mme Trottier"
+motscles: "Ingénierie des données, migration d'ERP, reprise de données, API, reporting, aide à la décision, machine learning, immobilier"
+output:
+  pdf_document:
+    template: rendu/template_memoire.tex
+    latex_engine: pdflatex
+    number_sections: true
+    fig_caption: true
+    pandoc_args:
+      - --lua-filter=rendu/filtre_memoire.lua
+      - --top-level-division=chapter
+  word_document:
+    toc: true
+    toc_depth: 2
+    fig_caption: true
+    pandoc_args:
+      - --lua-filter=rendu/filtre_memoire.lua
+      - --top-level-division=chapter
+---
