@@ -133,22 +133,24 @@ l'initiation au Machine Learning, ma deuxième année de Master MIASHS au sein d
 SPA marque une nouvelle étape. La transition numérique du groupe s'est accélérée cette année
 avec la refonte complète de son ERP métier, passant de l'outil historique Grimmo à la
 solution SPO éditée par Salvia. Ce changement d'échelle m'a conduite à évoluer d'un rôle
-d'assistance opérationnelle vers des missions d'ingénierie plus techniques, au cœur de
-l'interopérabilité des systèmes.
+d'assistance opérationnelle vers des missions d'ingénierie plus techniques. Le cœur du
+travail s'est déplacé vers l'interopérabilité des systèmes.
 
 Ce mémoire présente l'ensemble des travaux réalisés durant cette année, du premier jour de
 la migration jusqu'à la livraison d'une application d'aide à la décision. Il témoigne d'un
 mouvement en deux temps dans mes missions : le passage de la Data Science exploratoire au
 Data Engineering appliqué, puis le retour à la modélisation une fois les données
-reconstituées. En effet, avant de pouvoir modéliser ou prédire, il est impératif de
-construire une architecture de données robuste et cohérente. J'ai ainsi été confrontée à des
-défis techniques majeurs, impliquant l'automatisation de flux complexes, la gestion de règles
-de gestion dynamiques et l'industrialisation des processus de reprise.
+reconstituées. L'ordre compte. Avant de pouvoir modéliser ou prédire, il est impératif de
+construire une
+architecture de données robuste et cohérente. J'ai ainsi été confrontée à des défis
+techniques majeurs, impliquant l'automatisation de flux complexes, la gestion de règles de
+gestion dynamiques et l'industrialisation des processus de reprise.
 
 C'est de cette expérience que je tire la thèse de ce mémoire, et je préfère l'énoncer
 d'emblée pour que le lecteur puisse en juger au fil des chapitres : **la structure de la
-donnée commande ce que la modélisation peut en tirer**. Ce n'est pas une position théorique,
-c'est un constat que l'année a produit deux fois. La première, en creux, lorsque la charge de
+donnée commande ce que la modélisation peut en tirer**. Ce n'est pas une position théorique.
+C'est un constat que l'année a produit deux fois. La première, en creux, lorsque la charge
+de
 la migration a repoussé le projet de Machine Learning au second semestre. La seconde, en
 plein, lorsque le projet de Data Science a donné des résultats solides là où les données
 avaient une profondeur temporelle, et des résultats modestes là où elles n'étaient qu'une
@@ -1209,13 +1211,15 @@ une règle pour que tout le monde consomme la même ?
 :::
 
 Si les deux chantiers de reprise ont constitué la majeure partie de mon année, j'ai maintenu
-en parallèle mes activités de gestionnaire d'information, assurant la continuité des missions
+en parallèle mes activités de gestionnaire d'information, assurant la continuité des
+missions
 de reporting initiées en Master 1, tout en prenant part à des projets d'infrastructure
 système. Ce chapitre détaille ces activités filées, qui sont essentielles au bon
 fonctionnement quotidien des services et qui ont couru sur les deux semestres.
 
 Elles méritent un chapitre propre pour une raison de fond, et pas seulement par souci
-d'exhaustivité. C'est en les menant que j'ai rencontré, sous une forme miniature, le problème
+d'exhaustivité. C'est en les menant que j'ai rencontré, sous une forme miniature, le
+problème
 qui commande tout le projet de Data Science exposé au chapitre 5 : lorsqu'une règle de
 gestion n'a nulle part où être écrite, elle finit par être recalculée partout, différemment.
 
@@ -1225,7 +1229,8 @@ gestion n'a nulle part où être écrite, elle finit par être recalculée parto
 
 Dans la continuité de ma première année d'alternance, j'ai conservé la charge de la
 réalisation des demandes de reporting pour les différents services du groupe. Cette mission
-consiste à traduire des besoins métiers parfois abstraits en indicateurs visuels exploitables
+consiste à traduire des besoins métiers parfois abstraits en indicateurs visuels
+exploitables
 et fiables.
 
 Le travail commence rarement par une spécification. Il commence par une phrase du type « on
@@ -1245,7 +1250,8 @@ qui doit être facturé ou non.
 La complexité de cette demande ne réside pas dans la donnée brute, mais dans l'application
 d'une règle de gestion spécifique. Il s'agit d'une alternance conditionnelle stricte où la
 première commande est payante, la deuxième est gratuite, la troisième est payante, et ainsi
-de suite. Cette logique, simple à énoncer pour un humain, devient un véritable défi lorsqu'il
+de suite. Cette logique, simple à énoncer pour un humain, devient un véritable défi
+lorsqu'il
 faut l'automatiser dans un outil décisionnel sans modifier l'architecture des données.
 
 La difficulté tient à ce que la règle ne porte pas sur une ligne, mais sur la position d'une
@@ -1255,7 +1261,8 @@ calcule, et elle change dès qu'une commande est ajoutée ou annulée.
 
 ### Contraintes techniques et modélisation dynamique
 
-Mon travail a consisté à trouver la manière la plus optimale d'implémenter cette logique avec
+Mon travail a consisté à trouver la manière la plus optimale d'implémenter cette logique
+avec
 nos logiciels existants. En effet, je faisais face à des contraintes techniques fortes qui
 limitaient mes options :
 
@@ -1271,7 +1278,8 @@ Ces deux contraintes se conjuguent pour interdire toute solution qui consisterai
 *stocker* le résultat. Il fallait donc concevoir une méthode de calcul dynamique. L'objectif
 était de créer un algorithme au sein de MyReport qui, lors de la génération du tableau,
 effectue un traitement en temps réel. Le système doit d'abord identifier les opérations et
-les lots, puis classer leurs commandes par ordre chronologique. Il attribue ensuite un rang à
+les lots, puis classer leurs commandes par ordre chronologique. Il attribue ensuite un
+rang à
 chaque commande et applique une condition logique : si le rang est impair, le statut est
 défini comme « Payant », et s'il est pair, il devient « Gratuit ». La Figure 4.1 représente
 cette chaîne de calcul.
@@ -1301,16 +1309,21 @@ déploiement du SSO (Single Sign-On).
 
 Le SSO est une technologie permettant à un utilisateur d'accéder à plusieurs applications
 avec une seule authentification. Pour le groupe Angelotti, l'enjeu était double : simplifier
-l'expérience utilisateur en réduisant le nombre de mots de passe à mémoriser, et renforcer la
+l'expérience utilisateur en réduisant le nombre de mots de passe à mémoriser, et renforcer
+la
 sécurité des accès aux outils sensibles.
 
 Mon rôle a été à la fois opérationnel et pédagogique. J'ai pris en charge le déploiement de
 la solution logicielle sur les postes de travail, en ciblant deux périmètres clés : l'agence
 de Perpignan et le service financier du siège. Cette mission m'a demandé de coordonner mes
-interventions avec les plannings des collaborateurs pour minimiser l'impact sur leur travail.
+interventions avec les plannings des collaborateurs pour minimiser l'impact sur leur
+travail.
 Concrètement, j'ai procédé à l'installation du connecteur sur chaque poste, vérifié la bonne
 synchronisation avec l'annuaire de l'entreprise, et accompagné les utilisateurs lors de leur
-première connexion pour m'assurer de la bonne prise en main de l'outil.
+première connexion pour m'assurer de la bonne prise en main de l'outil. Nous avons
+volontairement
+commencé par ces deux périmètres avant d'envisager une généralisation, afin de mesurer les
+difficultés réelles sur un échantillon restreint.
 
 ### Ce qu'une mission d'administration système apprend sur la donnée
 
@@ -1330,7 +1343,8 @@ tiers.
 Enfin, l'accompagnement des utilisateurs lors de leur première connexion a été instructif à
 sa manière. Une solution techniquement correcte qui déroute l'utilisateur au moment de s'en
 servir n'est pas une solution livrée. Ce constat, fait ici sur une fenêtre
-d'authentification, s'est retrouvé mot pour mot au moment de livrer l'application d'aide à la
+d'authentification, s'est retrouvé mot pour mot au moment de livrer l'application d'aide à
+la
 décision.
 
 ## Ce que les missions filées coûtent et ce qu'elles rapportent
@@ -1343,7 +1357,8 @@ moins vite qu'un chantier mené d'un trait.
 
 Elles rapportent cependant trois choses que je n'aurais pas obtenues autrement.
 
-La première est une **connaissance du métier** que la seule fréquentation des bases de données
+La première est une **connaissance du métier** que la seule fréquentation des bases de
+données
 ne donne pas. On ne comprend pas ce qu'est une commande gratuite en lisant une table ; on le
 comprend en écoutant le service juridique expliquer pourquoi la règle existe.
 
@@ -1351,7 +1366,8 @@ La deuxième est une **crédibilité** auprès des services. Avoir répondu à l
 courantes pendant un an est ce qui a rendu possible, au second semestre, un échange direct
 avec la direction financière sur ses besoins d'aide à la décision.
 
-La troisième est une **vision de l'architecture** du système d'information dans son ensemble,
+La troisième est une **vision de l'architecture** du système d'information dans son
+ensemble,
 depuis l'authentification des postes jusqu'aux tableaux de bord, en passant par les bases de
 gestion. Cette vision d'ensemble est précisément ce qui manque le plus souvent à un profil
 purement analytique, et c'est elle qui m'a permis de concevoir le projet du second semestre
@@ -1372,7 +1388,8 @@ Cependant, ces contournements auront rendu un service précis : ils ont maintenu
 décisionnel en état de marche pendant les douze mois qu'a duré la reconstruction du socle.
 
 Ce socle étant désormais fiable, le chapitre suivant présente ce qu'il devient possible d'en
-faire. Il expose le projet de Data Science mené au second semestre, le Copilote Financier, et
+faire. Il expose le projet de Data Science mené au second semestre, le Copilote Financier,
+et
 la manière dont les questions rencontrées jusqu'ici, la définition partagée d'une notion, la
 reformulation d'un besoin métier, la prise en main par l'utilisateur, s'y retrouvent toutes,
 déplacées d'un cran.
@@ -2500,39 +2517,45 @@ dominée par des enjeux d'ingénierie des données et d'architecture système, a
 au second semestre, à la modélisation statistique.
 
 Le premier semestre a été celui de la reconstruction du socle. La migration de la base
-Grimmo vers l'ERP SPO m'a confrontée à la réalité rugueuse du terrain : il ne s'agissait pas
+Grimmo vers l'ERP SPO m'a confrontée à la réalité rugueuse du terrain. Il ne s'agissait pas
 simplement de transférer des données, mais de rétro-concevoir un modèle dont les règles
-n'étaient pas documentées, de résoudre des problèmes d'intégrité référentielle complexes avec
+n'étaient pas documentées, de résoudre des problèmes d'intégrité référentielle complexes
+avec
 la gestion des identifiants dynamiques et du versionnement, et de faire preuve d'agilité
 stratégique. L'adoption de la méthode des « coquilles vides » pour sécuriser le démarrage de
 la facturation illustre cette capacité à adapter la technique aux impératifs métiers. En
 parallèle, j'ai maintenu un haut niveau de service sur le reporting, illustré par la mise en
-œuvre d'une règle de gestion juridique complexe malgré les contraintes de nos outils, tout en
+œuvre d'une règle de gestion juridique complexe malgré les contraintes de nos outils, tout
+en
 participant à la sécurisation du système d'information via le déploiement du SSO.
 
-Le second semestre a prolongé ce travail, puis l'a valorisé. La reprise des tiers a achevé de
+Le second semestre a prolongé ce travail, puis l'a valorisé. La reprise des tiers a achevé
+de
 constituer le socle commercial du nouvel ERP, en créant 1 434 clients acquéreurs sans
 doublon, et elle a réalisé l'interopérabilité entre l'ERP et le CRM qui restait à faire. Le
 Copilote Financier a ensuite exploité ce socle pour outiller la direction financière sur
 trois questions de gestion, et il l'a fait de bout en bout, de la compréhension des exports
 jusqu'à une application que les contrôleurs de gestion ouvrent eux-mêmes.
 
-Ce parcours en deux temps aura démontré la thèse annoncée en introduction, et il l'aura fait
-deux fois plutôt qu'une. Une première fois en creux, lorsque la charge de la migration a
+Ce parcours en deux temps aura démontré la thèse annoncée en introduction. Il l'aura même
+fait deux fois plutôt qu'une. Une première fois en creux, lorsque la charge de la
+migration a
 repoussé le projet de modélisation au second semestre : tenter de modéliser des phénomènes
 financiers sur une base fragmentée entre l'ancien et le nouveau système aurait conduit à des
 résultats biaisés et non pérennes. Une seconde fois en plein, lorsque le projet de Data
 Science a donné des résultats solides sur le rythme d'écoulement, où les données avaient une
 profondeur temporelle, et des résultats modestes sur le risque de marge, où elles n'étaient
-qu'une photographie à date. La structure de la donnée commande ce que la modélisation peut en
+qu'une photographie à date. La structure de la donnée commande ce que la modélisation peut
+en
 tirer : c'est le même énoncé dans les deux cas, obtenu par deux chemins indépendants.
 
 Il reste évidemment beaucoup à faire. La migration vers SPO n'est pas achevée, l'historique
 budgétaire reste à reprendre, l'intégration à l'infrastructure Nexity s'annonce, et le
 Copilote Financier ne deviendra un véritable outil de suivi que lorsque les exports auront
-été historisés sur une durée suffisante. Ce que cette année aura établi ne dépend pourtant
-pas de ces échéances. Un projet de données ne se joue pas au moment du choix de l'algorithme
-mais bien avant, lorsqu'on décide ce qu'est un client, ce qu'est une marge, ou ce que contient
+été historisés sur une durée suffisante. Ce que cette année aura établi n'en dépend pas.
+Un projet de données ne se joue pas au moment du choix de l'algorithme
+mais bien avant, lorsqu'on décide ce qu'est un client, ce qu'est une marge, ou ce que
+contient
 réellement un fichier dont le nom annonce autre chose. Structurer une donnée et la modéliser
 ne sont pas deux métiers successifs, mais deux moments du même travail, et c'est le premier
 qui décide de ce que le second pourra en tirer.
