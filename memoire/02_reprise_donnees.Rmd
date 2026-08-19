@@ -1,41 +1,209 @@
-# La reprise des tiers : une chaîne de traitement pilotée par formules
+# La reprise des données vers SPO : des opérations aux tiers
 
 ::: sommaire
 **Sommaire**
 
-- 3.1 Contexte et enjeux de la reprise des tiers
-    - 3.1.1 Du CRM Vadimm à l'ERP SPO : le périmètre des données clients
-    - 3.1.2 L'enjeu central : créer sans dupliquer
-- 3.2 Conception du fichier de travail : une chaîne de traitement pilotée par formules
-    - 3.2.1 Une architecture en trois temps : sources, feuille pivot, feuilles de sortie
-    - 3.2.2 Le modèle de données des tiers dans SPO : couples, personnes physiques, personnes morales
-- 3.3 Les trois mécanismes algorithmiques
-    - 3.3.1 La déduplication par clés d'unicité différenciées selon la nature du tiers
-    - 3.3.2 L'exclusion des tiers déjà présents dans SPO
-    - 3.3.3 La propagation vers les feuilles de sortie par numérotation séquentielle
-- 3.4 De la préparation à l'injection : procédure et contraintes techniques
-    - 3.4.1 Génération et normalisation des fichiers d'import
-    - 3.4.2 Le contournement par API : 872 requêtes PATCH pour les coordonnées des couples
-- 3.5 Traitement des cas particuliers et arbitrages
-- 3.6 Bilan de l'import et points de vigilance pour la suite
+- 1.1 Ce que le changement d'ERP imposait
+- 1.2 La migration des opérations
+    - 1.2.1 Un arbitrage initial : automatiser ou saisir
+    - 1.2.2 Appropriation technique et industrialisation des flux
+    - 1.2.3 Dépendances hiérarchiques, identifiants et versionnement
+    - 1.2.4 Le déploiement en « coquilles vides » et le bilan du semestre
+- 1.3 La reprise des tiers
+    - 1.3.1 Contexte et enjeux de la reprise des tiers
+    - 1.3.2 Conception du fichier de travail
+    - 1.3.3 Les trois mécanismes algorithmiques
+    - 1.3.4 De la préparation à l'injection
+    - 1.3.5 Traitement des cas particuliers et arbitrages
+    - 1.3.6 Bilan de l'import et points de vigilance
+- 1.4 Ce que ces deux reprises ont en commun
 :::
 
-Ce chapitre détaille la reprise des tiers, c'est-à-dire des clients acquéreurs, depuis notre
-CRM Vadimm vers le nouvel ERP du groupe. Conduite au second semestre, cette mission prolonge
-directement le chantier exposé au chapitre précédent, et elle constitue le premier pas vers
-l'interopérabilité entre l'ERP et le CRM que je n'avais pu qu'annoncer à la fin du premier
-semestre : elle transfère le référentiel client, la synchronisation permanente sans double
-saisie restant à construire. Elle en change
-toutefois la nature : il ne s'agissait plus d'injecter des structures de gestion, opérations,
-tranches et budgets, mais des personnes, avec ce que cela implique de risques de doublons et
-d'exigence de qualité. J'y expose la conception du fichier de travail que j'ai construit
-pour industrialiser cette reprise, les trois mécanismes algorithmiques sur lesquels il
-repose, les contraintes techniques du format d'import de SPO et la manière dont je les ai
-contournées, puis le bilan de l'import et les enseignements que j'en retire.
+Ce chapitre expose le chantier le plus lourd de l'année : la reconstitution, dans le nouvel
+ERP, du socle de données du groupe. Il s'est déroulé en deux temps. Le premier semestre a
+porté sur les structures de gestion, opérations, tranches et budgets, migrées depuis la base
+historique Grimmo. Le second a porté sur les tiers, c'est-à-dire les clients acquéreurs,
+repris depuis le CRM Vadimm. Les deux missions partagent une méthode et se distinguent par la
+question qu'elles posent : injecter des structures suppose de comprendre un modèle de données
+inconnu ; injecter des personnes suppose de décider ce qui fait qu'une personne est la même.
 
-## Contexte et enjeux de la reprise des tiers
+## Ce que le changement d'ERP imposait
 
-### Du CRM Vadimm à l'ERP SPO : le périmètre des données clients
+Le remplacement de Grimmo par SPO a commandé le calendrier de toute l'année, et trois
+contraintes en découlaient. Une contrainte de **volumétrie** d'abord : 283 opérations devaient
+être reprises avec leurs subdivisions et leurs budgets, échelle à laquelle une saisie manuelle
+intégrale était exclue. Une contrainte de **continuité de service** ensuite : les utilisateurs
+devaient pouvoir facturer dès le basculement, une interruption de deux semaines étant déjà
+inacceptable. Une contrainte de **conformité au modèle cible** enfin : SPO impose ses propres
+règles d'intégrité, qui n'étaient pas toutes documentées et qu'il a fallu découvrir en les
+heurtant.
+
+La Figure 1.1 situe ces deux reprises dans le système d'information du groupe. Les trois
+outils et leurs usages métier occupent le haut du schéma, reliés par les flèches qui figurent
+la circulation normale de la donnée ; les tableurs forment la bande du bas, et les traits
+pointillés qui les rattachent à chacun d'eux marquent les échanges qui ne passent par aucun
+système. On y lit le problème que les deux missions de ce chapitre attaquent : le même client
+pouvait exister dans le CRM et dans l'ERP sans qu'aucun lien ne les rattache.
+
+![Les outils du système d'information et la circulation de la donnée](figures/fig_1_1_systeme_information.png){width=100%}
+
+La Figure 1.2 donne la répartition des quatre missions de l'année sur les deux semestres et
+situe les deux reprises par rapport aux missions filées du chapitre 2 et au projet de Data
+Science du chapitre 3.
+
+![Les quatre missions de l'année et leur répartition sur les deux semestres](figures/fig_1_2_frise_missions.png){width=100%}
+
+À ces contraintes s'ajoute une perspective absente du calendrier initial : le passage prochain
+vers l'infrastructure technique du groupe Nexity, qui a influé sur certains choix techniques,
+notamment lorsqu'il a fallu évaluer si l'architecture retenue pour le projet de Data Science
+tiendrait à une échelle supérieure.
+
+## La migration des opérations
+
+Cette mission, conduite au premier semestre, visait un objectif critique : récupérer
+l'intégralité des opérations immobilières actives pour assurer la continuité de la gestion
+financière et comptable dans le nouvel environnement.
+
+### Un arbitrage initial : automatiser ou saisir
+
+Face aux 283 opérations du périmètre, une saisie manuelle intégrale représentait un risque
+d'erreur humaine trop élevé et une charge incompatible avec les délais. Nous avons donc opté
+pour une stratégie hybride : une approche automatisée pour l'injection des gros volumes de
+données structurelles via les API, et un traitement manuel pour les exceptions et les cas
+historiques ne pouvant entrer dans les gabarits standardisés.
+
+Cet arbitrage n'allait pas de soi. Automatiser suppose un investissement initial qui ne se
+rentabilise que si le volume est suffisant et les données homogènes : sur 283 opérations, la
+première condition était remplie, la seconde seulement en partie. Vouloir tout automatiser
+aurait conduit à écrire des règles pour des cas uniques, ce qui coûte plus cher que de les
+traiter à la main.
+
+### Appropriation technique et industrialisation des flux
+
+Avant de manipuler les données de masse, il fallait maîtriser le modèle de données cible. Ma
+première tâche a consisté à analyser la documentation technique de l'API de Salvia [2], puis à
+mener une phase de tests unitaires en appelant manuellement les différents *endpoints* pour
+décortiquer la mécanique de création d'une donnée. Deux informations distinctes en sont
+sorties : quels champs l'ERP exige pour accepter une création, ce que la documentation décrit
+mais qui reste théorique tant qu'on n'a pas vu le service refuser ; et dans quel ordre il faut
+créer les objets entre eux, qui n'était pas explicité et qui a occupé la suite du travail.
+
+Cette phase peut sembler improductive, puisqu'elle ne crée aucune donnée. Je la considère
+pourtant comme la plus rentable du projet : chaque règle découverte à ce stade sur un objet
+unique aurait coûté, découverte plus tard, un rejet sur plusieurs centaines de lignes.
+
+Nous avons ensuite déployé le module DirectAPI de l'éditeur, conçu pour interfacer des
+fichiers plats avec l'ERP, dont j'ai construit l'intégralité du pipeline d'alimentation sous
+la forme de maquettes Excel en trois étapes : **extraction** de la base source par MyReport
+Builder, **transformation et mapping** par formules RechercheX, **chargement** via DirectAPI.
+
+L'étape de transformation est celle qui a demandé le plus de travail, et celle dont dépendait
+la validité de tout le reste. La nomenclature de SPO est stricte : un libellé de poste
+budgétaire ou un type de tranche doit correspondre à une valeur que le nouveau système
+reconnaît, faute de quoi la ligne est rejetée. Les correspondances viennent soit des tables de
+paramétrage extraites de SPO, où une divergence est une erreur de lecture, soit de fichiers de
+mapping que j'ai constitués, dont je réponds. Excel a été retenu comme moteur de
+transformation parce que la maquette reste relisible par les personnes qui connaissent le
+métier et non le code, et qu'une correspondance douteuse peut leur être montrée telle quelle.
+
+Pour sécuriser le processus, j'ai appliqué une validation itérative : 3 opérations pilotes,
+puis un lot de 12, avant la migration de masse. Cette progression par paliers rend les erreurs
+lisibles : sur trois opérations, un rejet s'analyse en quelques minutes ; sur plusieurs
+dizaines, les messages se mélangent et il devient difficile de savoir quelle règle a été
+violée.
+
+### Dépendances hiérarchiques, identifiants et versionnement
+
+Deux difficultés structurelles ont mobilisé l'essentiel de mon temps, et elles relèvent moins
+du transfert de données que de la rétro-ingénierie des processus de l'ERP.
+
+La première a été de décrypter l'ordre strict d'injection, contrainte d'intégrité
+référentielle qui n'était pas explicitée par la documentation de l'éditeur. Je l'ai découverte
+empiriquement, en analysant les codes d'erreur renvoyés par l'API : il faut créer l'opération,
+puis les tranches de travaux, puis les tranches commerciales, puis le budget associé. La
+Figure 1.3 représente cette séquence. Toute injection ne respectant pas cet ordre se solde par
+un échec, le système ne trouvant pas l'objet parent.
+
+![La séquence d'injection imposée par l'intégrité référentielle de l'ERP](figures/fig_1_3_sequence_injection.png){width=95%}
+
+Face à ce manque de clarté, j'ai pris l'initiative de rédiger une documentation interne
+cartographiant les étapes de la séquence et les prérequis de chaque objet, c'est-à-dire, pour
+chaque type de donnée à créer, ce qui doit exister avant lui. Je l'ai fait parce que les
+règles que les codes d'erreur m'avaient révélées n'existaient nulle part ailleurs que dans mes
+notes de test. C'est le premier livrable écrit de mon année qui n'était pas un fichier de
+données, et c'est celui qui a le plus servi aux autres : la reprise des tiers, exposée plus
+bas, s'est appuyée directement dessus.
+
+La seconde difficulté concernait les identifiants uniques dans le cadre des mises à jour, par
+exemple pour rectifier un montant de budget après sa création. Ces identifiants système
+n'étaient visibles nulle part dans l'interface, et l'architecture de l'API repose sur un
+principe de versionnement et non d'écrasement : lors de la modification d'un budget, le
+système ne met pas à jour la ligne existante, il clôture la version précédente et en crée une
+nouvelle avec un nouvel identifiant. Ne pouvant me fier à aucun identifiant statique, j'ai
+conçu une logique de requêtage dynamique en trois temps, que résume la Figure 1.4 : un appel
+GET pour récupérer toutes les versions de budget liées à une opération, un tri pour identifier
+l'identifiant de la version la plus récente, puis un appel POST sur cet identifiant.
+
+![Le requêtage dynamique imposé par le versionnement des budgets](figures/fig_1_4_requetage_dynamique.png){width=100%}
+
+Cette contrainte m'a appris quelque chose de plus général sur les interfaces de programmation :
+une API ne se contente pas d'exposer des données, elle impose un modèle de comportement. Le
+versionnement traduit ici une exigence d'auditabilité comptable parfaitement légitime, mais
+qui rend impossible toute écriture naïve. Comprendre l'intention derrière la contrainte est ce
+qui permet de la contourner proprement plutôt que de lutter contre elle.
+
+### Le déploiement en « coquilles vides » et le bilan du semestre
+
+Ces complexités, jointes aux délais imposés par la direction, nous ont confrontés à un
+arbitrage entre perfection technique et urgence opérationnelle. La contrainte majeure venait
+du besoin des utilisateurs de facturer dès le basculement : pour que ce processus fonctionne,
+et notamment le lien avec la Gestion Électronique des Documents (GED), il fallait que les
+opérations existent dans l'ERP, même sans leur historique.
+
+Nous avons donc adopté une stratégie de déploiement en « coquilles vides », qui dissocie le
+contenant — la structure de l'opération — du contenu, c'est-à-dire les données budgétaires
+détaillées. Le plan de migration a été réorienté pour créer massivement les fiches opérations
+et injecter en priorité ce qui est indispensable à la facturation, code opération et libellé,
+en laissant de côté les budgets passés et le détail des tranches.
+
+C'est la décision dont j'ai le plus appris en matière de conduite de projet. Elle suppose
+d'accepter qu'un système soit temporairement incomplet et de le documenter comme tel, plutôt
+que de retarder la mise en service jusqu'à la complétude. Le risque est réel : une donnée
+manquante que personne ne signale finit par être considérée comme absente pour de bon. Nous
+l'avons couvert en tenant la liste de ce qui restait à reprendre, ce qui a transformé une
+dette implicite en dette suivie. La stratégie a débloqué immédiatement la facturation et
+offert un délai précieux pour traiter la reprise au fil de l'eau.
+
+À la fin du premier semestre, nous n'étions qu'au début de ce chantier. La structure
+fondamentale des dossiers était modélisée et intégrée — opérations et tranches de travaux, la
+création des tranches commerciales étant encore en cours — mais l'intégration des données
+financières et comptables restait à accomplir, notamment la reprise détaillée des budgets et
+de l'historique des factures.
+
+| Objet du modèle SPO | État à la fin du premier semestre |
+|:-----------------------------|:--------------------------------------------|
+| Opérations | Créées pour l'ensemble du périmètre, 283 dossiers |
+| Tranches de travaux | Créées |
+| Tranches commerciales | Création en cours |
+| Budgets détaillés | Reportés, stratégie des « coquilles vides » |
+| Historique des factures | Non repris |
+
+Ce bilan appelle une remarque de méthode qui vaut au-delà de ce projet : sur un chantier de
+reprise, l'avancement ne se mesure pas au nombre d'enregistrements créés, mais à la part du
+modèle cible réellement couverte. Créer 283 opérations sans leurs budgets, ce n'est pas avoir
+fait la moitié du travail, c'est avoir rendu la seconde moitié possible.
+
+## La reprise des tiers
+
+Conduite au second semestre, cette mission prolonge directement la précédente et constitue le
+premier pas vers l'interopérabilité entre l'ERP et le CRM : elle transfère le référentiel
+client, la synchronisation permanente sans double saisie restant à construire. Elle change
+toutefois de nature : il ne s'agit plus d'injecter des structures de gestion, mais des
+personnes, avec ce que cela implique de risques de doublons et d'exigence de qualité.
+
+### Contexte et enjeux de la reprise des tiers
+
+#### Du CRM Vadimm à l'ERP SPO : le périmètre des données clients
 
 Le remplacement de l'ERP historique du groupe par SPO, décrit au chapitre 2, s'est fait par lots
 successifs. Après la création des opérations immobilières et de leurs tranches, il restait à
@@ -62,7 +230,7 @@ acquéreur qui a acheté trois lots apparaît donc trois fois, et rien dans le f
 signale. Transformer un fichier de ventes en un référentiel de personnes suppose de reconstituer
 l'identité de chacune, ce que le système source ne faisait pas à ma place.
 
-### L'enjeu central : créer sans dupliquer
+#### L'enjeu central : créer sans dupliquer
 
 L'enjeu de cette reprise se résume à une contrainte simple à énoncer et difficile à tenir :
 créer chaque client une fois et une seule. Deux sources de duplication se cumulaient, et
@@ -88,16 +256,16 @@ de construire un fichier de travail qui automatise entièrement ces contrôles p
 de sorte que la décision d'importer ou non une ligne soit calculée et non prise au cas par
 cas.
 
-## Conception du fichier de travail : une chaîne de traitement pilotée par formules
+### Conception du fichier de travail : une chaîne de traitement pilotée par formules
 
-### Une architecture en trois temps : sources, feuille pivot, feuilles de sortie
+#### Une architecture en trois temps : sources, feuille pivot, feuilles de sortie
 
 Le fichier que j'ai conçu ne se présente pas comme un tableur de saisie mais comme une
 chaîne de traitement automatique, dans la lignée des maquettes d'injection que j'avais
 construites au premier semestre. Les données entrent d'un côté sous leur forme brute et
 ressortent de l'autre sous la forme exacte attendue par SPO, sans qu'aucune donnée soit
 recopiée à la main entre les deux. Cette architecture se décompose en trois étages, que
-présente la Figure 3.1.
+présente la Figure 1.5.
 
 1. **Les feuilles sources** : trois feuilles en lecture seule qui reçoivent les extractions
    telles quelles. La feuille `VADIMM` porte les 1 557 lignes de ventes reprises du CRM, la
@@ -112,7 +280,7 @@ présente la Figure 3.1.
    entièrement générée par formules à partir de la feuille pivot, et destinée à être
    exportée en CSV.
 
-![La chaîne de traitement à trois étages du fichier de travail](figures/fig_3_1_chaine_traitement.png){width=100%}
+![La chaîne de traitement à trois étages du fichier de travail](figures/fig_1_5_chaine_traitement.png){width=100%}
 
 Ce découpage répond à une règle que je me suis imposée dès la conception, et qui figure en
 tête de la note de procédure que j'ai rédigée pour l'équipe : on ne modifie jamais
@@ -124,7 +292,7 @@ indispensable de l'automatisation : c'est elle qui garantit qu'à tout moment, l
 des fichiers d'import est bien le résultat des règles décrites, et non d'une retouche
 ponctuelle oubliée depuis.
 
-### Le modèle de données des tiers dans SPO : couples, personnes physiques, personnes morales
+#### Le modèle de données des tiers dans SPO : couples, personnes physiques, personnes morales
 
 Avant de pouvoir automatiser quoi que ce soit, il fallait comprendre comment SPO représente
 un tiers. Cette phase d'appropriation a repris la méthode que j'avais déjà éprouvée sur les
@@ -146,9 +314,8 @@ se fait à des couples acquéreurs.
 La seconde caractéristique est qu'un tiers n'est pas un enregistrement unique mais un
 ensemble d'objets liés. La fiche principale ne porte que l'identité ; l'adresse, le
 courriel, le téléphone, les représentants et les rôles sont autant d'objets rattachés, avec
-chacun son propre fichier d'import. La Figure 2.2, présentée au chapitre précédent, montre
-précisément l'interface du module DirectAPI avec la ressource « Tiers » sélectionnée : on y
-lit directement cette décomposition, puisque l'écran propose un emplacement de fichier
+chacun son propre fichier d'import. L'interface du module DirectAPI le montre directement
+lorsque la ressource « Tiers » y est sélectionnée : l'écran propose un emplacement de fichier
 distinct par objet rattaché. Six d'entre eux correspondent aux six feuilles de sortie de mon
 fichier, les deux autres, les RIB et les sites web, n'étant pas alimentés par cette reprise.
 
@@ -159,7 +326,7 @@ pour un couple, ils se rattachent aux représentants. Cette différence de trait
 paraît anodine sur le papier, s'est révélée être la principale contrainte technique de
 l'import.
 
-## Les trois mécanismes algorithmiques
+### Les trois mécanismes algorithmiques
 
 La feuille pivot repose sur trois mécanismes qui s'enchaînent : d'abord identifier les
 doublons internes, ensuite écarter les tiers déjà créés dans SPO, enfin distribuer les
@@ -167,7 +334,7 @@ lignes retenues vers les six feuilles de sortie. Ces trois mécanismes sont ce q
 un fichier de mise en forme d'un outil de reprise, puisqu'ils déplacent la décision
 d'importer une ligne de l'opérateur vers une règle écrite.
 
-### La déduplication par clés d'unicité différenciées selon la nature du tiers
+#### La déduplication par clés d'unicité différenciées selon la nature du tiers
 
 Dédupliquer suppose de répondre d'abord à une question qui n'est pas technique : à partir de
 quoi décide-t-on que deux lignes désignent la même personne ? C'est le point sur lequel
@@ -205,7 +372,7 @@ fichier, c'est une propriété du métier. Chercher une clé universelle aurait 
 fusionner des tiers distincts, soit à en dupliquer, et dans les deux cas l'erreur n'aurait été
 découverte que bien plus tard, dans l'usage quotidien de l'ERP.
 
-### L'exclusion des tiers déjà présents dans SPO
+#### L'exclusion des tiers déjà présents dans SPO
 
 Le deuxième mécanisme répond à la duplication externe. Pour chaque ligne de la feuille
 pivot, trois formules de recherche interrogent la feuille contenant l'extraction des tiers
@@ -230,16 +397,16 @@ détectés comme déjà existants et écartés. Rapporté aux 1 474 tiers uniqu
 sembler faible, mais chacun de ces 40 cas aurait produit un doublon durable dans le
 référentiel client de l'entreprise.
 
-La Figure 3.2 récapitule l'effet cumulé de ces deux premiers mécanismes. Des 1 602 lignes
+La Figure 1.6 récapitule l'effet cumulé de ces deux premiers mécanismes. Des 1 602 lignes
 du périmètre de départ, la déduplication interne en écarte 128 qui correspondent à des
 achats répétés, ramenant le total à 1 474 tiers uniques ; l'exclusion des tiers déjà présents
 dans SPO en retire 40 de plus, pour un total de **1 434 tiers à créer**. Chaque étage de
 ce filtrage correspond à une règle explicite, écrite dans une colonne du fichier, donc
 vérifiable et reproductible.
 
-![De 1 602 lignes de départ à 1 434 tiers créés : l'effet des deux filtres successifs](figures/fig_3_2_entonnoir_volumetrie.png){width=92%}
+![De 1 602 lignes de départ à 1 434 tiers créés : l'effet des deux filtres successifs](figures/fig_1_6_entonnoir_volumetrie.png){width=92%}
 
-### La propagation vers les feuilles de sortie par numérotation séquentielle
+#### La propagation vers les feuilles de sortie par numérotation séquentielle
 
 Restait à alimenter les six feuilles de sortie à partir des lignes retenues. La difficulté tient
 à ce que ces feuilles n'ont ni la même population ni le même nombre de lignes. La feuille des
@@ -263,15 +430,15 @@ saisie manuelle, produit les incohérences les plus difficiles à détecter : un
 rattachée au mauvais tiers parce qu'une ligne a été insérée quelque part sans que le reste
 suive.
 
-La Figure 3.3 donne la volumétrie effectivement produite par chacune des six feuilles. On
+La Figure 1.7 donne la volumétrie effectivement produite par chacune des six feuilles. On
 y lit directement le modèle de données décrit plus haut : 1 434 lignes pour la liste
 maîtresse des tiers et autant pour l'attribution du rôle « Client », mais 1 871 lignes de
 représentants, puisque chaque couple en compte deux, et seulement 553 adresses, 538
 téléphones et 469 courriels, ces trois derniers fichiers ne portant que les personnes
 physiques et morales. Ces écarts de volumétrie d'un fichier à l'autre ne sont donc pas des
-approximations : ils sont la traduction directe du modèle de données décrit en 3.2.2.
+approximations : ils sont la traduction directe du modèle de données décrit en 1.3.2.
 
-![Les six fichiers d'import produits par la feuille pivot](figures/fig_3_3_volumetrie_fichiers_import.png){width=95%}
+![Les six fichiers d'import produits par la feuille pivot](figures/fig_1_7_volumetrie_fichiers_import.png){width=95%}
 
 > **À insérer — figure.** Capture d'écran de la feuille `BuilderTiers`, montrant côte à
 > côte les colonnes de données reprises et les colonnes calculées : les trois rangs de
@@ -279,9 +446,9 @@ approximations : ils sont la traduction directe du modèle de données décrit e
 > colonnes de rapprochement. Anonymiser les noms d'acquéreurs. Les figures suivantes sont à
 > renuméroter après insertion.
 
-## De la préparation à l'injection : procédure et contraintes techniques
+### De la préparation à l'injection : procédure et contraintes techniques
 
-### Génération et normalisation des fichiers d'import
+#### Génération et normalisation des fichiers d'import
 
 Une fois les six feuilles calculées, il restait à les transformer en fichiers réellement
 acceptés par SPO. Cette étape, que j'imaginais purement mécanique, a mobilisé quatre
@@ -304,13 +471,13 @@ la feuille de référence et de recalculer : les tiers devenus existants sortent
 du périmètre. Le fichier reste ainsi utilisable dans le temps, ce qui était l'un de mes
 objectifs de conception.
 
-### Le contournement par API : 872 requêtes PATCH pour les coordonnées des couples
+#### Le contournement par API : 872 requêtes PATCH pour les coordonnées des couples
 
 C'est à ce stade que j'ai rencontré la contrainte la plus structurante du projet, et celle
 dont la résolution m'a le plus appris.
 
 Le format d'import CSV de SPO ne permet pas de porter les courriels et les téléphones des
-couples. La raison en est logique au regard du modèle de données décrit en 3.2.2 : pour un
+couples. La raison en est logique au regard du modèle de données décrit en 1.3.2 : pour un
 couple, ces coordonnées ne sont pas des attributs du tiers mais des attributs de ses
 représentants, et les fichiers d'import de coordonnées ne savent viser qu'un tiers. Le
 résultat est que, sur les 881 couples créés, les fichiers CSV pouvaient produire l'identité
@@ -346,8 +513,8 @@ La démarche s'est déroulée en trois temps :
 
 > **À insérer — figure.** Capture d'écran de la collection Postman : arborescence des cinq
 > lots et vue d'une requête PATCH sur son onglet *Body*, montrant la structure JSON Patch.
-> Masquer l'adresse du serveur et les identifiants, comme sur la Figure 2.2. Les figures
-> suivantes sont à renuméroter après insertion.
+> Masquer l'adresse du serveur et les identifiants. Les figures suivantes sont à renuméroter
+> après insertion.
 
 Ce contournement m'a appris quelque chose que je n'avais pas formulé aussi clairement
 jusque-là : dans un projet de reprise, la limite d'un format d'import n'est pas
@@ -357,7 +524,7 @@ basculer de l'une à l'autre au bon moment, plutôt que d'accepter une perte de 
 retomber dans la saisie manuelle, est une compétence que la reprise du premier semestre
 n'avait pas eu l'occasion de mobiliser.
 
-## Traitement des cas particuliers et arbitrages
+### Traitement des cas particuliers et arbitrages
 
 Une chaîne pilotée par formules ne traite pas tout. Neuf tiers ont demandé une intervention
 manuelle, répartis en quatre familles : trois adresses hors de France, que SPO refusait de
@@ -383,7 +550,7 @@ concentrée sur une poignée de cas identifiés au lieu de la diluer sur 1 602 
 à documenter chacun de ces arbitrages dans la note de procédure, pour que la trace en subsiste
 indépendamment de moi.
 
-## Bilan de l'import et points de vigilance pour la suite
+### Bilan de l'import et points de vigilance pour la suite
 
 L'intégralité des imports CSV et des requêtes PATCH a été exécutée avec succès. Le tableau
 suivant récapitule ce qui a été créé dans SPO.
@@ -399,12 +566,12 @@ suivant récapitule ce qui a été créé dans SPO.
 | Coordonnées des couples                   |    872 | Requêtes PATCH |
 
 Les 1 434 tiers créés se répartissent en **881 couples**, **462 personnes physiques** et
-**91 personnes morales**, répartition que représente la Figure 3.4. Cette structure n'est
+**91 personnes morales**, répartition que représente la Figure 1.8. Cette structure n'est
 pas un simple constat de volumétrie : elle justifie a posteriori l'attention portée au
 traitement des couples, qui représentent plus de six tiers sur dix et concentrent à eux
 seuls la contrainte de format qui a imposé le recours à l'API.
 
-![Répartition des 1 434 tiers créés selon leur nature](figures/fig_3_4_repartition_natures.png){width=92%}
+![Répartition des 1 434 tiers créés selon leur nature](figures/fig_1_8_repartition_natures.png){width=92%}
 
 > **À insérer — figure.** Capture d'écran d'une fiche de couple dans SPO, onglet des
 > représentants ouvert, montrant les deux personnes du couple et les coordonnées ajoutées
@@ -435,12 +602,41 @@ dispositif de détection dont je disposais. Un dernier point relève de la perfo
 environ 60 000 cellules de formules, le recalcul automatique devient pénible, et la procédure
 recommande de travailler en calcul manuel puis de forcer un recalcul complet avant chaque
 export.
+## Ce que ces deux reprises ont en commun
+
+Les deux chantiers ont été conduits selon la même méthode, que je n'avais pas choisie a
+priori : elle s'est imposée parce que le modèle cible était inconnu. On ne peut pas spécifier
+complètement une reprise dont on ignore les règles d'acceptation. On avance donc par paliers
+de volume croissant, en traitant chaque rejet comme une information sur le modèle cible plutôt
+que comme une erreur à corriger — d'où la progression 3, puis 12 opérations avant la masse, et
+les lots de 200 lignes homogènes en nature.
+
+Cette méthode a une propriété que j'ai appris à apprécier : **le coût d'une erreur y est
+proportionnel au palier où on la découvre**. Une règle non comprise coûte quelques minutes sur
+trois opérations, une demi-journée sur douze, et une reprise complète du fichier sur la
+totalité du périmètre. Elle a aussi une limite : elle est lente à démarrer et produit peu de
+livrable visible pendant les premières semaines, le résultat étant alors une documentation
+interne et non des données dans le système.
+
+Les difficultés techniques rencontrées se ramènent presque toutes à une même situation : un
+système imposait une règle qui n'était écrite nulle part. L'ordre d'injection des objets en
+est le cas le plus net, reconstitué par l'analyse des codes d'erreur ; le versionnement des
+budgets en est le second, qui a imposé une logique de requêtage dynamique. Le refus des
+caractères accentués par le format d'import et l'impossibilité de porter les coordonnées des
+couples en CSV relèvent de la même famille, la solution ayant consisté dans le second cas à
+changer de porte d'entrée vers le système.
+
+Le régime de preuve de ces deux missions est celui de la **réconciliation** : la question posée
+n'est pas si un modèle est performant, mais si ce qui est arrivé correspond à ce qui est
+parti. Elle a pris la forme de la validation par paliers sur la migration, et d'un panneau de
+compteurs à vérifier avant tout export sur la reprise des tiers. Ce régime a un angle mort
+qu'il faut nommer : il prouve qu'une donnée est arrivée, pas qu'elle est juste. Si une clé
+d'unicité était mal choisie, l'erreur passerait le contrôle sans être vue, puisque les
+compteurs tomberaient juste.
 
 Le référentiel commercial du groupe est ainsi reconstitué selon des règles écrites et
 rejouables, plutôt que par une saisie dont la logique aurait été introuvable six mois plus
 tard. Le chantier n'est pas clos pour autant : la reprise des historiques budgétaires reste
-devant nous, et le fichier devra être rejoué avant la bascule définitive. Pendant que ce
-socle se reconstruisait, les services ont continué d'avoir besoin de leurs indicateurs. Le
-chapitre suivant présente ces missions filées, où se pose déjà, sur un terrain plus modeste,
-la question qui commandera le projet de Data Science : où écrit-on une règle pour que tout le
-monde consomme la même ?
+devant nous, et le fichier devra être rejoué avant la bascule définitive. Pendant que ce socle
+se reconstruisait, les services ont continué d'avoir besoin de leurs indicateurs, et c'est
+l'objet du chapitre suivant.

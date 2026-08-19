@@ -38,7 +38,7 @@ def _enregistrer(fig, nom):
 
 
 # --------------------------------------------------------------------------
-# Figure 3.1 — La chaîne de traitement à trois étages
+# Figure 1.5 — La chaîne de traitement à trois étages
 # --------------------------------------------------------------------------
 def figure_chaine_traitement():
     """Schéma des trois étages du fichier de travail (sources, pivot, sorties)."""
@@ -109,11 +109,11 @@ def figure_chaine_traitement():
         ax.annotate("", xy=(x1, hauteur / 2), xytext=(x0, hauteur / 2),
                     arrowprops=dict(arrowstyle="-|>", linewidth=1.7, color=ENCRE_2))
 
-    _enregistrer(fig, "fig_3_1_chaine_traitement.png")
+    _enregistrer(fig, "fig_1_5_chaine_traitement.png")
 
 
 # --------------------------------------------------------------------------
-# Figure 3.2 — L'entonnoir de la volumétrie
+# Figure 1.6 — L'entonnoir de la volumétrie
 # --------------------------------------------------------------------------
 def figure_entonnoir():
     etapes = [
@@ -146,11 +146,11 @@ def figure_entonnoir():
                     arrowprops=dict(arrowstyle="-", linewidth=0.8, color="#b9b8b3",
                                     shrinkA=2, shrinkB=2))
 
-    _enregistrer(fig, "fig_3_2_entonnoir_volumetrie.png")
+    _enregistrer(fig, "fig_1_6_entonnoir_volumetrie.png")
 
 
 # --------------------------------------------------------------------------
-# Figure 3.3 — Volumétrie des six fichiers d'import
+# Figure 1.7 — Volumétrie des six fichiers d'import
 # --------------------------------------------------------------------------
 def figure_fichiers_import():
     fichiers = [
@@ -177,11 +177,11 @@ def figure_fichiers_import():
     ax.set_xlabel("nombre de lignes générées")
     ax.set_title("Les six fichiers d'import produits par la feuille pivot")
     ax.grid(axis="y", visible=False)
-    _enregistrer(fig, "fig_3_3_volumetrie_fichiers_import.png")
+    _enregistrer(fig, "fig_1_7_volumetrie_fichiers_import.png")
 
 
 # --------------------------------------------------------------------------
-# Figure 3.4 — Répartition des 1 434 tiers créés par nature
+# Figure 1.8 — Répartition des 1 434 tiers créés par nature
 # --------------------------------------------------------------------------
 def figure_repartition():
     natures = [("Couples", 881, BLEU), ("Personnes physiques", 462, VIOLET),
@@ -211,7 +211,7 @@ def figure_repartition():
     ax.legend(handles=[mpatches.Patch(color=c, label=l) for l, _, c in natures],
               loc="upper center", bbox_to_anchor=(0.5, -0.22), ncol=3,
               frameon=False, fontsize=9)
-    _enregistrer(fig, "fig_3_4_repartition_natures.png")
+    _enregistrer(fig, "fig_1_8_repartition_natures.png")
 
 
 # --------------------------------------------------------------------------
@@ -346,7 +346,7 @@ def figure_frise_missions():
 
 
 # --------------------------------------------------------------------------
-# Figure 2.3 — La séquence d'injection imposée par l'ERP
+# Figure 1.3 — La séquence d'injection imposée par l'ERP
 # --------------------------------------------------------------------------
 def figure_sequence_injection():
     etapes = ["Opération", "Tranches\nde travaux", "Tranches\ncommerciales", "Budget"]
@@ -368,11 +368,11 @@ def figure_sequence_injection():
     ax.text(50, 6, "Toute injection qui ne respecte pas cet ordre est rejetée : "
             "le système ne trouve pas l'objet parent.",
             ha="center", va="center", fontsize=8.6, color=ENCRE_2, style="italic")
-    _enregistrer(fig, "fig_2_3_sequence_injection.png")
+    _enregistrer(fig, "fig_1_3_sequence_injection.png")
 
 
 # --------------------------------------------------------------------------
-# Figure 2.4 — Le requêtage dynamique face au versionnement
+# Figure 1.4 — Le requêtage dynamique face au versionnement
 # --------------------------------------------------------------------------
 def figure_requetage_dynamique():
     fig, ax = _cadre((11.6, 4.4), ymax=52)
@@ -392,11 +392,11 @@ def figure_requetage_dynamique():
     ax.text(50, 9, "Aucun identifiant n'étant stable, il faut le retrouver "
             "avant chaque écriture.",
             ha="center", va="center", fontsize=8.6, color=ENCRE_2, style="italic")
-    _enregistrer(fig, "fig_2_4_requetage_dynamique.png")
+    _enregistrer(fig, "fig_1_4_requetage_dynamique.png")
 
 
 # --------------------------------------------------------------------------
-# Figure 4.1 — La règle de facturation traduite en calcul de rang
+# Figure 2.1 — La règle de facturation traduite en calcul de rang
 # --------------------------------------------------------------------------
 def figure_regle_facturation():
     fig, ax = _cadre((11.6, 4.0), ymax=48)
@@ -420,11 +420,11 @@ def figure_regle_facturation():
     ax.text(50, 5, "C'est ce qui permet de tenir la règle sans droit d'écriture "
             "sur la base ni colonne ajoutée aux fichiers sources.",
             ha="center", va="center", fontsize=8.6, color=ENCRE_2, style="italic")
-    _enregistrer(fig, "fig_4_1_regle_facturation.png")
+    _enregistrer(fig, "fig_2_1_regle_facturation.png")
 
 
 # --------------------------------------------------------------------------
-# Figure 6.1 — Les trois régimes de preuve
+# Figure 4.1 — Les trois régimes de preuve
 # --------------------------------------------------------------------------
 def figure_regimes_de_preuve():
     fig, ax = _cadre((11.6, 4.6), ymax=58)
@@ -448,7 +448,7 @@ def figure_regimes_de_preuve():
     ax.text(50, 56.5, "Le régime de preuve se déduit de la nature du livrable, "
             "jamais de la méthode employée.",
             ha="center", va="center", fontsize=8.6, color=ENCRE_2, style="italic")
-    _enregistrer(fig, "fig_6_1_regimes_de_preuve.png")
+    _enregistrer(fig, "fig_4_1_regimes_de_preuve.png")
 
 
 if __name__ == "__main__":

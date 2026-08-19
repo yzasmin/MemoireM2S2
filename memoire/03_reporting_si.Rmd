@@ -1,0 +1,127 @@
+# Reporting et missions SI transverses
+
+::: sommaire
+**Sommaire**
+
+- 2.1 Le maintien opérationnel du reporting
+    - 2.1.1 Une complexité métier : la règle de facturation juridique
+    - 2.1.2 Contraintes techniques et modélisation dynamique
+- 2.2 Le déploiement du Single Sign-On
+- 2.3 Ce que les missions filées coûtent et ce qu'elles rapportent
+:::
+
+Pendant que les deux reprises du chapitre précédent se déroulaient, j'ai maintenu mes
+activités de gestionnaire d'information : les demandes de reporting des services, initiées en
+Master 1, et une contribution à l'infrastructure système. Ces missions ont couru sur les deux
+semestres. Elles méritent d'être exposées pour une raison de fond, et pas par souci
+d'exhaustivité : c'est en les menant que j'ai rencontré, sous une forme miniature, le problème
+qui commande le projet de Data Science du chapitre 3 — lorsqu'une règle de gestion n'a nulle
+part où être écrite, elle finit par être recalculée partout, différemment.
+
+## Le maintien opérationnel du reporting
+
+Dans la continuité de ma première année, j'ai conservé la charge des demandes de reporting des
+différents services, qui consistent à traduire des besoins métier parfois abstraits en
+indicateurs visuels fiables. Le travail commence rarement par une spécification : il commence
+par une gêne exprimée en réunion, ou par un tableau que quelqu'un refait à la main tous les
+mois. Reformuler la demande jusqu'à ce qu'elle soit calculable — de quelles lignes parle-t-on,
+sur quelle période, que fait-on des cas limites ? — est la partie que je sous-estimais en
+arrivant, et c'est celle qui décide de l'utilité du résultat.
+
+### Une complexité métier : la règle de facturation juridique
+
+La demande du service juridique en donne l'exemple le plus significatif. Le besoin portait sur
+le suivi des commandes clients, afin de déterminer avec précision ce qui doit être facturé. Sa
+complexité ne réside pas dans la donnée brute mais dans une règle de gestion : une alternance
+conditionnelle stricte où la première commande est payante, la deuxième gratuite, la troisième
+payante, et ainsi de suite.
+
+La difficulté tient à ce que cette règle ne porte pas sur une ligne, mais sur la position
+d'une ligne dans une séquence. Aucune colonne de la base ne contient l'information « c'est la
+deuxième commande de ce client sur ce lot » : cette information n'existe que si on la calcule,
+et elle change dès qu'une commande est ajoutée ou annulée.
+
+### Contraintes techniques et modélisation dynamique
+
+Mon travail a consisté à trouver la manière la plus efficace d'implémenter cette logique avec
+nos logiciels existants, sous deux contraintes fortes. Je ne possédais pas les droits
+d'écriture nécessaires pour créer des champs de statut dans la base SQL, ce qui interdisait la
+solution la plus simple, matérialiser le statut à l'enregistrement de la commande ; et je ne
+pouvais pas ajouter de colonnes dans les fichiers Excel sources, car ces derniers étaient
+écrasés à chaque mise à jour.
+
+Ces deux contraintes interdisaient toute solution consistant à *stocker* le résultat. Il
+fallait donc un calcul dynamique, exécuté lors de la génération du tableau. Le système devait
+d'abord identifier les opérations et les lots, puis classer leurs commandes par ordre
+chronologique ; il attribuait ensuite un rang à chaque commande et appliquait une condition
+logique, dont l'énoncé ne dépend d'aucune date : si le rang est impair, le statut est
+« Payant » ; s'il est pair, il est « Gratuit ». La Figure 2.1 représente cette chaîne de calcul.
+
+![La règle de facturation juridique traduite en calcul de rang, exécuté à chaque génération du tableau](figures/fig_2_1_regle_facturation.png){width=100%}
+
+Cette approche répond au besoin sans altérer la structure des données sources, mais elle a un
+coût qu'il faut assumer : la règle est recalculée à chaque affichage, et elle n'existe nulle
+part ailleurs que dans la définition du tableau. Si un autre service a besoin de la même
+notion, il devra la redemander, et rien ne garantit qu'elle sera implantée à l'identique.
+C'est exactement le problème que le projet de Data Science résoudra au chapitre 3, en écrivant
+les définitions partagées une seule fois dans des vues de base de données. La contrainte
+rencontrée ici en miniature m'a rendue attentive à cette question bien avant de concevoir
+l'architecture du Copilote Financier.
+
+## Le déploiement du Single Sign-On
+
+En parallèle, j'ai collaboré avec l'administratrice des systèmes et outils SI sur un projet
+d'infrastructure transverse : le déploiement du SSO (*Single Sign-On*), technologie permettant
+d'accéder à plusieurs applications avec une seule authentification. L'enjeu était double pour
+le groupe : réduire le nombre de mots de passe à mémoriser et renforcer la sécurité des accès
+aux outils sensibles. J'ai pris en charge le déploiement sur les postes de travail de deux
+périmètres, l'agence de Perpignan et le service financier du siège : installation du
+connecteur, vérification de la synchronisation avec l'annuaire d'entreprise, et accompagnement
+des utilisateurs lors de leur première connexion. Nous avons volontairement commencé par ces
+deux périmètres avant d'envisager une généralisation, afin de mesurer les difficultés réelles
+sur un échantillon restreint.
+
+Cette mission m'a appris quelque chose que je n'attendais pas d'un déploiement. L'annuaire
+d'entreprise sur lequel repose le SSO est un référentiel d'identités : il répond, pour les
+collaborateurs, à la question que je me posais pour les clients au chapitre 1, à savoir comment
+garantir qu'une personne n'existe qu'une fois et qu'on sait la reconnaître. Voir ce problème
+résolu du côté de l'infrastructure, par un annuaire centralisé et une synchronisation
+automatique, éclaire par contraste la situation côté données de gestion, où aucun référentiel
+de ce type n'existait avant la reprise des tiers.
+
+L'accompagnement des utilisateurs a été instructif à sa manière : une solution techniquement
+correcte qui déroute l'utilisateur au moment de s'en servir n'est pas une solution livrée. Ce
+constat, fait ici sur une fenêtre d'authentification, s'est retrouvé mot pour mot au moment de
+livrer l'application d'aide à la décision.
+
+## Ce que les missions filées coûtent et ce qu'elles rapportent
+
+Il serait malhonnête de ne pas dire ce que ces missions transverses ont coûté : elles
+fragmentent le temps, et un chantier de reprise interrompu trois fois dans la journée pour une
+demande de tableau de bord avance moins vite qu'un chantier mené d'un trait, et surtout se
+reprend plus mal, puisqu'il faut à chaque fois reconstituer où l'on en était dans une logique
+de formules imbriquées. Cette fragmentation a été la difficulté la plus constante de l'année,
+et ce que j'ai fini par mettre en place tient en peu de choses : réserver les plages longues
+aux travaux qui ne se découpent pas, regrouper les demandes courtes, et surtout écrire
+systématiquement où j'en étais avant d'interrompre une tâche.
+
+Ces missions rapportent cependant trois choses que je n'aurais pas obtenues autrement. Une
+**connaissance du métier** que la seule fréquentation des bases ne donne pas : on ne comprend
+pas ce qu'est une commande gratuite en lisant une table, on le comprend en écoutant le service
+juridique expliquer pourquoi la règle existe. Une **crédibilité** auprès des services : avoir
+répondu à leurs demandes courantes pendant un an est ce qui a rendu possible, au second
+semestre, un échange direct avec la direction financière. Une **vision de l'architecture** du
+système d'information dans son ensemble, depuis l'authentification des postes jusqu'aux
+tableaux de bord, qui m'a permis de concevoir le projet du second semestre comme une chaîne
+complète plutôt que comme une suite de modèles.
+
+Le régime de preuve retenu ici est celui de la **recette par l'usage** : sur le reporting
+juridique, seul le service demandeur pouvait juger de la conformité de la règle appliquée.
+Cette validation a une limite qu'il faut nommer : elle ne dit rien, à court terme, de
+l'utilité réelle de l'outil dans la durée.
+
+Ces solutions restent par ailleurs des contournements : une règle recalculée à chaque
+affichage tient tant que personne d'autre n'en a besoin. Elles auront néanmoins maintenu le
+système décisionnel en état de marche pendant les douze mois qu'a duré la reconstruction du
+socle. Ce socle étant désormais fiable, le chapitre suivant expose ce qu'il devient possible
+d'en faire.

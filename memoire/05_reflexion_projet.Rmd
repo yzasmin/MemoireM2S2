@@ -1,0 +1,186 @@
+# Réflexion sur le métier, perspectives et projet professionnel
+
+::: sommaire
+**Sommaire**
+
+- 4.1 Réflexion sur le métier
+- 4.2 Perspectives et projet professionnel
+:::
+
+Ce dernier chapitre quitte le récit des missions pour livrer la réflexion qu'elles ont
+produite, puis le projet professionnel qui en découle.
+
+## Réflexion sur le métier
+
+**Un traducteur avant d'être un modélisateur.** L'image que j'avais de ce métier en entrant en
+Master 2 était celle que donne le cursus : on reçoit un jeu de données et une question, on
+choisit une méthode, on évalue, on livre un modèle. Cette image n'est pas fausse, elle est
+simplement très minoritaire dans le temps réel. Sur les quatre missions de l'année, une seule
+y correspond, et encore partiellement ; le poste que j'ai réellement occupé se rapproche de
+celui de gestionnaire d'applications tel que le décrivent les référentiels métier [1]. Ce qui
+a occupé le reste, c'est un travail de traduction dans les deux sens : traduire une gêne
+exprimée par un service en question calculable, puis traduire un résultat statistique en
+information sur laquelle quelqu'un peut décider.
+
+Cette traduction est le vrai travail, et elle est difficile pour une raison précise : les deux
+langues n'ont pas les mêmes catégories. Le service juridique parle de commandes payantes et
+gratuites ; la base ne connaît que des lignes sans position dans une séquence. La direction
+financière parle d'opérations qui dérivent ; les exports ne contiennent qu'un budget et un
+engagé à une date. Chaque fois, il a fallu construire la catégorie manquante, et ce sont ces
+constructions qui engagent le plus, parce qu'elles décident de ce que l'entreprise pourra
+observer ensuite.
+
+**Les outils comptent moins que les méthodes.** Le tableau suivant récapitule les technologies
+et les méthodes effectivement employées, en distinguant ce qui relève de l'outil de ce qui
+relève de la méthode.
+
+| Mission | Technologies | Méthodes |
+|:------------|:-------------------------------|:---------------------------------|
+| Migration des opérations | Excel et RechercheX, MyReport Builder, API REST de Salvia, module DirectAPI | Rétro-ingénierie du modèle cible par les codes d'erreur, mapping par tables de correspondance, validation itérative par paliers |
+| Reprise des tiers | Excel, environ 60 000 cellules de formules, CSV, API REST, JSON Patch, Postman | Déduplication par clés d'unicité différenciées, exclusion par rapprochement, numérotation séquentielle par destination |
+| Reporting et SSO | MyReport, SQL en lecture, annuaire d'entreprise | Modélisation dynamique par calcul de rang, accompagnement utilisateur |
+| Copilote Financier | Python et pandas, SQLite en schéma en étoile, PySpark évalué, Streamlit | Régression linéaire et logistique, arbre, forêt aléatoire, séparateur à vaste marge, modèle à effets aléatoires sur panel, régression dynamique à erreurs ARIMA, ajustement logistique, recherche par similarité, optimisation sous contrainte |
+
+La colonne des outils est beaucoup moins intéressante que celle des méthodes, ce qui est
+contre-intuitif quand on sort d'un cursus où l'on apprend des technologies. Excel figure dans
+deux missions sur quatre, non qu'il soit le bon outil dans l'absolu, mais parce que c'est
+celui que l'entreprise sait relire, corriger et maintenir sans moi. Un script Python aurait
+produit les mêmes fichiers plus vite, et personne n'aurait pu le reprendre après mon départ.
+
+**La place réelle de la modélisation.** Le constat suivant est plus inconfortable, et je le
+formule d'autant plus volontiers qu'il va contre ce que j'espérais démontrer en commençant le
+projet du second semestre. Dans le Copilote Financier, la page la plus consultée par les
+contrôleurs de gestion ne repose sur aucun modèle appris : c'est un tableau descriptif de
+dépassements en euros, calculé en SQL. La sophistication des méthodes décroît quand on se
+rapproche de l'utilisateur, et ce n'est pas un échec de la modélisation, c'est sa place réelle
+dans un outil de gestion.
+
+J'en tire deux choses plus précises. La première est que **la valeur d'un projet data ne se
+mesure pas au degré de sophistication des méthodes employées**, mais à l'écart entre ce que
+l'entreprise savait avant et après. La seconde est que **le choix de la méthode se déduit de la
+donnée disponible, jamais de l'ambition du projet** : sur le rythme de vente, la profondeur
+temporelle autorisait un modèle exigeant, et il a donné un résultat solide ; sur le risque de
+marge, l'absence d'historique interdisait tout modèle dynamique, et aucune sophistication
+n'aurait compensé cette absence.
+
+**Le régime de preuve se déduit de la nature du livrable.** C'est l'enseignement transversal le
+plus utile de l'année, et il n'apparaît que dans la comparaison entre les missions : une
+reprise de données, un tableau de bord et un modèle statistique ne se prouvent pas de la même
+manière. La Figure 4.1 représente les trois régimes que j'ai employés, chacun étant exposé au
+chapitre où il s'applique — la réconciliation au chapitre 1, la recette par l'usage au
+chapitre 2, la validation statistique au chapitre 3.
+
+![Les trois régimes de preuve employés selon la nature du livrable](figures/fig_4_1_regimes_de_preuve.png){width=100%}
+
+Appliquer à une reprise de données les critères d'un modèle statistique, ou l'inverse, revient
+à ne rien prouver du tout. Un second enseignement transversal s'y ajoute : l'arbitrage entre
+exhaustivité et continuité de service est revenu dans les quatre missions — les « coquilles
+vides », le traitement manuel des cas particuliers, le calcul dynamique, le périmètre restreint
+à la promotion. Dans les quatre cas, la décision a consisté à livrer quelque chose d'utile et
+d'incomplet plutôt que rien de complet, et ce qui distingue cet arbitrage d'un renoncement est
+uniquement le fait d'écrire ce qui a été laissé de côté. Une dette documentée est une dette
+suivie ; une dette implicite devient, quelques mois plus tard, une donnée que tout le monde
+croit absente.
+
+**Documenter est un acte technique.** J'ai longtemps considéré la documentation comme une
+formalité qui suit le travail. Deux épisodes m'ont fait changer d'avis : la note interne sur
+la séquence d'injection, qui a servi à la reprise des tiers six mois plus tard et aurait servi
+à quelqu'un d'autre si je n'avais pas été là ; et la note de procédure de l'import des tiers,
+qui énonce les manipulations à ne jamais faire avant d'expliquer comment utiliser le fichier.
+J'en retire une formulation que j'assume : **documenter, ce n'est pas décrire ce qu'on a fait,
+c'est rendre le travail reprenable par quelqu'un d'autre**.
+
+**Livrer, c'est faire adopter.** La leçon la plus nette de l'année tient en un épisode : la
+première version de l'interface du Copilote Financier, techniquement correcte, était
+inutilisable par ceux à qui elle était destinée, parce qu'elle parlait de scores et de
+probabilités là où l'on attendait des niveaux d'alerte et des euros. Un livrable n'existe qu'à
+partir du moment où quelqu'un s'en sert, et la distance entre un résultat juste et un résultat
+utilisé ne se comble pas par de la pédagogie : elle se comble en changeant le livrable. C'est
+aussi pourquoi j'ai fait de l'énoncé des limites une partie du livrable, au même titre que les
+résultats. Dans un exercice universitaire, présenter un modèle faible est un mauvais
+résultat ; dans une entreprise, présenter un modèle faible **sans le dire** est bien pire, parce
+que quelqu'un décidera dessus.
+
+Le tableau suivant récapitule ce qui a été livré et se trouve aujourd'hui en service.
+
+| Livrable | Volume ou périmètre |
+|:-------------------------------------------------|:----------------------------|
+| Opérations créées dans SPO, hors budgets détaillés | 283 |
+| Tiers créés dans SPO, avec leurs objets rattachés | 1 434 |
+| Adresses, courriels et téléphones importés | 553, 469 et 538 |
+| Représentants des couples et des sociétés | 1 871 |
+| Coordonnées ajoutées par requête API | 872 requêtes, toutes passées |
+| Documentation interne produite | Séquence d'injection, procédure d'import des tiers |
+| Reportings maintenus et faits évoluer | Sur l'ensemble des services demandeurs |
+| Postes équipés du SSO | Agence de Perpignan et service financier du siège |
+| Base de données analytique | Trois dimensions, quatre tables de faits, trois vues métier |
+| Application d'aide à la décision livrée | Cinq pages, 147 opérations de promotion suivies |
+
+Ces chiffres ne disent pourtant pas l'essentiel. Ce que l'année a produit de plus durable
+n'est aucun de ces volumes : ce sont trois définitions écrites quelque part. La séquence
+d'injection valide pour l'ERP, la clé qui décide qu'un client est le même client, et la
+formule qui dit ce qu'est la marge d'une opération. Les données se réinjectent ; ces trois
+décisions-là, il faut les reprendre depuis le début si elles se perdent.
+
+## Perspectives et projet professionnel
+
+**Achever la reprise et historiser les données.** Aucun des chantiers de cette année n'est
+achevé. La migration vers SPO reste prioritaire : la stratégie des « coquilles vides », si elle
+a sauvé le démarrage de la facturation, doit laisser place à une reprise exhaustive —
+historiques budgétaires complets, contrôle de cohérence comptable et tests finaux avant la
+bascule définitive. Le fichier de reprise des tiers devra être rejoué avant cette bascule,
+pour écarter les tiers créés entre-temps par les équipes commerciales.
+
+S'y ajoute la recommandation la plus structurante que je laisse à l'entreprise : **historiser
+les exports mensuels dans le nouvel ERP**. C'est l'absence de cet historique qui plafonne
+aujourd'hui l'analyse du risque de marge. Au bout d'un an de conservation, le score statique
+deviendrait un véritable suivi de trajectoire. Cette recommandation ne coûte presque rien à
+mettre en œuvre ; elle coûte seulement d'y penser maintenant plutôt que dans deux ans.
+
+**Faire vivre le Copilote Financier.** L'application livrée est fonctionnelle et
+reproductible, mais elle reste une photographie. Trois évolutions la rendraient durable :
+l'historisation déjà évoquée, qui transformerait le score de risque en suivi ;
+l'extension à l'aménagement foncier, dont la logique économique différente suppose un
+traitement dédié plutôt qu'une simple levée de filtre ; et la fiabilisation de la saisie des
+motifs de désistement, sans laquelle les analyses commerciales resteront partielles sur une
+partie du réseau.
+
+**L'intégration à l'infrastructure Nexity.** Une mission structurante, non prévue
+initialement, s'ajoute à cette feuille de route : le passage vers l'infrastructure technique
+du groupe Nexity, qui engendrera des adaptations de nos outils — reconfiguration des
+connecteurs de bases, protocoles de sécurité pour les accès distants, migration de scripts
+d'automatisation. Cette perspective a déjà influé sur mes choix techniques : le test de montée
+en charge conduit dans le projet analytique n'avait pas d'autre objet que de savoir si
+l'architecture retenue tiendrait à une échelle supérieure.
+
+**Le positionnement que je vise.** Ces deux années ont déplacé mon projet. J'y suis entrée en
+visant la data science au sens strict, la modélisation prédictive ; j'en sors en visant un
+positionnement plus large : **construire et fiabiliser les chaînes de données qui rendent la
+décision possible, puis les outiller**. Il croise trois domaines que l'année m'a fait pratiquer
+ensemble : l'**ingénierie des données**, sur laquelle j'ai le plus progressé — reprises,
+migrations, interfaces de programmation, déduplication, modélisation d'une base analytique ;
+l'**analyse et la modélisation**, entendues comme le choix d'une méthode proportionnée à la
+donnée disponible et sa validation honnête ; la **restitution et le dialogue avec les
+métiers**, c'est-à-dire la traduction d'un besoin en spécification puis d'un résultat en écran.
+Un profil qui ne tiendrait que le premier produirait des pipelines que personne n'interroge ;
+un profil qui ne tiendrait que le deuxième modéliserait des données dont il ignore la
+provenance.
+
+À court terme, je souhaite poursuivre au sein du groupe, sur le périmètre données et système
+d'information : la reprise des historiques budgétaires, la bascule définitive vers SPO et
+l'adaptation des outils à l'infrastructure Nexity forment un ensemble sur lequel ma
+connaissance du modèle de données constitue un avantage que personne d'autre n'a aujourd'hui
+dans l'entreprise. À moyen terme, je vise un poste d'ingénieure données orientée aide à la
+décision, dans une entreprise de taille intermédiaire sans équipe data constituée, où le poste
+couvre toute la chaîne, ou dans une direction data structurée où je travaillerais enfin à
+plusieurs sur un même chantier.
+
+**Ce qu'il me reste à consolider.** Il serait présomptueux de conclure sans nommer ce qui me
+manque, d'autant que l'année l'a rendu visible. L'**industrialisation** d'abord : j'ai
+construit des chaînes reproductibles, mais elles se lancent à la main, et passer à une
+exécution planifiée, surveillée et alertée en cas d'échec est ce qui sépare un livrable d'un
+service. La **profondeur statistique sur les données temporelles** ensuite : c'est l'axe où le
+projet du second semestre a donné les meilleurs résultats, et celui où j'ai le plus senti la
+limite de mes acquis. La **conduite d'un projet à plusieurs** enfin : deux ans seule sur les
+sujets data laissent hors champ les conventions de code partagées, la revue par un pair et la
+répartition d'un chantier entre plusieurs personnes.
