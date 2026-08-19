@@ -1,0 +1,199 @@
+%% !TEX root = manuscript.tex
+
+\chapter{Contexte et enjeux}
+\minitoc
+\newpage
+
+Ce premier chapitre pose le cadre de mon alternance. Après une présentation de l'entreprise et
+de mon rattachement, j'y décris le système d'information du groupe et les données que j'ai
+manipulées, avant d'introduire la problématique qui guide l'ensemble de ce mémoire. Je termine
+en présentant brièvement les outils qui reviennent tout au long du document.
+
+\section{Contexte métier : le groupe Angelotti et la Holding SPA}
+
+J'ai effectué mon alternance de Master 2 au sein de la Holding SPA du groupe Angelotti, un
+acteur de l'aménagement et de la promotion immobilière implanté en Occitanie et en région PACA.
+
+Ces deux métiers n'ont pas la même logique économique. Dans l'aménagement, la valeur naît de la
+transformation du foncier, c'est-à-dire de la division d'un terrain en lots viabilisés. Dans la
+promotion, elle naît de la construction de logements neufs. Ils produisent donc deux structures
+de coûts et deux rythmes de commercialisation différents, ce qui explique que je les traite
+séparément tout au long de ce mémoire.
+
+Une deuxième particularité du secteur a pesé sur mon travail. Chaque opération étant portée par
+une société dédiée, le suivi financier est nativement cloisonné : il n'existe pas de vue
+d'ensemble spontanée sur l'activité. Une opération vit par ailleurs sur un cycle qui se compte
+en années. Un budget est arrêté au moment de l'engagement, puis le chantier et la
+commercialisation le font dériver, parce que les appels d'offres reviennent plus chers
+qu'anticipé, que des acquéreurs se désistent ou que le rythme de vente ralentit. Cette dérive
+est le fonctionnement normal du métier. Ce qui pose problème, c'est de la mesurer à temps, car
+sur une marge de quelques centaines de milliers d'euros, quelques mois de retard suffisent à
+transformer un ajustement en perte.
+
+La Holding SPA regroupe les fonctions support du groupe. Rattachée à elle, j'ai travaillé sous
+l'encadrement de ma tutrice, Sabine Cruanas, et en lien direct avec les services métiers : la
+direction financière, le service juridique et les équipes commerciales. Le groupe ne dispose
+pas d'une équipe data constituée, ce qui explique l'étendue du périmètre qui m'a été confié :
+j'y ai été, sur l'année, la seule personne dédiée à ces sujets.
+
+\section{Contexte data : le système d'information, les données et leur refonte}
+
+\subsection{Le système d'information et sa refonte}
+
+À mon arrivée en deuxième année, le système d'information reposait sur trois outils principaux.
+\textbf{Grimmo}, l'ERP métier historique, pour la gestion des opérations ; \textbf{Vadimm}, le
+CRM, pour la relation commerciale ; et \textbf{MyReport}, l'outil décisionnel, pour les tableaux
+de bord des services. À ces trois outils s'ajoutait une quatrième couche, moins visible :
+\textbf{les tableurs}, qui faisaient le lien partout où les trois premiers ne se parlaient pas.
+
+La figure~\ref{fig:si} représente cette organisation. Les trois outils et leurs usages métier
+occupent le haut du schéma, reliés par les flèches qui figurent la circulation normale de la
+donnée. Les tableurs forment la bande du bas, et les traits pointillés qui les rattachent à
+chacun d'eux marquent les échanges qui ne passent par aucun système. On y lit le problème que
+la reprise des données allait devoir traiter : le même client pouvait exister dans le CRM et
+dans l'ERP sans qu'aucun lien ne les rattache.
+
+\begin{figure}[!htbp]
+\centering
+\includegraphics[width=0.65\textwidth]{fig_1_1_systeme_information.png}
+\caption{Les outils du système d'information et la circulation de la donnée}
+\label{fig:si}
+\end{figure}
+
+C'est dans ce décor que s'est engagée la refonte : le remplacement de Grimmo par SPO, la
+solution éditée par Salvia~[2]. Ce chantier a commandé le calendrier de toute mon année, et
+trois contraintes en découlaient. Une contrainte de \textbf{volumétrie} d'abord, puisque 283
+opérations devaient être reprises avec leurs subdivisions et leurs budgets, échelle à laquelle
+une saisie manuelle intégrale était exclue. Une contrainte de \textbf{continuité de service}
+ensuite, les utilisateurs devant pouvoir facturer dès le basculement. Une contrainte de
+\textbf{conformité au modèle cible} enfin, SPO imposant ses propres règles d'intégrité, qui
+n'étaient pas toutes documentées et qu'il a fallu découvrir en les heurtant.
+
+À ces contraintes s'est ajoutée une perspective absente du calendrier initial, le passage vers
+l'infrastructure technique du groupe Nexity, qui a influé sur certains choix techniques.
+
+\subsection{Les données disponibles}
+
+Les données que j'ai manipulées sont de deux natures. D'un côté, les données de structure et de
+gestion : les opérations, leurs tranches de travaux et de commercialisation, et leurs budgets,
+issus de Grimmo puis de SPO. De l'autre, les données commerciales : les clients acquéreurs,
+leurs coordonnées, les lots, les réservations et les désistements, issus du CRM Vadimm. Le
+projet du second semestre a par ailleurs mobilisé quatre exports du système de gestion et trois
+sources publiques, que je détaille au chapitre~3.
+
+Une partie de ces données est sensible au regard du RGPD, puisqu'il s'agit de données
+personnelles de clients : identité, adresse postale, courriel et téléphone. La confidentialité
+a donc été une contrainte permanente, à la fois dans mon travail et dans la rédaction de ce
+mémoire. Les chiffres que je présente sont des volumétries ou des agrégats, et aucune donnée
+nominative n'apparaît, ni dans ce document ni dans l'application que j'ai livrée.
+
+\subsection{Mon positionnement au regard de la data science}
+
+Je dois préciser d'emblée un point, parce qu'il éclaire tout ce qui suit : sur les quatre
+missions de l'année, une seule relève de la data science au sens où le Master l'entend, et
+c'est celle du second semestre. Le reste tient de l'ingénierie des données et de la gestion
+d'applications.
+
+Cette répartition ne m'a pas éloignée de la formation, elle m'a plutôt fait comprendre ce qui
+la précède. En travaillant au plus près des données sources, j'ai vu concrètement pourquoi
+certaines analyses sont possibles et d'autres non, et ce que coûte une donnée mal structurée en
+amont. Ce travail de fond garantit une base saine pour les analyses à venir, et il alimente
+directement l'outil de pilotage que j'ai construit ensuite.
+
+\section{Problématique et fil conducteur}
+
+Ces différents aspects se rejoignent autour d'un même constat. À chaque mission, avant de
+pouvoir répondre à la question posée par un service, il m'a fallu commencer par reconstituer la
+donnée : décider ce qu'est un client, ce qu'est une marge, ou ce que contient réellement un
+fichier dont le nom annonce autre chose. Et à chaque fois, la qualité de cette reconstruction a
+déterminé ce que je pouvais produire ensuite.
+
+Qu'il s'agisse de migrer un référentiel vers un nouvel ERP, de maintenir un reporting ou de
+construire un outil d'aide à la décision, l'objectif est resté le même : fournir aux services
+des données justes, sur lesquelles ils peuvent réellement s'appuyer pour décider. C'est autour
+de cet enjeu que s'articule ma problématique.
+
+\begin{center}
+\fbox{\begin{minipage}{0.88\textwidth}
+\vspace{0.4em}
+\begin{center}
+\textbf{Comment reconstituer et fiabiliser les données d'une entreprise\\
+au cours d'un changement d'ERP, afin d'en tirer des outils de pilotage\\
+utilisables par les services métiers ?}
+\end{center}
+\vspace{0.4em}
+\end{minipage}}
+\end{center}
+
+Cette question comporte deux volets, que mes deux missions principales illustrent chacune de
+leur côté. Le premier est celui de la structure : reconstituer un socle de données dans un
+modèle cible dont les règles ne sont pas documentées. Le second est celui de l'exploitation :
+tirer de ce socle des analyses qui aident réellement à décider. Le second dépend du premier,
+et c'est ce lien que je m'attache à montrer tout au long de ce mémoire.
+
+\section{Structure du mémoire}
+
+Après ce chapitre de cadrage, je présente les deux grandes missions de l'année. La
+\textbf{Mission~1} (chapitre~2) porte sur la reprise des données vers SPO, conduite en deux
+temps : les opérations au premier semestre, les tiers au second. La \textbf{Mission~2}
+(chapitre~3) porte sur le Copilote Financier, le projet de Data Science mené pour la direction
+financière. Je présente ensuite les \textbf{activités complémentaires} menées en parallèle sur
+les deux semestres, avec le maintien du système décisionnel et le déploiement du SSO
+(chapitre~4). Le chapitre~5 revient enfin sur mon organisation, les compétences acquises,
+l'adéquation de ces missions avec le Master MIASHS, le positionnement RSE de l'entreprise et
+mon projet professionnel.
+
+\section{Les outils et l'environnement technique}
+
+Mes missions s'appuient sur un ensemble d'outils qui structurent mon travail au quotidien.
+Certains constituent la chaîne de traitement de la donnée elle-même, d'autres encadrent
+l'organisation et la documentation. Comme ils reviennent tout au long de ce mémoire, je les
+présente brièvement ici.
+
+\textbf{SPO} (Suivi des Programmes Opérationnels) L'ERP métier qui remplace Grimmo depuis cette
+année, édité par Salvia. Il porte l'ensemble de la gestion des opérations : structures,
+budgets, tiers et facturation. C'est la cible de toutes les reprises de données que je décris
+au chapitre~2.
+
+\textbf{DirectAPI} Le module de l'éditeur Salvia qui permet d'injecter dans l'ERP des fichiers
+tabulaires, sans passer par la saisie manuelle. C'est par lui que sont passés les gros volumes
+structurels de la migration.
+
+\textbf{L'API de SPO} L'interface de programmation de l'ERP, qui expose les mêmes objets que
+l'interface graphique mais permet de les créer et de les modifier par requêtes. Je m'en suis
+servie là où le format d'import tabulaire ne suffisait pas, en m'appuyant notamment sur le
+format JSON Patch~[3].
+
+\textbf{Postman} Un client d'interface de programmation, qui permet de composer des requêtes,
+de les organiser en collections et de les exécuter par lots. C'est l'outil avec lequel j'ai
+exécuté les 872 requêtes de modification décrites au chapitre~2.
+
+\textbf{Vadimm} Le CRM du groupe, qui porte la relation commerciale : les clients, les
+réservations et les désistements. C'est la source des données reprises au second semestre.
+
+\textbf{MyReport} L'outil décisionnel du groupe, qui requête les bases sources et produit les
+tableaux de bord des services. Son module \emph{Builder} sert à construire les extractions, et
+c'est aussi par lui que passent les reportings que je maintiens.
+
+\textbf{Le tableur} Excel occupe une place particulière dans ce mémoire. Il n'est pas seulement
+un outil de saisie : je l'ai utilisé comme un véritable moteur de transformation, les fichiers
+de travail que je décris au chapitre~2 étant entièrement pilotés par formules.
+
+\textbf{Python} Le langage dans lequel j'ai écrit toute la chaîne du Copilote Financier :
+nettoyage des exports, construction de la base, analyses et application. Les bibliothèques
+mobilisées sont détaillées au chapitre~3.
+
+\textbf{SQL et SQLite} SQL est le langage d'interrogation des bases relationnelles. SQLite est
+le moteur léger dans lequel j'ai matérialisé la base analytique du Copilote Financier, avec ses
+tables et ses vues.
+
+\textbf{Streamlit} Une bibliothèque Python qui permet de construire une application web à partir
+d'un script. C'est avec elle qu'est réalisée la plateforme livrée à la direction financière.
+
+\textbf{Git et GitHub} Git est un système de gestion de versions, qui historise chaque
+modification du code ; GitHub est la plateforme qui héberge le dépôt. C'est ce qui rend le
+travail du second semestre traçable et reproductible.
+
+\textbf{SSO} (Single Sign-On) L'authentification unique, qui donne accès à plusieurs
+applications avec un seul compte. J'ai contribué à son déploiement sur deux périmètres du
+groupe, comme je l'expose au chapitre~4.

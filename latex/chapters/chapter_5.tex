@@ -1,0 +1,259 @@
+%% !TEX root = manuscript.tex
+
+\chapter{Organisation, compétences et prise de recul}
+\minitoc
+\newpage
+
+Ce dernier chapitre quitte le récit des missions pour revenir sur la façon dont j'ai organisé
+mon travail, sur les compétences que j'ai mobilisées et acquises, sur les difficultés
+rencontrées, sur l'adéquation de ces missions avec ma formation et sur le positionnement RSE de
+l'entreprise. Il se termine par mes perspectives et mon projet professionnel.
+
+\section{Gestion de projet et organisation}
+
+Mon organisation a été largement conditionnée par un fait que j'ai déjà signalé : le groupe ne
+dispose pas d'une équipe data constituée. Je n'ai donc pas travaillé dans le cadre d'une méthode
+Agile formalisée, avec ses sprints et ses rituels, comme c'est le cas dans une direction data
+structurée. Mon organisation a été plus artisanale, et il me semble utile de le dire, parce que
+cela a eu des conséquences concrètes.
+
+Le calendrier de l'année a d'abord été imposé de l'extérieur, par le projet de changement d'ERP,
+qui commandait les échéances de la reprise des données. Autour de ce fil principal, j'ai
+fonctionné par jalons : un lot de test, une validation, un lot plus large. Cette progression par
+paliers, née d'une contrainte technique sur la migration, m'a finalement servi de méthode de
+gestion de projet sur toutes mes missions, y compris sur le Copilote Financier, où le cadrage
+puis la restitution ont été validés avec la direction financière avant d'aller plus loin.
+
+Sur le plan personnel, la difficulté a été de tenir ensemble deux rythmes très différents. D'un
+côté, les projets de fond, qui demandent de longues plages de concentration. De l'autre, les
+sollicitations du quotidien, une extraction qui ne remonte plus, un accès à ouvrir, un chiffre
+à expliquer, qui arrivent sans prévenir et qui attendent une réponse rapide. Hiérarchiser mes
+tâches et m'y tenir a demandé un effort constant, et je constate qu'il est facile de se laisser
+emporter par l'urgence au détriment du fond. C'est une difficulté sur laquelle je reviens plus
+loin.
+
+Le second semestre a marqué une évolution nette de mes pratiques sur ce point. J'ai versionné
+l'intégralité du Copilote Financier sous Git, tenu un journal de bord documentant chaque étape
+et ses enseignements, et imposé au projet une contrainte de reproductibilité complète, tout
+devant se reconstruire depuis les exports bruts par une seule commande. Ces trois pratiques
+n'existaient pas dans mon travail du premier semestre, et je les considère comme un acquis
+durable.
+
+\section{Compétences mobilisées et acquises}
+
+Sur le plan technique, j'ai consolidé et surtout élargi mes bases. J'ai beaucoup pratiqué les
+interfaces de programmation, du simple appel de test au requêtage dynamique et à la modification
+partielle au format JSON Patch, ainsi que le tableur employé non comme un outil de saisie mais
+comme un moteur de transformation piloté par formules. J'ai également travaillé SQL, de la
+requête d'extraction à la conception d'une base analytique avec ses dimensions, ses tables de
+faits et ses vues métier. Sur le volet analyse, j'ai mis en pratique un ensemble de méthodes
+vues en cours, de la régression linéaire aux modèles à effets aléatoires, en passant par les
+séries temporelles, la classification, l'optimisation sous contrainte et le traitement du texte.
+J'ai enfin découvert Streamlit et Git, que je ne pratiquais pas avant cette année.
+
+Sur le plan méthodologique, l'acquis principal est la validation. J'ai appris à ne jamais livrer
+un résultat sans avoir défini d'abord comment je saurais qu'il est juste, et surtout à
+comprendre que cette question ne se pose pas de la même façon selon le livrable.
+
+Sur le plan humain et professionnel, j'ai gagné en autonomie, ce qui n'était pas un choix mais
+une nécessité compte tenu de la taille de l'équipe. J'ai surtout gagné en capacité à dialoguer
+avec des profils non techniques, c'est-à-dire à traduire un besoin métier flou en règle codable,
+et parfois à en discuter la faisabilité. J'ai également développé une pratique de la
+rétro-ingénierie, en reprenant des systèmes dont les règles n'étaient documentées nulle part.
+
+\section{L'intelligence artificielle dans ma pratique}
+
+Il me semble important de consacrer une place à l'intelligence artificielle dans ce mémoire,
+tant elle a marqué ma façon de travailler cette année.
+
+Concrètement, elle m'a servi d'appui au quotidien, notamment pour monter rapidement en
+compétence sur des outils que je découvrais, pour m'aider à écrire ou à corriger du code, pour
+clarifier une notion vue en cours, ou encore pour structurer un document. Elle a agi comme un
+accélérateur d'apprentissage, particulièrement précieux dans un contexte où je devais me former
+seule à un environnement technique nouveau, sans équipe data autour de moi pour prendre le
+relais.
+
+Cet usage ne va toutefois pas sans réflexion. Une intelligence artificielle produit vite, mais
+pas toujours juste, et ses réponses peuvent être plausibles tout en étant erronées. J'ai donc
+fait attention à ne jamais prendre une sortie d'IA pour argent comptant, et à la vérifier
+systématiquement, exactement comme je le ferais pour une donnée. L'outil me fait gagner du
+temps, mais la responsabilité du résultat me revient entièrement.
+
+Par souci de transparence, je précise enfin que l'IA m'a assistée dans la rédaction et la mise
+en forme de ce mémoire, comme dans une partie de mon travail technique, toujours sous mon
+contrôle et ma relecture.
+
+\section{Retour d'expérience : difficultés et enseignements}
+
+Cette année a été marquée par des difficultés qui se sont toutes révélées formatrices. Trois
+enseignements me paraissent mériter d'être développés, parce qu'ils ne ressortent que de la
+comparaison entre mes missions.
+
+\subsection{Traduire avant de modéliser}
+
+L'image que j'avais de ce métier en entrant en Master~2 était celle que donne le cursus : on
+reçoit un jeu de données et une question, on choisit une méthode, on évalue, on livre un modèle.
+Cette image n'est pas fausse, elle est simplement très minoritaire dans le temps réel. Sur les
+quatre missions de l'année, une seule y correspond, et encore partiellement. Le poste que j'ai
+réellement occupé se rapproche davantage de celui de gestionnaire d'applications~[1].
+
+Ce qui a occupé le reste, c'est un travail de traduction dans les deux sens : traduire une gêne
+exprimée par un service en question calculable, puis traduire un résultat statistique en
+information sur laquelle quelqu'un peut décider. Cette traduction est difficile pour une raison
+précise, c'est que les deux langues n'ont pas les mêmes catégories. Le service juridique parle
+de commandes qui se suivent, alors que la base ne connaît que des lignes sans position dans une
+séquence. La direction financière parle d'opérations qui dérivent, alors que les exports ne
+contiennent qu'un budget et un engagé à une date. Chaque fois, il a fallu construire la
+catégorie manquante, et ce sont ces constructions qui engagent le plus, parce qu'elles décident
+de ce que l'entreprise pourra observer ensuite.
+
+\subsection{Vérifier son travail ne veut pas dire la même chose selon le livrable}
+
+C'est l'enseignement transversal qui m'a le plus servi, et je ne l'ai vu qu'en comparant mes
+missions entre elles. Une reprise de données, un tableau de bord et un modèle statistique ne se
+vérifient pas de la même manière, et la figure~\ref{fig:verification} récapitule les trois
+manières que j'ai employées.
+
+\begin{figure}[!htbp]
+\centering
+\includegraphics[width=0.85\textwidth]{fig_5_1_verification.png}
+\caption{Les trois manières de vérifier un résultat, selon la nature du livrable}
+\label{fig:verification}
+\end{figure}
+
+Sur une reprise de données, la question est de savoir si ce qui est arrivé correspond à ce qui
+est parti, et j'y ai répondu par des paliers de validation, des compteurs de contrôle et le
+recoupement de deux sources. Sur un modèle, la question est de savoir si le résultat tient hors
+de l'échantillon d'apprentissage, et j'y ai répondu par un échantillon test, une comparaison à
+une référence naïve et un contrôle des fuites. Sur un livrable destiné à un utilisateur, la
+question est enfin de savoir s'il s'en sert, et pour la bonne chose, et cela ne se vérifie que
+par la validation du service et son retour à l'usage.
+
+J'ai appris à mes dépens qu'appliquer la mauvaise vérification ne protège de rien. Les
+compteurs de la reprise des tiers tombaient juste, mais ils n'auraient rien dit d'une clé
+d'unicité mal choisie. Ce sont les échanges avec les équipes commerciales, et non les
+compteurs, qui ont validé ces clés.
+
+\subsection{Documenter fait partie du travail technique}
+
+J'ai longtemps considéré la documentation comme une formalité qui suit le travail. Deux épisodes
+m'ont fait changer d'avis. Le premier est la note interne sur la séquence d'injection dans
+l'ERP, rédigée au premier semestre, qui m'a servi deux mois plus tard sur la reprise des tiers
+et qui aurait servi à quelqu'un d'autre si je n'avais pas été là. Le second est la note de
+procédure de l'import des tiers, qui énonce les manipulations à ne jamais faire avant même
+d'expliquer comment utiliser le fichier.
+
+Dans un contexte où je suis la seule à connaître ces règles, ne pas les écrire revient à créer
+une dépendance à ma présence, ce qui est un défaut du livrable et non une preuve de sa valeur.
+
+\subsection{Bilan des livrables}
+
+Le tableau suivant récapitule ce qui a été livré et se trouve aujourd'hui en service.
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 2\tabcolsep) * \real{0.6329}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 2\tabcolsep) * \real{0.3671}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Livrable
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Volume ou périmètre
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+Opérations créées dans SPO, hors budgets détaillés & 283 \\
+Tiers créés dans SPO, avec leurs objets rattachés & 1~434 \\
+Adresses, courriels et téléphones importés & 553, 469 et 538 \\
+Représentants des couples et des sociétés & 1~871 \\
+Coordonnées ajoutées par requête API & 872 requêtes, toutes passées \\
+Documentation interne produite & Séquence d'injection, procédure d'import des tiers \\
+Reportings maintenus et faits évoluer & Sur l'ensemble des services demandeurs \\
+Postes équipés du SSO & Agence de Perpignan et service financier \\
+Base de données analytique & Trois dimensions, quatre tables de faits, trois vues métier \\
+Application d'aide à la décision livrée & Cinq pages, 147 opérations de promotion suivies \\
+\end{longtable}
+
+\section{Adéquation avec le Master MIASHS}
+
+Le Master MIASHS, Mathématiques et Informatique Appliquées aux Sciences Humaines et Sociales,
+consiste à mobiliser les mathématiques, les statistiques et l'informatique pour analyser des
+phénomènes humains et sociaux. Mon alternance rejoint cette formation sur plusieurs points, mais
+elle appelle aussi une nuance que je préfère poser d'emblée.
+
+Sur le plan méthodologique, le Copilote Financier a mobilisé très directement les enseignements
+du Master. La régression linéaire et la régularisation, la classification et ses métriques,
+l'analyse exploratoire et ses contrôles, les séries temporelles, l'optimisation sous contrainte
+et le traitement du texte sont autant de notions vues en cours que j'ai appliquées sur des
+données réelles, avec les difficultés que cela suppose. Le volet informatique de la formation
+m'a été tout aussi utile, pour l'écriture des requêtes SQL comme pour la structuration d'un
+projet Python reproductible.
+
+Au-delà des méthodes, l'objet d'étude lui-même rejoint le cursus. Derrière chaque ligne de mes
+tables, il y a des ménages qui achètent un logement, des projets qui échouent faute de
+financement, et un marché qui réagit au coût du crédit. L'axe B de mon projet est, au fond, une
+étude de la sensibilité d'une demande à une variable macroéconomique, ce qui relève pleinement
+des sciences sociales quantitatives.
+
+La nuance est la suivante. Sur les quatre missions de l'année, trois relèvent de l'ingénierie
+des données et de la gestion d'applications, et non de la modélisation. Le Master accorde une
+place importante à la data science au sens strict, et mon alternance m'a surtout placée en
+amont de ces usages. Je ne le regrette pas, parce que c'est précisément ce décalage qui m'a fait
+comprendre ce dont dépend une modélisation ; mais je dois reconnaître que la part de mon année
+consacrée à la modélisation est restée minoritaire.
+
+\section{Positionnement RSE et propositions}
+
+Ma position d'alternante dans une fonction support ne m'a pas donné de visibilité sur la
+politique RSE du groupe dans son ensemble, et je me garderai donc d'en dresser un bilan. Je peux
+en revanche décrire ce que j'ai observé et ce à quoi mon travail a contribué, à mon échelle.
+
+Sur le plan social, l'entreprise m'a offert un cadre d'apprentissage réel : j'ai été confiée à
+des chantiers structurants, avec l'autonomie et le droit à l'erreur que cela suppose, ce qui est
+loin d'être acquis pour une alternante. Le fait d'avoir été la seule personne sur ces sujets a
+été exigeant, mais aussi profondément formateur.
+
+Sur le plan environnemental, ma contribution est indirecte et je ne veux pas la surestimer. La
+suppression de la double saisie entre systèmes, la réduction du nombre de fiches clients
+dupliquées et la substitution d'une chaîne de traitement automatisée à des centaines de saisies
+manuelles réduisent surtout du temps de travail et des erreurs, pas une empreinte carbone. Le
+seul effet mesurable dans ce registre concerne le Copilote Financier, dont l'architecture
+calcule une seule fois, dans une vue, ce que des tableurs recalculaient à chaque ouverture.
+
+Je formulerais deux propositions, qui sont de même nature que mes recommandations techniques.
+La première est l'historisation des exports mensuels dans le nouvel ERP, qui donnerait à
+l'entreprise une mémoire de sa propre activité, aujourd'hui perdue à chaque nouvel export. La
+seconde est la fiabilisation de la saisie des motifs de désistement, dont l'analyse a montré
+qu'elle rend, dans certaines agences, une part importante de l'information inexploitable. Ces
+deux chantiers ne coûtent presque rien et conditionnent tout ce qui pourra être analysé dans les
+années à venir.
+
+\section{Perspectives et projet professionnel}
+
+Ces deux années ont déplacé mon projet. J'y suis entrée en visant la data science au sens
+strict, c'est-à-dire la modélisation prédictive. J'en sors en visant un positionnement plus
+large : construire et fiabiliser les chaînes de données qui rendent la décision possible, puis
+les outiller.
+
+Ce positionnement croise trois domaines que l'année m'a fait pratiquer ensemble.
+L'\textbf{ingénierie des données} d'abord, sur laquelle j'ai le plus progressé, avec les
+reprises, les migrations, les interfaces de programmation, la déduplication et la modélisation
+d'une base analytique. L'\textbf{analyse et la modélisation} ensuite, entendues comme le choix
+d'une méthode proportionnée à la donnée disponible et sa validation honnête. La
+\textbf{restitution et le dialogue avec les métiers} enfin, c'est-à-dire la traduction d'un
+besoin en spécification, puis d'un résultat en écran. Ces trois domaines se tiennent : un profil
+qui ne tiendrait que le premier produirait des chaînes de données que personne n'interroge ; un
+profil qui ne tiendrait que le deuxième modéliserait des données dont il ignore la provenance.
+
+À court terme, je vise un poste d'ingénieure données orientée aide à la décision. Deux contextes
+m'intéressent, pour des raisons différentes. Une entreprise de taille intermédiaire sans équipe
+data constituée, où le poste couvre toute la chaîne, comme cela a été le cas cette année. Ou une
+direction data structurée, où je travaillerais enfin à plusieurs sur un même chantier, ce qui me
+manque et ce dont j'ai besoin pour progresser sur les pratiques collectives : la revue de code,
+les conventions partagées et la répartition du travail.
+
+À plus court terme encore, plusieurs chantiers restent ouverts chez Angelotti, et je souhaite
+les mener à terme : achever la reprise des historiques budgétaires, construire la
+synchronisation permanente entre l'ERP et le CRM, et accompagner l'adoption du Copilote
+Financier par la direction financière, dont l'usage réel sera le meilleur juge.

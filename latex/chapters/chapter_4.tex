@@ -1,0 +1,98 @@
+%% !TEX root = manuscript.tex
+
+\chapter{Activités complémentaires}
+\minitoc
+\newpage
+
+En parallèle de mes deux grandes missions, mon alternance a compté d'autres contributions, qui
+se sont étalées sur les deux semestres. Elles n'ont pas le volume des chapitres précédents, mais
+elles occupent une part réelle de mon temps et elles éclairent une autre facette du poste, celle
+du maintien en conditions opérationnelles de ce qui existe déjà. J'en présente ici deux : le
+maintien du système décisionnel et la contribution au déploiement du SSO.
+
+\section{Le maintien du système décisionnel}
+
+Le groupe pilote son activité à travers MyReport, l'outil décisionnel présenté au chapitre~1.
+Chaque service y dispose de tableaux de bord alimentés par des extractions des bases sources.
+Comme il n'existe pas d'équipe data constituée, c'est à moi qu'ont été confiés leur maintien et
+leur évolution, pour l'ensemble des services demandeurs.
+
+Ce travail prend deux formes. La première est la correction : un tableau ne remonte plus, un
+chiffre paraît faux à un utilisateur, une extraction tombe en erreur après une évolution de la
+base source. Il faut alors remonter la chaîne de traitement pour identifier l'origine du
+problème avant de le corriger, et cette investigation prend souvent plus de temps que la
+correction elle-même. La seconde est l'évolution : un service demande un indicateur
+supplémentaire, un nouvel axe d'analyse ou une règle de calcul différente.
+
+Ces demandes ont ceci de particulier qu'elles arrivent rarement sous forme de spécification. Un
+service décrit une gêne, et c'est à moi de la traduire en règle calculable. C'est le point sur
+lequel j'ai le plus progressé sur cette activité, et il rejoint directement ce que j'ai vécu sur
+les deux missions principales.
+
+\subsection{Un exemple : la règle de facturation des commandes}
+
+L'exemple le plus représentatif de cette traduction m'a été demandé par le service juridique. La
+règle métier est simple à énoncer : pour un lot donné, les commandes se facturent en alternance,
+la première étant payante, la deuxième gratuite, la troisième payante, et ainsi de suite.
+
+Elle est cependant beaucoup moins simple à calculer, pour une raison qui tient à la structure de
+la donnée. La base ne connaît que des lignes de commande, sans position dans une séquence : rien
+n'y indique qu'une commande est la première ou la deuxième de son lot. La catégorie sur laquelle
+repose toute la règle, le rang de la commande, n'existe tout simplement pas dans les données. Il
+fallait donc la construire.
+
+À cette difficulté s'ajoutait une contrainte pratique. Je ne disposais pas de droits d'écriture
+sur la base, et je ne pouvais pas non plus ajouter une colonne aux fichiers sources, qui sont
+alimentés par ailleurs. La règle devait donc être portée entièrement par le calcul, sans rien
+stocker.
+
+La solution retenue, que représente la figure~\ref{fig:facturation}, tient en une chaîne de
+quatre étapes : partir des commandes du lot telles qu'elles sont dans la base, les trier
+chronologiquement par opération et par lot, leur attribuer un rang au calcul, puis en déduire le
+statut, les rangs impairs étant payants et les rangs pairs gratuits. Aucune de ces étapes n'est
+stockée : la chaîne est rejouée à chaque génération du tableau, ce qui permet de tenir la règle
+sans droit d'écriture ni colonne ajoutée aux fichiers sources.
+
+\begin{figure}[!htbp]
+\centering
+\includegraphics[width=0.85\textwidth]{fig_4_1_regle_facturation.png}
+\caption{La règle de facturation des commandes, reconstituée par le calcul à chaque génération du tableau}
+\label{fig:facturation}
+\end{figure}
+
+Ce cas m'a marquée parce qu'il illustre en petit ce que j'ai rencontré en grand sur les deux
+missions principales. Le service juridique parle de commandes qui se suivent ; la base ne connaît
+que des lignes sans ordre. Entre les deux, il faut construire la catégorie manquante, et c'est ce
+travail de construction qui décide de ce que l'entreprise pourra observer ensuite.
+
+\section{La contribution au déploiement du SSO}
+
+Ma seconde activité complémentaire relève davantage de la gestion d'applications que de la
+donnée. Le groupe a engagé le déploiement du SSO (Single Sign-On), c'est-à-dire de
+l'authentification unique, qui permet à un collaborateur d'accéder à plusieurs applications avec
+un seul compte, sans avoir à s'identifier à chaque fois.
+
+J'ai contribué à ce déploiement sur deux périmètres : l'agence de Perpignan et le service
+financier. Concrètement, mon rôle a consisté à préparer les postes, à accompagner les
+utilisateurs lors de la bascule et à traiter les cas qui ne passaient pas, chaque poste ayant
+son historique de comptes et d'accès.
+
+Cette activité peut sembler éloignée du reste de mon mémoire, et elle l'est sur le plan
+technique. Elle m'a toutefois appris deux choses que je n'aurais pas apprises ailleurs. La
+première est qu'un déploiement se juge à l'usage : une bascule techniquement réussie qui laisse
+trois personnes incapables de se connecter est un échec pour le service concerné. La seconde est
+qu'une part importante du travail consiste à accompagner, à expliquer et à rassurer, ce qui est
+exactement ce que j'ai retrouvé lors de la mise en service du Copilote Financier.
+
+\section{Ce que ces activités apportent au reste}
+
+Ces deux activités partagent un point commun avec mes missions principales : elles portent sur
+l'existant, sur ce qui est déjà utilisé au quotidien par des collègues. Une erreur y a donc un
+effet immédiat, ce qui impose une prudence constante et une vérification systématique avant toute
+mise en service.
+
+Elles m'ont aussi donné une visibilité sur l'ensemble des services du groupe que mes deux
+missions principales, plus resserrées sur la direction financière et sur les équipes
+commerciales, ne m'auraient pas donnée. C'est en traitant ces demandes que j'ai compris comment
+chaque service utilise réellement ses données, et cette connaissance m'a directement servi au
+moment de cadrer le Copilote Financier.
