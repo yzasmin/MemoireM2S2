@@ -96,22 +96,19 @@ on ne saurait pas mesurer la performance réelle.
 \hypertarget{objectifs-du-dashboard}{%
 \subsection{Objectifs du dashboard}\label{objectifs-du-dashboard}}
 
-Le livrable final est une application web destinée à la direction financière, dont la
-fonction est de traduire les modèles en décisions. C'est sur ce point qu'un retour de
-l'entreprise, reçu en cours de projet, nous a imposé une clarification utile.
+Le livrable final est une application web destinée à la direction financière, dont la fonction
+est de traduire les modèles en décisions. Un retour de l'entreprise, reçu en cours de projet,
+a imposé une clarification utile : la première version de l'interface était trop marquée par le
+vocabulaire de la modélisation, ses écrans parlant de scores, de probabilités et
+d'intervalles là où les utilisateurs attendaient des niveaux d'alerte, des dépassements en
+euros et un prix de marché estimé. J'ai donc entièrement réécrit l'interface en langage de
+gestion, et nous en avons restreint le périmètre aux 147 opérations de promotion immobilière,
+l'aménagement foncier relevant d'une logique économique différente. Les métriques de validation
+restent dans les notebooks : l'écran ne montre que ce qui se décide.
 
-La première version de l'interface était trop marquée par le vocabulaire de la
-modélisation. Les écrans parlaient de scores, de probabilités et d'intervalles, là où les
-utilisateurs attendaient des niveaux d'alerte, des dépassements en euros et un prix de
-marché estimé. J'ai donc entièrement réécrit l'interface en langage de gestion, et nous en avons
-restreint le périmètre aux 147 opérations de promotion immobilière, l'aménagement foncier
-relevant d'une logique économique différente. Les métriques de validation, elles, restent
-dans les notebooks : l'écran ne montre que ce qui se décide.
-
-Ce retour a été l'un des enseignements les plus utiles du projet. Un modèle correctement
-validé mais restitué dans le vocabulaire du modélisateur reste inutilisable par le métier,
-et cette distance ne se comble pas par de la pédagogie, elle se comble en changeant les
-mots affichés.
+Ce retour a été l'un des enseignements les plus utiles du projet. Un modèle correctement validé
+mais restitué dans le vocabulaire du modélisateur reste inutilisable par le métier, et cette
+distance ne se comble pas par de la pédagogie, elle se comble en changeant les mots affichés.
 
 \hypertarget{donnuxe9es-disponibles}{%
 \section{Données disponibles}\label{donnuxe9es-disponibles}}
@@ -119,11 +116,10 @@ mots affichés.
 \hypertarget{donnuxe9es-internes}{%
 \subsection{Données internes}\label{donnuxe9es-internes}}
 
-Quatre exports du système de gestion constituent le point de départ du projet. Leur
-périmètre de 267 opérations ne recouvre pas exactement les 283 opérations reprises au
-chapitre 1 : ce sont deux extractions distinctes, faites à des dates différentes, et les
-exports de gestion ne portent que les opérations disposant d'un budget analytique au moment
-de l'extraction.
+Quatre exports du système de gestion constituent le point de départ. Leur périmètre de 267
+opérations ne recouvre pas exactement les 283 opérations reprises au chapitre~1 : ce sont deux
+extractions distinctes, faites à des dates différentes, et les exports de gestion ne portent
+que les opérations disposant d'un budget analytique au moment de l'extraction.
 
 \begin{longtable}[]{@{}
   >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.2523}}
@@ -150,83 +146,55 @@ Budget LIVE & poste budgétaire & 79~106 lignes & contrôle de cohérence \\
 06\_Informations Lots & dossier désisté & 2~164 lignes & détail des désistements \\
 \end{longtable}
 
-Deux intitulés sont abrégés dans ce tableau~: l'export de la grille de prix
-s'appelle «~Grille de Prix Avec Désistements~» dans le système de gestion, et le fichier de
-contrôle «~A\_DM\_BUDGET\_MONTANT\_GESTION\_LIVE~», désigné ci-après comme le fichier LIVE.
+Deux intitulés sont abrégés : l'export de la grille de prix s'appelle «~Grille de Prix Avec
+Désistements~» dans le système de gestion, et le fichier de contrôle
+«~A\_DM\_BUDGET\_MONTANT\_GESTION\_LIVE~», désigné ci-après comme le fichier LIVE.
 
-Comprendre ces exports m'a demandé plus de temps que les modéliser. Ce déséquilibre m'a
-d'abord surprise, puis m'a paru normal : c'est à cette étape que se jouait la fiabilité de
-tout le reste. Trois constats l'illustrent.
-
-Le premier concerne le fichier «~06\_Informations Lots~». Malgré son nom, il ne contient
-pas les lots : il ne porte que des dossiers désistés, 2~157 au motif «~Désisté~» et 7 au
-motif «~Résolution de vente~». La table maîtresse des lots est en réalité la grille de
-prix. Prendre ce fichier pour ce que son nom annonce aurait faussé toute l'analyse du
-stock.
-
-Le deuxième concerne le fichier «~Budget \& EFR~». Il affiche 65~000 lignes, un chiffre rond
-qui évoquait immédiatement une troncature à l'export. J'ai donc réconcilié ce fichier avec
-le fichier LIVE, et la vérification a montré le contraire de ce que je craignais : les
-totaux sont identiques à l'euro près sur les 118 opérations jointes, avec un écart médian
-nul. Les 65~000 lignes se décomposent en 64~788 postes de détail et 212 lignes de synthèse.
-Le chiffre rond n'était qu'une coïncidence.
-
-Le troisième concerne le nettoyage proprement dit, qui a traité les défauts classiques d'un
-export de gestion. Les natures de lot ont été harmonisées, les libellés «~appt~»,
-«~Appartement~» ou «~stat~» étant regroupés en huit familles. Les doublons orthographiques
-de communes ont été fusionnés : 91 orthographes désignaient en réalité 90 communes. Enfin,
-les surfaces et les prix à zéro ont été convertis en valeurs manquantes plutôt que traités
-comme des zéros réels, un zéro de surface n'ayant aucun sens économique.
+Comprendre ces exports m'a demandé plus de temps que les modéliser, et c'est normal : c'est à
+cette étape que se jouait la fiabilité de tout le reste. Trois constats l'illustrent. Le
+fichier «~06\_Informations Lots~» ne contient pas les lots malgré son nom : il ne porte que des
+dossiers désistés, 2~157 au motif «~Désisté~» et 7 au motif «~Résolution de vente~», la table
+maîtresse des lots étant en réalité la grille de prix. Le fichier «~Budget \& EFR~» affiche
+65~000 lignes, chiffre rond qui évoquait une troncature~; la réconciliation avec le fichier
+LIVE a montré le contraire, les totaux étant identiques à l'euro près sur les 118 opérations
+jointes, et les 65~000 lignes se décomposant en 64~788 postes de détail et 212 lignes de
+synthèse. Le nettoyage, enfin, a traité les défauts classiques d'un export de gestion : natures
+de lot harmonisées en huit familles, doublons orthographiques de communes fusionnés puisque 91
+orthographes désignaient 90 communes, et surfaces ou prix à zéro convertis en valeurs
+manquantes, un zéro de surface n'ayant aucun sens économique.
 
 \hypertarget{donnuxe9es-externes}{%
 \subsection{Données externes}\label{donnuxe9es-externes}}
 
-Trois sources publiques complètent les données internes. Je les ai toutes récupérées par
-script, et non par téléchargement manuel, pour qu'elles restent re-téléchargeables et que
-l'analyse puisse être rejouée sur des séries actualisées :
-
-\begin{enumerate}
-\def\labelenumi{\arabic{enumi}.}
-
-\item
-  \textbf{Le taux moyen des crédits habitat en France}, série mensuelle de la Banque centrale
-  européenne {[}4{]}, de 2015 à 2026.
-\item
-  \textbf{L'indicateur de confiance des ménages}, publié par Eurostat {[}5{]}, sur la même période.
-\item
-  \textbf{Un référentiel des 90 communes d'implantation} du groupe, comprenant la population et
-  les coordonnées géographiques, obtenu par l'API publique \texttt{geo.api.gouv.fr} {[}6{]} et enrichi
-  d'une distance au littoral que j'ai calculée.
-\end{enumerate}
-
-Ce détour par le script plutôt que par le téléchargement manuel a un coût en temps au
-départ, mais c'est lui qui rend l'exigence de reproductibilité tenable jusqu'au bout de la
-chaîne.
+Trois sources publiques complètent les données internes, toutes récupérées par script pour
+qu'elles restent re-téléchargeables et que l'analyse puisse être rejouée sur des séries
+actualisées : le \textbf{taux moyen des crédits habitat en France}, série mensuelle de la Banque
+centrale européenne {[}4{]} de 2015 à 2026~; l'\textbf{indicateur de confiance des ménages} publié par
+Eurostat {[}5{]} sur la même période~; et un \textbf{référentiel des 90 communes d'implantation} du
+groupe, avec population et coordonnées géographiques, obtenu par l'API publique
+\texttt{geo.api.gouv.fr} {[}6{]} et enrichi d'une distance au littoral que j'ai calculée.
 
 \hypertarget{architecture-technique}{%
 \section{Architecture technique}\label{architecture-technique}}
 
-L'architecture retenue tient en une chaîne courte et entièrement rejouable. Les quatre
-exports et les trois sources externes alimentent un script de nettoyage, qui charge une
-base SQLite organisée en schéma en étoile, c'est-à-dire autour de tables de faits
-rattachées à des tables de dimensions. On y trouve trois dimensions, les opérations, les
-communes et la conjoncture mensuelle, et quatre tables de faits : 64~788 lignes
-budgétaires, 14~123 lots, 14~428 dossiers de vente et 2~164 désistements. Les notebooks
-d'analyse et l'application s'appuient tous deux sur cette base.
+L'architecture tient en une chaîne courte et entièrement rejouable. Les quatre exports et les
+trois sources externes alimentent un script de nettoyage qui charge une base SQLite en schéma
+en étoile, c'est-à-dire autour de tables de faits rattachées à des tables de dimensions : trois
+dimensions --- opérations, communes, conjoncture mensuelle --- et quatre tables de faits, soit
+64~788 lignes budgétaires, 14~123 lots, 14~428 dossiers de vente et 2~164 désistements. Les
+notebooks d'analyse et l'application s'appuient tous deux sur cette base.
 
-Trois vues SQL y encapsulent les calculs partagés : la marge budgétée contre la marge
-engagée par opération, les réservations par opération et par mois, et l'état du stock. Ce
-choix est plus structurant qu'il n'y paraît. La définition de la marge est écrite une seule
-fois, dans la vue, et les notebooks comme la plateforme consomment la même. C'est
-exactement la situation inverse de celle décrite au chapitre 4, où la règle de facturation
-juridique, ne pouvant être écrite nulle part, devait être recalculée à chaque génération du
-tableau.
+Trois vues SQL y encapsulent les calculs partagés : marge budgétée contre marge engagée par
+opération, réservations par opération et par mois, état du stock. Ce choix est plus structurant
+qu'il n'y paraît : la définition de la marge est écrite une seule fois, dans la vue, et les
+notebooks comme la plateforme consomment la même. C'est la situation inverse de celle du
+chapitre~2, où la règle de facturation juridique, ne pouvant être écrite nulle part, devait
+être recalculée à chaque génération du tableau.
 
-Une seule commande reconstruit l'ensemble depuis les exports bruts, en quelques secondes.
-L'analyse complète est versionnée et ré-exécutable de bout en bout, ce qui signifie que
-tous les résultats présentés dans ce chapitre sont reproductibles. Cette contrainte, que je
-me suis imposée avant d'écrire la première ligne d'analyse, est ce qui distingue un travail
-vérifiable d'une suite de manipulations dont personne ne saurait refaire le chemin.
+Une seule commande reconstruit l'ensemble depuis les exports bruts, en quelques secondes. Tous
+les résultats présentés ici sont donc reproductibles --- contrainte que je me suis imposée avant
+d'écrire la première ligne d'analyse, et qui distingue un travail vérifiable d'une suite de
+manipulations dont personne ne saurait refaire le chemin.
 
 \hypertarget{notebooks-et-ruxe9sultats}{%
 \section{Notebooks et résultats}\label{notebooks-et-ruxe9sultats}}
@@ -234,17 +202,13 @@ vérifiable d'une suite de manipulations dont personne ne saurait refaire le che
 \hypertarget{exploration-et-nettoyage-des-donnuxe9es-brutes}{%
 \subsection{Exploration et nettoyage des données brutes}\label{exploration-et-nettoyage-des-donnuxe9es-brutes}}
 
-Au-delà du nettoyage décrit en section 3.2, l'exploration a produit deux résultats qui ont
-directement orienté la modélisation.
+L'exploration a produit deux résultats qui ont directement orienté la modélisation.
 
 Le premier concerne la distribution des prix. Le prix au mètre carré des appartements est
-fortement asymétrique, avec un coefficient d'asymétrie de 19,2, ce qui rendait le prix brut
-impropre à une modélisation linéaire directe. Après passage au logarithme, la
-distribution devient proche d'une loi normale : le coefficient d'asymétrie tombe à 0,39 et
-le diagramme quantile-quantile, qui compare la distribution observée à la distribution
-théorique, devient presque rectiligne. La Figure 3.1 rassemble les deux distributions et
-les diagrammes quantile-quantile correspondants. C'est ce constat qui a conduit l'axe C à
-modéliser le logarithme du prix plutôt que le prix lui-même.
+fortement asymétrique, avec un coefficient d'asymétrie de 19,2, ce qui le rendait impropre à
+une modélisation linéaire directe~; après passage au logarithme, le coefficient tombe à 0,39 et
+le diagramme quantile-quantile devient presque rectiligne. La Figure 3.1 rassemble les deux
+distributions. C'est ce constat qui a conduit l'axe C à modéliser le logarithme du prix.
 
 \begin{figure}[!htbp]
 \centering
@@ -252,19 +216,16 @@ modéliser le logarithme du prix plutôt que le prix lui-même.
 \caption{Prix au mètre carré des appartements : distribution brute et après transformation logarithmique}
 \end{figure}
 
-Le second résultat est une leçon de méthode, et c'est peut-être le passage du projet dont
-j'ai le plus appris. En calculant la corrélation entre les réservations mensuelles du
-groupe et le taux des crédits habitat, j'obtenais une valeur quasi nulle, de +0,07. Prise
-au premier degré, cette valeur signifiait que la conjoncture n'explique rien du rythme de
-vente, ce qui contredisait tout ce que l'on sait du marché.
-
-En réalité, la série brute est brouillée par la croissance du portefeuille. Le nombre
-d'opérations en commercialisation a fortement augmenté sur la période, soutenant le volume total
-de réservations même lorsque la demande par programme s'effondre. Rapportées au nombre
-d'opérations actives, les réservations racontent l'inverse. La Figure 3.2 donne cette série
-d'intensité corrigée ; sa corrélation avec le taux d'intérêt passe à -0,34 et celle avec la
-confiance des ménages à +0,44. Tout l'axe B repose sur cette correction. Sans elle, j'aurais
-conclu à l'absence d'effet de la conjoncture, et j'aurais eu tort.
+Le second est une leçon de méthode, et c'est le passage du projet dont j'ai le plus appris. En
+calculant la corrélation entre les réservations mensuelles du groupe et le taux des crédits
+habitat, j'obtenais une valeur quasi nulle, de +0,07 : prise au premier degré, elle signifiait
+que la conjoncture n'explique rien du rythme de vente, ce qui contredit tout ce que l'on sait
+du marché. En réalité, la série brute est brouillée par la croissance du portefeuille, le
+nombre d'opérations en commercialisation ayant fortement augmenté sur la période. Rapportées
+au nombre d'opérations actives, les réservations racontent l'inverse : la Figure 3.2 donne
+cette série d'intensité corrigée, dont la corrélation avec le taux d'intérêt passe à -0,34 et
+celle avec la confiance des ménages à +0,44. Tout l'axe B repose sur cette correction~; sans
+elle, j'aurais conclu à l'absence d'effet de la conjoncture, et j'aurais eu tort.
 
 \begin{figure}[!htbp]
 \centering
@@ -275,51 +236,42 @@ conclu à l'absence d'effet de la conjoncture, et j'aurais eu tort.
 \hypertarget{sql-et-spark}{%
 \subsection{SQL et Spark}\label{sql-et-spark}}
 
-Le véritable livrable de cette étape est la base SQL décrite en section 3.3 : les vues
-métier partagées, les index, et un contrôle croisé des agrégats qui retrouve les mêmes
-totaux par deux moteurs indépendants, soit 1~561,8~M€ de dépenses budgétées et 1~754,8~M€
-de recettes, à l'arrondi près. Ce contrôle n'est pas une coquetterie : il garantit que la
-base chargée dit bien la même chose que les exports d'origine.
+Le livrable de cette étape est la base décrite plus haut : vues métier partagées, index, et un
+contrôle croisé des agrégats qui retrouve les mêmes totaux par deux moteurs indépendants, soit
+1~561,8~M€ de dépenses budgétées et 1~754,8~M€ de recettes, à l'arrondi près. Ce contrôle
+garantit que la base chargée dit bien la même chose que les exports d'origine.
 
-J'ai ensuite évalué Spark comme piste de montée en charge, l'entreprise appartenant à un groupe
-dont le périmètre de données dépasse largement le sien. Le test aboutit à une conclusion
-négative, et c'est en cela qu'il est utile. Sur notre volumétrie, 64~788 lignes représentant 9
-Mo en mémoire, l'agrégation chronométrée est environ cinquante fois plus lente qu'avec pandas.
-Le rapport mesuré est de 58, après 24 secondes de démarrage de la machine virtuelle Java ; une
-exécution antérieure donnait 28. Le chiffre varie donc avec la machine, mais la conclusion non.
-
-SQLite et pandas constituent donc la bonne architecture à cette échelle. L'intérêt du test
-est ailleurs : le chemin de montée en charge est identifié, si le périmètre devait un jour
-s'étendre à celui du groupe Nexity.
+J'ai ensuite évalué Spark comme piste de montée en charge, l'entreprise appartenant à un
+groupe dont le périmètre de données dépasse largement le sien. Le test aboutit à une conclusion
+négative, et c'est en cela qu'il est utile : sur nos 64~788 lignes, soit 9~Mo en mémoire,
+l'agrégation est environ cinquante fois plus lente qu'avec pandas --- un rapport mesuré de 58,
+après 24 secondes de démarrage de la machine virtuelle Java. SQLite et pandas constituent donc
+la bonne architecture à cette échelle, et le chemin de montée en charge est identifié si le
+périmètre devait un jour s'étendre à celui du groupe Nexity.
 
 \hypertarget{axe-a-risque-de-duxe9rive-de-marge}{%
 \subsection{Axe A : risque de dérive de marge}\label{axe-a-risque-de-duxe9rive-de-marge}}
 
-La difficulté de l'axe A n'était pas le modèle mais la définition de la cible. Les exports
-dont je disposais sont une photographie à date, sans historique des révisions budgétaires :
-je ne peux donc pas observer comment un budget a évolué, seulement où il en est
-aujourd'hui.
+La difficulté de cet axe n'était pas le modèle mais la définition de la cible. Les exports
+étant une photographie à date, sans historique des révisions budgétaires, je ne peux pas
+observer comment un budget a évolué, seulement où il en est. J'ai donc mesuré la dérive par
+les dépassements déjà engagés, poste par poste : les dépenses à terminaison sont estimées par
+le maximum de l'engagé et du budget de chaque poste, selon un principe simple --- un dépassement
+engagé est acquis, et le budget restant sera dépensé --- et la variation de marge rapporte la
+marge ainsi recalculée à la marge budgétée. Cette grandeur est appelée dans le projet la
+variation de marge «~committée~», par emprunt à la notion comptable de coût engagé : elle ne
+mesure pas une dérive anticipée, mais la part de dérive que les engagements déjà pris rendent
+acquise.
 
-J'ai donc mesuré la dérive par les dépassements déjà engagés, poste par poste. Les dépenses
-à terminaison sont estimées par le maximum de l'engagé et du budget de chaque poste, selon
-un principe qui se formule simplement : un dépassement engagé est acquis, et le budget
-restant sera dépensé. La variation de marge rapporte ensuite la marge ainsi recalculée à la
-marge budgétée. Cette grandeur est appelée dans le projet la variation de marge
-«~committée~», par emprunt à la notion comptable de coût engagé : elle ne mesure pas une
-dérive anticipée, mais la part de dérive que les engagements déjà pris rendent acquise.
-
-Cette définition impose une précaution sur les variables explicatives, et j'y ai veillé
-dès la construction du jeu de données. Concrètement, le modèle n'utilise que le budget
-initial et les signaux commerciaux, jamais l'engagé ni le facturé, qui sont précisément ce
-qui définit la cible. Sans cette précaution, le modèle aurait «~prédit~» sa propre
-définition.
+Cette définition impose une précaution sur les variables explicatives : le modèle n'utilise
+que le budget initial et les signaux commerciaux, jamais l'engagé ni le facturé, qui
+définissent la cible. Sans cela, il aurait «~prédit~» sa propre définition.
 
 Sur le périmètre exploitable, soit les 123 opérations engagées à au moins 60~\% et dont la
-marge budgétée dépasse 50~k€, plus d'un tiers des opérations, 36,6~\% exactement, n'a aucun
-dépassement engagé. Mais 28~\% franchissent le seuil de dérive matérielle, que j'ai fixé à
-2~\% de la marge, et deux cas extrêmes dépassent la moitié de la marge budgétée. La
-Figure 3.3 donne la distribution complète et situe ce seuil, avec à droite le détail des
-opérations en dérive.
+marge budgétée dépasse 50~k€, 36,6~\% des opérations n'ont aucun dépassement engagé, 28~\%
+franchissent le seuil de dérive matérielle que j'ai fixé à 2~\% de la marge, et deux cas
+extrêmes dépassent la moitié de la marge budgétée. La Figure 3.3 donne la distribution
+complète et situe ce seuil.
 
 \begin{figure}[!htbp]
 \centering
@@ -328,70 +280,55 @@ opérations en dérive.
 \end{figure}
 
 La partie la plus utile de cet axe pour l'entreprise n'est pas un modèle appris : c'est le
-tableau descriptif des dépassements engagés en euros, par opération et par poste, calculé
-en SQL pur. C'est lui qui alimente la page «~Alertes marge~» de la plateforme.
+tableau descriptif des dépassements engagés en euros, par opération et par poste, calculé en
+SQL pur, qui alimente la page «~Alertes marge~» de la plateforme.
 
-La modélisation vient en complément, comme score de tri. Une régression du taux de
-variation atteint un coefficient de détermination de 0,08 sur l'échantillon test. Le
-résultat est modeste, et je le présente tel quel : la structure du budget initial
-prédispose à la dérive mais ne la détermine pas, l'aléa de chantier faisant le reste. Une
-classification des opérations «~à risque~», c'est-à-dire dont la dérive dépasse 2~\%,
-atteint un score F1, qui combine en une seule valeur la capacité à détecter les cas à
-risque et celle à ne pas en signaler à tort, de l'ordre de 0,30 à 0,34 en validation
-croisée stratifiée, c'est-à-dire
-sur des découpages qui conservent la proportion d'opérations à risque, contre 0 pour la
-référence majoritaire, qui ne détecte rien du tout. J'ai confronté quatre
-classifieurs classiques : la régression logistique, le séparateur à vaste marge, l'arbre de
-décision et la forêt aléatoire. À 123 observations, leurs écarts de performance ne sont pas
-significatifs. Le choix s'est donc porté sur la forêt aléatoire, dont les probabilités
-alimentent les niveaux d'alerte de la plateforme.
-
-Il faut donc lire ce dispositif pour ce qu'il est : un outil de hiérarchisation de
-l'attention, pas un oracle.
+La modélisation vient en complément, comme score de tri. Une régression du taux de variation
+atteint un coefficient de détermination de 0,08 sur l'échantillon test : résultat modeste, que
+je présente tel quel, la structure du budget initial prédisposant à la dérive sans la
+déterminer. Une classification des opérations «~à risque~», dont la dérive dépasse 2~\%, atteint
+un score F1 --- qui combine la capacité à détecter les cas à risque et celle à ne pas en
+signaler à tort --- de 0,30 à 0,34 en validation croisée stratifiée, contre 0 pour la référence
+majoritaire qui ne détecte rien. J'ai confronté quatre classifieurs classiques : régression
+logistique, séparateur à vaste marge, arbre de décision et forêt aléatoire. À 123
+observations, leurs écarts ne sont pas significatifs~; le choix s'est porté sur la forêt
+aléatoire, dont les probabilités alimentent les niveaux d'alerte. Il faut donc lire ce
+dispositif pour ce qu'il est : un outil de hiérarchisation de l'attention, pas un oracle.
 
 \hypertarget{axe-b-vitesse-duxe9coulement}{%
 \subsection{Axe B : vitesse d'écoulement}\label{axe-b-vitesse-duxe9coulement}}
 
 Budgéter les réservations de 2026 suppose de distinguer, dans le rythme de vente, ce qui
-relève de la conjoncture et ce qui relève du programme lui-même. C'est l'axe dont les
-résultats sont les plus solides, et celui qui sert le plus directement la décision
-budgétaire.
+relève de la conjoncture et ce qui relève du programme. C'est l'axe dont les résultats sont
+les plus solides.
 
-Le rythme de vente est modélisé sur un panel opération × mois, soit 3~230 observations
-portant sur 160 opérations. J'ai pris soin d'y réintroduire les mois à zéro réservation,
-entre la première et la dernière vente de chaque programme : les omettre reviendrait à ne
-compter que les mois où quelque chose s'est passé, et donc à surestimer le rythme.
+Le rythme est modélisé sur un panel opération × mois, soit 3~230 observations portant sur 160
+opérations, en réintroduisant les mois à zéro réservation entre la première et la dernière
+vente de chaque programme : les omettre reviendrait à ne compter que les mois où quelque chose
+s'est passé, donc à surestimer le rythme.
 
-Un modèle à effets aléatoires sépare alors ce qui revient à l'opération de ce qui revient à
-la conjoncture. Deux enseignements en ressortent. D'une part, les deux tiers de la variance
-tiennent au programme lui-même, avec un coefficient de corrélation intraclasse de 0,66 : ce
-qui distingue les programmes entre eux pèse davantage que la conjoncture qui leur est
-commune.
-D'autre part, l'effet du taux d'intérêt est fortement significatif : \textbf{une hausse d'un point
-de taux réduit les réservations mensuelles d'environ 19~\%}, pour un coefficient de -0,216
-associé à une p-valeur inférieure à 10\textsuperscript{-15}. La régression naïve, qui ignore la structure en
-panel, surestime cet effet ; le modèle à effets aléatoires le corrige.
+Un modèle à effets aléatoires sépare alors ce qui revient à l'opération de ce qui revient à la
+conjoncture, et deux enseignements en ressortent. Les deux tiers de la variance tiennent au
+programme lui-même, avec un coefficient de corrélation intraclasse de 0,66. Et l'effet du taux
+d'intérêt est fortement significatif : \textbf{une hausse d'un point de taux réduit les réservations
+mensuelles d'environ 19~\%}, pour un coefficient de -0,216 associé à une p-valeur inférieure à
+10\textsuperscript{-15}. La régression naïve, qui ignore la structure en panel, surestime cet effet.
 
-J'ai posé un garde-fou méthodologique, qui fonde la manière dont les scénarios sont
-construits. Sur la série agrégée du groupe, qui compte 114 mois, j'ai mené une régression
-dynamique à erreurs ARIMA, c'est-à-dire une régression dont les résidus sont eux-mêmes
-modélisés comme une série temporelle, dans les règles de l'art : vérification que ces
-résidus sont assimilables à un bruit blanc d'abord, sélection du modèle par le critère AICc
-ensuite, qui arbitre entre qualité d'ajustement et nombre de paramètres.
-Cette approche ne parvient pas à identifier l'effet du taux, dont le coefficient y est
-indiscernable de zéro, avec une p-valeur de 0,82. L'explication tient à la nature de la
-série : les variations du taux sont trop lentes pour être identifiées sur une seule série
-de cette longueur.
+J'ai posé un garde-fou méthodologique. Sur la série agrégée du groupe, qui compte 114 mois,
+une régression dynamique à erreurs ARIMA --- dont les résidus sont eux-mêmes modélisés comme une
+série temporelle, avec vérification qu'ils sont assimilables à un bruit blanc et sélection par
+le critère AICc --- ne parvient pas à identifier l'effet du taux, dont le coefficient y est
+indiscernable de zéro, avec une p-valeur de 0,82. Les variations du taux sont trop lentes pour
+être identifiées sur une seule série de cette longueur.
 
-Ce résultat négatif dit deux choses. Il confirme d'abord que la significativité obtenue sur
-le panel n'est pas un artefact de régression fallacieuse, c'est-à-dire d'une corrélation
-née de la seule tendance commune des deux séries, puisque la voie temporelle, plus
-exigeante sur ce point, ne produit tout simplement pas d'effet mesurable. Il indique
-ensuite que les scénarios doivent combiner les deux modèles : la série temporelle fournit
-la trajectoire de référence, avec sa dynamique et sa saisonnalité, et l'élasticité estimée
-sur le panel traduit chaque scénario de taux en effet sur le rythme. Sur cette base,
-présentée en Figure 3.4, une détente à 2,5~\% fin 2026 redonnerait environ +6~\% de rythme en
-moyenne sur douze mois, tandis qu'une remontée à 3,5~\% en retirerait 3~\%.
+Ce résultat négatif dit deux choses. Il confirme que la significativité obtenue sur le panel
+n'est pas un artefact de régression fallacieuse, puisque la voie temporelle, plus exigeante
+sur ce point, ne produit pas d'effet mesurable. Et il indique que les scénarios doivent
+combiner les deux modèles : la série temporelle fournit la trajectoire de référence, avec sa
+dynamique et sa saisonnalité, et l'élasticité estimée sur le panel traduit chaque scénario de
+taux en effet sur le rythme. Sur cette base, présentée en Figure 3.4, une détente à 2,5~\% fin
+2026 redonnerait environ +6~\% de rythme en moyenne sur douze mois, tandis qu'une remontée à
+3,5~\% en retirerait 3~\%.
 
 \begin{figure}[!htbp]
 \centering
@@ -399,12 +336,13 @@ moyenne sur douze mois, tandis qu'une remontée à 3,5~\% en retirerait 3~\%.
 \caption{Prévision d'intensité de vente à douze mois sous trois scénarios de taux 2026, avec intervalle à 80~\%}
 \end{figure}
 
-À l'échelle d'un programme pris isolément, la courbe des réservations cumulées suit une
-forme en S, que j'ai ajustée par une fonction logistique à trois paramètres. Sur les 28
-opérations terminées du périmètre, cet ajustement bat la droite dans 25 cas, comme
-l'illustre la Figure 3.5 sur quatre programmes. Il fournit surtout un indicateur
-directement utile à la trésorerie : le délai d'atteinte de 90~\% du potentiel de vente, dont
-la médiane est proche de vingt mois.
+À l'échelle d'un programme, la courbe des réservations cumulées suit une forme en S, que j'ai
+ajustée par une fonction logistique à trois paramètres. Sur les 28 opérations terminées du
+périmètre, cet ajustement bat la droite dans 25 cas, comme l'illustre la Figure 3.5. Il
+fournit surtout un indicateur utile à la trésorerie : le délai d'atteinte de 90~\% du potentiel
+de vente, dont la médiane est proche de vingt mois. Sa limite est connue et vérifiée : en
+début de commercialisation, le potentiel n'est pas identifiable, et l'outil n'est donc proposé
+que sur les programmes suffisamment avancés.
 
 \begin{figure}[!htbp]
 \centering
@@ -412,89 +350,69 @@ la médiane est proche de vingt mois.
 \caption{Réservations cumulées et courbes logistiques ajustées sur quatre opérations terminées, avec le repère des 90~\% du potentiel}
 \end{figure}
 
-La limite de cet indicateur est connue et vérifiée : en début de commercialisation, le
-potentiel n'est pas identifiable, l'ajustement pouvant alors produire n'importe quelle
-valeur. L'outil n'est donc proposé que sur les programmes suffisamment avancés.
-
 \hypertarget{axe-c-prix-du-stock}{%
 \subsection{Axe C : prix du stock}\label{axe-c-prix-du-stock}}
 
-Repricer le stock suppose d'abord de savoir à quel prix chaque lot devrait se vendre. Le
-modèle que j'ai construit pour répondre à cette question est volontairement le plus simple
-qui fonctionne. Il s'agit d'une régression
-linéaire du logarithme du prix au mètre carré des 5~064 appartements transigés
-depuis 2016, expliqué par leurs caractéristiques, à savoir la surface, l'étage,
-l'exposition, le type de produit, l'agence, la commune et la proximité du littoral, ainsi
-que par leur année de réservation. Ce modèle explique 88,6~\% de la variance sur
-l'échantillon test, avec une erreur type d'environ 11~\% sur le prix.
+Repricer le stock suppose de savoir à quel prix chaque lot devrait se vendre. Le modèle
+retenu est volontairement le plus simple qui fonctionne : une régression linéaire du
+logarithme du prix au mètre carré des 5~064 appartements transigés depuis 2016, expliqué par
+la surface, l'étage, l'exposition, le type de produit, l'agence, la commune, la proximité du
+littoral et l'année de réservation. Il explique 88,6~\% de la variance sur l'échantillon test,
+avec une erreur type d'environ 11~\% sur le prix.
 
-Son intérêt principal n'est pas sa performance mais sa lisibilité : ses coefficients se
-lisent comme des prix implicites, ce qui permet de les discuter avec la direction
-commerciale. On y lit une prime d'étage de +6~\%, une prime d'exposition sud, une décote de
-63~\% pour le logement social, qui s'explique par des prix réglementés, et un effet millésime
-d'environ +19 points entre 2016 et 2023, suivi d'un plateau.
+Son intérêt principal n'est pas sa performance mais sa lisibilité : ses coefficients se lisent
+comme des prix implicites, ce qui permet de les discuter avec la direction commerciale. On y
+lit une prime d'étage de +6~\%, une prime d'exposition sud, une décote de 63~\% pour le logement
+social qu'expliquent des prix réglementés, et un effet millésime d'environ +19 points entre
+2016 et 2023, suivi d'un plateau. Ce plateau recoupe l'axe B : les prix du neuf n'ont pas
+baissé avec la remontée des taux, c'est le volume qui s'est ajusté. Une variante régularisée
+n'apporte rien, avec cinq mille observations pour une trentaine de coefficients.
 
-Ce plateau mérite d'être commenté, car il recoupe l'axe B. Les prix du neuf n'ont pas
-baissé avec la remontée des taux : c'est le volume qui s'est ajusté, en parfaite cohérence
-avec l'axe B. J'ai également testé une variante régularisée du
-modèle, sans gain : avec cinq mille observations pour une trentaine de coefficients, il n'y
-avait rien à stabiliser.
+Appliqué aux 127 appartements en stock, ce modèle sert de détecteur : au seuil d'une erreur
+type, 103 lots sont dans le marché, 8 au-dessus du prix estimé et 16 en dessous. La
+recommandation de remise est ensuite posée comme une optimisation sous contrainte : maximiser
+le revenu attendu à douze mois, en ajustant chaque prix dans des bornes commerciales de -10 à
++5~\%, sous un objectif d'accélération de l'écoulement, la demande réagissant au prix avec une
+élasticité fixée à -1.
 
-Appliqué aux 127 appartements en stock, ce modèle sert de détecteur. Au seuil d'une erreur
-type, 103 lots sont dans le marché, 8 se situent au-dessus du prix estimé et 16 en dessous.
-La recommandation de remise est ensuite posée comme une petite optimisation sous
-contrainte : maximiser le revenu attendu à douze mois d'une opération, en ajustant chaque
-prix dans des bornes commerciales de -10 à +5~\%, sous un objectif d'accélération de
-l'écoulement, la demande réagissant au prix avec une élasticité fixée à -1, c'est-à-dire
-une baisse de prix de 1~\% qui ferait vendre 1~\% de plus.
+Ce paramètre est la fragilité assumée de l'axe, et je préfère l'exposer que la laisser
+découvrir : mon estimation interne donne -0,81, valeur qui a le bon signe mais n'est pas
+significative sur les 95 opérations disponibles, et la valeur retenue vient de la littérature
+sur le logement neuf.
 
-Ce paramètre d'élasticité est la fragilité assumée de l'axe, et je préfère l'exposer que la
-laisser découvrir. Mon estimation interne donne -0,81, valeur qui a le bon signe mais qui
-n'est pas significative sur les 95 opérations disponibles. La valeur retenue vient donc de
-la littérature sur le logement neuf, et non de nos données.
-
-Le résultat, lui, est robuste et contre-intuitif. À cette élasticité, la remise optimale
-est uniforme en euros sur tous les lots, de l'ordre de 23~k€ par lot sur l'opération
-d'application. Elle est donc proportionnellement plus forte sur les petits lots, à
-l'inverse de la pratique actuelle des remises accordées au cas par cas. Sur l'opération
-test, qui compte 18 appartements en stock, viser +8~\% d'écoulement déplace le volume
-attendu de 6,8 à 7,4 lots pour un revenu quasi inchangé, en recul de 0,3~\%. L'intérêt de la
-manœuvre n'est donc pas le revenu immédiat mais la vitesse, et l'économie de frais de
-portage que l'objectif ne compte pas.
+Le résultat, lui, est robuste et contre-intuitif. À cette élasticité, la remise optimale est
+uniforme en euros sur tous les lots, de l'ordre de 23~k€ par lot sur l'opération
+d'application~; elle est donc proportionnellement plus forte sur les petits lots, à l'inverse
+de la pratique actuelle. Sur l'opération test, qui compte 18 appartements en stock, viser
++8~\% d'écoulement déplace le volume attendu de 6,8 à 7,4 lots pour un revenu quasi inchangé,
+en recul de 0,3~\%. L'intérêt de la manœuvre n'est donc pas le revenu immédiat mais la vitesse,
+et l'économie de frais de portage que l'objectif ne compte pas.
 
 \hypertarget{signaux-faibles-texte-et-ruxe9seau}{%
 \subsection{Signaux faibles (texte et réseau)}\label{signaux-faibles-texte-et-ruxe9seau}}
 
-Trois constats simples, obtenus avec des moyens simples, complètent le dispositif.
-
-Le premier est un moteur de recherche par similarité, construit sur les 9~688 commentaires
-libres de vente. Une requête formulée en langage courant, comme «~refus de prêt banque~» ou
-«~remise prix hors pack~», remonte les dossiers concernés. C'est un outil d'audit des
-remises non structurées réellement utilisable.
-
-Le deuxième porte sur les motifs de désistement, analysés par agence. Le profil obtenu
-révèle un problème de qualité de saisie plus qu'un fait commercial : à Salon-de-Provence,
-90~\% des motifs sont enregistrés en «~Autres motifs~», rendant les désistements de cette
-agence inanalysables tant que la saisie n'est pas fiabilisée.
-
-Le troisième porte sur la structure du réseau de vente, qui se révèle très concentrée. Deux
-acteurs, le réseau interne et un prescripteur externe, portent à eux seuls 51,6~\% des
-dossiers attribués, avec des taux de désistement allant du simple au triple : 9~\% pour le
-réseau interne contre 29,6~\% pour le prescripteur externe. L'écart a une traduction
-financière immédiate, puisque chaque commission versée sur un dossier qui n'aboutit pas est
-une dépense sans recette.
+Trois constats simples, obtenus avec des moyens simples, complètent le dispositif. Un moteur
+de recherche par similarité, construit sur les 9~688 commentaires libres de vente, remonte les
+dossiers concernés à partir d'une requête en langage courant, comme «~refus de prêt banque~» :
+c'est un outil d'audit des remises non structurées réellement utilisable. L'analyse des motifs
+de désistement par agence révèle ensuite un problème de qualité de saisie plus qu'un fait
+commercial : à Salon-de-Provence, 90~\% des motifs sont enregistrés en «~Autres motifs~», ce qui
+rend ces désistements inanalysables. La structure du réseau de vente, enfin, se révèle très
+concentrée : deux acteurs, le réseau interne et un prescripteur externe, portent 51,6~\% des
+dossiers attribués, avec des taux de désistement allant de 9~\% pour le premier à 29,6~\% pour le
+second --- écart à traduction financière immédiate, chaque commission versée sur un dossier qui
+n'aboutit pas étant une dépense sans recette.
 
 J'ai enfin tenté de prédire le désistement à partir du seul texte du commentaire, avec un
-contrôle de fuite soigneux pour ne pas utiliser d'information postérieure au désistement.
-Cette tentative plafonne à un score F1 de 0,34 : le texte seul ne suffit pas, et il est donc
-traité comme un signal d'appoint et non comme un prédicteur.
+contrôle de fuite soigneux. Cette tentative plafonne à un score F1 de 0,34 : le texte seul ne
+suffit pas, et il est traité comme un signal d'appoint, non comme un prédicteur.
 
 \hypertarget{plateforme-streamlit}{%
 \section{Plateforme Streamlit}\label{plateforme-streamlit}}
 
-L'application finale est la meilleure réponse au risque de sur-complexité que j'évoquais en
-ouverture de ce chapitre : ce qui est livré au métier est simple. Cinq pages, un périmètre
-restreint aux 147 opérations de promotion, et aucun terme de modélisation à l'écran.
+L'application est la meilleure réponse au risque de sur-complexité évoqué en ouverture : ce
+qui est livré au métier est simple. Cinq pages, un périmètre restreint aux 147 opérations de
+promotion, et aucun terme de modélisation à l'écran.
 
 La page \textbf{Vue d'ensemble}, présentée en Figure 3.6, donne la situation en quelques secondes :
 147 opérations suivies, dont 10 en alerte et 2 à surveiller parmi les 68 opérations en cours
@@ -507,10 +425,10 @@ récent de 4,8 réservations par opération et par mois, pour un taux de crédit
 \caption{Plateforme, page «~Vue d'ensemble~»}
 \end{figure}
 
-La page \textbf{Alertes marge}, présentée en Figure 3.7, classe les opérations par niveau
-d'alerte, le score de l'axe A étant traduit en trois niveaux. Elle affiche surtout, pour
-chaque opération, les dépassements déjà engagés en euros et les postes concernés. C'est la
-page la plus consultée, et il faut redire qu'elle repose sur du SQL et non sur un modèle.
+La page \textbf{Alertes marge}, présentée en Figure 3.7, classe les opérations par niveau d'alerte,
+le score de l'axe A étant traduit en trois niveaux, et affiche pour chacune les dépassements
+déjà engagés en euros et les postes concernés. C'est la page la plus consultée, et il faut
+redire qu'elle repose sur du SQL et non sur un modèle.
 
 \begin{figure}[!htbp]
 \centering
@@ -518,91 +436,63 @@ page la plus consultée, et il faut redire qu'elle repose sur du SQL et non sur 
 \caption{Plateforme, page «~Alertes marge~» : niveaux d'alerte et dépassements engagés en euros}
 \end{figure}
 
-Les trois autres pages transposent les axes restants. La page \textbf{Rythme de vente} fait de
-l'axe B un simulateur : un curseur de taux 2026 produit une phrase de résultat fondée sur
-l'élasticité du panel, et la trajectoire d'écoulement de chaque programme donne son délai
-estimé. La page \textbf{Pilotage des prix} affiche le diagnostic du stock et la grille
-d'ajustement recommandée sous un objectif d'accélération choisi au curseur. La page
-\textbf{Qualité commerciale} reprend les signaux faibles, alerte de saisie comprise.
-
-Chaque page a été vérifiée par le cadre de test de Streamlit, en contrôlant qu'elle
-s'exécute sans exception, y compris aux bornes des curseurs et sur les sélections vides,
-et l'ensemble se reconstruit depuis les exports bruts, conformément à l'exigence de
-reproductibilité posée au départ.
+Les trois autres pages transposent les axes restants. \textbf{Rythme de vente} fait de l'axe B un
+simulateur, où un curseur de taux 2026 produit une phrase de résultat fondée sur l'élasticité
+du panel. \textbf{Pilotage des prix} affiche le diagnostic du stock et la grille d'ajustement
+recommandée. \textbf{Qualité commerciale} reprend les signaux faibles, alerte de saisie comprise.
+Chaque page a été vérifiée par le cadre de test de Streamlit, y compris aux bornes des
+curseurs et sur les sélections vides, et l'ensemble se reconstruit depuis les exports bruts.
 
 \hypertarget{puxe9rimuxe8tre-et-limites}{%
 \section{Périmètre et limites}\label{puxe9rimuxe8tre-et-limites}}
 
-Je considère que l'énoncé des limites fait partie du livrable, au même titre que les
-résultats. Les présenter comme telles est aussi ce qui permet à la direction financière de
-savoir jusqu'où elle peut s'appuyer sur l'outil.
+L'énoncé des limites fait partie du livrable, au même titre que les résultats : c'est ce qui
+permet à la direction financière de savoir jusqu'où elle peut s'appuyer sur l'outil.
 
-La limite principale est structurelle et commande la suite du projet : les données
-budgétaires sont une photographie à date, sans historique des révisions. C'est elle qui
-plafonne l'axe A, avec un coefficient de détermination de 0,08 en régression et des scores
-F1 de l'ordre de 0,3 en classification. On ne peut pas apprendre la dynamique d'une dérive
-sur une image fixe. Ma première recommandation à l'entreprise est donc d'historiser les
-exports mensuels dans le nouvel ERP : au bout d'un an, le score statique deviendra un
-véritable suivi de trajectoire.
+La limite principale est structurelle et commande la suite du projet : les données budgétaires
+sont une photographie à date, sans historique des révisions. C'est elle qui plafonne l'axe A.
+Ma première recommandation à l'entreprise est donc d'historiser les exports mensuels dans le
+nouvel ERP : au bout d'un an, le score statique deviendra un véritable suivi de trajectoire.
 
-Les autres limites sont assumées et documentées :
+Les autres limites sont assumées : l'échantillon de l'axe A est petit, 123 opérations, et les
+écarts entre modèles y sont indiscernables, ce qui a motivé le choix d'un modèle interprétable
+unique~; l'élasticité de l'axe C vient de la littérature, si bien que les recommandations de
+prix sont des aides à la décision non opposables, la grille restant sous le contrôle de la
+direction commerciale~; les intervalles de prévision de l'axe B ignorent l'incertitude sur les
+taux futurs, raison pour laquelle la plateforme présente des scénarios plutôt qu'une prévision
+unique~; et le texte des commentaires reste un signal d'appoint.
 
-\begin{itemize}
-
-\item
-  L'échantillon de l'axe A est petit, 123 opérations, et les écarts entre modèles y sont
-  indiscernables ; c'est ce qui a motivé le choix d'un modèle interprétable unique plutôt
-  qu'une sélection par performance.
-\item
-  L'élasticité de l'axe C n'a pas pu être estimée significativement en interne et vient de
-  la littérature. Les recommandations de prix sont donc des aides à la décision, non
-  opposables, et la grille reste sous le contrôle de la direction commerciale.
-\item
-  Les intervalles de prévision de l'axe B ignorent l'incertitude sur les taux futurs
-  eux-mêmes, ce qui est précisément la raison pour laquelle la plateforme présente des
-  scénarios plutôt qu'une prévision unique.
-\item
-  Le texte des commentaires est un signal d'appoint, et non un prédicteur.
-\end{itemize}
-
-Enfin, la plateforme couvre la promotion, soit 147 opérations, et exclut l'aménagement
-foncier, dont la logique économique justifierait un traitement dédié. L'analyse, elle,
-couvre bien les 267 opérations, périmètre des exports de gestion à la date d'extraction. La
-frontière entre les deux activités ressort d'ailleurs d'elle-même dès l'analyse
-exploratoire, constituant une validation involontaire du choix de périmètre demandé par
-l'entreprise.
+La plateforme couvre enfin la promotion, soit 147 opérations, et exclut l'aménagement foncier,
+dont la logique économique justifierait un traitement dédié. L'analyse, elle, couvre les 267
+opérations des exports de gestion. La frontière entre les deux activités ressort d'ailleurs
+d'elle-même dès l'analyse exploratoire, ce qui valide involontairement le choix de périmètre
+demandé par l'entreprise.
 
 \hypertarget{muxe9thode-uxe9valuation-et-limites-du-projet}{%
 \section{Méthode, évaluation et limites du projet}\label{muxe9thode-uxe9valuation-et-limites-du-projet}}
 
 Ce projet a suivi une logique différente de celle des reprises du chapitre~1, en trois temps
-séparés. Le \textbf{cadrage} formule les questions de gestion avant de regarder les données et pose
-les exigences non fonctionnelles. L'\textbf{exploration et la modélisation} viennent ensuite, chaque
-question étant traitée par la méthode la plus simple qui y réponde. La \textbf{restitution} traduit
-enfin les résultats dans le langage de l'utilisateur. Le point d'articulation le plus délicat
-se situe entre les deux dernières étapes : la première version de l'interface, trop marquée
-par le vocabulaire de la modélisation, a dû être entièrement réécrite, et cette réécriture a
-changé ce que l'écran affiche, donc ce sur quoi l'utilisateur décide.
+séparés : le \textbf{cadrage}, qui formule les questions de gestion avant de regarder les données et
+pose les exigences non fonctionnelles~; l'\textbf{exploration et la modélisation}, chaque question
+étant traitée par la méthode la plus simple qui y réponde~; la \textbf{restitution}, qui traduit les
+résultats dans le langage de l'utilisateur. Le point d'articulation le plus délicat se situe
+entre les deux dernières étapes : la première version de l'interface, trop marquée par le
+vocabulaire de la modélisation, a dû être entièrement réécrite, et cette réécriture a changé ce
+que l'écran affiche, donc ce sur quoi l'utilisateur décide.
 
-Le régime de preuve applicable ici est celui de la \textbf{validation statistique}, où la question
-posée n'est pas si la donnée est bien arrivée mais si le résultat tient hors de l'échantillon
-sur lequel il a été construit. J'y ai systématiquement associé un échantillon test distinct,
-une comparaison à une référence naïve et un contrôle des fuites entre variables explicatives
-et cible. La comparaison à la référence est celle qui m'a le plus servi : un score F1 de 0,3
-ne veut rien dire dans l'absolu, mais il prend un sens précis lorsque la référence majoritaire
-ne détecte rien. Ce régime a lui aussi un angle mort : il mesure une performance sur des
-données passées, dans une conjoncture donnée, et rien ne garantit qu'un modèle calibré sur la
-période récente tienne si le marché change de régime.
+Le régime de preuve applicable ici est celui de la \textbf{validation statistique} : la question
+n'est pas si la donnée est bien arrivée, mais si le résultat tient hors de l'échantillon sur
+lequel il a été construit. J'y ai systématiquement associé un échantillon test distinct, une
+comparaison à une référence naïve et un contrôle des fuites. La comparaison à la référence est
+celle qui m'a le plus servi : un score F1 de 0,3 ne veut rien dire dans l'absolu, mais il prend
+un sens précis lorsque la référence majoritaire ne détecte rien. Son angle mort est qu'il
+mesure une performance sur des données passées, dans une conjoncture donnée.
 
-Trois difficultés relèvent enfin de la donnée elle-même. L'\textbf{absence d'historique} d'abord :
-les exports budgétaires sont une photographie à date, sans trace des révisions successives, et
-cette limite plafonne l'axe A. Aucune méthode ne la contourne, car on n'apprend pas la
-dynamique d'une dérive sur une image fixe. La \textbf{qualité de saisie} ensuite, dont le cas le
-plus parlant est celui d'une agence dont 90~\% des motifs de désistement sont enregistrés en
-«~Autres motifs~»~: ce constat inattendu a produit une recommandation opérationnelle immédiate.
-L'\textbf{impossibilité d'estimer certains paramètres en interne} enfin : l'élasticité de la demande
-au prix a le bon signe dans nos données mais n'y est pas significative, et la valeur retenue
-vient de la littérature.
+Trois difficultés relèvent enfin de la donnée elle-même : l'\textbf{absence d'historique}, déjà
+évoquée~; la \textbf{qualité de saisie}, dont le cas de Salon-de-Provence a produit une
+recommandation opérationnelle immédiate~; et l'\textbf{impossibilité d'estimer certains paramètres en
+interne}, l'élasticité de la demande au prix ayant le bon signe dans nos données sans y être
+significative.
 
 \hypertarget{conclusion-du-chapitre}{%
 \section{Conclusion du chapitre}\label{conclusion-du-chapitre}}
