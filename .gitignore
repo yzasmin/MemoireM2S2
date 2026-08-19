@@ -5,3 +5,11 @@ data/interim/
 data/copilote.db
 data/externe/_ecb_mir_raw.csv
 plateforme/modeles/*.joblib
+gabarit/**/*.aux
+gabarit/**/*.log
+gabarit/**/*.out
+gabarit/**/*.toc
+gabarit/**/*.lof
+gabarit/**/*.maf
+gabarit/**/*.mtc*
+gabarit/manuscript.pdf
