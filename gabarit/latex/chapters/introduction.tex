@@ -1,0 +1,73 @@
+%% !TEX root = manuscript.tex
+
+\chapter*{Introduction}
+
+Le groupe Angelotti est un acteur de l'aménagement et de la promotion immobilière implanté en
+Occitanie et en région PACA. Ces deux métiers n'ont pas la même logique économique : dans
+l'aménagement, la valeur naît de la transformation du foncier~; dans la promotion, de la
+construction. Ils produisent deux structures de coûts et deux rythmes de commercialisation
+différents, et cette frontière ressortira d'elle-même de l'analyse exploratoire du chapitre~3.
+Chaque opération étant par ailleurs portée par une société dédiée, le suivi financier est
+nativement cloisonné et toute vision transverse doit être reconstruite.
+
+Une opération vit sur un cycle qui se compte en années. Un budget est arrêté à l'engagement,
+puis le chantier et la commercialisation le font dériver. Cette dérive est le fonctionnement
+normal du métier~; ce qui pose problème, c'est de la mesurer à temps, car sur une marge de
+quelques centaines de milliers d'euros, quelques mois de retard suffisent à transformer un
+ajustement en perte.
+
+À mon arrivée en deuxième année, le système d'information reposait sur trois outils ---
+\textbf{Grimmo}, l'ERP métier historique, pour la gestion des opérations~; \textbf{Vadimm}, le CRM, pour
+la relation commerciale~; \textbf{MyReport}, l'outil décisionnel, pour les tableaux de bord --- et sur
+une quatrième couche moins visible, \textbf{les tableurs}, qui faisaient le lien partout où les
+trois premiers ne se parlaient pas.
+
+Le contexte data de mes missions se résume alors à un paradoxe que j'ai mis plusieurs mois à
+formuler : l'entreprise ne manquait pas de données. Elle disposait de l'historique complet de
+ses opérations, ventes, désistements et budgets sur plusieurs années. Ce qui manquait, c'était
+la possibilité de s'en servir, et trois obstacles se cumulaient. L'\textbf{absence d'identifiant
+partagé} d'abord : un acquéreur du CRM et un tiers de l'ERP ne se reconnaissent pas, et les
+rapprocher suppose de reconstruire une clé d'identité. L'\textbf{absence de définition partagée}
+ensuite : la marge d'une opération peut se calculer sur le budget, sur l'engagé ou sur le
+facturé, et tant que la définition n'est écrite nulle part, chaque tableau de bord porte
+implicitement la sienne, deux services pouvant afficher deux chiffres différents sans que ni
+l'un ni l'autre ait tort. L'\textbf{absence de profondeur temporelle} enfin : les exports du système
+de gestion disent où en est un budget aujourd'hui, pas comment il y est arrivé. Ces trois
+obstacles ont un point commun : aucun ne relève de la modélisation. Ce sont des problèmes de
+structure, et ils se règlent avant tout modèle.
+
+C'est dans ce décor que s'inscrit mon année. Après une première année d'alternance consacrée à
+la migration du CRM Vadimm, ma deuxième année de Master MIASHS au sein de la Holding SPA a
+coïncidé avec l'étape la plus lourde de la modernisation du système d'information : la refonte
+complète de l'ERP métier, passant de Grimmo à la solution SPO éditée par Salvia. Un changement
+d'ERP n'est pas un changement d'outil, c'est un changement de modèle de données : les objets ne
+portent plus les mêmes noms, ne s'articulent plus de la même façon et n'acceptent plus les
+mêmes valeurs. Ce changement d'échelle m'a conduite d'un rôle d'assistance opérationnelle vers
+des missions d'ingénierie, centrées sur l'interopérabilité des systèmes.
+
+Rattachée à la Holding SPA, j'ai travaillé au contact direct des services métiers --- direction
+financière, service juridique, équipes commerciales --- tout en intervenant sur les outils du
+système d'information. Cette position intermédiaire a une conséquence pratique constante : la
+formulation du besoin fait partie du travail. Un service ne demande presque jamais un livrable
+technique~; il décrit une gêne, un tableau qu'il refait à la main chaque mois, une question à
+laquelle il ne sait pas répondre.
+
+Ce mémoire présente les travaux réalisés durant cette année, du premier jour de la migration
+jusqu'à la livraison d'une application d'aide à la décision. Il témoigne d'un mouvement en deux
+temps : le passage de la Data Science exploratoire au Data Engineering appliqué, puis le retour
+à la modélisation une fois les données reconstituées. L'ordre compte, et c'est de lui que je
+tire la thèse de ce mémoire, énoncée d'emblée pour que le lecteur puisse en juger au fil des
+chapitres : \textbf{la structure de la donnée commande ce que la modélisation peut en tirer}. Ce
+n'est pas une position théorique, c'est un constat que l'année a produit deux fois. La première
+en creux, lorsque la charge de la migration a repoussé le projet de Machine Learning au second
+semestre. La seconde en plein, lorsque ce projet a donné des résultats solides là où les
+données avaient une profondeur temporelle, et modestes là où elles n'étaient qu'une
+photographie à date.
+
+Quatre chapitres suivent la progression de mes responsabilités. Le chapitre 1 expose le
+chantier le plus lourd de l'année, la reprise des données vers le nouvel ERP, d'abord les
+opérations puis les tiers. Le chapitre 2 présente les missions filées menées en parallèle sur
+les deux semestres : le maintien du système décisionnel et la contribution au déploiement du
+Single Sign-On. Le chapitre 3 expose le projet de Data Science conduit au second semestre, le
+Copilote Financier. Le chapitre 4, enfin, livre la réflexion que ces missions ont produite sur
+le métier, et présente les perspectives et mon projet professionnel.

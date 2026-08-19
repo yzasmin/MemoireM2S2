@@ -1,0 +1,130 @@
+% Gabarit LaTeX du mémoire de fin d'études — Yasmina Saoud, M2 MIASHS.
+% Reprend la mise en forme du mémoire de mi-parcours : classe report 12 pt,
+% Computer Modern, français, page de titre, encadré « Sommaire » en ouverture
+% de chapitre, légendes « Figure X.Y – Titre » sous la figure.
+\documentclass[12pt,a4paper]{report}
+
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[french]{babel}
+\usepackage{lmodern}
+\usepackage[margin=2.5cm]{geometry}
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{booktabs}
+\usepackage{longtable}
+\usepackage{array}
+\usepackage{calc}
+\usepackage{caption}
+\usepackage{enumitem}
+\usepackage{microtype}
+\usepackage{minitoc}
+\usepackage[table]{xcolor}
+\usepackage{hyperref}
+
+\hypersetup{hidelinks, pdftitle={$if(title)$$title$$endif$}, pdfauthor={$if(author)$$author$$endif$}}
+
+% --- Sommaire de chapitre (minitoc), intitulé et profondeur ---------------
+\setcounter{secnumdepth}{3}
+\setcounter{tocdepth}{2}
+\setcounter{minitocdepth}{3}
+\mtcsetdepth{minitoc}{3}
+\mtcsettitle{minitoc}{Sommaire}
+\renewcommand{\mtifont}{\normalsize\bfseries}
+\dominitoc
+
+% --- Légendes des figures : « Figure 1.1 – Titre », sous la figure --------
+\captionsetup[figure]{labelsep=endash, font=small, justification=centering}
+\captionsetup[table]{labelsep=endash, font=small, justification=centering}
+\renewcommand{\figurename}{Figure}
+\renewcommand{\tablename}{Tableau}
+
+% --- Images : jamais plus larges que le texte, proportions conservées -----
+\makeatletter
+\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+\def\maxheight{\ifdim\Gin@nat@height>0.85\textheight 0.85\textheight\else\Gin@nat@height\fi}
+\makeatother
+\setkeys{Gin}{width=\maxwidth, height=\maxheight, keepaspectratio}
+
+% Les figures cherchent leur place au fil du texte plutôt qu'en fin de chapitre.
+\makeatletter\renewcommand{\fps@figure}{!htbp}\makeatother
+\renewcommand{\topfraction}{0.9}
+\renewcommand{\bottomfraction}{0.7}
+\renewcommand{\textfraction}{0.1}
+\renewcommand{\floatpagefraction}{0.95}
+
+% --- Rappels de mise en page ---------------------------------------------
+\setlength{\parskip}{0pt plus 0.5pt}
+\setlist[itemize]{leftmargin=1.6em, itemsep=0.15em, topsep=0.35em}
+\setlist[enumerate]{leftmargin=1.9em, itemsep=0.15em, topsep=0.35em}
+
+% Macros attendues par le générateur pandoc.
+\providecommand{\tightlist}{\setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\providecommand{\passthrough}[1]{#1}
+\providecommand{\pandocbounded}[1]{#1}
+\makeatletter
+\providecommand{\real}[1]{#1}
+\makeatother
+
+% --- Encadré « Sommaire » de secours si minitoc est absent ----------------
+\newenvironment{sommaireboite}%
+  {\par\vspace{0.8em}\noindent\rule{\linewidth}{0.4pt}\par\vspace{0.3em}}%
+  {\par\vspace{0.3em}\noindent\rule{\linewidth}{0.4pt}\par\vspace{1em}}
+
+% --- Page de transition de fin de chapitre : sans titre de section --------
+\newenvironment{transitionchapitre}{\clearpage}{}
+
+$if(chapoffset)$
+\setcounter{chapter}{$chapoffset$}
+$endif$
+
+$for(header-includes)$
+$header-includes$
+$endfor$
+
+\title{$if(title)$$title$$endif$}
+\author{$if(author)$$author$$endif$}
+\date{$if(date)$$date$$endif$}
+
+\begin{document}
+
+$if(pagedetitre)$
+% ------------------------------------------------------------------ titre
+\begin{titlepage}
+\centering
+\vspace*{1.5cm}
+{\large UFR 6 \par}
+{\large Université Paul Valéry, Montpellier III \par}
+\vspace{2.5cm}
+{\Large Mémoire de fin d'études \par}
+\vspace{1.2cm}
+{\huge\bfseries $titrememoire$ \par}
+\vspace{0.6cm}
+{\Large $soustitre$ \par}
+\vspace{2.5cm}
+{\large Présenté par : $auteurmajuscule$ \par}
+\vspace{0.4cm}
+{\large Master MIASHS -- Année universitaire $annee$ \par}
+\vspace{0.4cm}
+{\large En collaboration avec : Holding SPA, Groupe Angelotti \par}
+\vspace{1.6cm}
+{\large Tutrice en entreprise : $tutriceentreprise$ \par}
+{\large Tutrice universitaire : $tutriceuniversitaire$ \par}
+$if(moissoutenance)$
+\vspace{1.2cm}
+{\large $moissoutenance$ \par}
+$endif$
+\vfill
+{\large\bfseries Mots-clés \par}
+\vspace{0.3cm}
+{\large $motscles$ \par}
+\vspace{1.5cm}
+\end{titlepage}
+$endif$
+
+\pagenumbering{roman}
+\setcounter{page}{1}
+
+$body$
+
+\end{document}

@@ -1,0 +1,549 @@
+%% !TEX root = manuscript.tex
+
+\chapter{La reprise des données vers SPO : des opérations aux tiers}
+\minitoc
+\newpage
+
+Ce chapitre expose le chantier le plus lourd de l'année : la reconstitution, dans le nouvel
+ERP, du socle de données du groupe. Il s'est déroulé en deux temps. Le premier semestre a
+porté sur les structures de gestion, opérations, tranches et budgets, migrées depuis la base
+historique Grimmo. Le second a porté sur les tiers, c'est-à-dire les clients acquéreurs,
+repris depuis le CRM Vadimm. Les deux missions partagent une méthode et se distinguent par la
+question qu'elles posent : injecter des structures suppose de comprendre un modèle de données
+inconnu~; injecter des personnes suppose de décider ce qui fait qu'une personne est la même.
+
+\hypertarget{ce-que-le-changement-derp-imposait}{%
+\section{Ce que le changement d'ERP imposait}\label{ce-que-le-changement-derp-imposait}}
+
+Le remplacement de Grimmo par SPO a commandé le calendrier de toute l'année, et trois
+contraintes en découlaient. Une contrainte de \textbf{volumétrie} d'abord : 283 opérations devaient
+être reprises avec leurs subdivisions et leurs budgets, échelle à laquelle une saisie manuelle
+intégrale était exclue. Une contrainte de \textbf{continuité de service} ensuite : les utilisateurs
+devaient pouvoir facturer dès le basculement, une interruption de deux semaines étant déjà
+inacceptable. Une contrainte de \textbf{conformité au modèle cible} enfin : SPO impose ses propres
+règles d'intégrité, qui n'étaient pas toutes documentées et qu'il a fallu découvrir en les
+heurtant.
+
+La Figure 1.1 situe ces deux reprises dans le système d'information du groupe. Les trois
+outils et leurs usages métier occupent le haut du schéma, reliés par les flèches qui figurent
+la circulation normale de la donnée~; les tableurs forment la bande du bas, et les traits
+pointillés qui les rattachent à chacun d'eux marquent les échanges qui ne passent par aucun
+système. On y lit le problème que les deux missions de ce chapitre attaquent : le même client
+pouvait exister dans le CRM et dans l'ERP sans qu'aucun lien ne les rattache.
+
+\begin{figure}[!htbp]
+\centering
+\includegraphics[width=0.65\textwidth]{fig_1_1_systeme_information.png}
+\caption{Les outils du système d'information et la circulation de la donnée}
+\end{figure}
+
+À ces contraintes s'ajoute une perspective absente du calendrier initial : le passage prochain
+vers l'infrastructure technique du groupe Nexity, qui a influé sur certains choix techniques,
+notamment lorsqu'il a fallu évaluer si l'architecture retenue pour le projet de Data Science
+tiendrait à une échelle supérieure.
+
+\hypertarget{la-migration-des-opuxe9rations}{%
+\section{La migration des opérations}\label{la-migration-des-opuxe9rations}}
+
+Cette mission, conduite au premier semestre, est exposée en détail dans mon mémoire de
+mi-parcours. Je n'en reprends ici que ce dont la suite a besoin : la méthode, les deux
+contraintes que l'ERP impose, et l'état dans lequel le socle se trouvait à la fin du semestre.
+
+\hypertarget{muxe9thode-et-industrialisation-des-flux}{%
+\subsection{Méthode et industrialisation des flux}\label{muxe9thode-et-industrialisation-des-flux}}
+
+Face aux 283 opérations du périmètre, une saisie manuelle intégrale était exclue. Nous avons
+retenu une stratégie hybride : injection automatisée des gros volumes structurels via les API,
+traitement manuel des cas historiques ne pouvant entrer dans les gabarits. Vouloir tout
+automatiser aurait conduit à écrire des règles pour des cas uniques, ce qui coûte plus cher
+que de les traiter à la main.
+
+J'ai d'abord analysé la documentation technique de l'API de Salvia {[}2{]}, puis testé
+manuellement les \emph{endpoints} pour décortiquer la mécanique de création d'une donnée. Nous
+avons ensuite déployé le module DirectAPI, dont j'ai construit le pipeline d'alimentation sous
+la forme de maquettes Excel en trois étapes : \textbf{extraction} de la base source par MyReport
+Builder, \textbf{transformation et mapping} par formules RechercheX, \textbf{chargement} via DirectAPI.
+La transformation concentre l'essentiel du travail, la nomenclature de SPO étant stricte : un
+libellé de poste budgétaire ou un type de tranche non reconnu fait rejeter la ligne. Excel a
+été retenu parce que la maquette reste relisible par les personnes qui connaissent le métier
+et non le code.
+
+Le processus a été sécurisé par une validation itérative : 3 opérations pilotes, puis un lot
+de 12, avant la migration de masse. Cette progression par paliers rend les erreurs lisibles,
+et c'est elle que j'ai reconduite au second semestre.
+
+\hypertarget{deux-contraintes-de-lerp-et-la-documentation-qui-en-est-sortie}{%
+\subsection{Deux contraintes de l'ERP, et la documentation qui en est sortie}\label{deux-contraintes-de-lerp-et-la-documentation-qui-en-est-sortie}}
+
+La première est l'ordre strict d'injection, contrainte d'intégrité référentielle que la
+documentation de l'éditeur n'explicitait pas. Je l'ai découverte en analysant les codes
+d'erreur renvoyés par l'API : il faut créer l'opération, puis les tranches de travaux, puis
+les tranches commerciales, puis le budget. La Figure 1.2 représente cette séquence~; toute
+injection qui ne la respecte pas échoue, le système ne trouvant pas l'objet parent.
+
+\begin{figure}[!htbp]
+\centering
+\includegraphics[width=0.65\textwidth]{fig_1_2_sequence_injection.png}
+\caption{La séquence d'injection imposée par l'intégrité référentielle de l'ERP}
+\end{figure}
+
+J'ai alors rédigé une documentation interne cartographiant cette séquence et les prérequis de
+chaque objet, parce que ces règles n'existaient nulle part ailleurs que dans mes notes de
+test. C'est le premier livrable écrit de mon année qui n'était pas un fichier de données, et
+c'est celui qui a le plus servi aux autres : la reprise des tiers, exposée plus bas, s'est
+appuyée directement dessus.
+
+La seconde tient aux identifiants. Invisibles dans l'interface, ils changent à chaque mise à
+jour : l'API ne remplace pas un budget, elle clôture la version précédente et en crée une
+nouvelle. Ne pouvant me fier à aucun identifiant statique, j'ai conçu un requêtage dynamique
+en trois temps --- un appel GET pour lister les versions, un tri pour retenir la plus récente,
+un appel POST sur cet identifiant. J'en retire une leçon plus générale : une API ne se
+contente pas d'exposer des données, elle impose un modèle de comportement, et comprendre
+l'intention derrière la contrainte est ce qui permet de la contourner proprement.
+
+\hypertarget{le-duxe9ploiement-en-coquilles-vides-et-le-bilan-du-semestre}{%
+\subsection{Le déploiement en «~coquilles vides~» et le bilan du semestre}\label{le-duxe9ploiement-en-coquilles-vides-et-le-bilan-du-semestre}}
+
+Les utilisateurs devaient facturer dès le basculement, notamment pour le lien avec la Gestion
+Électronique des Documents (GED). Nous avons donc adopté une stratégie de déploiement en
+«~coquilles vides~», qui dissocie le contenant --- la structure de l'opération --- du contenu,
+c'est-à-dire les données budgétaires détaillées, en injectant d'abord le code opération et le
+libellé.
+
+C'est la décision dont j'ai le plus appris en conduite de projet. Elle suppose d'accepter
+qu'un système soit temporairement incomplet et de le documenter comme tel : une donnée
+manquante que personne ne signale finit par être considérée comme absente pour de bon. Tenir
+la liste de ce qui restait à reprendre a transformé une dette implicite en dette suivie.
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 2\tabcolsep) * \real{0.4000}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 2\tabcolsep) * \real{0.6000}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Objet du modèle SPO
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+État à la fin du premier semestre
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+Opérations & Créées pour l'ensemble du périmètre, 283 dossiers \\
+Tranches de travaux & Créées \\
+Tranches commerciales & Création en cours \\
+Budgets détaillés & Reportés, stratégie des «~coquilles vides~» \\
+Historique des factures & Non repris \\
+\end{longtable}
+
+Sur un chantier de reprise, l'avancement ne se mesure pas au nombre d'enregistrements créés
+mais à la part du modèle cible réellement couverte : créer 283 opérations sans leurs budgets,
+ce n'est pas avoir fait la moitié du travail, c'est avoir rendu la seconde moitié possible.
+
+\hypertarget{la-reprise-des-tiers}{%
+\section{La reprise des tiers}\label{la-reprise-des-tiers}}
+
+Conduite au second semestre, cette mission prolonge directement la précédente et constitue le
+premier pas vers l'interopérabilité entre l'ERP et le CRM : elle transfère le référentiel
+client, la synchronisation permanente sans double saisie restant à construire. Elle change
+toutefois de nature : il ne s'agit plus d'injecter des structures de gestion, mais des
+personnes, avec ce que cela implique de risques de doublons et d'exigence de qualité.
+
+\hypertarget{contexte-et-enjeux-de-la-reprise-des-tiers}{%
+\subsection{Contexte et enjeux de la reprise des tiers}\label{contexte-et-enjeux-de-la-reprise-des-tiers}}
+
+\hypertarget{du-crm-vadimm-uxe0-lerp-spo-le-puxe9rimuxe8tre-des-donnuxe9es-clients}{%
+\subsubsection{Du CRM Vadimm à l'ERP SPO : le périmètre des données clients}\label{du-crm-vadimm-uxe0-lerp-spo-le-puxe9rimuxe8tre-des-donnuxe9es-clients}}
+
+Après la création des opérations et de leurs tranches, il restait à reprendre les données
+commerciales, et en premier lieu les clients. Dans SPO, ceux-ci sont désignés par le terme
+générique de \emph{tiers} : la même entité de base représente un acquéreur particulier comme une
+société, et se voit attribuer un ou plusieurs rôles. Reprendre les tiers, c'était alimenter le
+socle sur lequel toute la gestion commerciale allait s'appuyer.
+
+Le périmètre était d'importer l'ensemble des clients ayant déjà acheté chez Angelotti. La
+matière première venait du CRM Vadimm, sous la forme de deux extractions complémentaires :
+celle des ventes enregistrées, qui porte 1~557 lignes, et celle des coordonnées des acquéreurs
+et co-acquéreurs, qui en porte 1~602. Les deux ne se recouvrent donc pas exactement~; l'écart
+de 45 lignes n'est pas documenté dans les fichiers sources et s'explique vraisemblablement par
+des contacts renseignés sans vente correspondante. J'ai retenu le plus large des deux totaux
+pour ne perdre aucun acquéreur : le périmètre de travail compte \textbf{1~602 lignes}.
+
+La difficulté ne tenait pas au volume mais à la nature de la donnée. Une ligne de l'extraction
+ne décrit pas un client, elle décrit une vente : un acquéreur qui a acheté trois lots apparaît
+trois fois, et rien dans le fichier ne le signale. Transformer un fichier de ventes en
+référentiel de personnes suppose de reconstituer l'identité de chacune, ce que le système
+source ne faisait pas à ma place.
+
+\hypertarget{lenjeu-central-cruxe9er-sans-dupliquer}{%
+\subsubsection{L'enjeu central : créer sans dupliquer}\label{lenjeu-central-cruxe9er-sans-dupliquer}}
+
+L'enjeu se résume à une contrainte simple à énoncer et difficile à tenir : créer chaque client
+une fois et une seule. Deux sources de duplication se cumulaient, et elles n'appelaient pas la
+même parade.
+
+La première est interne au fichier : chaque ligne correspondant à une vente, un client fidèle
+y figure autant de fois qu'il a acheté. Importer le fichier tel quel aurait créé autant de
+fiches que d'achats, rendant impossible de reconstituer son historique ou de lui adresser un
+courrier unique. La seconde est externe : au moment de préparer l'import, SPO n'était pas vide,
+environ 13~000 tiers y ayant déjà été créés par saisie ou par d'autres canaux. Injecter les
+1~602 lignes sans les confronter à cet existant aurait produit des doublons plus insidieux,
+opposant une fiche importée et une fiche saisie, toutes deux légitimes en apparence.
+
+Une reprise manuelle était donc exclue : vérifier ligne à ligne qu'un acquéreur n'existe ni
+ailleurs dans le fichier ni déjà dans un référentiel de 13~000 tiers représentait un volume de
+contrôles incompatible avec les délais, et un risque d'erreur que rien n'aurait permis de
+tracer. J'ai construit un fichier de travail qui automatise ces contrôles par formules, de
+sorte que la décision d'importer une ligne soit calculée et non prise au cas par cas.
+
+\hypertarget{conception-du-fichier-de-travail-une-chauxeene-de-traitement-pilotuxe9e-par-formules}{%
+\subsection{Conception du fichier de travail : une chaîne de traitement pilotée par formules}\label{conception-du-fichier-de-travail-une-chauxeene-de-traitement-pilotuxe9e-par-formules}}
+
+\hypertarget{une-architecture-en-trois-temps-sources-feuille-pivot-feuilles-de-sortie}{%
+\subsubsection{Une architecture en trois temps : sources, feuille pivot, feuilles de sortie}\label{une-architecture-en-trois-temps-sources-feuille-pivot-feuilles-de-sortie}}
+
+Le fichier ne se présente pas comme un tableur de saisie mais comme une chaîne de traitement,
+dans la lignée des maquettes d'injection du premier semestre : les données entrent d'un côté
+sous leur forme brute et ressortent de l'autre sous la forme attendue par SPO, sans qu'aucune
+donnée soit recopiée à la main. La Figure 1.3 en présente les trois étages.
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+
+\item
+  \textbf{Les feuilles sources}, en lecture seule : \texttt{VADIMM} porte les 1~557 lignes de ventes,
+  \texttt{Builder\ coordonnée} les 1~602 lignes de coordonnées, et \texttt{SPO} l'extraction des tiers déjà
+  existants, qui sert de référentiel de comparaison.
+\item
+  \textbf{La feuille pivot \texttt{BuilderTiers}}, cœur du dispositif : elle reçoit l'intégralité des
+  lignes sources et y adjoint les colonnes de calcul qui déterminent, pour chacune, s'il
+  s'agit d'un tiers nouveau, d'un doublon interne ou d'un tiers déjà présent dans SPO.
+\item
+  \textbf{Les six feuilles de sortie}, une par fichier d'import attendu par SPO, entièrement
+  générées par formules et destinées à être exportées en CSV.
+\end{enumerate}
+
+\begin{figure}[!htbp]
+\centering
+\includegraphics[width=0.65\textwidth]{fig_1_3_chaine_traitement.png}
+\caption{La chaîne de traitement à trois étages du fichier de travail}
+\end{figure}
+
+Une règle figure en tête de la note de procédure : on ne modifie jamais directement une
+feuille de sortie. Ces feuilles étant calculées, toute correction saisie dedans serait écrasée
+au recalcul suivant, sans laisser de trace. Toute intervention passe donc par \texttt{BuilderTiers}
+ou par la feuille de coordonnées. C'est la contrepartie de l'automatisation : elle garantit
+qu'à tout moment le contenu des fichiers d'import résulte des règles décrites et non d'une
+retouche oubliée.
+
+\hypertarget{le-moduxe8le-de-donnuxe9es-des-tiers-dans-spo-couples-personnes-physiques-personnes-morales}{%
+\subsubsection{Le modèle de données des tiers dans SPO : couples, personnes physiques, personnes morales}\label{le-moduxe8le-de-donnuxe9es-des-tiers-dans-spo-couples-personnes-physiques-personnes-morales}}
+
+Avant d'automatiser, il fallait comprendre comment SPO représente un tiers, par lecture de la
+documentation puis tests unitaires de création. Deux caractéristiques ont structuré tout le
+reste du travail.
+
+La première est que SPO distingue trois \textbf{natures} de tiers, et que la nature commande la
+manière dont l'identité est portée. Une \textbf{personne morale} est une société, identifiée par sa
+raison sociale et son SIRET. Une \textbf{personne physique} est un individu, identifié par nom,
+prénom et date de naissance. Un \textbf{couple} est une entité particulière : le tiers n'est ni l'un
+ni l'autre des conjoints, il les regroupe, et les deux personnes qui le composent sont
+enregistrées comme ses \emph{représentants}. Cette nature est de loin la plus fréquente, l'essentiel
+de nos ventes se faisant à des couples acquéreurs.
+
+La seconde est qu'un tiers n'est pas un enregistrement unique mais un ensemble d'objets liés :
+la fiche principale ne porte que l'identité, tandis que l'adresse, le courriel, le téléphone,
+les représentants et les rôles sont autant d'objets rattachés, avec chacun son fichier
+d'import. C'est ce qui explique que mon fichier produise six feuilles de sortie et non une
+seule. Cela explique aussi une asymétrie décisive : adresses, courriels et téléphones se
+rattachent directement à une personne physique ou morale, mais pour un couple ils se rattachent
+aux représentants. Cette différence, anodine sur le papier, s'est révélée être la principale
+contrainte technique de l'import.
+
+\hypertarget{les-trois-muxe9canismes-algorithmiques}{%
+\subsection{Les trois mécanismes algorithmiques}\label{les-trois-muxe9canismes-algorithmiques}}
+
+La feuille pivot repose sur trois mécanismes qui s'enchaînent : identifier les doublons
+internes, écarter les tiers déjà créés dans SPO, puis distribuer les lignes retenues vers les
+six feuilles de sortie. Ce sont eux qui distinguent un fichier de mise en forme d'un outil de
+reprise, puisqu'ils déplacent la décision d'importer une ligne de l'opérateur vers une règle
+écrite.
+
+\hypertarget{la-duxe9duplication-par-cluxe9s-dunicituxe9-diffuxe9renciuxe9es-selon-la-nature-du-tiers}{%
+\subsubsection{La déduplication par clés d'unicité différenciées selon la nature du tiers}\label{la-duxe9duplication-par-cluxe9s-dunicituxe9-diffuxe9renciuxe9es-selon-la-nature-du-tiers}}
+
+Dédupliquer suppose de répondre à une question qui n'est pas technique : à partir de quoi
+décide-t-on que deux lignes désignent la même personne~? C'est le point sur lequel j'ai le
+plus hésité, et celui qui commande la qualité du résultat.
+
+Une clé unique appliquée à tout le fichier ne pouvait pas convenir, précisément parce que les
+trois natures de tiers ne s'identifient pas de la même façon : deux sociétés peuvent porter des
+raisons sociales très proches sans être la même entité, alors qu'il est très improbable que
+deux lignes partageant nom, prénom, date de naissance et adresse désignent deux personnes
+distinctes. J'ai donc retenu \textbf{trois clés d'unicité distinctes}, une par nature, calculées
+chacune dans sa propre colonne :
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+
+\item
+  \textbf{Pour un couple} : nom et prénom de l'acquéreur principal, désigné ADV dans nos
+  extractions, complétés du nom et du prénom du co-acquéreur, désigné CO. C'est la
+  combinaison des deux identités qui fait l'unicité, et non chacune prise isolément.
+\item
+  \textbf{Pour une personne physique} : le nom, le prénom, la date de naissance et l'adresse. La
+  date de naissance sépare les homonymes, l'adresse ajoute un second point de comparaison.
+\item
+  \textbf{Pour une personne morale} : la raison sociale et le SIRET, identifiant légal de
+  l'établissement, la raison sociale le doublant lorsqu'il fait défaut.
+\end{enumerate}
+
+Chaque colonne calcule un \textbf{rang} : la première occurrence d'un tiers reçoit le rang 1, les
+suivantes les rangs 2, 3, et ainsi de suite. Seules les lignes de rang 1 sont retenues, les
+autres correspondant à des achats successifs d'un client déjà compté. Le rang a un avantage
+sur une suppression : aucune ligne n'est effacée, les doublons restent visibles, et l'on peut
+à tout moment vérifier pourquoi une ligne n'a pas été importée.
+
+Ce choix de trois clés différenciées est le véritable cœur méthodologique du travail, parce
+qu'il traduit une idée simple : la règle d'unicité n'est pas une propriété du fichier, c'est
+une propriété du métier. Chercher une clé universelle aurait conduit soit à fusionner des
+tiers distincts, soit à en dupliquer, et dans les deux cas l'erreur n'aurait été découverte
+que bien plus tard, dans l'usage quotidien de l'ERP.
+
+\hypertarget{lexclusion-des-tiers-duxe9juxe0-pruxe9sents-dans-spo}{%
+\subsubsection{L'exclusion des tiers déjà présents dans SPO}\label{lexclusion-des-tiers-duxe9juxe0-pruxe9sents-dans-spo}}
+
+Pour chaque ligne de la feuille pivot, trois formules de recherche interrogent l'extraction
+des tiers déjà créés dans SPO : les \textbf{personnes morales} par leur raison sociale, les
+\textbf{personnes physiques} par leur nom et leur prénom, et les \textbf{couples} par les quatre noms
+qui les composent, \textbf{en testant les deux ordres possibles} entre l'acquéreur et le
+co-acquéreur.
+
+Ce dernier point illustre le genre de détail qui décide de la réussite d'une reprise. Rien ne
+garantit que l'ordre des deux conjoints soit le même dans Vadimm et dans SPO~; une recherche à
+sens unique laisserait donc passer une partie des doublons, et les tiers concernés seraient
+créés une seconde fois sans que personne s'en aperçoive avant longtemps.
+
+Lorsqu'une de ces formules renvoie un code tiers de SPO, du type \texttt{T00012666}, la ligne est
+exclue de l'import. \textbf{40 tiers} ont ainsi été détectés comme déjà existants. Rapporté aux
+1~474 tiers uniques, le volume peut sembler faible, mais chacun de ces 40 cas aurait produit
+un doublon durable dans le référentiel client.
+
+La Figure 1.4 récapitule l'effet cumulé de ces deux mécanismes : des 1~602 lignes de départ,
+la déduplication interne en écarte 128 qui correspondent à des achats répétés, ramenant le
+total à 1~474 tiers uniques~; l'exclusion en retire 40 de plus, pour \textbf{1~434 tiers à créer}.
+Chaque étage correspond à une règle explicite, écrite dans une colonne, donc vérifiable et
+reproductible.
+
+\begin{figure}[!htbp]
+\centering
+\includegraphics[width=0.65\textwidth]{fig_1_4_entonnoir_volumetrie.png}
+\caption{De 1~602 lignes de départ à 1~434 tiers créés : l'effet des deux filtres successifs}
+\end{figure}
+
+\hypertarget{la-propagation-vers-les-feuilles-de-sortie-par-numuxe9rotation-suxe9quentielle}{%
+\subsubsection{La propagation vers les feuilles de sortie par numérotation séquentielle}\label{la-propagation-vers-les-feuilles-de-sortie-par-numuxe9rotation-suxe9quentielle}}
+
+Les six feuilles de sortie n'ont ni la même population ni le même nombre de lignes : celle des
+tiers reçoit un enregistrement par tiers créé, celle des adresses ne concerne que les
+personnes physiques et morales, celle des courriels seulement celles dont le courriel est
+renseigné, celle des représentants deux lignes par couple plus une par société. Il fallait
+donc à chaque feuille une numérotation propre.
+
+Le mécanisme retenu attribue à chaque ligne de la feuille pivot un \textbf{numéro séquentiel par
+destination} : une ligne sans vocation à alimenter une feuille ne reçoit pas de numéro pour
+elle, les autres sont numérotées de 1 à \emph{n}. Chaque feuille de sortie n'a plus qu'à chercher,
+pour sa ligne \emph{i}, celle de \texttt{BuilderTiers} portant le numéro \emph{i} dans la colonne qui la
+concerne.
+
+Ce détour rend les six feuilles indépendantes tout en les gardant synchronisées avec une
+source unique : si une ligne est corrigée ou si une exclusion apparaît, les six numérotations
+se recalculent et les fichiers restent cohérents. C'est exactement le problème qui, en saisie
+manuelle, produit les incohérences les plus difficiles à détecter --- une adresse rattachée au
+mauvais tiers parce qu'une ligne a été insérée sans que le reste suive.
+
+La volumétrie des six feuilles traduit directement le modèle de données décrit en 1.3.2, et le
+tableau de la section 1.3.6 la récapitule : 1~434 lignes pour la liste maîtresse des tiers et
+autant pour le rôle «~Client~», mais 1~871 représentants puisque chaque couple en compte deux,
+et seulement 553 adresses, 538 téléphones et 469 courriels, ces trois fichiers ne portant que
+les personnes physiques et morales.
+
+\begin{quote}
+\textbf{À insérer --- figure.} Capture d'écran de la feuille \texttt{BuilderTiers}, montrant côte à
+côte les colonnes de données reprises et les colonnes calculées : les trois rangs de
+déduplication avec des valeurs 1 et 2 visibles, et une ligne portant un code SPO dans les
+colonnes de rapprochement. Anonymiser les noms d'acquéreurs. Les figures suivantes sont à
+renuméroter après insertion.
+\end{quote}
+
+\hypertarget{de-la-pruxe9paration-uxe0-linjection-procuxe9dure-et-contraintes-techniques}{%
+\subsection{De la préparation à l'injection : procédure et contraintes techniques}\label{de-la-pruxe9paration-uxe0-linjection-procuxe9dure-et-contraintes-techniques}}
+
+\hypertarget{guxe9nuxe9ration-et-normalisation-des-fichiers-dimport}{%
+\subsubsection{Génération et normalisation des fichiers d'import}\label{guxe9nuxe9ration-et-normalisation-des-fichiers-dimport}}
+
+Transformer les six feuilles en fichiers réellement acceptés par SPO a mobilisé quatre
+contraintes de format que la documentation ne mentionnait pas et que les premiers rejets ont
+fait apparaître : un encodage UTF-8 avec le point-virgule pour séparateur~; la conversion en
+ASCII pur de tous les noms, prénoms, adresses et professions, SPO refusant les caractères
+accentués~; la suppression de la seconde ligne d'en-tête~; et le découpage en lots de 200
+tiers au maximum, homogènes en nature. Cette dernière règle explique que l'import des couples
+se soit fait en cinq lots successifs, puisqu'un même fichier ne peut mélanger les natures. Le
+détail figure en annexe~A.
+
+Ces contraintes sont consignées dans la note de procédure remise à l'équipe, avec la marche à
+suivre pour rejouer l'import s'il devait être différé : d'autres tiers pouvant être créés
+entre la préparation et l'injection, la procédure prévoit de redemander une extraction
+actualisée, de remplacer la feuille de référence et de recalculer, les tiers devenus existants
+sortant automatiquement du périmètre. Le fichier reste ainsi utilisable dans le temps, ce qui
+était l'un de mes objectifs de conception.
+
+\hypertarget{le-contournement-par-api-872-requuxeates-patch-pour-les-coordonnuxe9es-des-couples}{%
+\subsubsection{Le contournement par API : 872 requêtes PATCH pour les coordonnées des couples}\label{le-contournement-par-api-872-requuxeates-patch-pour-les-coordonnuxe9es-des-couples}}
+
+C'est ici qu'est apparue la contrainte la plus structurante du projet. Le format d'import CSV
+ne permet pas de porter les courriels et les téléphones des couples : pour un couple, ces
+coordonnées ne sont pas des attributs du tiers mais de ses représentants, et les fichiers
+d'import de coordonnées ne savent viser qu'un tiers. Sur les 881 couples créés, les CSV
+pouvaient donc produire l'identité et les représentants, mais pas les coordonnées de contact ---
+plus de six tiers sur dix seraient arrivés dans l'ERP sans adresse électronique ni téléphone.
+
+Saisir ces coordonnées à la main représentait plusieurs centaines de saisies et reconduisait
+le risque d'erreur que le fichier automatisé visait à supprimer. J'ai donc retenu la seconde
+voie, l'API de SPO, déjà pratiquée au premier semestre. Elle expose une opération de
+modification partielle au format \textbf{JSON Patch}, normalisé par la RFC~6902 {[}3{]}, qui décrit une
+modification non pas en renvoyant l'objet entier mais sous la forme d'opérations élémentaires
+indiquant l'action, le chemin de la propriété visée et la valeur à appliquer. C'était
+exactement ce qu'il fallait : ajouter un courriel et un téléphone sur un représentant déjà
+créé, sans toucher au reste de sa fiche.
+
+J'ai construit le corps de chaque requête à partir de la feuille \texttt{Builder\ coordonnée}, puis
+regroupé l'ensemble dans une collection Postman de \textbf{872 requêtes PATCH}, organisées en cinq
+lots correspondant aux cinq fichiers d'import de couples. Les cinq lots ont été exécutés après
+la création des couples, et l'intégralité des requêtes est passée sans erreur.
+
+\begin{quote}
+\textbf{À insérer --- figure.} Capture d'écran de la collection Postman : arborescence des cinq
+lots et vue d'une requête PATCH sur son onglet \emph{Body}, montrant la structure JSON Patch.
+Masquer l'adresse du serveur et les identifiants. Les figures suivantes sont à renuméroter
+après insertion.
+\end{quote}
+
+Ce contournement m'a appris quelque chose que je n'avais pas formulé aussi clairement : dans
+un projet de reprise, la limite d'un format d'import n'est pas nécessairement une limite du
+système. Le fichier plat et l'API sont deux portes d'entrée vers le même modèle de données, et
+savoir basculer de l'une à l'autre au bon moment, plutôt que d'accepter une perte de données
+ou de retomber dans la saisie manuelle, est une compétence que la reprise du premier semestre
+n'avait pas eu l'occasion de mobiliser.
+
+\hypertarget{traitement-des-cas-particuliers-et-arbitrages}{%
+\subsection{Traitement des cas particuliers et arbitrages}\label{traitement-des-cas-particuliers-et-arbitrages}}
+
+Une chaîne pilotée par formules ne traite pas tout. Neuf tiers ont demandé une intervention
+manuelle, répartis en quatre familles : trois adresses hors de France, que SPO refusait de
+créer avec un pays étranger et qui ont été créées en France puis rectifiées~; trois tiers dont
+la nature était mal renseignée dans Vadimm, corrigée dans la feuille pivot avant génération
+puisque la nature commande la clé d'unicité et la feuille de sortie~; un tiers relevant d'une
+opération de dation, déjà présent dans SPO~; et deux doublons portant deux adresses
+divergentes. L'annexe~B donne le détail de chaque cas.
+
+Ce dernier est le seul qui ait demandé un arbitrage véritable : la déduplication savait dire
+qu'il s'agissait de la même personne, elle ne pouvait pas dire où cette personne habite
+aujourd'hui. Après vérification des dates dans Vadimm, nous avons conservé l'adresse rattachée
+à la vente la plus récente.
+
+Ces neuf cas délimitent précisément ce que l'automatisation peut et ne peut pas faire : les
+formules savent appliquer une règle, elles ne savent pas décider laquelle de deux adresses
+également plausibles est la bonne. La valeur du fichier n'est pas d'avoir supprimé la décision
+humaine, mais de l'avoir concentrée sur une poignée de cas identifiés au lieu de la diluer sur
+1~602 lignes.
+
+\hypertarget{bilan-de-limport-et-points-de-vigilance-pour-la-suite}{%
+\subsection{Bilan de l'import et points de vigilance pour la suite}\label{bilan-de-limport-et-points-de-vigilance-pour-la-suite}}
+
+L'intégralité des imports CSV et des requêtes PATCH a été exécutée avec succès.
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 4\tabcolsep) * \real{0.6364}}
+  >{\raggedleft\arraybackslash}p{(\columnwidth - 4\tabcolsep) * \real{0.1212}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 4\tabcolsep) * \real{0.2424}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Objet créé dans SPO
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+Volume
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Canal
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+Tiers & 1~434 & Import CSV \\
+Adresses & 553 & Import CSV \\
+Courriels (personnes physiques et morales) & 469 & Import CSV \\
+Téléphones (personnes physiques et morales) & 538 & Import CSV \\
+Représentants (couples et sociétés) & 1~871 & Import CSV \\
+Rôles «~Client~» & 1~434 & Import CSV \\
+Coordonnées des couples & 872 & Requêtes PATCH \\
+\end{longtable}
+
+Les 1~434 tiers se répartissent en \textbf{881 couples}, \textbf{462 personnes physiques} et \textbf{91
+personnes morales}, répartition que représente la Figure 1.5. Cette structure justifie a
+posteriori l'attention portée aux couples, qui représentent plus de six tiers sur dix et
+concentrent la contrainte de format qui a imposé le recours à l'API.
+
+\begin{figure}[!htbp]
+\centering
+\includegraphics[width=0.65\textwidth]{fig_1_5_repartition_natures.png}
+\caption{Répartition des 1~434 tiers créés selon leur nature}
+\end{figure}
+
+\begin{quote}
+\textbf{À insérer --- figure.} Capture d'écran d'une fiche de couple dans SPO, onglet des
+représentants ouvert, montrant les deux personnes du couple et les coordonnées ajoutées
+par requête PATCH sur l'une d'elles. Anonymiser les noms.
+\end{quote}
+
+Quatre manipulations cassent le fichier sans produire le moindre message d'erreur : modifier
+une feuille de sortie, modifier les colonnes calculées de la feuille pivot, insérer une ligne
+au milieu d'une feuille, et trier la feuille pivot, dont la logique de rang est cumulative sur
+l'ordre des lignes. La note de procédure les énonce avant même d'expliquer comment se servir
+du fichier.
+
+Les pièges de formule rencontrés relèvent tous du même défaut, et c'est l'enseignement
+principal que j'en tire : dans une chaîne pilotée par formules, l'erreur ne se manifeste
+presque jamais par un message d'erreur, mais par un compteur qui ne tombe pas juste. Chaîne
+vide comptée comme une valeur, code de mois interprété comme des minutes, heures parasites
+rendant différentes deux dates identiques, cellule vide confondue avec chaîne vide : chacun a
+produit des compteurs surévalués ou des faux positifs, et aucun n'a signalé quoi que ce soit
+(annexe~C). J'ai donc ajouté à la feuille pivot un panneau de compteurs que la procédure
+impose de vérifier avant tout export : c'est le seul dispositif de détection dont je
+disposais. Avec environ 60~000 cellules de formules, elle recommande enfin de travailler en
+calcul manuel puis de forcer un recalcul complet avant chaque export.
+
+\hypertarget{ce-que-ces-deux-reprises-ont-en-commun}{%
+\section{Ce que ces deux reprises ont en commun}\label{ce-que-ces-deux-reprises-ont-en-commun}}
+
+Les deux chantiers ont suivi la même méthode, que je n'avais pas choisie a priori : elle s'est
+imposée parce que le modèle cible était inconnu. On ne peut pas spécifier complètement une
+reprise dont on ignore les règles d'acceptation~; on avance donc par paliers de volume
+croissant, en traitant chaque rejet comme une information sur le modèle cible plutôt que comme
+une erreur à corriger. Sa propriété la plus utile est que \textbf{le coût d'une erreur y est
+proportionnel au palier où on la découvre}~; sa limite est qu'elle démarre lentement et produit
+d'abord une documentation interne plutôt que des données dans le système.
+
+Les difficultés techniques se ramènent presque toutes à une même situation : un système
+imposait une règle qui n'était écrite nulle part. L'ordre d'injection en est le cas le plus
+net, le versionnement des budgets le second, le refus des caractères accentués et
+l'impossibilité de porter les coordonnées des couples en CSV relèvent de la même famille.
+
+Le régime de preuve de ces deux missions est celui de la \textbf{réconciliation} : la question n'est
+pas si un modèle est performant, mais si ce qui est arrivé correspond à ce qui est parti. Elle
+a pris la forme de la validation par paliers sur la migration et du panneau de compteurs sur
+la reprise des tiers. Son angle mort mérite d'être nommé : elle prouve qu'une donnée est
+arrivée, pas qu'elle est juste. Si une clé d'unicité était mal choisie, l'erreur passerait le
+contrôle sans être vue, puisque les compteurs tomberaient juste.
+
+Le référentiel commercial est ainsi reconstitué selon des règles écrites et rejouables. Le
+chantier n'est pas clos pour autant : la reprise des historiques budgétaires reste devant
+nous, et le fichier devra être rejoué avant la bascule définitive.

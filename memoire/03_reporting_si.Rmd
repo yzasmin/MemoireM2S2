@@ -1,0 +1,92 @@
+# Reporting et missions SI transverses
+
+::: sommaire
+**Sommaire**
+
+- 2.1 Le maintien opérationnel du reporting
+- 2.2 Le déploiement du Single Sign-On
+- 2.3 Ce que les missions filées coûtent et ce qu'elles rapportent
+:::
+
+Pendant que les deux reprises du chapitre précédent se déroulaient, j'ai maintenu mes
+activités de gestionnaire d'information : les demandes de reporting des services et une
+contribution à l'infrastructure système. Conduites sur les deux semestres, elles sont exposées
+en détail dans mon mémoire de mi-parcours ; je n'en retiens ici que ce qui éclaire la suite,
+car c'est en les menant que j'ai rencontré, sous une forme miniature, le problème qui commande
+le projet de Data Science du chapitre 3 : lorsqu'une règle de gestion n'a nulle part où être
+écrite, elle finit par être recalculée partout, différemment.
+
+## Le maintien opérationnel du reporting
+
+Ces demandes consistent à traduire des besoins métier parfois abstraits en indicateurs fiables.
+Le travail commence rarement par une spécification : il commence par une gêne exprimée en
+réunion, ou par un tableau que quelqu'un refait à la main tous les mois. Reformuler la demande
+jusqu'à ce qu'elle soit calculable — de quelles lignes parle-t-on, sur quelle période, que
+fait-on des cas limites ? — est la partie que je sous-estimais en arrivant, et c'est celle qui
+décide de l'utilité du résultat.
+
+La demande du service juridique en donne l'exemple le plus significatif. Le besoin portait sur
+le suivi des commandes clients, avec une règle de gestion en alternance stricte : la première
+commande est payante, la deuxième gratuite, la troisième payante, et ainsi de suite. La
+difficulté tient à ce que cette règle ne porte pas sur une ligne mais sur la position d'une
+ligne dans une séquence : aucune colonne de la base ne contient l'information « c'est la
+deuxième commande de ce client sur ce lot », qui n'existe que si on la calcule et change dès
+qu'une commande est ajoutée ou annulée.
+
+Deux contraintes interdisaient de stocker le résultat : je ne possédais pas les droits
+d'écriture permettant de créer un champ de statut dans la base SQL, et les fichiers Excel
+sources étaient écrasés à chaque mise à jour. Il fallait donc un calcul dynamique, exécuté à
+la génération du tableau : identifier les opérations et les lots, classer les commandes par
+ordre chronologique, attribuer un rang, puis appliquer la règle — rang impair, statut
+« Payant » ; rang pair, « Gratuit ». La Figure 2.1 représente cette chaîne de calcul.
+
+![La règle de facturation juridique traduite en calcul de rang, exécuté à chaque génération du tableau](figures/fig_2_1_regle_facturation.png){width=65%}
+
+Cette approche répond au besoin sans altérer les données sources, mais elle a un coût : la
+règle est recalculée à chaque affichage et n'existe nulle part ailleurs que dans la définition
+du tableau. Si un autre service a besoin de la même notion, rien ne garantit qu'elle sera
+implantée à l'identique. C'est exactement le problème que le projet du chapitre 3 résoudra, en
+écrivant les définitions partagées une seule fois dans des vues de base de données. Le régime
+de preuve retenu ici est celui de la **recette par l'usage** : seul le service demandeur
+pouvait juger de la conformité de la règle appliquée, et cette validation ne dit rien, à court
+terme, de l'utilité de l'outil dans la durée.
+
+## Le déploiement du Single Sign-On
+
+J'ai par ailleurs collaboré avec l'administratrice des systèmes et outils SI au déploiement du
+SSO (*Single Sign-On*) sur les postes de deux périmètres, l'agence de Perpignan et le service
+financier du siège : installation du connecteur, vérification de la synchronisation avec
+l'annuaire d'entreprise, accompagnement des utilisateurs à leur première connexion. Nous avons
+volontairement commencé par ces deux périmètres avant d'envisager une généralisation.
+
+Cette mission m'a appris quelque chose que je n'attendais pas d'un déploiement. L'annuaire
+d'entreprise sur lequel repose le SSO est un référentiel d'identités : il répond, pour les
+collaborateurs, à la question que je me posais pour les clients au chapitre 1, à savoir
+comment garantir qu'une personne n'existe qu'une fois et qu'on sait la reconnaître. Voir ce
+problème résolu du côté de l'infrastructure éclaire par contraste la situation côté données de
+gestion, où aucun référentiel de ce type n'existait avant la reprise des tiers.
+L'accompagnement des utilisateurs a été instructif à sa manière : une solution techniquement
+correcte qui déroute l'utilisateur au moment de s'en servir n'est pas une solution livrée.
+
+## Ce que les missions filées coûtent et ce qu'elles rapportent
+
+Ces missions transverses fragmentent le temps, et un chantier de reprise interrompu trois fois
+dans la journée pour une demande de tableau de bord se reprend mal, puisqu'il faut à chaque
+fois reconstituer où l'on en était dans une logique de formules imbriquées. Cette
+fragmentation a été la difficulté la plus constante de l'année, et ce que j'ai fini par mettre
+en place tient en peu de choses : réserver les plages longues aux travaux qui ne se découpent
+pas, regrouper les demandes courtes, et surtout écrire où j'en étais avant d'interrompre une
+tâche.
+
+Elles rapportent cependant trois choses que je n'aurais pas obtenues autrement : une
+**connaissance du métier** que la fréquentation des bases ne donne pas, car on ne comprend pas
+ce qu'est une commande gratuite en lisant une table ; une **crédibilité** auprès des services,
+qui a rendu possible au second semestre un échange direct avec la direction financière ; et
+une **vision de l'architecture** du système d'information, depuis l'authentification des postes
+jusqu'aux tableaux de bord, qui m'a permis de concevoir le projet du second semestre comme une
+chaîne complète plutôt que comme une suite de modèles.
+
+Ces solutions restent des contournements : une règle recalculée à chaque affichage tient tant
+que personne d'autre n'en a besoin. Elles auront néanmoins maintenu le système décisionnel en
+état de marche pendant les douze mois qu'a duré la reconstruction du socle. Ce socle étant
+désormais fiable, le chapitre suivant expose ce qu'il devient possible d'en faire.
