@@ -1,0 +1,19 @@
+{\reset@font\mtcSfont\mtc@string\contentsline{section}{\noexpand \leavevmode \numberline {3.1}Contexte}{\reset@font\mtcSfont 27}{section.3.1}}
+{\reset@font\mtcSSfont\mtc@string\contentsline{subsection}{\noexpand \leavevmode \numberline {3.1.1}Problème métier}{\reset@font\mtcSSfont 27}{subsection.3.1.1}}
+{\reset@font\mtcSSSfont\mtc@string\contentsline{subsubsection}{\noexpand \leavevmode Besoins par axe et exigences non fonctionnelles}{\reset@font\mtcSSSfont 28}{subsubsection*.22}}
+{\reset@font\mtcSSfont\mtc@string\contentsline{subsection}{\noexpand \leavevmode \numberline {3.1.2}Objectifs du dashboard}{\reset@font\mtcSSfont 28}{subsection.3.1.2}}
+{\reset@font\mtcSfont\mtc@string\contentsline{section}{\noexpand \leavevmode \numberline {3.2}Données disponibles}{\reset@font\mtcSfont 29}{section.3.2}}
+{\reset@font\mtcSSfont\mtc@string\contentsline{subsection}{\noexpand \leavevmode \numberline {3.2.1}Données internes}{\reset@font\mtcSSfont 29}{subsection.3.2.1}}
+{\reset@font\mtcSSfont\mtc@string\contentsline{subsection}{\noexpand \leavevmode \numberline {3.2.2}Données externes}{\reset@font\mtcSSfont 30}{subsection.3.2.2}}
+{\reset@font\mtcSfont\mtc@string\contentsline{section}{\noexpand \leavevmode \numberline {3.3}Architecture technique}{\reset@font\mtcSfont 30}{section.3.3}}
+{\reset@font\mtcSfont\mtc@string\contentsline{section}{\noexpand \leavevmode \numberline {3.4}Notebooks et résultats}{\reset@font\mtcSfont 31}{section.3.4}}
+{\reset@font\mtcSSfont\mtc@string\contentsline{subsection}{\noexpand \leavevmode \numberline {3.4.1}Exploration et nettoyage des données brutes}{\reset@font\mtcSSfont 31}{subsection.3.4.1}}
+{\reset@font\mtcSSfont\mtc@string\contentsline{subsection}{\noexpand \leavevmode \numberline {3.4.2}SQL et Spark}{\reset@font\mtcSSfont 32}{subsection.3.4.2}}
+{\reset@font\mtcSSfont\mtc@string\contentsline{subsection}{\noexpand \leavevmode \numberline {3.4.3}Axe A : risque de dérive de marge}{\reset@font\mtcSSfont 33}{subsection.3.4.3}}
+{\reset@font\mtcSSfont\mtc@string\contentsline{subsection}{\noexpand \leavevmode \numberline {3.4.4}Axe B : vitesse d'écoulement}{\reset@font\mtcSSfont 34}{subsection.3.4.4}}
+{\reset@font\mtcSSfont\mtc@string\contentsline{subsection}{\noexpand \leavevmode \numberline {3.4.5}Axe C : prix du stock}{\reset@font\mtcSSfont 36}{subsection.3.4.5}}
+{\reset@font\mtcSSfont\mtc@string\contentsline{subsection}{\noexpand \leavevmode \numberline {3.4.6}Signaux faibles (texte et réseau)}{\reset@font\mtcSSfont 38}{subsection.3.4.6}}
+{\reset@font\mtcSfont\mtc@string\contentsline{section}{\noexpand \leavevmode \numberline {3.5}Plateforme Streamlit}{\reset@font\mtcSfont 38}{section.3.5}}
+{\reset@font\mtcSfont\mtc@string\contentsline{section}{\noexpand \leavevmode \numberline {3.6}Périmètre et limites}{\reset@font\mtcSfont 41}{section.3.6}}
+{\reset@font\mtcSfont\mtc@string\contentsline{section}{\noexpand \leavevmode \numberline {3.7}Méthode, évaluation et limites du projet}{\reset@font\mtcSfont 42}{section.3.7}}
+{\reset@font\mtcSfont\mtc@string\contentsline{section}{\noexpand \leavevmode \numberline {3.8}Conclusion du chapitre}{\reset@font\mtcSfont 42}{section.3.8}}
