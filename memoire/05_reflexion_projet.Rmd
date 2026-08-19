@@ -70,7 +70,7 @@ manière. La Figure 4.1 représente les trois régimes que j'ai employés, chacu
 chapitre où il s'applique — la réconciliation au chapitre 1, la recette par l'usage au
 chapitre 2, la validation statistique au chapitre 3.
 
-![Les trois régimes de preuve employés selon la nature du livrable](figures/fig_4_1_regimes_de_preuve.png){width=100%}
+![Les trois régimes de preuve employés selon la nature du livrable](figures/fig_4_1_regimes_de_preuve.png){width=65%}
 
 Appliquer à une reprise de données les critères d'un modèle statistique, ou l'inverse, revient
 à ne rien prouver du tout. Un second enseignement transversal s'y ajoute : l'arbitrage entre

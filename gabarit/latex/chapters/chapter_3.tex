@@ -248,7 +248,7 @@ modéliser le logarithme du prix plutôt que le prix lui-même.
 
 \begin{figure}[!htbp]
 \centering
-\includegraphics[width=1\textwidth]{fig_3_1_prix_m2_log.png}
+\includegraphics[width=0.65\textwidth]{fig_3_1_prix_m2_log.png}
 \caption{Prix au mètre carré des appartements : distribution brute et après transformation logarithmique}
 \end{figure}
 
@@ -268,7 +268,7 @@ conclu à l'absence d'effet de la conjoncture, et j'aurais eu tort.
 
 \begin{figure}[!htbp]
 \centering
-\includegraphics[width=1\textwidth]{fig_3_2_intensite_vente.png}
+\includegraphics[width=0.65\textwidth]{fig_3_2_intensite_vente.png}
 \caption{Intensité de vente, mesurée en réservations par opération active : l'effet de la remontée des taux apparaît une fois l'effet de portefeuille neutralisé}
 \end{figure}
 
@@ -323,7 +323,7 @@ opérations en dérive.
 
 \begin{figure}[!htbp]
 \centering
-\includegraphics[width=0.95\textwidth]{fig_3_3_distribution_variation_marge.png}
+\includegraphics[width=0.65\textwidth]{fig_3_3_distribution_variation_marge.png}
 \caption{Distribution de la variation de marge «~committée~» sur les 123 opérations du périmètre, et seuil de dérive matérielle à -2~\%}
 \end{figure}
 
@@ -395,7 +395,7 @@ moyenne sur douze mois, tandis qu'une remontée à 3,5~\% en retirerait 3~\%.
 
 \begin{figure}[!htbp]
 \centering
-\includegraphics[width=0.95\textwidth]{fig_3_4_scenarios_taux_2026.png}
+\includegraphics[width=0.65\textwidth]{fig_3_4_scenarios_taux_2026.png}
 \caption{Prévision d'intensité de vente à douze mois sous trois scénarios de taux 2026, avec intervalle à 80~\%}
 \end{figure}
 
@@ -408,7 +408,7 @@ la médiane est proche de vingt mois.
 
 \begin{figure}[!htbp]
 \centering
-\includegraphics[width=0.95\textwidth]{fig_3_5_courbes_logistiques.png}
+\includegraphics[width=0.65\textwidth]{fig_3_5_courbes_logistiques.png}
 \caption{Réservations cumulées et courbes logistiques ajustées sur quatre opérations terminées, avec le repère des 90~\% du potentiel}
 \end{figure}
 
@@ -432,14 +432,7 @@ Son intérêt principal n'est pas sa performance mais sa lisibilité : ses coeff
 lisent comme des prix implicites, ce qui permet de les discuter avec la direction
 commerciale. On y lit une prime d'étage de +6~\%, une prime d'exposition sud, une décote de
 63~\% pour le logement social, qui s'explique par des prix réglementés, et un effet millésime
-d'environ +19 points entre 2016 et 2023, suivi d'un plateau. La Figure 3.6 représente cet
-effet millésime année par année.
-
-\begin{figure}[!htbp]
-\centering
-\includegraphics[width=0.88\textwidth]{fig_3_6_effet_millesime.png}
-\caption{Effet millésime du modèle de prix : prime par année de réservation, référence 2016}
-\end{figure}
+d'environ +19 points entre 2016 et 2023, suivi d'un plateau.
 
 Ce plateau mérite d'être commenté, car il recoupe l'axe B. Les prix du neuf n'ont pas
 baissé avec la remontée des taux : c'est le volume qui s'est ajusté, en parfaite cohérence
@@ -449,15 +442,6 @@ avait rien à stabiliser.
 
 Appliqué aux 127 appartements en stock, ce modèle sert de détecteur. Au seuil d'une erreur
 type, 103 lots sont dans le marché, 8 se situent au-dessus du prix estimé et 16 en dessous.
-La Figure 3.7 confronte le prix de grille au prix de marché estimé et matérialise cette
-bande de tolérance.
-
-\begin{figure}[!htbp]
-\centering
-\includegraphics[width=0.88\textwidth]{fig_3_7_stock_prix_marche.png}
-\caption{Stock d'appartements : prix de grille contre prix de marché estimé, avec la bande à plus ou moins une erreur type}
-\end{figure}
-
 La recommandation de remise est ensuite posée comme une petite optimisation sous
 contrainte : maximiser le revenu attendu à douze mois d'une opération, en ajustant chaque
 prix dans des bornes commerciales de -10 à +5~\%, sous un objectif d'accélération de
@@ -512,25 +496,25 @@ L'application finale est la meilleure réponse au risque de sur-complexité que 
 ouverture de ce chapitre : ce qui est livré au métier est simple. Cinq pages, un périmètre
 restreint aux 147 opérations de promotion, et aucun terme de modélisation à l'écran.
 
-La page \textbf{Vue d'ensemble}, présentée en Figure 3.8, donne la situation en quelques secondes :
+La page \textbf{Vue d'ensemble}, présentée en Figure 3.6, donne la situation en quelques secondes :
 147 opérations suivies, dont 10 en alerte et 2 à surveiller parmi les 68 opérations en cours
 suffisamment engagées, les 56 autres étant conformes, 421 lots principaux en stock, un rythme
 récent de 4,8 réservations par opération et par mois, pour un taux de crédit à 3,11~\%.
 
 \begin{figure}[!htbp]
 \centering
-\includegraphics[width=1\textwidth]{fig_3_8_plateforme_vue_ensemble.png}
+\includegraphics[width=0.65\textwidth]{fig_3_6_plateforme_vue_ensemble.png}
 \caption{Plateforme, page «~Vue d'ensemble~»}
 \end{figure}
 
-La page \textbf{Alertes marge}, présentée en Figure 3.9, classe les opérations par niveau
+La page \textbf{Alertes marge}, présentée en Figure 3.7, classe les opérations par niveau
 d'alerte, le score de l'axe A étant traduit en trois niveaux. Elle affiche surtout, pour
 chaque opération, les dépassements déjà engagés en euros et les postes concernés. C'est la
 page la plus consultée, et il faut redire qu'elle repose sur du SQL et non sur un modèle.
 
 \begin{figure}[!htbp]
 \centering
-\includegraphics[width=1\textwidth]{fig_3_9_plateforme_alertes_marge.png}
+\includegraphics[width=0.65\textwidth]{fig_3_7_plateforme_alertes_marge.png}
 \caption{Plateforme, page «~Alertes marge~» : niveaux d'alerte et dépassements engagés en euros}
 \end{figure}
 
@@ -623,30 +607,21 @@ vient de la littérature.
 \hypertarget{conclusion-du-chapitre}{%
 \section{Conclusion du chapitre}\label{conclusion-du-chapitre}}
 
-Le Copilote Financier répond aux trois questions posées en ouverture, mais il n'y répond
-pas avec la même force, et je crois qu'il est plus honnête de le dire que de présenter un
-ensemble homogène. L'axe B est solide : l'effet du taux d'intérêt sur le rythme de
-réservation est mesuré, séparé de l'effet propre à chaque programme, et confirmé par un
-garde-fou méthodologique qui aurait pu l'invalider. L'axe C est lisible et directement
-discutable avec la direction commerciale, à la réserve près d'un paramètre d'élasticité
-emprunté à la littérature. L'axe A, enfin, ne dépasse pas le stade du score de tri, et sa
-partie la plus utilisée n'est pas un modèle mais une requête SQL.
+Le Copilote Financier répond aux trois questions posées en ouverture, mais pas avec la même
+force, et il est plus honnête de le dire que de présenter un ensemble homogène. L'axe B est
+solide : l'effet du taux d'intérêt sur le rythme de réservation est mesuré, séparé de l'effet
+propre à chaque programme, et confirmé par un garde-fou méthodologique qui aurait pu
+l'invalider. L'axe C est lisible et directement discutable avec la direction commerciale, à la
+réserve près d'un paramètre d'élasticité emprunté à la littérature. L'axe A ne dépasse pas le
+stade du score de tri, et sa partie la plus utilisée n'est pas un modèle mais une requête SQL.
 
 Ce déséquilibre n'est pas un accident de parcours, c'est une conséquence directe de la donnée
-disponible. Là où j'avais une profondeur temporelle, le modèle a produit un résultat
-exploitable ; là où je n'avais qu'une photographie à date, il n'a pas pu en produire. Cette
-observation est, pour moi, l'apport principal du projet, et elle vérifie la thèse annoncée en
-introduction : la structure de la donnée commande ce que la modélisation peut en tirer.
-
-Ce chapitre et les deux chantiers de reprise qui le précèdent se répondent précisément sur ce
-point. Les chapitres 2 et 3 racontent la reconstitution d'un socle de gestion dans un nouvel
-ERP, avec ses séquences d'injection, ses clés d'unicité, ses contournements de format et ses
-arbitrages documentés. Celui-ci raconte ce que l'on peut faire d'un patrimoine de données une
-fois qu'il est fiable, et ce que l'on ne peut pas en faire lorsqu'il lui manque une
-dimension. Le lien entre eux n'est pas rhétorique : les deux recommandations formulées plus
-haut, historiser les exports mensuels et fiabiliser la saisie des motifs de désistement, sont
-exactement de la même nature que le travail décrit aux chapitres 2 et 3. Ce sont des travaux
-de structure, faits pour rendre possible une analyse à venir.
+disponible : là où j'avais une profondeur temporelle, le modèle a produit un résultat
+exploitable~; là où je n'avais qu'une photographie à date, il n'a pas pu en produire. C'est
+l'apport principal du projet, et il vérifie la thèse annoncée en introduction. Les deux
+recommandations formulées plus haut, historiser les exports mensuels et fiabiliser la saisie
+des motifs de désistement, sont d'ailleurs de la même nature que les chantiers du chapitre~1 :
+des travaux de structure, faits pour rendre possible une analyse à venir.
 
 Une succession de récits de mission ne fait pourtant pas un bilan. Comment ces projets
 ont-ils été conduits, avec quelles méthodes, comment ai-je su que le résultat était bon, et

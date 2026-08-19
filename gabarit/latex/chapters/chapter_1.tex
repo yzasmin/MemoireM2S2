@@ -33,18 +33,8 @@ pouvait exister dans le CRM et dans l'ERP sans qu'aucun lien ne les rattache.
 
 \begin{figure}[!htbp]
 \centering
-\includegraphics[width=1\textwidth]{fig_1_1_systeme_information.png}
+\includegraphics[width=0.65\textwidth]{fig_1_1_systeme_information.png}
 \caption{Les outils du système d'information et la circulation de la donnée}
-\end{figure}
-
-La Figure 1.2 donne la répartition des quatre missions de l'année sur les deux semestres et
-situe les deux reprises par rapport aux missions filées du chapitre~2 et au projet de Data
-Science du chapitre~3.
-
-\begin{figure}[!htbp]
-\centering
-\includegraphics[width=1\textwidth]{fig_1_2_frise_missions.png}
-\caption{Les quatre missions de l'année et leur répartition sur les deux semestres}
 \end{figure}
 
 À ces contraintes s'ajoute une perspective absente du calendrier initial : le passage prochain
@@ -55,137 +45,75 @@ tiendrait à une échelle supérieure.
 \hypertarget{la-migration-des-opuxe9rations}{%
 \section{La migration des opérations}\label{la-migration-des-opuxe9rations}}
 
-Cette mission, conduite au premier semestre, visait un objectif critique : récupérer
-l'intégralité des opérations immobilières actives pour assurer la continuité de la gestion
-financière et comptable dans le nouvel environnement.
+Cette mission, conduite au premier semestre, est exposée en détail dans mon mémoire de
+mi-parcours. Je n'en reprends ici que ce dont la suite a besoin : la méthode, les deux
+contraintes que l'ERP impose, et l'état dans lequel le socle se trouvait à la fin du semestre.
 
-\hypertarget{un-arbitrage-initial-automatiser-ou-saisir}{%
-\subsection{Un arbitrage initial : automatiser ou saisir}\label{un-arbitrage-initial-automatiser-ou-saisir}}
+\hypertarget{muxe9thode-et-industrialisation-des-flux}{%
+\subsection{Méthode et industrialisation des flux}\label{muxe9thode-et-industrialisation-des-flux}}
 
-Face aux 283 opérations du périmètre, une saisie manuelle intégrale représentait un risque
-d'erreur humaine trop élevé et une charge incompatible avec les délais. Nous avons donc opté
-pour une stratégie hybride : une approche automatisée pour l'injection des gros volumes de
-données structurelles via les API, et un traitement manuel pour les exceptions et les cas
-historiques ne pouvant entrer dans les gabarits standardisés.
+Face aux 283 opérations du périmètre, une saisie manuelle intégrale était exclue. Nous avons
+retenu une stratégie hybride : injection automatisée des gros volumes structurels via les API,
+traitement manuel des cas historiques ne pouvant entrer dans les gabarits. Vouloir tout
+automatiser aurait conduit à écrire des règles pour des cas uniques, ce qui coûte plus cher
+que de les traiter à la main.
 
-Cet arbitrage n'allait pas de soi. Automatiser suppose un investissement initial qui ne se
-rentabilise que si le volume est suffisant et les données homogènes~: sur 283 opérations, la
-première condition était remplie, la seconde seulement en partie. Vouloir tout automatiser
-aurait conduit à écrire des règles pour des cas uniques, ce qui coûte plus cher que de les
-traiter à la main.
-
-\hypertarget{appropriation-technique-et-industrialisation-des-flux}{%
-\subsection{Appropriation technique et industrialisation des flux}\label{appropriation-technique-et-industrialisation-des-flux}}
-
-Avant de manipuler les données de masse, il fallait maîtriser le modèle de données cible. Ma
-première tâche a consisté à analyser la documentation technique de l'API de Salvia {[}2{]}, puis à
-mener une phase de tests unitaires en appelant manuellement les différents \emph{endpoints} pour
-décortiquer la mécanique de création d'une donnée. Deux informations distinctes en sont
-sorties : quels champs l'ERP exige pour accepter une création, ce que la documentation décrit
-mais qui reste théorique tant qu'on n'a pas vu le service refuser~; et dans quel ordre il faut
-créer les objets entre eux, qui n'était pas explicité et qui a occupé la suite du travail.
-
-Cette phase peut sembler improductive, puisqu'elle ne crée aucune donnée. Je la considère
-pourtant comme la plus rentable du projet : chaque règle découverte à ce stade sur un objet
-unique aurait coûté, découverte plus tard, un rejet sur plusieurs centaines de lignes.
-
-Nous avons ensuite déployé le module DirectAPI de l'éditeur, conçu pour interfacer des
-fichiers plats avec l'ERP, dont j'ai construit l'intégralité du pipeline d'alimentation sous
+J'ai d'abord analysé la documentation technique de l'API de Salvia {[}2{]}, puis testé
+manuellement les \emph{endpoints} pour décortiquer la mécanique de création d'une donnée. Nous
+avons ensuite déployé le module DirectAPI, dont j'ai construit le pipeline d'alimentation sous
 la forme de maquettes Excel en trois étapes : \textbf{extraction} de la base source par MyReport
 Builder, \textbf{transformation et mapping} par formules RechercheX, \textbf{chargement} via DirectAPI.
+La transformation concentre l'essentiel du travail, la nomenclature de SPO étant stricte : un
+libellé de poste budgétaire ou un type de tranche non reconnu fait rejeter la ligne. Excel a
+été retenu parce que la maquette reste relisible par les personnes qui connaissent le métier
+et non le code.
 
-L'étape de transformation est celle qui a demandé le plus de travail, et celle dont dépendait
-la validité de tout le reste. La nomenclature de SPO est stricte : un libellé de poste
-budgétaire ou un type de tranche doit correspondre à une valeur que le nouveau système
-reconnaît, faute de quoi la ligne est rejetée. Les correspondances viennent soit des tables de
-paramétrage extraites de SPO, où une divergence est une erreur de lecture, soit de fichiers de
-mapping que j'ai constitués, dont je réponds. Excel a été retenu comme moteur de
-transformation parce que la maquette reste relisible par les personnes qui connaissent le
-métier et non le code, et qu'une correspondance douteuse peut leur être montrée telle quelle.
+Le processus a été sécurisé par une validation itérative : 3 opérations pilotes, puis un lot
+de 12, avant la migration de masse. Cette progression par paliers rend les erreurs lisibles,
+et c'est elle que j'ai reconduite au second semestre.
 
-Pour sécuriser le processus, j'ai appliqué une validation itérative : 3 opérations pilotes,
-puis un lot de 12, avant la migration de masse. Cette progression par paliers rend les erreurs
-lisibles : sur trois opérations, un rejet s'analyse en quelques minutes~; sur plusieurs
-dizaines, les messages se mélangent et il devient difficile de savoir quelle règle a été
-violée.
+\hypertarget{deux-contraintes-de-lerp-et-la-documentation-qui-en-est-sortie}{%
+\subsection{Deux contraintes de l'ERP, et la documentation qui en est sortie}\label{deux-contraintes-de-lerp-et-la-documentation-qui-en-est-sortie}}
 
-\hypertarget{duxe9pendances-hiuxe9rarchiques-identifiants-et-versionnement}{%
-\subsection{Dépendances hiérarchiques, identifiants et versionnement}\label{duxe9pendances-hiuxe9rarchiques-identifiants-et-versionnement}}
-
-Deux difficultés structurelles ont mobilisé l'essentiel de mon temps, et elles relèvent moins
-du transfert de données que de la rétro-ingénierie des processus de l'ERP.
-
-La première a été de décrypter l'ordre strict d'injection, contrainte d'intégrité
-référentielle qui n'était pas explicitée par la documentation de l'éditeur. Je l'ai découverte
-empiriquement, en analysant les codes d'erreur renvoyés par l'API : il faut créer l'opération,
-puis les tranches de travaux, puis les tranches commerciales, puis le budget associé. La
-Figure 1.3 représente cette séquence. Toute injection ne respectant pas cet ordre se solde par
-un échec, le système ne trouvant pas l'objet parent.
+La première est l'ordre strict d'injection, contrainte d'intégrité référentielle que la
+documentation de l'éditeur n'explicitait pas. Je l'ai découverte en analysant les codes
+d'erreur renvoyés par l'API : il faut créer l'opération, puis les tranches de travaux, puis
+les tranches commerciales, puis le budget. La Figure 1.2 représente cette séquence~; toute
+injection qui ne la respecte pas échoue, le système ne trouvant pas l'objet parent.
 
 \begin{figure}[!htbp]
 \centering
-\includegraphics[width=0.95\textwidth]{fig_1_3_sequence_injection.png}
+\includegraphics[width=0.65\textwidth]{fig_1_2_sequence_injection.png}
 \caption{La séquence d'injection imposée par l'intégrité référentielle de l'ERP}
 \end{figure}
 
-Face à ce manque de clarté, j'ai pris l'initiative de rédiger une documentation interne
-cartographiant les étapes de la séquence et les prérequis de chaque objet, c'est-à-dire, pour
-chaque type de donnée à créer, ce qui doit exister avant lui. Je l'ai fait parce que les
-règles que les codes d'erreur m'avaient révélées n'existaient nulle part ailleurs que dans mes
-notes de test. C'est le premier livrable écrit de mon année qui n'était pas un fichier de
-données, et c'est celui qui a le plus servi aux autres : la reprise des tiers, exposée plus
-bas, s'est appuyée directement dessus.
+J'ai alors rédigé une documentation interne cartographiant cette séquence et les prérequis de
+chaque objet, parce que ces règles n'existaient nulle part ailleurs que dans mes notes de
+test. C'est le premier livrable écrit de mon année qui n'était pas un fichier de données, et
+c'est celui qui a le plus servi aux autres : la reprise des tiers, exposée plus bas, s'est
+appuyée directement dessus.
 
-La seconde difficulté concernait les identifiants uniques dans le cadre des mises à jour, par
-exemple pour rectifier un montant de budget après sa création. Ces identifiants système
-n'étaient visibles nulle part dans l'interface, et l'architecture de l'API repose sur un
-principe de versionnement et non d'écrasement : lors de la modification d'un budget, le
-système ne met pas à jour la ligne existante, il clôture la version précédente et en crée une
-nouvelle avec un nouvel identifiant. Ne pouvant me fier à aucun identifiant statique, j'ai
-conçu une logique de requêtage dynamique en trois temps, que résume la Figure 1.4~: un appel
-GET pour récupérer toutes les versions de budget liées à une opération, un tri pour identifier
-l'identifiant de la version la plus récente, puis un appel POST sur cet identifiant.
-
-\begin{figure}[!htbp]
-\centering
-\includegraphics[width=1\textwidth]{fig_1_4_requetage_dynamique.png}
-\caption{Le requêtage dynamique imposé par le versionnement des budgets}
-\end{figure}
-
-Cette contrainte m'a appris quelque chose de plus général sur les interfaces de programmation :
-une API ne se contente pas d'exposer des données, elle impose un modèle de comportement. Le
-versionnement traduit ici une exigence d'auditabilité comptable parfaitement légitime, mais
-qui rend impossible toute écriture naïve. Comprendre l'intention derrière la contrainte est ce
-qui permet de la contourner proprement plutôt que de lutter contre elle.
+La seconde tient aux identifiants. Invisibles dans l'interface, ils changent à chaque mise à
+jour : l'API ne remplace pas un budget, elle clôture la version précédente et en crée une
+nouvelle. Ne pouvant me fier à aucun identifiant statique, j'ai conçu un requêtage dynamique
+en trois temps --- un appel GET pour lister les versions, un tri pour retenir la plus récente,
+un appel POST sur cet identifiant. J'en retire une leçon plus générale : une API ne se
+contente pas d'exposer des données, elle impose un modèle de comportement, et comprendre
+l'intention derrière la contrainte est ce qui permet de la contourner proprement.
 
 \hypertarget{le-duxe9ploiement-en-coquilles-vides-et-le-bilan-du-semestre}{%
 \subsection{Le déploiement en «~coquilles vides~» et le bilan du semestre}\label{le-duxe9ploiement-en-coquilles-vides-et-le-bilan-du-semestre}}
 
-Ces complexités, jointes aux délais imposés par la direction, nous ont confrontés à un
-arbitrage entre perfection technique et urgence opérationnelle. La contrainte majeure venait
-du besoin des utilisateurs de facturer dès le basculement : pour que ce processus fonctionne,
-et notamment le lien avec la Gestion Électronique des Documents (GED), il fallait que les
-opérations existent dans l'ERP, même sans leur historique.
+Les utilisateurs devaient facturer dès le basculement, notamment pour le lien avec la Gestion
+Électronique des Documents (GED). Nous avons donc adopté une stratégie de déploiement en
+«~coquilles vides~», qui dissocie le contenant --- la structure de l'opération --- du contenu,
+c'est-à-dire les données budgétaires détaillées, en injectant d'abord le code opération et le
+libellé.
 
-Nous avons donc adopté une stratégie de déploiement en «~coquilles vides~», qui dissocie le
-contenant --- la structure de l'opération --- du contenu, c'est-à-dire les données budgétaires
-détaillées. Le plan de migration a été réorienté pour créer massivement les fiches opérations
-et injecter en priorité ce qui est indispensable à la facturation, code opération et libellé,
-en laissant de côté les budgets passés et le détail des tranches.
-
-C'est la décision dont j'ai le plus appris en matière de conduite de projet. Elle suppose
-d'accepter qu'un système soit temporairement incomplet et de le documenter comme tel, plutôt
-que de retarder la mise en service jusqu'à la complétude. Le risque est réel : une donnée
-manquante que personne ne signale finit par être considérée comme absente pour de bon. Nous
-l'avons couvert en tenant la liste de ce qui restait à reprendre, ce qui a transformé une
-dette implicite en dette suivie. La stratégie a débloqué immédiatement la facturation et
-offert un délai précieux pour traiter la reprise au fil de l'eau.
-
-À la fin du premier semestre, nous n'étions qu'au début de ce chantier. La structure
-fondamentale des dossiers était modélisée et intégrée --- opérations et tranches de travaux, la
-création des tranches commerciales étant encore en cours --- mais l'intégration des données
-financières et comptables restait à accomplir, notamment la reprise détaillée des budgets et
-de l'historique des factures.
+C'est la décision dont j'ai le plus appris en conduite de projet. Elle suppose d'accepter
+qu'un système soit temporairement incomplet et de le documenter comme tel : une donnée
+manquante que personne ne signale finit par être considérée comme absente pour de bon. Tenir
+la liste de ce qui restait à reprendre a transformé une dette implicite en dette suivie.
 
 \begin{longtable}[]{@{}
   >{\raggedright\arraybackslash}p{(\columnwidth - 2\tabcolsep) * \real{0.4000}}
@@ -207,10 +135,9 @@ Budgets détaillés & Reportés, stratégie des «~coquilles vides~» \\
 Historique des factures & Non repris \\
 \end{longtable}
 
-Ce bilan appelle une remarque de méthode qui vaut au-delà de ce projet : sur un chantier de
-reprise, l'avancement ne se mesure pas au nombre d'enregistrements créés, mais à la part du
-modèle cible réellement couverte. Créer 283 opérations sans leurs budgets, ce n'est pas avoir
-fait la moitié du travail, c'est avoir rendu la seconde moitié possible.
+Sur un chantier de reprise, l'avancement ne se mesure pas au nombre d'enregistrements créés
+mais à la part du modèle cible réellement couverte : créer 283 opérations sans leurs budgets,
+ce n'est pas avoir fait la moitié du travail, c'est avoir rendu la seconde moitié possible.
 
 \hypertarget{la-reprise-des-tiers}{%
 \section{La reprise des tiers}\label{la-reprise-des-tiers}}
@@ -290,7 +217,7 @@ chaîne de traitement automatique, dans la lignée des maquettes d'injection que
 construites au premier semestre. Les données entrent d'un côté sous leur forme brute et
 ressortent de l'autre sous la forme exacte attendue par SPO, sans qu'aucune donnée soit
 recopiée à la main entre les deux. Cette architecture se décompose en trois étages, que
-présente la Figure 1.5.
+présente la Figure 1.3.
 
 \begin{enumerate}
 \def\labelenumi{\arabic{enumi}.}
@@ -314,7 +241,7 @@ présente la Figure 1.5.
 
 \begin{figure}[!htbp]
 \centering
-\includegraphics[width=1\textwidth]{fig_1_5_chaine_traitement.png}
+\includegraphics[width=0.65\textwidth]{fig_1_3_chaine_traitement.png}
 \caption{La chaîne de traitement à trois étages du fichier de travail}
 \end{figure}
 
@@ -451,7 +378,7 @@ détectés comme déjà existants et écartés. Rapporté aux 1~474 tiers unique
 sembler faible, mais chacun de ces 40 cas aurait produit un doublon durable dans le
 référentiel client de l'entreprise.
 
-La Figure 1.6 récapitule l'effet cumulé de ces deux premiers mécanismes. Des 1~602 lignes
+La Figure 1.4 récapitule l'effet cumulé de ces deux premiers mécanismes. Des 1~602 lignes
 du périmètre de départ, la déduplication interne en écarte 128 qui correspondent à des
 achats répétés, ramenant le total à 1~474 tiers uniques ; l'exclusion des tiers déjà présents
 dans SPO en retire 40 de plus, pour un total de \textbf{1~434 tiers à créer}. Chaque étage de
@@ -460,7 +387,7 @@ vérifiable et reproductible.
 
 \begin{figure}[!htbp]
 \centering
-\includegraphics[width=0.92\textwidth]{fig_1_6_entonnoir_volumetrie.png}
+\includegraphics[width=0.65\textwidth]{fig_1_4_entonnoir_volumetrie.png}
 \caption{De 1~602 lignes de départ à 1~434 tiers créés : l'effet des deux filtres successifs}
 \end{figure}
 
@@ -489,19 +416,11 @@ saisie manuelle, produit les incohérences les plus difficiles à détecter : un
 rattachée au mauvais tiers parce qu'une ligne a été insérée quelque part sans que le reste
 suive.
 
-La Figure 1.7 donne la volumétrie effectivement produite par chacune des six feuilles. On
-y lit directement le modèle de données décrit plus haut : 1~434 lignes pour la liste
-maîtresse des tiers et autant pour l'attribution du rôle «~Client~», mais 1~871 lignes de
-représentants, puisque chaque couple en compte deux, et seulement 553 adresses, 538
-téléphones et 469 courriels, ces trois derniers fichiers ne portant que les personnes
-physiques et morales. Ces écarts de volumétrie d'un fichier à l'autre ne sont donc pas des
-approximations : ils sont la traduction directe du modèle de données décrit en 1.3.2.
-
-\begin{figure}[!htbp]
-\centering
-\includegraphics[width=0.95\textwidth]{fig_1_7_volumetrie_fichiers_import.png}
-\caption{Les six fichiers d'import produits par la feuille pivot}
-\end{figure}
+La volumétrie produite par les six feuilles traduit directement le modèle de données décrit
+en 1.3.2, et le tableau de la section 1.3.6 la récapitule : 1~434 lignes pour la liste
+maîtresse des tiers et autant pour le rôle «~Client~», mais 1~871 représentants puisque chaque
+couple en compte deux, et seulement 553 adresses, 538 téléphones et 469 courriels, ces trois
+fichiers ne portant que les personnes physiques et morales.
 
 \begin{quote}
 \textbf{À insérer --- figure.} Capture d'écran de la feuille \texttt{BuilderTiers}, montrant côte à
@@ -660,14 +579,14 @@ Coordonnées des couples & 872 & Requêtes PATCH \\
 \end{longtable}
 
 Les 1~434 tiers créés se répartissent en \textbf{881 couples}, \textbf{462 personnes physiques} et
-\textbf{91 personnes morales}, répartition que représente la Figure 1.8. Cette structure n'est
+\textbf{91 personnes morales}, répartition que représente la Figure 1.5. Cette structure n'est
 pas un simple constat de volumétrie : elle justifie a posteriori l'attention portée au
 traitement des couples, qui représentent plus de six tiers sur dix et concentrent à eux
 seuls la contrainte de format qui a imposé le recours à l'API.
 
 \begin{figure}[!htbp]
 \centering
-\includegraphics[width=0.92\textwidth]{fig_1_8_repartition_natures.png}
+\includegraphics[width=0.65\textwidth]{fig_1_5_repartition_natures.png}
 \caption{Répartition des 1~434 tiers créés selon leur nature}
 \end{figure}
 
@@ -704,39 +623,26 @@ recommande de travailler en calcul manuel puis de forcer un recalcul complet ava
 export.
 \#\# Ce que ces deux reprises ont en commun
 
-Les deux chantiers ont été conduits selon la même méthode, que je n'avais pas choisie a
-priori : elle s'est imposée parce que le modèle cible était inconnu. On ne peut pas spécifier
-complètement une reprise dont on ignore les règles d'acceptation. On avance donc par paliers
-de volume croissant, en traitant chaque rejet comme une information sur le modèle cible plutôt
-que comme une erreur à corriger --- d'où la progression 3, puis 12 opérations avant la masse, et
-les lots de 200 lignes homogènes en nature.
+Les deux chantiers ont suivi la même méthode, que je n'avais pas choisie a priori : elle s'est
+imposée parce que le modèle cible était inconnu. On ne peut pas spécifier complètement une
+reprise dont on ignore les règles d'acceptation~; on avance donc par paliers de volume
+croissant, en traitant chaque rejet comme une information sur le modèle cible plutôt que comme
+une erreur à corriger. Sa propriété la plus utile est que \textbf{le coût d'une erreur y est
+proportionnel au palier où on la découvre}~; sa limite est qu'elle démarre lentement et produit
+d'abord une documentation interne plutôt que des données dans le système.
 
-Cette méthode a une propriété que j'ai appris à apprécier : \textbf{le coût d'une erreur y est
-proportionnel au palier où on la découvre}. Une règle non comprise coûte quelques minutes sur
-trois opérations, une demi-journée sur douze, et une reprise complète du fichier sur la
-totalité du périmètre. Elle a aussi une limite : elle est lente à démarrer et produit peu de
-livrable visible pendant les premières semaines, le résultat étant alors une documentation
-interne et non des données dans le système.
+Les difficultés techniques se ramènent presque toutes à une même situation : un système
+imposait une règle qui n'était écrite nulle part. L'ordre d'injection en est le cas le plus
+net, le versionnement des budgets le second, le refus des caractères accentués et
+l'impossibilité de porter les coordonnées des couples en CSV relèvent de la même famille.
 
-Les difficultés techniques rencontrées se ramènent presque toutes à une même situation : un
-système imposait une règle qui n'était écrite nulle part. L'ordre d'injection des objets en
-est le cas le plus net, reconstitué par l'analyse des codes d'erreur~; le versionnement des
-budgets en est le second, qui a imposé une logique de requêtage dynamique. Le refus des
-caractères accentués par le format d'import et l'impossibilité de porter les coordonnées des
-couples en CSV relèvent de la même famille, la solution ayant consisté dans le second cas à
-changer de porte d'entrée vers le système.
+Le régime de preuve de ces deux missions est celui de la \textbf{réconciliation} : la question n'est
+pas si un modèle est performant, mais si ce qui est arrivé correspond à ce qui est parti. Elle
+a pris la forme de la validation par paliers sur la migration et du panneau de compteurs sur
+la reprise des tiers. Son angle mort mérite d'être nommé : elle prouve qu'une donnée est
+arrivée, pas qu'elle est juste. Si une clé d'unicité était mal choisie, l'erreur passerait le
+contrôle sans être vue, puisque les compteurs tomberaient juste.
 
-Le régime de preuve de ces deux missions est celui de la \textbf{réconciliation} : la question posée
-n'est pas si un modèle est performant, mais si ce qui est arrivé correspond à ce qui est
-parti. Elle a pris la forme de la validation par paliers sur la migration, et d'un panneau de
-compteurs à vérifier avant tout export sur la reprise des tiers. Ce régime a un angle mort
-qu'il faut nommer : il prouve qu'une donnée est arrivée, pas qu'elle est juste. Si une clé
-d'unicité était mal choisie, l'erreur passerait le contrôle sans être vue, puisque les
-compteurs tomberaient juste.
-
-Le référentiel commercial du groupe est ainsi reconstitué selon des règles écrites et
-rejouables, plutôt que par une saisie dont la logique aurait été introuvable six mois plus
-tard. Le chantier n'est pas clos pour autant : la reprise des historiques budgétaires reste
-devant nous, et le fichier devra être rejoué avant la bascule définitive. Pendant que ce socle
-se reconstruisait, les services ont continué d'avoir besoin de leurs indicateurs, et c'est
-l'objet du chapitre suivant.
+Le référentiel commercial est ainsi reconstitué selon des règles écrites et rejouables. Le
+chantier n'est pas clos pour autant : la reprise des historiques budgétaires reste devant
+nous, et le fichier devra être rejoué avant la bascule définitive.
