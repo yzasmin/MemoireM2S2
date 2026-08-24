@@ -205,14 +205,73 @@ anciens plutôt que de s'y ajouter.
 - `plan_slides.md` et le `.pptx` régénérés et re-validés (`validate.py`
   PASS, contenu vérifié via `markitdown`, aucun texte de substitution).
 
+## Étape 10 — Réécriture du registre : voix naturelle d'étudiante M2
+
+- Demande explicite : que le texte sonne comme écrit naturellement par
+  une étudiante en M2 MIASHS, pas comme un texte poli par une IA.
+- Repérage des tics d'écriture IA dans la version précédente : contrastes
+  répétés en « plutôt que » (« documentée plutôt que masquée », « je le
+  dis clairement plutôt que de le cacher »…), « Je l'assume » répété,
+  chutes théâtrales en tiret après deux-points, ouvertures figées
+  (« Précision importante », « Résultat : »), phrases-punchline très
+  ciselées façon consultant.
+- Réécriture intégrale du discours dans un registre plus oral et plus
+  personnel : connecteurs naturels (« du coup », « en fait », « pour le
+  coup »), réflexions à la première personne moins packagées (« je ne
+  l'avais pas vue venir », « ça m'a bien intéressée »), suppression des
+  effets de manche répétés, en gardant intactes toutes les consignes de
+  fond (phrases courtes, jargon expliqué à la première occurrence,
+  transitions explicites, `[pause]`, tous les chiffres inchangés).
+- Aucun chiffre modifié — uniquement la formulation. Pas de nouvel audit
+  chiffré nécessaire pour cette étape (travail de style, pas de contenu).
+
+## Étape 11 — Correction de durée : 25 minutes, pas 15
+
+- Le facteur limitant initial (~15 minutes) était une erreur : la
+  consigne réelle est **25 minutes**. Recalibrage complet du discours.
+- 14 slides → **17 slides** : le chapitre 1, condensé à 2 slides dans la
+  version 15 minutes, est redéployé sur 5 slides pour retrouver le
+  niveau de détail d'une vraie soutenance de 25 minutes (contexte
+  Angelotti seul, migration des opérations seule, reprise des tiers en
+  deux temps problème/solution) + une slide neuve de synthèse « Ce que
+  ces deux reprises ont en commun », qui introduit le régime de preuve de
+  la réconciliation et prépare la réflexion transversale de la fin.
+- Contenu Copilote Financier également enrichi avec du détail déjà
+  vérifié à l'étape 2 mais laissé de côté faute de place : les quatre
+  noms des familles de la typologie de l'axe A et l'exemple nommé du Parc
+  des Cyclades (voisines à cosinus ≥ 0,945, marges +7,9 % à +11,3 %),
+  l'exposition sud et l'effet millésime de l'axe C, l'exemple nommé de
+  l'opération Arpeggio pour l'optimisation de prix, la taille du corpus
+  TF-IDF (1 346 documents, 535 termes) de l'axe transverse.
+- Réflexion transversale restaurée à ses **trois** régimes de preuve
+  (réconciliation, recette par l'usage — maintien des tableaux de bord et
+  déploiement du SSO —, validation statistique), plus le point
+  « documenter est un acte technique » — tous deux absents des versions
+  15 minutes faute de place, tous deux vérifiés dans le mémoire (chapitre
+  1, section 1.5 et chapitre 3).
+- Recompte : 3 220 mots utiles → **23,0 à 24,8 minutes** selon le débit
+  (130-140 mots/minute), au plus près des 25 minutes demandées ; ratio
+  alternance/copilote **32,5 % / 67,5 %**, proche de la cible 30/70.
+- `plan_slides.md` réécrit intégralement pour les 17 slides. `.pptx`
+  régénéré avec 3 nouvelles slides (contexte seul, migration seule,
+  synthèse des deux reprises) — validation structurelle PASS, contenu
+  vérifié via `markitdown`, aucun texte de substitution.
+- Comme à l'étape 9, cette réécriture n'a pas été repassée par les deux
+  sous-agents d'audit complets : les chiffres ajoutés proviennent tous de
+  vérifications déjà faites à l'étape 2 (ré-confirmés ici un par un avant
+  intégration), et les règles de fluidité/jargon suivies sont celles déjà
+  validées par l'audit contexte neuf de la phase 1. Une relecture
+  complète par les deux sous-agents reste possible sur demande.
+
 ## État à la fin de la phase 1
 
 - `discours_soutenance.md`, `plan_slides.md` et
   `soutenance_copilote_financier.pptx` sont à jour avec toutes les
-  corrections des deux audits **et** les demandes de rééquilibrage/
-  d'approfondissement appliquées.
-- État final : 14 slides, 2 240 mots utiles → 16,0 à 17,2 minutes selon
-  le débit (130-140 mots/minute) ; répartition ≈ 25 % missions
-  d'alternance / ≈ 75 % Copilote Financier.
+  corrections des deux audits, les demandes de rééquilibrage 30/70,
+  d'approfondissement (ACP, validation croisée, exploration des données),
+  de réécriture du registre, et de recalibrage à 25 minutes.
+- État final : **17 slides, 3 220 mots utiles → 23,0 à 24,8 minutes**
+  selon le débit (130-140 mots/minute) ; répartition ≈ 32,5 % missions
+  d'alternance / ≈ 67,5 % Copilote Financier.
 - **En attente de validation explicite avant de passer à la phase 2**
   (questions du jury), conformément à la consigne.

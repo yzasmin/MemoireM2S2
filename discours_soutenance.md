@@ -1,8 +1,9 @@
 # Discours de soutenance — texte mot à mot
 
-Calibré pour 15 minutes à l'oral (~130-140 mots/minute). Les indications
-`[pause]` marquent un silence court, volontaire. Une entrée = une slide de
-`plan_slides.md` : le découpage est identique dans les deux fichiers.
+Calibré pour **25 minutes** à l'oral (~130-140 mots/minute). Les
+indications `[pause]` marquent un silence court, volontaire. Une entrée =
+une slide de `plan_slides.md` : le découpage est identique dans les deux
+fichiers.
 
 **Répartition volontaire : environ 30 % du temps sur les deux reprises de
 données (mes missions d'alternance), 70 % sur le Copilote Financier — le
@@ -15,217 +16,310 @@ projet de data science proprement dit.**
 Bonjour à toutes et à tous. Je m'appelle Yasmina Saoud, je suis en deuxième
 année de Master MIASHS, en alternance au sein du groupe Angelotti.
 
-Mon année a été dominée par deux chantiers : une reprise de données vers
-un nouvel ERP, puis un projet de data science, le Copilote Financier.
-Je vais présenter le premier rapidement, pour consacrer l'essentiel de mon
-temps au second — c'est là qu'est la vraie matière statistique. [pause]
+Mon année a été marquée par deux gros chantiers : une reprise de données
+vers un nouvel ERP, puis un projet de data science, le Copilote Financier.
+Je vais passer assez vite sur le premier pour consacrer l'essentiel de mon
+temps au second, parce que c'est vraiment là qu'il y a de la statistique.
+[pause]
 
-Commençons par le contexte.
+Je commence par le contexte.
 
-## SLIDE 2 — Contexte Angelotti et migration des opérations
+## SLIDE 2 — Contexte Angelotti
 
 Le groupe Angelotti est un promoteur-aménageur immobilier, filiale de
-Nexity. Deux métiers : la promotion, qui construit et vend des logements
-neufs, et l'aménagement, qui viabilise des terrains à bâtir. Chaque
-opération est portée par une société dédiée, avec un budget qui dérive au
-fil du chantier et des ventes.
+Nexity. Il a deux métiers assez différents : la promotion, qui construit
+et vend des logements neufs, et l'aménagement, qui viabilise des terrains
+à bâtir pour les revendre en lots. [pause]
 
-Cette année, un seul événement a structuré mon premier semestre : le
-remplacement de l'ERP historique, Grimmo, par un nouveau système, SPO.
-[pause] Un ERP, c'est le logiciel qui centralise la gestion d'une
-entreprise. Changer d'ERP, ce n'est pas changer d'outil : c'est changer de
-modèle de données. 283 opérations devaient y être recréées, à une échelle
-qui excluait la saisie manuelle. J'ai automatisé l'essentiel via des
-interfaces de programmation, en découvrant au passage deux règles non
-documentées, en analysant les erreurs renvoyées par le système — un ordre
-d'injection strict, et des identifiants qui changent à chaque mise à jour.
+Chaque opération immobilière est portée par une société dédiée. Un budget
+est posé au moment où l'opération démarre — foncier, construction,
+honoraires, commercialisation — en face des recettes attendues. Et
+ensuite, la vie de l'opération le fait dériver petit à petit : des appels
+d'offres plus chers que prévu, un rythme de vente plus lent qu'anticipé,
+des désistements d'acquéreurs, des remises commerciales données au cas
+par cas. Aujourd'hui, cette dérive est suivie opération par opération,
+dans des tableurs Excel, sans vision statistique transverse sur
+l'ensemble du portefeuille. C'est ce constat qui a motivé les deux
+projets que je vais vous présenter.
+
+## SLIDE 3 — La migration des opérations
+
+Cette année, il y a eu un événement qui a occupé tout mon premier
+semestre : le remplacement de l'ERP historique, Grimmo, par un nouveau
+système, SPO. [pause] Un ERP, c'est le logiciel qui centralise la gestion
+d'une entreprise. Et changer d'ERP, ce n'est pas juste changer d'outil,
+c'est changer complètement de modèle de données.
+
+Il fallait recréer 283 opérations dans SPO, à une échelle où la saisie
+manuelle n'était pas possible. On a choisi une stratégie hybride :
+injection automatisée des gros volumes via les interfaces de
+programmation de l'éditeur, et traitement manuel des cas trop
+particuliers pour rentrer dans un gabarit. [pause]
+
+En analysant les erreurs renvoyées par le système, j'ai découvert deux
+règles qui n'étaient documentées nulle part. La première, c'est un ordre
+d'injection strict : il faut créer l'opération, puis les tranches de
+travaux, puis les tranches commerciales, puis le budget, sinon le système
+ne trouve pas l'objet parent. La seconde, c'est que les identifiants ne
+sont jamais stables, ils changent à chaque mise à jour. J'ai dû construire
+un système qui va toujours chercher la version la plus récente avant
+d'agir.
+
 Le processus a été sécurisé par une validation par paliers : trois
-opérations pilotes, puis un lot de douze, avant la migration de masse,
-pour que les erreurs restent lisibles. Pour ne pas interrompre la
-facturation, nous avons déployé la structure d'abord, le détail
-budgétaire ensuite. À la fin du semestre, les 283 opérations existaient
-dans SPO.
+opérations pilotes, puis un lot de douze, avant la migration de masse.
+Et comme les utilisateurs devaient pouvoir facturer dès le basculement,
+on a déployé la structure d'abord, le détail budgétaire ensuite — la
+stratégie des « coquilles vides ». À la fin du semestre, les 283
+opérations existaient dans SPO.
 
-## SLIDE 3 — La reprise des tiers
+## SLIDE 4 — La reprise des tiers : le problème
 
-Au second semestre, j'ai reconstitué le référentiel client — ce que SPO
-appelle un « tiers ». Matière première : 1 602 lignes de coordonnées
-d'acquéreurs, issues du CRM, le logiciel qui gère la relation commerciale.
-Le piège : une ligne décrit un achat, pas un
-client, donc un client fidèle apparaît plusieurs fois. Et SPO n'était pas
-vide : environ 13 000 tiers y existaient déjà. [pause]
+Au second semestre, je me suis occupée de reconstituer le référentiel
+client — ce que SPO appelle un « tiers ». Ma matière première, c'était
+deux extractions du CRM, le logiciel qui gère la relation commerciale :
+une de 1 557 ventes, et une de 1 602 lignes de coordonnées d'acquéreurs.
+[pause]
 
-L'enjeu tenait en une phrase : créer chaque client une fois, sans le
-vérifier à la main. J'ai construit un fichier piloté par formules, dont le
-cœur est trois clés d'unicité différentes selon le type de client — un
-couple, une personne seule, ou une société — parce qu'on ne prouve pas
-l'identité de la même façon dans les trois cas. Chaque clé calcule un
-rang plutôt que de supprimer une ligne : rien n'est effacé, tout reste
-vérifiable, et je peux toujours dire pourquoi une ligne n'a pas été
-importée. [pause]
+Le problème, c'est qu'une ligne de cette extraction ne décrit pas un
+client, elle décrit une vente. Un acquéreur qui a acheté trois lots
+apparaît trois fois, et rien dans le fichier ne le signale. Et en plus,
+SPO n'était pas vide : il y avait déjà environ 13 000 tiers dedans, créés
+par saisie ou par d'autres canaux.
 
-Résultat : sur 1 602 lignes, 128 étaient des doublons internes, ce qui
-laisse 1 474 lignes uniques ; 40 autres existaient déjà dans SPO. 1 434
-tiers ont finalement été créés — 881 couples, 462 personnes seules, 91
-sociétés — sans aucun doublon détecté. Une contrainte technique m'a
-obligée à sortir du simple fichier d'import : les coordonnées de contact
-des couples ne peuvent pas passer par un fichier plat dans SPO. J'ai donc
-construit 872 requêtes automatiques vers l'interface de programmation de
-SPO, organisées en cinq lots, et les 872 sont passées sans erreur.
+L'enjeu tenait en une phrase : créer chaque client une fois, et une
+seule, sans avoir à vérifier ça ligne par ligne à la main sur un volume
+pareil.
 
-## SLIDE 4 — Vers le Copilote Financier
+## SLIDE 5 — La reprise des tiers : la solution et les résultats
 
-Ces deux reprises répondent à une question : la donnée est-elle bien
-arrivée ? Le socle reconstitué permet de se poser une question différente :
-que peut-on en tirer pour la décision ? [pause] C'est le second projet de
-mon année, le Copilote Financier, construit sur les données réelles de
-gestion du groupe pour sa direction financière.
+J'ai construit un fichier de travail entièrement piloté par formules. Le
+cœur du dispositif, ce sont trois clés d'unicité différentes selon le
+type de client — un couple, une personne seule, ou une société — parce
+qu'on ne prouve pas qu'il s'agit de la même personne de la même manière
+dans les trois cas. Chaque clé calcule un rang plutôt que de supprimer
+une ligne : rien n'est effacé, tout reste vérifiable. [pause]
 
-## SLIDE 5 — Le Copilote Financier : contexte, données et méthode
+Sur les 1 602 lignes de départ, 128 étaient des doublons internes, ce qui
+laisse 1 474 lignes uniques. 40 autres existaient déjà dans SPO. Au
+final, 1 434 tiers ont été créés — 881 couples, 462 personnes seules,
+91 sociétés — sans aucun doublon détecté par ces trois clés.
+
+Une contrainte technique m'a aussi obligée à sortir du simple fichier
+d'import : les coordonnées de contact des couples ne passent pas par un
+fichier plat dans SPO. J'ai donc construit 872 requêtes automatiques vers
+l'interface de programmation, organisées en cinq lots, et les 872 sont
+passées sans erreur. Il restait neuf cas trop particuliers pour la chaîne
+automatique — des adresses à l'étranger, des natures mal renseignées,
+deux doublons avec des adresses différentes — que j'ai traités à la
+main.
+
+## SLIDE 6 — Ce que ces deux reprises ont en commun
+
+Ces deux chantiers ont suivi la même méthode, sans que je l'aie vraiment
+choisie au départ : on ne peut pas spécifier complètement une reprise
+dont on ne connaît pas encore les règles d'acceptation. Du coup, on
+avance par paliers, et chaque rejet devient une information sur le
+système cible plutôt qu'une simple erreur à corriger. [pause]
+
+Et surtout, ces deux missions répondent à la même question : est-ce que
+la donnée est bien arrivée ? C'est ce que j'appelle, dans mon mémoire, le
+régime de preuve de la réconciliation — j'y reviendrai à la fin. Il a un
+angle mort qu'il faut assumer : ça prouve qu'une donnée est arrivée, pas
+qu'elle est juste. Si une clé d'unicité avait été mal choisie dès le
+départ, l'erreur serait passée sans être vue.
+
+## SLIDE 7 — Vers le Copilote Financier
+
+Une fois le socle de données reconstitué, on peut se poser une question
+différente : qu'est-ce qu'on peut en tirer pour la décision ? [pause]
+C'est le second projet de mon année, le Copilote Financier, construit sur
+les données réelles de gestion du groupe pour sa direction financière.
+
+## SLIDE 8 — Le Copilote Financier : contexte, données et méthode
 
 La direction financière suivait ses dérives opération par opération, sur
-tableurs, sans vision d'ensemble. Trois questions structurent le projet :
-quelles opérations dérapent ? À quel rythme le stock se vend-il ? À quel
-prix vendre chaque lot ? [pause]
+des tableurs, sans vision d'ensemble. Trois questions reviennent tout le
+temps en comité d'engagement : quelles opérations dérapent ? à quel
+rythme le stock se vend-il ? à quel prix vendre chaque lot ? [pause]
 
-J'ai construit un axe pour chacune, sur 267 opérations réelles et sept
-programmes d'analyse exécutés et vérifiés un par un. La méthode change
-volontairement d'un axe à l'autre : typologie non supervisée, régression
-et classification, séries temporelles, optimisation sous contrainte,
-fouille de texte et analyse de réseau. [pause] Sur un échantillon aussi
-restreint, une règle traverse tout le projet : je ne retiens un résultat
-que s'il tient en validation croisée — c'est-à-dire testé sur des données
-qu'il n'a pas vues à l'entraînement — jamais sur sa seule performance
-d'ajustement. Je vous donne maintenant les résultats, avec la même
-honnêteté que dans le mémoire : ils ne se valent pas tous.
+Le point de départ, ce sont quatre exports du système de gestion — une
+grille de prix avec les désistements, un export budgétaire poste par
+poste, un export de contrôle, un détail des désistements — plus trois
+sources externes que je suis allée chercher moi-même : le taux des
+crédits à l'habitat publié par la Banque centrale européenne, la
+confiance des ménages publiée par Eurostat, et un référentiel des
+communes du portefeuille.
 
-## SLIDE 6 — Exploration des données : deux leçons avant de modéliser
+J'ai construit un axe pour chacune des trois questions, sur 267
+opérations réelles, avec sept programmes d'analyse que j'ai exécutés et
+vérifiés un par un. La méthode change volontairement d'un axe à l'autre :
+typologie non supervisée, régression et classification, séries
+temporelles, optimisation sous contrainte, fouille de texte et analyse de
+réseau. [pause] Et sur un échantillon aussi petit, j'ai gardé une règle
+tout le long : je ne retiens un résultat que s'il tient en validation
+croisée, c'est-à-dire testé sur des données qu'il n'a pas vues à
+l'entraînement, jamais sur sa seule performance d'ajustement.
 
-Avant de modéliser, l'exploration des données a produit deux résultats qui
-ont orienté toute la suite.
+## SLIDE 9 — Exploration des données : deux leçons avant de modéliser
 
-Le prix au mètre carré des appartements est très asymétrique : quelques
-lots de standing tirent la distribution vers le haut. [pause] Après
-passage au logarithme, cette asymétrie devient quasi nulle — c'est ce
-constat qui a orienté l'axe C à modéliser le logarithme du prix plutôt que
-le prix brut.
+Avant de me lancer dans la modélisation, l'exploration des données m'a
+appris deux choses qui ont orienté toute la suite.
 
-La deuxième leçon, je ne l'ai pas vue venir. La corrélation brute entre
-les réservations mensuelles et le taux des crédits était presque nulle,
-alors que je savais ce lien réel sur ce marché. En creusant, la cause
-était ailleurs : le nombre d'opérations commercialisées avait fortement
-augmenté sur la période, ce qui maquillait la relation. Rapportée au
-nombre d'opérations actives, la corrélation redevient nette et négative.
-Cette leçon — toujours vérifier la sortie réelle plutôt que la conclusion
-attendue — a directement structuré la démarche de l'axe B.
+D'abord, le prix au mètre carré des appartements est très asymétrique :
+quelques lots de standing tirent la distribution vers le haut. [pause]
+Une fois passé au logarithme, cette asymétrie devient presque nulle.
+C'est ce constat qui m'a fait modéliser le logarithme du prix, et pas le
+prix brut, dans l'axe C.
 
-## SLIDE 7 — Axe A : le risque de marge
+La deuxième leçon, je ne l'avais pas vue venir. La corrélation brute
+entre les réservations mensuelles et le taux des crédits était presque
+nulle, alors que je savais que ce lien existait vraiment sur ce marché.
+En creusant, j'ai compris pourquoi : le nombre d'opérations
+commercialisées avait beaucoup augmenté sur la période, et ça brouillait
+la relation. Une fois rapportée au nombre d'opérations actives, la
+corrélation redevient nette et négative. J'en ai tiré une leçon simple :
+toujours vérifier ce que dit vraiment la sortie, pas ce qu'on s'attend à
+y trouver. Ça a directement guidé ma démarche pour l'axe B.
 
-Premier axe. Sur 123 opérations suffisamment avancées, 28 % dépassent déjà
-leur budget de plus de 2 %, un seuil que j'ai fixé comme dérive
+## SLIDE 10 — Axe A : le risque de marge
+
+Premier axe. Sur 123 opérations suffisamment avancées, 28 % dépassent
+déjà leur budget de plus de 2 %, un seuil que j'ai fixé comme dérive
 matérielle.
 
-Une régression directe de l'ampleur de la dérive n'explique que 8 % de la
-variance observée — c'est-à-dire des écarts d'une opération à l'autre.
-[pause] J'ai donc basculé en classification : prédire une classe, « à
-risque » ou non. J'ai comparé six méthodes en validation croisée sur la
-métrique F1, qui équilibre détection des cas à risque et fausses alertes.
-Les résultats se tiennent en un mouchoir de poche, entre 0,26 et 0,34,
-sauf un cas instructif : un réseau de neurones atteint un F1 de 0,91 sur
-les données d'entraînement, mais retombe à 0,26 en validation — la
-signature exacte du sur-apprentissage sur un petit échantillon. J'ai
-retenu une forêt aléatoire, F1 ≈ 0,30 contre 0 pour une référence naïve.
+J'ai d'abord essayé une régression directe sur l'ampleur de la dérive :
+elle n'explique que 8 % de la variance observée, c'est-à-dire des écarts
+d'une opération à l'autre. [pause] Le résultat n'était pas satisfaisant,
+donc je suis passée en classification : prédire une classe, « à risque »
+ou non. J'ai comparé six méthodes en validation croisée sur la métrique
+F1, qui équilibre la détection des cas à risque et les fausses alertes.
+Les résultats se tiennent dans un mouchoir de poche, entre 0,26 et 0,34,
+sauf un cas qui m'a bien intéressée : un réseau de neurones atteint un F1
+de 0,91 sur les données d'entraînement, mais retombe à 0,26 en
+validation. C'est exactement la signature du sur-apprentissage sur un
+petit échantillon. J'ai finalement gardé une forêt aléatoire, F1 ≈ 0,30
+contre 0 pour une référence naïve.
 
-En complément, une régression Ridge rend les facteurs de dérive lisibles :
-les postes techniques pèsent, une marge budgétée confortable protège. Et
-une analyse en composantes principales — une méthode qui résume la
-structure des coûts en quelques axes — montre que deux axes en résument
-61 %, résultat vérifié par une seconde méthode de calcul indépendante.
-Elle fonde une typologie de quatre familles d'opérations, qui permet de
-comparer chaque opération à ses « voisines » les plus proches. Je
-l'assume : ce n'est pas un oracle, c'est un signal réel mais faible.
+En complément, une régression Ridge rend les facteurs de dérive
+lisibles : les postes techniques pèsent, une marge budgétée confortable
+protège. [pause] J'ai aussi construit une analyse en composantes
+principales, une méthode qui résume la structure des coûts en quelques
+axes : deux axes en résument 61 %, et j'ai vérifié ce résultat par une
+seconde méthode de calcul indépendante. Ça m'a permis de bâtir une
+typologie de quatre familles d'opérations — le résidentiel classique,
+l'aménagement foncier, la promotion sur foncier allégé, et l'aménagement
+lourd en VRD — qui sert à comparer chaque opération à ses « voisines »
+les plus proches en structure de coûts. Sur une opération du portefeuille,
+Le Parc des Cyclades, dont la marge budgétée était de 6,5 %, ses cinq
+voisines les plus proches affichent des marges entre 7,9 % et 11,3 % —
+un référentiel concret que je n'aurais pas eu sans cette typologie. Ce
+n'est pas un oracle, mais un signal réel, même s'il reste faible.
 
-## SLIDE 8 — Axe B : la vitesse d'écoulement
+## SLIDE 11 — Axe B : la vitesse d'écoulement
 
-Deuxième axe, la vitesse d'écoulement — c'est l'axe le plus solide de mon
-travail. J'ai construit un panel de plus
-de 3 200 observations, une ligne par opération et par mois. J'ai utilisé
-un modèle à effets aléatoires. Il sépare ce qui revient à chaque programme
-de ce qui revient à la conjoncture économique.
+Deuxième axe, la vitesse d'écoulement. C'est celui dont je suis la plus
+fière. J'ai construit un panel de plus de 3 200 observations, une ligne
+par opération et par mois, et j'ai utilisé un modèle à effets aléatoires.
+Il sépare ce qui revient à chaque programme de ce qui revient à la
+conjoncture économique.
 
-Résultat : deux tiers de la variance du rythme de vente tiennent au
-programme lui-même. Un tiers tient à la conjoncture. [pause] Et l'effet du
-taux des crédits immobiliers est net : chaque point de taux en plus fait
-baisser les réservations mensuelles d'environ 19 %, un résultat très
-significatif statistiquement.
+Ça donne deux choses : les deux tiers de la variance du rythme de vente
+tiennent au programme lui-même, un tiers tient à la conjoncture. [pause]
+Et l'effet du taux des crédits immobiliers est net : chaque point de
+taux en plus fait baisser les réservations mensuelles d'environ 19 %, un
+résultat très significatif statistiquement.
 
-J'ai aussi testé cet effet sur la série agrégée du groupe dans le temps,
-avec un modèle de série temporelle plus exigeant. Là, l'effet du taux
-devient indiscernable de zéro. Cent quatorze mois ne suffisent pas à
-l'isoler sur une série globale. C'est une bonne nouvelle méthodologique :
-cela écarte le risque que mon premier résultat soit une corrélation
-fallacieuse — un lien qui semblerait réel sans en être un. J'ai donc
-combiné les deux modèles : la trajectoire vient de la série temporelle,
-l'ampleur de l'effet du taux vient du panel. Sous ce scénario, une
-détente des taux à 2,5 % en 2026 redonnerait 6 % de rythme de vente ; une
-remontée à 3,5 % en retirerait 3 %.
+J'ai voulu vérifier cet effet autrement, en le testant sur la série
+agrégée du groupe dans le temps, avec un modèle de série temporelle plus
+exigeant. Et là, l'effet du taux devient indiscernable de zéro. Cent
+quatorze mois, ce n'est pas assez pour l'isoler sur une seule série
+globale. Ce n'est pas un échec, c'est plutôt rassurant : ça écarte le
+risque que mon premier résultat vienne d'une corrélation fallacieuse, un
+lien qui semblerait réel sans en être un. [pause] J'ai donc combiné les
+deux modèles : la trajectoire vient de la série temporelle, et l'ampleur
+de l'effet du taux vient du panel. Avec ça, une détente des taux à 2,5 %
+en 2026 redonnerait 6 % de rythme de vente, et une remontée à 3,5 % en
+retirerait 3 %.
 
-À l'échelle d'un programme, une courbe en S ajustée sur les réservations
-cumulées bat un ajustement linéaire sur 25 des 28 opérations terminées :
-délai médian de 20 mois pour vendre 90 % du potentiel, un repère utile à
-la trésorerie.
+À l'échelle d'un programme, j'ai aussi ajusté une courbe en S sur les
+réservations cumulées. Elle bat un simple ajustement linéaire sur 25 des
+28 opérations terminées, avec un délai médian de 20 mois pour vendre 90 %
+du potentiel — un repère utile pour la trésorerie.
 
-## SLIDE 9 — Axe C : l'optimisation des prix
+## SLIDE 12 — Axe C : l'optimisation des prix
 
 Troisième axe, les prix. J'ai construit un modèle dit hédonique : le prix
 d'un logement comme somme de caractéristiques valorisées séparément. Sur
 plus de 5 000 appartements vendus depuis 2016, il explique 88,6 % de la
-variance du prix, avec une erreur d'environ 11 %. Les primes retrouvées
-sont cohérentes : un étage de plus vaut environ 6 %, le logement social,
-aux prix réglementés, coûte 63 % de moins. [pause]
+variance du prix, avec une erreur d'environ 11 %.
 
-Appliqué au stock, ce modèle signale 24 lots sur 127 hors marché.
+Les primes retrouvées sont plutôt cohérentes : un étage de plus vaut
+environ 6 %, une exposition sud vaut 2,6 % de plus qu'une exposition
+est-ouest, et le logement social, dont les prix sont réglementés, coûte
+63 % de moins. [pause] Il y a aussi un effet millésime intéressant : les
+prix ont augmenté d'environ 19 % entre 2016 et 2023, puis encore un peu
+jusqu'en 2026, avec un plateau après 2022. Les prix du neuf n'ont pas
+baissé avec la remontée des taux, c'est plutôt le volume de ventes qui
+s'est ajusté, comme on l'a vu dans l'axe B.
 
-La partie la plus intéressante, c'est la recommandation de remise. J'ai dû
-fixer la sensibilité de la demande au prix, ce qu'on appelle l'élasticité,
-car mon estimation interne n'était pas assez précise pour être fiable. En
-résolvant le problème d'optimisation par la méthode du multiplicateur de
-Lagrange — une technique qui trouve le meilleur compromis sous contrainte
-— puis en vérifiant la solution par un second algorithme indépendant, les
-deux convergent à moins d'un centième près. Le résultat est
-contre-intuitif : la remise optimale est un montant identique en euros
-sur tous les lots, donc un pourcentage plus fort sur les petits lots — à
-l'inverse de la pratique actuelle au cas par cas.
+Appliqué au stock, ce modèle signale 24 lots sur 127 qui sont hors
+marché.
 
-## SLIDE 10 — Signaux faibles : texte et réseau de vente
+La partie qui m'a le plus intéressée, c'est la recommandation de remise.
+J'ai dû fixer la sensibilité de la demande au prix, ce qu'on appelle
+l'élasticité, parce que mon estimation interne n'était pas assez précise
+pour être fiable. Pour résoudre le problème d'optimisation, j'ai utilisé
+la méthode du multiplicateur de Lagrange, une technique qui trouve le
+meilleur compromis sous contrainte, puis j'ai vérifié la solution avec un
+second algorithme indépendant : les deux convergent à moins d'un centième
+près. [pause] Et le résultat est plutôt surprenant : la remise optimale,
+c'est un montant identique en euros sur tous les lots, donc un
+pourcentage plus fort sur les petits lots. Sur une opération test,
+Arpeggio, qui a 18 appartements en stock entre 166 et 461 mille euros,
+viser 8 % d'accélération des ventes donne des ajustements individuels
+allant de -5 % à -14 % selon le prix du lot, mais un montant constant en
+euros, autour de 23 000 euros par lot. C'est l'inverse de ce qui se fait
+aujourd'hui, au cas par cas.
 
-Un axe transverse exploite ce que les champs structurés ne captent pas :
-9 688 commentaires libres de vente, et le réseau des vendeurs.
+## SLIDE 13 — Signaux faibles : texte et réseau de vente
 
-Sur le texte, j'ai construit un moteur de recherche par similarité : une
-requête comme « refus de prêt banque » retrouve directement les dossiers
-concernés. [pause] J'ai aussi tenté de prédire le désistement à partir du
-seul commentaire, avec un contrôle de fuite serré — j'ai écarté les 314
-commentaires qui nomment déjà l'annulation. Sur le corpus restant, un
-modèle probabiliste simple atteint un F1 de 0,34, mieux qu'une régression
-logistique plus précise mais presque muette. Le signal existe, mais reste
-un appoint, pas un prédicteur autonome.
+Il y a aussi un axe transverse, qui exploite ce que les champs structurés
+ne captent pas : 9 688 commentaires libres de vente, et le réseau des
+vendeurs.
 
-Sur les motifs de désistement, une mesure d'écart entre distributions a
-révélé qu'une agence a un profil très atypique : 90 % de ses désistements
-sont classés « autres motifs ». Ce n'est pas un comportement client, c'est
-un défaut de saisie — une vraie recommandation opérationnelle.
+Sur le texte, j'ai construit un moteur de recherche par similarité, avec
+une méthode qu'on appelle TF-IDF : elle pondère chaque mot selon sa
+fréquence dans un commentaire et sa rareté dans l'ensemble des
+commentaires. Sur un corpus dédupliqué de 1 346 documents et 535 termes,
+une requête comme « refus de prêt banque » retrouve directement les
+dossiers concernés. [pause]
 
-Enfin, le réseau des vendeurs et des opérations montre une concentration
-forte : deux acteurs portent 51,6 % des dossiers attribués, avec des taux
-de désistement très différents, 9 % pour l'un, 30 % pour l'autre — une
-dépendance commerciale à surveiller.
+J'ai aussi essayé de prédire le désistement à partir du commentaire seul,
+avec un contrôle de fuite serré — j'ai écarté les 314 commentaires qui
+nomment déjà l'annulation. Sur ce qui reste, un modèle probabiliste
+simple atteint un F1 de 0,34, mieux qu'une régression logistique qui est
+plus précise mais presque muette. Le signal est là, mais il reste un
+appoint, pas un prédicteur autonome.
 
-## SLIDE 11 — La plateforme : cinq pages pour la direction financière
+Sur les motifs de désistement, une mesure d'écart entre distributions m'a
+montré qu'une agence a un profil vraiment atypique : 90 % de ses
+désistements sont classés en « autres motifs ». En creusant, j'ai compris
+que ce n'est pas un comportement client, c'est un défaut de saisie — une
+recommandation opérationnelle très concrète pour le coup. [pause]
 
-Tout ce travail, du risque de marge au réseau de vente, alimente une
-application que la direction financière utilise elle-même, cinq pages
-testées une par une.
+Enfin, j'ai construit le réseau des vendeurs et des opérations : 209
+vendeurs avec au moins trois dossiers, ce qui couvre 98,8 % des dossiers
+attribués, reliés à 104 opérations par 711 liens. Deux acteurs — le
+réseau de vente interne, et un prescripteur externe — portent à eux deux
+51,6 % des dossiers attribués, avec des taux de désistement très
+différents, 9 % pour l'un, 30 % pour l'autre. C'est une dépendance
+commerciale à surveiller.
+
+## SLIDE 14 — La plateforme : cinq pages pour la direction financière
+
+Tout ce travail, du risque de marge au réseau de vente, se retrouve dans
+une application que la direction financière utilise elle-même, cinq
+pages testées une par une.
 
 Vue d'ensemble donne la situation du portefeuille en un coup d'œil.
 Alertes marge classe les opérations en cours par niveau de risque — sur
@@ -234,54 +328,71 @@ Alertes marge classe les opérations en cours par niveau de risque — sur
 Rythme de vente transforme mon modèle en simulateur : un curseur sur le
 taux de crédit 2026 donne directement le rythme attendu. Pilotage des
 prix affiche les lots hors marché et propose une grille ajustée. Qualité
-commerciale signale l'agence au défaut de saisie identifié plus tôt, et
-permet de retrouver des dossiers similaires par une recherche en langage
-courant.
+commerciale signale l'agence au défaut de saisie que j'ai trouvé plus
+tôt, et permet de retrouver des dossiers similaires par une recherche en
+langage courant.
 
-Précision importante : la première version parlait le vocabulaire des
-statistiques — F1, R², coefficients — trop technique pour ses
-utilisateurs, m'a dit le commanditaire. Je l'ai reconstruite en langage
-métier, une leçon qui compte autant que les résultats eux-mêmes.
+Un point que je voudrais souligner : la première version de la
+plateforme parlait le vocabulaire des statistiques — F1, R²,
+coefficients. Le commanditaire me l'a dit franchement : c'était trop
+technique pour ses utilisateurs. Je l'ai reconstruite en langage métier,
+et cette leçon compte autant à mes yeux que les résultats eux-mêmes.
 
-## SLIDE 12 — Réflexion transversale
+## SLIDE 15 — Réflexion transversale
 
 Je termine sur ce que cette année a changé dans l'idée que je me faisais
 de ce métier.
 
-Je m'attendais à être d'abord une modélisatrice. En réalité, j'ai surtout
-été une traductrice, dans les deux sens : traduire une gêne métier en
-question calculable, puis un résultat statistique en information sur
-laquelle décider. [pause]
+Je pensais que j'allais surtout être une modélisatrice. En réalité, j'ai
+été avant tout une traductrice, dans les deux sens : traduire une gêne
+métier en question calculable, puis traduire un résultat statistique en
+information sur laquelle on peut décider. [pause]
 
-Deuxième leçon : une reprise de données et un modèle statistique ne se
-prouvent pas de la même façon. Une reprise se prouve par réconciliation —
-la donnée est-elle bien arrivée ? Un modèle se prouve par la validation
-statistique — le résultat tient-il en dehors de l'échantillon qui a servi
-à le construire ? Confondre ces deux régimes de preuve serait la vraie
-erreur méthodologique.
+Deuxième chose que j'ai comprise : une reprise de données, un tableau de
+bord, et un modèle statistique ne se prouvent pas de la même façon. Une
+reprise se prouve par réconciliation — est-ce que la donnée est bien
+arrivée ? En marge des deux reprises, j'ai aussi maintenu les tableaux de
+bord existants et participé au déploiement du SSO, l'authentification
+unique, sur deux périmètres du groupe. Ces missions-là se prouvent
+autrement, par l'usage : est-ce que la personne s'en sert, et pour la
+bonne chose ? Et un modèle se prouve par la validation statistique :
+est-ce que le résultat tient en dehors de l'échantillon qui a servi à le
+construire ? Confondre ces régimes de preuve, ce serait la vraie erreur
+méthodologique. [pause]
 
-## SLIDE 13 — Perspectives et projet professionnel
+Une dernière chose que j'ai apprise : documenter, ce n'est pas une
+formalité qui vient après le travail, c'est un vrai acte technique. La
+note que j'avais écrite sur la séquence d'injection de SPO m'a resservi
+deux mois plus tard pour la reprise des tiers, presque telle quelle.
+
+## SLIDE 16 — Perspectives et projet professionnel
 
 J'ai commencé ce master en visant la modélisation prédictive au sens
-strict. J'en sors avec un projet plus large : construire et fiabiliser
-les chaînes de données qui rendent une décision possible, puis les
-outiller jusqu'à l'écran. [pause]
+strict. J'en sors avec un projet un peu plus large : construire et
+fiabiliser les chaînes de données qui rendent une décision possible, puis
+les mettre en forme jusqu'à l'écran. [pause]
+
+Ça veut dire tenir ensemble trois compétences : l'ingénierie des données,
+sur laquelle j'ai le plus progressé cette année ; une modélisation
+proportionnée à la donnée réellement disponible ; et le dialogue avec les
+métiers, qui décide au final si un livrable sert vraiment à quelque
+chose.
 
 À court terme, je vise un poste d'ingénieure données orientée aide à la
-décision, où je pourrai continuer à tenir toute cette chaîne, ou une
-direction data structurée où je travaillerai enfin à plusieurs sur un même
-chantier.
+décision, où je pourrais continuer à tenir toute cette chaîne, ou une
+direction data plus structurée, où je travaillerais enfin à plusieurs sur
+un même sujet.
 
-## SLIDE 14 — Conclusion
+## SLIDE 17 — Conclusion
 
-Pour conclure : cette année a été dominée par la reconstruction d'un
-socle de données, avant de revenir, au second semestre, à la
-modélisation statistique.
+Pour conclure, cette année a été dominée par la reconstruction d'un socle
+de données, avant de revenir, au second semestre, à la modélisation
+statistique.
 
-Un projet de données ne se joue pas au moment de choisir un algorithme. Il
-se joue avant, quand on décide ce qu'est un client, ce qu'est une marge.
-Structurer une donnée et la modéliser ne sont pas deux métiers séparés :
-ce sont deux moments du même travail. [pause]
+Un projet de données ne se joue pas au moment de choisir un algorithme.
+Ça se joue avant, quand on décide ce qu'est un client, ce qu'est une
+marge. Structurer une donnée et la modéliser, ce ne sont pas deux métiers
+séparés : ce sont deux moments du même travail. [pause]
 
 Je vous remercie de votre attention, et je suis prête à répondre à vos
 questions.
