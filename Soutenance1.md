@@ -1,0 +1,142 @@
+# Soutenance1 — journal de la préparation de soutenance
+
+Une entrée par fichier produit ou étape franchie. Mise à jour en place, pas
+de duplication. Les chiffres corrigés en cours de route remplacent les
+anciens plutôt que de s'y ajouter.
+
+## Étape 1 — Lecture intégrale des sources
+
+- Mémoire (PDF, 27 pages) extrait en texte via `pdftotext -layout` (le
+  rendu image par `pdftoppm` échouait, poppler-utils installé puis
+  contourné en extraction texte directe) et lu intégralement.
+- `chapitre_copilote_financier.docx` extrait en texte brut via parsing XML
+  du zip (pas de `python-docx` disponible dans l'environnement) et lu
+  intégralement.
+- README.md, journal_de_bord.md, docs/01, docs/02, docs/03,
+  plateforme/app.py lus intégralement.
+- Les 7 notebooks exécutés (00 à 06) extraits en texte (cellules markdown +
+  sorties texte, sans les images) via un script Python maison, pour
+  vérification chiffre par chiffre sans consommer le budget de contexte
+  des images.
+
+## Étape 2 — Vérification croisée mémoire / docx / notebooks
+
+- Comparaison ligne à ligne des chiffres cités dans le mémoire et dans le
+  chapitre docx : aucune divergence non résolue trouvée. Les deux sources
+  sont cohérentes (le docx est la version longue du chapitre 2 du mémoire).
+- Spot-check direct dans les sorties de cellules exécutées des notebooks
+  pour les chiffres les plus cités du discours : R² axe A (0,077), F1 par
+  classifieur (forêt 0,306, arbre CART 0,340, SVM linéaire 0,303), ICC axe
+  B (0,66), β taux (−0,216, p<1e-15), ARIMA (AICc 611,7, Ljung-Box p=0,224,
+  p taux=0,82), R² hédonique axe C (0,886), élasticité interne (−0,81,
+  p=0,57, n=95), λ* Lagrange (−23 015 €), F1 texte (Naive Bayes 0,343,
+  logistique 0,254), réseau (51,6 %, Valoriciel 29,6 %, interne 9,0 %,
+  centraux 16,9 % vs périphériques 20,2 %), axe A périmètre (123
+  opérations, 28 % soit 34 en dérive). **Tous confirmés à l'identique dans
+  les sorties de cellules exécutées.**
+- Point de vigilance noté (pas une divergence, une distinction à ne pas
+  confondre à l'oral) : notebook 00 (EDA) travaille sur 5 137 appartements
+  (asymétrie du prix au m²), notebook 05 (modèle hédonique) sur 5 064
+  appartements transigés (échantillon d'apprentissage, filtré
+  différemment) — deux échantillons différents, pas une erreur.
+- Autre point de vigilance : le diagnostic de stock du notebook 05
+  (103/8/16 sur 127 appartements, périmètre 267 opérations toutes
+  activités) diffère du diagnostic affiché sur la plateforme (111/4/12 sur
+  127 appartements) parce que le modèle de la plateforme est ré-entraîné
+  sur le seul périmètre promotion — explicité comme tel dans le docx, pas
+  une incohérence.
+
+## Étape 3 — Rédaction de `discours_soutenance.md`
+
+- Texte mot à mot rédigé, découpé en 14 slides, phrases courtes,
+  transitions explicites, jargon expliqué à la première occurrence.
+- 2 060 mots au total → 14,7 à 15,8 minutes selon le débit (130-140
+  mots/minute) : dans la cible.
+- Axe A présenté comme modeste (F1 ≈ 0,30) sans le survendre ; axe B
+  présenté comme le plus solide.
+
+## Étape 4 — Rédaction de `plan_slides.md`
+
+- 14 slides, correspondance 1:1 avec les sections du discours. Visuels
+  proposés : figures existantes du mémoire (1.1, 1.2, 1.4, 1.5, 2.3, 2.4,
+  2.6, 2.7, 3.1) réutilisées telles quelles plutôt que redessinées.
+
+## Étape 5 — Génération du `.pptx` complémentaire
+
+- 14 slides construites avec `pptxgenjs`, palette reprise à l'identique de
+  `src/theme_viz.py` (bleu, vert, ambre, violet, rouge) pour une cohérence
+  visuelle avec les figures du mémoire et la plateforme.
+- Figures réelles extraites du PDF du mémoire via `pdfimages` (pages
+  identifiées en splittant le texte `pdftotext -layout` sur les sauts de
+  page `\f`) plutôt que redessinées : Fig. 1.1, 1.2, 1.4, 1.5, 2.3, 2.4,
+  2.6, 2.7, 3.1 — toutes vérifiées visuellement avant intégration.
+- Validation structurelle (`validate.py`) : PASS. Contenu vérifié via
+  `markitdown` (aucun texte de substitution oublié).
+- **Limite technique notée** : LibreOffice ne convertit aucun fichier dans
+  ce sandbox (`soffice` échoue même sur un `.pptx` minimal d'une slide ou
+  un `.txt` brut) — le rendu visuel image par image n'a donc pas pu être
+  vérifié par capture d'écran. Le contrôle s'est appuyé sur la validation
+  structurelle + `markitdown` + relecture manuelle du contenu de chaque
+  slide.
+- Fichier : `soutenance_copilote_financier.pptx` (à la racine du dépôt).
+  `plan_slides.md` reste le livrable qui fait foi en cas de divergence.
+
+## Étape 6 — Audit « contexte neuf » (discours + slides)
+
+- Verdict durée : ~2 013 mots utiles → 14 min 23 à 15 min 29 selon le
+  débit (130-140 mots/minute) — dans la cible.
+- 7 phrases trop longues repérées et raccourcies (identifiants ERP,
+  enjeu de dédoublonnage, trois clés d'unicité, définition du F1, panel à
+  effets aléatoires, élasticité, page Qualité commerciale — cette
+  dernière avait une rupture grammaticale, corrigée).
+- 4 termes non expliqués à leur première occurrence, corrigés : « variance »,
+  « corrélation fallacieuse », « notebooks », « CRM ».
+- 2 transitions muettes ajoutées à l'oral (« Premier axe... » avant la
+  slide 8, « Troisième axe... » avant la slide 10).
+- 3 écarts slide ↔ discours corrigés : le seuil des 60 % d'engagement et
+  le nom de l'algorithme (forêt aléatoire) manquaient à l'oral pour l'axe
+  A ; le chiffre intermédiaire de 1 474 tiers uniques manquait à l'oral.
+- 2 corrections de cohérence appliquées à `plan_slides.md` : le sigle SSO
+  (jamais expliqué) retiré du bullet de la slide 12 ; la mention nominative
+  de l'opération ARPEGGIO retirée du visuel proposé de la slide 10 (le
+  discours ne la nomme pas).
+- Toutes les corrections ont été appliquées. Recompte après correction :
+  2 117 mots → 15,1 à 16,3 minutes selon le débit — toujours dans la
+  cible, à l'extrémité lente en cas de débit très posé (130 mots/min), ce
+  qui reste cohérent avec la consigne d'un rythme volontairement lent
+  pour une candidate peu à l'aise à l'oral.
+
+## Étape 7 — Audit expert data science
+
+- Sous-agent expert data science : audit chiffre par chiffre contre les
+  sources primaires (mémoire, docx, 7 notebooks exécutés, `app.py`).
+  Verdict : quasiment tous les chiffres exacts et correctement arrondis
+  (R²=0,077→8 %, F1 forêt=0,306≈0,30 vs baseline 0, ICC=0,66, effet taux
+  −19 % p<10⁻¹⁵, ARIMA p=0,82 sur 114 mois, R² hédonique=0,886/±11 %,
+  ε=−1, chiffres complets de la reprise des tiers, description des 5
+  pages de la plateforme conforme au code réel) — un seul vrai problème
+  trouvé, corrigé :
+  - Slide 8 : « seuil que j'ai fixé comme dérive **significative** »
+    confondait un seuil de matérialité choisi par l'analyste (2 %) avec
+    la significativité statistique — dangereux car le mot « significatif »
+    est réutilisé 30 secondes plus tard en slide 9 dans son sens
+    statistique strict (p < 10⁻¹⁵). Corrigé en « dérive **matérielle** »,
+    conforme au vocabulaire du mémoire et de `plan_slides.md`.
+  - Point de vigilance signalé (pas une erreur, à anticiper à l'oral) :
+    le diagnostic de stock cité en slide 10 (16 sous-cotés / 8 surcotés,
+    depuis le notebook 05, périmètre 267 opérations) diffère des chiffres
+    réellement affichés par la plateforme démontrée en slide 11 (12 en
+    dessous / 4 au-dessus, périmètre promotion ré-entraîné, incertitude
+    ±13 % au lieu de ±11 %) — expliqué dans le docx, mais si un membre du
+    jury ouvre la plateforme après la slide 10 il verra des chiffres
+    différents. **Repris comme question probable en phase 2.**
+
+## État à la fin de la phase 1
+
+- `discours_soutenance.md`, `plan_slides.md` et
+  `soutenance_copilote_financier.pptx` sont à jour avec toutes les
+  corrections des deux audits appliquées.
+- Recompte final du discours : 2 117 mots utiles → 15,1 à 16,3 minutes
+  selon le débit (130-140 mots/minute).
+- **En attente de validation explicite avant de passer à la phase 2**
+  (questions du jury), conformément à la consigne.
