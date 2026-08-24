@@ -131,12 +131,88 @@ anciens plutôt que de s'y ajouter.
     jury ouvre la plateforme après la slide 10 il verra des chiffres
     différents. **Repris comme question probable en phase 2.**
 
+## Étape 8 — Rééquilibrage 30/70 (demande explicite)
+
+- Consigne : la soutenance (pas le mémoire PDF, déjà validé) doit passer à
+  ≈ 30 % sur les deux reprises de données (mes missions d'alternance) et
+  ≈ 70 % sur le Copilote Financier, jugé « la vraie partie data science »,
+  en puisant plus largement dans le dépôt GitHub (pas seulement le résumé
+  déjà fait par le mémoire).
+- Restructuration complète : 14 slides → **13 slides**. Chapitre 1
+  (contexte, migration, tiers) fusionné de 4 slides à 2, condensé sans
+  perdre le cœur méthodologique (trois clés d'unicité, validation par
+  paliers). Une slide entièrement nouvelle ajoutée : **Signaux faibles
+  (texte et réseau)**, absente de la première version.
+- Contenu ajouté au Copilote Financier, retrouvé et vérifié dans les
+  notebooks (pas seulement recopié du mémoire) :
+  - Axe A : comparaison des **six classifieurs** (logistique 0,283, SVM
+    linéaire 0,303, SVM RBF 0,257, arbre 0,340, forêt 0,306, MLP
+    0,913 train / 0,262 CV) et la démonstration de sur-apprentissage du
+    MLP, l'interprétation Ridge, la typologie comme comparateur.
+  - Axe C : la vérification croisée Lagrange/SLSQP (écart 0,006), les
+    primes hédoniques détaillées (étage, sud, social).
+  - Axe transverse (nouveau) : TF-IDF/cosinus, Naive Bayes anti-fuite
+    (F1=0,343), divergence de Kullback-Leibler (défaut de saisie Salon-
+    de-Provence), réseau biparti vendeurs-opérations (51,6 %, 9,0 % vs
+    29,6 % de désistement).
+  - Tous ces chiffres avaient déjà été vérifiés cellule par cellule dans
+    les notebooks lors de l'étape 2 — réutilisés tels quels, aucun
+    nouveau chiffre non vérifié introduit.
+- Recompte final : **2 041 mots**, répartition **28,4 % / 71,6 %** entre
+  les deux missions (cible 30/70, à la marge d'erreur d'un recomptage
+  manuel) — 14,6 à 15,7 minutes selon le débit.
+- Vérifications de cohérence appliquées lors de la réécriture : sigle CRM
+  ré-expliqué (perdu pendant la réécriture, rattrapé), transitions
+  parallèles ajoutées entre les trois axes (« Premier axe », « Deuxième
+  axe », « Troisième axe »), dernière occurrence du mot « notebooks »
+  remplacée par une formulation sans jargon.
+- `plan_slides.md` et `soutenance_copilote_financier.pptx` régénérés en
+  cohérence avec la nouvelle structure à 13 slides.
+- Cette réécriture n'a pas été repassée par les deux sous-agents d'audit
+  (contexte neuf + expert data science) : les chiffres ajoutés provenaient
+  tous de vérifications déjà faites à l'étape 2, et les corrections de
+  fluidité/cohérence ont été appliquées directement en suivant les mêmes
+  règles que celles identifiées par les audits de la phase 1. Si une
+  relecture plus poussée est souhaitée sur cette version, le redemander
+  explicitement.
+
+## Étape 9 — Ajout ACP, validation croisée et exploration des données
+
+- Demande explicite : couvrir aussi l'ACP (analyse en composantes
+  principales), la validation croisée comme choix méthodologique, et
+  l'exploration des données (EDA, notebook 00) — absente de toutes les
+  versions précédentes du discours.
+- 13 slides → **14 slides** : nouvelle slide 6 « Exploration des données :
+  deux leçons » (asymétrie du prix corrigée par log, et le piège de la
+  corrélation brute réservations/taux masquée par la croissance du
+  portefeuille — corrigée en intensité par opération active). Figures 2.1
+  et 2.2 du mémoire extraites (page 26 du PDF) et intégrées au `.pptx`.
+- Axe A (slide 7) enrichi : l'ACP est nommée explicitement, avec son
+  résultat vérifié dans le notebook 02 (2 axes résument 61 % de la
+  structure des coûts, vérifié par SVD) plutôt que la mention vague
+  « typologie » de la version précédente.
+- Validation croisée élevée en principe transversal explicite (slide 5),
+  plutôt que mentionnée seulement en passant dans l'axe A.
+- Recompte : 2 041 → **2 240 mots**, ratio alternance/copilote 28,4 % →
+  **25,3 % / 74,7 %** (toujours nettement côté 70 % visé, un peu plus
+  penché), durée 14,6-15,7 → **16,0-17,2 minutes** selon le débit. Un
+  compromis assumé : ajouter cette profondeur méthodologique sans
+  dépasser trop largement les 15 minutes cibles a nécessité un allègement
+  de plusieurs phrases (axe B, axe C, plateforme), mais le total reste
+  au-dessus de la fourchette initiale de durée. Signalé explicitement
+  plutôt que masqué — à retravailler si 15 minutes strictes redeviennent
+  la priorité.
+- `plan_slides.md` et le `.pptx` régénérés et re-validés (`validate.py`
+  PASS, contenu vérifié via `markitdown`, aucun texte de substitution).
+
 ## État à la fin de la phase 1
 
 - `discours_soutenance.md`, `plan_slides.md` et
   `soutenance_copilote_financier.pptx` sont à jour avec toutes les
-  corrections des deux audits appliquées.
-- Recompte final du discours : 2 117 mots utiles → 15,1 à 16,3 minutes
-  selon le débit (130-140 mots/minute).
+  corrections des deux audits **et** les demandes de rééquilibrage/
+  d'approfondissement appliquées.
+- État final : 14 slides, 2 240 mots utiles → 16,0 à 17,2 minutes selon
+  le débit (130-140 mots/minute) ; répartition ≈ 25 % missions
+  d'alternance / ≈ 75 % Copilote Financier.
 - **En attente de validation explicite avant de passer à la phase 2**
   (questions du jury), conformément à la consigne.
