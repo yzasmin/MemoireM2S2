@@ -1,16 +1,25 @@
 # Plan des slides — soutenance Copilote Financier
 
-17 slides, calibrées pour **25 minutes** à l'oral. Répartition volontaire
+18 slides, calibrées pour **25 minutes** à l'oral. Répartition volontaire
 du temps de parole : **≈ 30 % sur les deux reprises de données (missions
 d'alternance, slides 2-6), ≈ 70 % sur le Copilote Financier (slides
-8-14)** — c'est la partie data science, et c'est elle que le jury attend
+8-15)** — c'est la partie data science, et c'est elle que le jury attend
 en profondeur. Une entrée par slide : titre, contenu (bullets ou visuel du
 mémoire/repo à reprendre), et la portion de `discours_soutenance.md` qui
 lui correspond. En cas de divergence entre ce fichier et le `.pptx`
 généré en complément, **ce fichier fait foi**.
 
-**Calibrage actuel :** 3 220 mots utiles → 23,0 à 24,8 minutes selon le
-débit (130-140 mots/minute), ratio réel 32,5 % / 67,5 %.
+**Principe de construction du Copilote Financier (slides 8-15) : le récit
+suit le projet dans l'ordre où il s'est vraiment déroulé**, pas une liste
+de résultats mis côte à côte. Chaque slide explique pourquoi l'étape
+précédente amène à la suivante : contexte → exploration des données → ce
+que l'exploration a rendu nécessaire (la typologie) → axe A (qui utilise
+cette typologie) → axe B → axe C → signaux faibles (ajoutés une fois les
+trois axes posés) → plateforme (qui restitue tout). Chaque transition est
+prononcée à l'oral, pas seulement sous-entendue par l'ordre des slides.
+
+**Calibrage actuel :** 3 380 mots utiles → 24,1 à 26,0 minutes selon le
+débit (130-140 mots/minute), ratio réel 30,7 % / 69,3 %.
 
 ---
 
@@ -111,7 +120,7 @@ l'intégrité référentielle de l'ERP).
   juste
 
 **Visuel :** slide texte courte, transition conceptuelle vers la
-réflexion de la fin (slide 15).
+réflexion de la fin (slide 16).
 
 **Discours :** SLIDE 6.
 
@@ -162,6 +171,8 @@ repris du mémoire (section 2.1.2 / `docs/01_cadrage_projet.md`).
   négative — cette correction structure toute la démarche de l'axe B
 - Leçon assumée à l'oral : toujours vérifier la sortie réelle plutôt que
   la conclusion attendue
+- **Bridge de fin (à l'oral) :** ces deux leçons en poche, restait encore
+  une étape avant de pouvoir attaquer l'axe A → slide 10
 
 **Visuel :** Figure 2.1 du mémoire (distribution du prix, brute puis log)
 et Figure 2.2 (intensité de vente, effet des taux visible une fois
@@ -171,9 +182,38 @@ l'effet de portefeuille neutralisé).
 
 ---
 
-### Slide 10 — Axe A : le risque de marge
+### Slide 10 — La typologie : une étape avant l'axe A
+
+**Slide nouvelle, déplacée hors de l'axe A pour que le récit suive
+l'ordre réel du projet (notebook 02 avant notebook 03) : comparer une
+opération de 2 M€ à une de 50 M€ sur leurs montants bruts n'a pas de
+sens, il fallait d'abord une typologie fondée sur la structure des
+coûts.**
 
 **Contenu :**
+- **ACP (analyse en composantes principales)** : 2 axes résument **61 %**
+  de la structure des coûts, vérifié par une seconde méthode de calcul
+  indépendante (SVD)
+- Croisée avec une classification non supervisée → **4 familles
+  d'opérations** : résidentiel classique, aménagement foncier, promotion
+  sur foncier allégé, aménagement lourd VRD
+- Exemple nommé : **Le Parc des Cyclades** (marge budgétée +6,5 %), ses 5
+  voisines les plus proches affichent des marges de +7,9 % à +11,3 %
+- **Bridge de fin (à l'oral) :** cette typologie sert directement de
+  comparateur dans l'axe A → slide 11
+
+**Visuel :** pas de figure extraite du mémoire pour cette slide — un
+schéma simple (2 axes de l'ACP + 4 groupes colorés) serait idéal si le
+temps de conception le permet ; à défaut, cartes chiffrées (61 %, 4
+familles, exemple Cyclades).
+
+**Discours :** SLIDE 10.
+
+---
+
+### Slide 11 — Axe A : le risque de marge
+
+**Contenu (ouvre en rappelant qu'on vient d'obtenir la typologie) :**
 - Périmètre : 123 opérations suffisamment avancées (engagement ≥ 60 %) —
   **28 % en dérive matérielle** (> 2 % de la marge budgétée)
 - Régression du taux de dérive : R² test = 0,08 → bascule en
@@ -183,22 +223,19 @@ l'effet de portefeuille neutralisé).
   **forêt aléatoire 0,306 (retenue)** · réseau de neurones (MLP) 0,913 en
   apprentissage mais **0,262 en validation — sur-apprentissage démonstratif**
 - Régression Ridge en complément (facteurs de dérive lisibles)
-- **ACP** : 2 axes résument **61 %** de la structure des coûts (vérifié
-  par SVD) → typologie de 4 familles d'opérations (résidentiel classique,
-  aménagement foncier, promotion sur foncier allégé, aménagement lourd
-  VRD) → comparateur de « voisines » ; exemple nommé : Le Parc des
-  Cyclades (marge budgétée +6,5 %, voisines à +7,9 % / +11,3 %)
 - Message assumé : signal réel mais faible
+- **Bridge de fin (à l'oral) :** axe traité → passage à la deuxième
+  question, le rythme de vente → slide 12
 
 **Visuel :** Figure 2.3 du mémoire (distribution de la variation de
 marge) + petit tableau des 6 F1 par méthode, duo train/validation du MLP
 mis en évidence.
 
-**Discours :** SLIDE 10. **Slide la plus dense en méthode.**
+**Discours :** SLIDE 11. **Slide la plus dense en méthode.**
 
 ---
 
-### Slide 11 — Axe B : la vitesse d'écoulement
+### Slide 12 — Axe B : la vitesse d'écoulement
 
 **Contenu :**
 - Panel de 3 230 observations (opération × mois, 160 opérations) — modèle
@@ -215,14 +252,15 @@ mis en évidence.
 
 **Visuel :** Figure 2.4 du mémoire (scénarios de taux 2026).
 
-**Discours :** SLIDE 11. **Axe le plus solide — à assumer clairement
+**Discours :** SLIDE 12. **Axe le plus solide — à assumer clairement
 comme tel à l'oral.**
 
 ---
 
-### Slide 12 — Axe C : l'optimisation des prix
+### Slide 13 — Axe C : l'optimisation des prix
 
-**Contenu :**
+**Contenu (ouvre sur le lien avec l'axe B : une fois qu'on sait combien de
+lots vont se vendre, la question suivante est leur prix) :**
 - Modèle hédonique sur 5 064 appartements vendus depuis 2016 — **R² test
   = 0,886, erreur type ≈ 11 %**
 - Primes cohérentes : étage +6,0 %, sud +2,6 %, social −62,8 %, millésime
@@ -239,13 +277,14 @@ comme tel à l'oral.**
 **Visuel :** tableau des résultats clés (R², lots hors marché, règle de
 remise, exemple Arpeggio).
 
-**Discours :** SLIDE 12.
+**Discours :** SLIDE 13.
 
 ---
 
-### Slide 13 — Signaux faibles : texte et réseau de vente
+### Slide 14 — Signaux faibles : texte et réseau de vente
 
-**Contenu :**
+**Contenu (ouvre en situant cette slide comme un enrichissement ajouté
+une fois les trois axes posés, pas un quatrième axe du même rang) :**
 - 9 688 commentaires libres de vente : moteur de recherche par
   similarité (TF-IDF sur corpus dédupliqué de 1 346 documents, 535
   termes)
@@ -262,11 +301,11 @@ remise, exemple Arpeggio).
 contraste des taux de désistement) — pas de figure extraite du mémoire
 pour cette slide.
 
-**Discours :** SLIDE 13.
+**Discours :** SLIDE 14.
 
 ---
 
-### Slide 14 — La plateforme : cinq pages pour la direction financière
+### Slide 15 — La plateforme : cinq pages pour la direction financière
 
 **Contenu :**
 - Application Streamlit, périmètre 147 opérations de promotion, 5 pages
@@ -282,11 +321,11 @@ pour cette slide.
 **Visuel :** Figure 2.6 et/ou 2.7 du mémoire (captures des pages « Vue
 d'ensemble » et « Alertes marge »).
 
-**Discours :** SLIDE 14.
+**Discours :** SLIDE 15.
 
 ---
 
-### Slide 15 — Réflexion transversale
+### Slide 16 — Réflexion transversale
 
 **Contenu :**
 - **« Un traducteur avant d'être un modélisateur »** : traduire une gêne
@@ -306,11 +345,11 @@ d'ensemble » et « Alertes marge »).
 telle quelle, elle correspond maintenant exactement aux trois régimes
 évoqués à l'oral.
 
-**Discours :** SLIDE 15.
+**Discours :** SLIDE 16.
 
 ---
 
-### Slide 16 — Perspectives et projet professionnel
+### Slide 17 — Perspectives et projet professionnel
 
 **Contenu :**
 - Entrée en master visant la modélisation prédictive stricte → sortie
@@ -323,11 +362,11 @@ telle quelle, elle correspond maintenant exactement aux trois régimes
 
 **Visuel :** slide texte, 3 bullets courts, pas de graphique.
 
-**Discours :** SLIDE 16.
+**Discours :** SLIDE 17.
 
 ---
 
-### Slide 17 — Conclusion
+### Slide 18 — Conclusion
 
 **Contenu :**
 - Année dominée par la reconstruction d'un socle de données, avant retour
@@ -338,4 +377,4 @@ telle quelle, elle correspond maintenant exactement aux trois régimes
 
 **Visuel :** slide de clôture sobre (« Merci — Questions »).
 
-**Discours :** SLIDE 17.
+**Discours :** SLIDE 18.

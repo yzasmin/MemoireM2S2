@@ -263,15 +263,50 @@ anciens plutôt que de s'y ajouter.
   validées par l'audit contexte neuf de la phase 1. Une relecture
   complète par les deux sous-agents reste possible sur demande.
 
+## Étape 12 — La partie Copilote Financier doit suivre le fil du projet
+
+- Demande explicite : que la partie Copilote Financier raconte le projet
+  dans l'ordre où il s'est déroulé (« j'ai commencé par ça, pourquoi, ça
+  m'a amenée vers ça, résultat ») plutôt que de présenter les axes A/B/C
+  comme des résultats posés côte à côte.
+- Restructuration : la typologie (ACP + classification non supervisée,
+  notebook 02), qui était fondue dans la fin de la slide axe A, devient
+  sa propre slide, positionnée **avant** l'axe A — ordre réellement suivi
+  dans les notebooks (02 précède 03) et motivé explicitement à l'oral
+  (« comparer une opération de 2 M€ à une de 50 M€ sur leurs montants
+  bruts n'a pas de sens »).
+- Phrases de liaison ajoutées à l'oral entre chaque étape, pour que
+  l'enchaînement soit dit et non seulement sous-entendu par l'ordre des
+  slides : exploration → « avant d'attaquer le premier axe, il y a eu
+  encore une étape » → typologie → « avec cette typologie en poche » →
+  axe A → « une fois cet axe traité, je suis passée à la deuxième
+  question » → axe B → « une fois qu'on savait anticiper le rythme de
+  vente, la question qui s'imposait naturellement, c'était le prix » →
+  axe C → « une fois ces trois axes posés, j'ai voulu voir si je pouvais
+  aller chercher un signal en plus » → signaux faibles → plateforme.
+- 17 slides → **18 slides** (nouvelle slide « La typologie : une étape
+  avant l'axe A »). Aucun chiffre nouveau introduit — tout provient de
+  contenu déjà vérifié à l'étape 2 (ACP 61 %, 4 familles nommées, exemple
+  du Parc des Cyclades), simplement déplacé et mieux motivé.
+- Recompte : 3 220 → **3 380 mots** → 24,1 à 26,0 minutes selon le débit,
+  toujours centré sur les 25 minutes demandées. Ratio alternance/copilote
+  32,5 % → **30,7 % / 69,3 %**, quasiment exactement 30/70.
+- `plan_slides.md` réécrit avec un principe de construction explicite en
+  tête de fichier (le récit suit l'ordre réel du projet). `.pptx`
+  régénéré avec la nouvelle slide typologie et les bullets d'axe A
+  allégés de la typologie (déplacée) — validation structurelle PASS,
+  contenu vérifié via `markitdown`.
+
 ## État à la fin de la phase 1
 
 - `discours_soutenance.md`, `plan_slides.md` et
   `soutenance_copilote_financier.pptx` sont à jour avec toutes les
   corrections des deux audits, les demandes de rééquilibrage 30/70,
   d'approfondissement (ACP, validation croisée, exploration des données),
-  de réécriture du registre, et de recalibrage à 25 minutes.
-- État final : **17 slides, 3 220 mots utiles → 23,0 à 24,8 minutes**
-  selon le débit (130-140 mots/minute) ; répartition ≈ 32,5 % missions
-  d'alternance / ≈ 67,5 % Copilote Financier.
+  de réécriture du registre, de recalibrage à 25 minutes, et de mise en
+  récit chronologique du Copilote Financier.
+- État final : **18 slides, 3 380 mots utiles → 24,1 à 26,0 minutes**
+  selon le débit (130-140 mots/minute) ; répartition ≈ 30,7 % missions
+  d'alternance / ≈ 69,3 % Copilote Financier.
 - **En attente de validation explicite avant de passer à la phase 2**
   (questions du jury), conformément à la consigne.

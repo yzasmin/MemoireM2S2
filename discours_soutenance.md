@@ -179,13 +179,39 @@ commercialisées avait beaucoup augmenté sur la période, et ça brouillait
 la relation. Une fois rapportée au nombre d'opérations actives, la
 corrélation redevient nette et négative. J'en ai tiré une leçon simple :
 toujours vérifier ce que dit vraiment la sortie, pas ce qu'on s'attend à
-y trouver. Ça a directement guidé ma démarche pour l'axe B.
+y trouver. Ça a directement guidé ma démarche pour l'axe B. [pause]
 
-## SLIDE 10 — Axe A : le risque de marge
+Ces deux leçons en poche, j'ai pu commencer à construire les trois axes.
+Mais avant de m'attaquer au premier, il y a eu encore une étape.
 
-Premier axe. Sur 123 opérations suffisamment avancées, 28 % dépassent
-déjà leur budget de plus de 2 %, un seuil que j'ai fixé comme dérive
-matérielle.
+## SLIDE 10 — La typologie : une étape avant l'axe A
+
+En regardant les 267 opérations, je me suis vite heurtée à un problème :
+comparer une opération de 2 millions d'euros et une de 50 millions sur
+leurs montants bruts, ça n'a pas de sens. C'est la structure de leur
+budget qui dit vraiment ce qu'elles sont. [pause]
+
+J'ai donc construit une typologie, en commençant par une analyse en
+composantes principales, une méthode qui résume la structure des coûts
+en quelques axes : deux axes en résument 61 %, et j'ai vérifié ce
+résultat par une seconde méthode de calcul indépendante. En croisant ça
+avec une classification non supervisée, j'ai obtenu quatre familles
+d'opérations assez nettes : le résidentiel classique, l'aménagement
+foncier, la promotion sur foncier allégé, et l'aménagement lourd en VRD.
+[pause]
+
+Sur une opération du portefeuille, Le Parc des Cyclades, dont la marge
+budgétée était de 6,5 %, ses cinq voisines les plus proches dans cette
+typologie affichent des marges entre 7,9 % et 11,3 % — un référentiel
+concret. Cette typologie, je m'en suis resservie directement dans l'axe
+A, pour situer chaque opération à risque parmi ses semblables.
+
+## SLIDE 11 — Axe A : le risque de marge
+
+Avec cette typologie en poche, j'ai pu m'attaquer à la première vraie
+question : le risque de marge. Sur 123 opérations suffisamment avancées,
+28 % dépassent déjà leur budget de plus de 2 %, un seuil que j'ai fixé
+comme dérive matérielle.
 
 J'ai d'abord essayé une régression directe sur l'ampleur de la dérive :
 elle n'explique que 8 % de la variance observée, c'est-à-dire des écarts
@@ -198,24 +224,15 @@ sauf un cas qui m'a bien intéressée : un réseau de neurones atteint un F1
 de 0,91 sur les données d'entraînement, mais retombe à 0,26 en
 validation. C'est exactement la signature du sur-apprentissage sur un
 petit échantillon. J'ai finalement gardé une forêt aléatoire, F1 ≈ 0,30
-contre 0 pour une référence naïve.
+contre 0 pour une référence naïve. [pause]
 
 En complément, une régression Ridge rend les facteurs de dérive
 lisibles : les postes techniques pèsent, une marge budgétée confortable
-protège. [pause] J'ai aussi construit une analyse en composantes
-principales, une méthode qui résume la structure des coûts en quelques
-axes : deux axes en résument 61 %, et j'ai vérifié ce résultat par une
-seconde méthode de calcul indépendante. Ça m'a permis de bâtir une
-typologie de quatre familles d'opérations — le résidentiel classique,
-l'aménagement foncier, la promotion sur foncier allégé, et l'aménagement
-lourd en VRD — qui sert à comparer chaque opération à ses « voisines »
-les plus proches en structure de coûts. Sur une opération du portefeuille,
-Le Parc des Cyclades, dont la marge budgétée était de 6,5 %, ses cinq
-voisines les plus proches affichent des marges entre 7,9 % et 11,3 % —
-un référentiel concret que je n'aurais pas eu sans cette typologie. Ce
-n'est pas un oracle, mais un signal réel, même s'il reste faible.
+protège. Ce n'est pas un oracle, mais un signal réel, même s'il reste
+faible. Une fois cet axe traité, je suis passée à la deuxième question
+du cahier des charges : le rythme de vente.
 
-## SLIDE 11 — Axe B : la vitesse d'écoulement
+## SLIDE 12 — Axe B : la vitesse d'écoulement
 
 Deuxième axe, la vitesse d'écoulement. C'est celui dont je suis la plus
 fière. J'ai construit un panel de plus de 3 200 observations, une ligne
@@ -246,9 +263,11 @@ réservations cumulées. Elle bat un simple ajustement linéaire sur 25 des
 28 opérations terminées, avec un délai médian de 20 mois pour vendre 90 %
 du potentiel — un repère utile pour la trésorerie.
 
-## SLIDE 12 — Axe C : l'optimisation des prix
+## SLIDE 13 — Axe C : l'optimisation des prix
 
-Troisième axe, les prix. J'ai construit un modèle dit hédonique : le prix
+Une fois qu'on savait anticiper le rythme de vente, la question qui
+s'imposait naturellement, c'était le prix. Troisième axe, les prix : j'ai
+construit un modèle dit hédonique : le prix
 d'un logement comme somme de caractéristiques valorisées séparément. Sur
 plus de 5 000 appartements vendus depuis 2016, il explique 88,6 % de la
 variance du prix, avec une erreur d'environ 11 %.
@@ -281,11 +300,13 @@ allant de -5 % à -14 % selon le prix du lot, mais un montant constant en
 euros, autour de 23 000 euros par lot. C'est l'inverse de ce qui se fait
 aujourd'hui, au cas par cas.
 
-## SLIDE 13 — Signaux faibles : texte et réseau de vente
+## SLIDE 14 — Signaux faibles : texte et réseau de vente
 
-Il y a aussi un axe transverse, qui exploite ce que les champs structurés
-ne captent pas : 9 688 commentaires libres de vente, et le réseau des
-vendeurs.
+Une fois ces trois axes posés, j'ai voulu voir si je pouvais aller
+chercher un signal en plus, là où personne ne regardait : dans le texte
+et dans le réseau commercial. C'est l'axe transverse, qui exploite ce que
+les champs structurés ne captent pas : 9 688 commentaires libres de
+vente, et le réseau des vendeurs.
 
 Sur le texte, j'ai construit un moteur de recherche par similarité, avec
 une méthode qu'on appelle TF-IDF : elle pondère chaque mot selon sa
@@ -315,7 +336,7 @@ réseau de vente interne, et un prescripteur externe — portent à eux deux
 différents, 9 % pour l'un, 30 % pour l'autre. C'est une dépendance
 commerciale à surveiller.
 
-## SLIDE 14 — La plateforme : cinq pages pour la direction financière
+## SLIDE 15 — La plateforme : cinq pages pour la direction financière
 
 Tout ce travail, du risque de marge au réseau de vente, se retrouve dans
 une application que la direction financière utilise elle-même, cinq
@@ -338,7 +359,7 @@ coefficients. Le commanditaire me l'a dit franchement : c'était trop
 technique pour ses utilisateurs. Je l'ai reconstruite en langage métier,
 et cette leçon compte autant à mes yeux que les résultats eux-mêmes.
 
-## SLIDE 15 — Réflexion transversale
+## SLIDE 16 — Réflexion transversale
 
 Je termine sur ce que cette année a changé dans l'idée que je me faisais
 de ce métier.
@@ -365,7 +386,7 @@ formalité qui vient après le travail, c'est un vrai acte technique. La
 note que j'avais écrite sur la séquence d'injection de SPO m'a resservi
 deux mois plus tard pour la reprise des tiers, presque telle quelle.
 
-## SLIDE 16 — Perspectives et projet professionnel
+## SLIDE 17 — Perspectives et projet professionnel
 
 J'ai commencé ce master en visant la modélisation prédictive au sens
 strict. J'en sors avec un projet un peu plus large : construire et
@@ -383,7 +404,7 @@ décision, où je pourrais continuer à tenir toute cette chaîne, ou une
 direction data plus structurée, où je travaillerais enfin à plusieurs sur
 un même sujet.
 
-## SLIDE 17 — Conclusion
+## SLIDE 18 — Conclusion
 
 Pour conclure, cette année a été dominée par la reconstruction d'un socle
 de données, avant de revenir, au second semestre, à la modélisation
