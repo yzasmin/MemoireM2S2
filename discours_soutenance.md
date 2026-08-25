@@ -58,12 +58,10 @@ particuliers pour rentrer dans un gabarit. [pause]
 
 En analysant les erreurs renvoyées par le système, j'ai découvert deux
 règles qui n'étaient documentées nulle part. La première, c'est un ordre
-d'injection strict : il faut créer l'opération, puis les tranches de
-travaux, puis les tranches commerciales, puis le budget, sinon le système
-ne trouve pas l'objet parent. La seconde, c'est que les identifiants ne
-sont jamais stables, ils changent à chaque mise à jour. J'ai dû construire
-un système qui va toujours chercher la version la plus récente avant
-d'agir.
+d'injection strict entre opération, tranches et budget. La seconde,
+c'est que les identifiants ne sont jamais stables, ils changent à chaque
+mise à jour. J'ai dû construire un système qui va toujours chercher la
+version la plus récente avant d'agir.
 
 Le processus a été sécurisé par une validation par paliers : trois
 opérations pilotes, puis un lot de douze, avant la migration de masse.
@@ -181,10 +179,37 @@ corrélation redevient nette et négative. J'en ai tiré une leçon simple :
 toujours vérifier ce que dit vraiment la sortie, pas ce qu'on s'attend à
 y trouver. Ça a directement guidé ma démarche pour l'axe B. [pause]
 
-Ces deux leçons en poche, j'ai pu commencer à construire les trois axes.
-Mais avant de m'attaquer au premier, il y a eu encore une étape.
+Ces deux leçons en poche, j'ai pu passer à la suite. Mais avant ça, il
+fallait que je m'assure d'avoir une base solide sur laquelle m'appuyer.
 
-## SLIDE 10 — La typologie : une étape avant l'axe A
+## SLIDE 10 — La base de données SQL
+
+Les quatre exports Excel, tels quels, n'étaient pas interrogeables
+facilement. Je les ai transformés en une base de données SQLite, avec
+sept tables et trois vues SQL qui encapsulent les calculs partagés : la
+marge par opération, les réservations par mois, l'état du stock. [pause]
+L'intérêt d'une vue, c'est qu'elle n'est écrite qu'une seule fois : les
+notebooks et la plateforme utilisent tous la même définition, au lieu de
+la recopier et risquer de la faire diverger un jour.
+
+Une requête toute simple, un comptage par commune, m'a d'ailleurs donné
+un premier signal utile : Le Cap d'Agde concentre à lui seul 117 millions
+d'euros de chiffre d'affaires budgété sur seulement deux opérations, un
+poids à garder en tête pour l'axe A. [pause]
+
+J'ai aussi voulu vérifier comment cette couche passerait à l'échelle avec
+Spark, si le volume grossissait un jour. En chronométrant honnêtement la
+même agrégation en pandas et en Spark sur nos données, le verdict est
+sans appel : pandas répond en 10 millisecondes, Spark en 577, sans même
+compter les 24 secondes de démarrage de sa session. Sur ce volume, Spark
+est largement surdimensionné — mais la démonstration prouve que le
+chemin de montée en charge existe, si le Copilote devait un jour couvrir
+tout le groupe Nexity.
+
+Cette base solidement posée, j'ai pu commencer à construire les trois
+axes. Mais avant de m'attaquer au premier, il y a eu encore une étape.
+
+## SLIDE 11 — La typologie : une étape avant l'axe A
 
 En regardant les 267 opérations, je me suis vite heurtée à un problème :
 comparer une opération de 2 millions d'euros et une de 50 millions sur
@@ -206,7 +231,7 @@ typologie affichent des marges entre 7,9 % et 11,3 % — un référentiel
 concret. Cette typologie, je m'en suis resservie directement dans l'axe
 A, pour situer chaque opération à risque parmi ses semblables.
 
-## SLIDE 11 — Axe A : le risque de marge
+## SLIDE 12 — Axe A : le risque de marge
 
 Avec cette typologie en poche, j'ai pu m'attaquer à la première vraie
 question : le risque de marge. Sur 123 opérations suffisamment avancées,
@@ -232,7 +257,7 @@ protège. Ce n'est pas un oracle, mais un signal réel, même s'il reste
 faible. Une fois cet axe traité, je suis passée à la deuxième question
 du cahier des charges : le rythme de vente.
 
-## SLIDE 12 — Axe B : la vitesse d'écoulement
+## SLIDE 13 — Axe B : la vitesse d'écoulement
 
 Deuxième axe, la vitesse d'écoulement. C'est celui dont je suis la plus
 fière. J'ai construit un panel de plus de 3 200 observations, une ligne
@@ -263,7 +288,7 @@ réservations cumulées. Elle bat un simple ajustement linéaire sur 25 des
 28 opérations terminées, avec un délai médian de 20 mois pour vendre 90 %
 du potentiel — un repère utile pour la trésorerie.
 
-## SLIDE 13 — Axe C : l'optimisation des prix
+## SLIDE 14 — Axe C : l'optimisation des prix
 
 Une fois qu'on savait anticiper le rythme de vente, la question qui
 s'imposait naturellement, c'était le prix. Troisième axe, les prix : j'ai
@@ -273,13 +298,12 @@ plus de 5 000 appartements vendus depuis 2016, il explique 88,6 % de la
 variance du prix, avec une erreur d'environ 11 %.
 
 Les primes retrouvées sont plutôt cohérentes : un étage de plus vaut
-environ 6 %, une exposition sud vaut 2,6 % de plus qu'une exposition
-est-ouest, et le logement social, dont les prix sont réglementés, coûte
-63 % de moins. [pause] Il y a aussi un effet millésime intéressant : les
-prix ont augmenté d'environ 19 % entre 2016 et 2023, puis encore un peu
-jusqu'en 2026, avec un plateau après 2022. Les prix du neuf n'ont pas
-baissé avec la remontée des taux, c'est plutôt le volume de ventes qui
-s'est ajusté, comme on l'a vu dans l'axe B.
+environ 6 %, et le logement social, dont les prix sont réglementés,
+coûte 63 % de moins. [pause] Il y a aussi un effet millésime : les prix
+ont augmenté d'environ 19 % entre 2016 et 2023, avec un plateau après
+2022. Les prix du neuf n'ont pas baissé avec la remontée des taux, c'est
+plutôt le volume de ventes qui s'est ajusté, comme on l'a vu dans l'axe
+B.
 
 Appliqué au stock, ce modèle signale 24 lots sur 127 qui sont hors
 marché.
@@ -294,13 +318,12 @@ second algorithme indépendant : les deux convergent à moins d'un centième
 près. [pause] Et le résultat est plutôt surprenant : la remise optimale,
 c'est un montant identique en euros sur tous les lots, donc un
 pourcentage plus fort sur les petits lots. Sur une opération test,
-Arpeggio, qui a 18 appartements en stock entre 166 et 461 mille euros,
-viser 8 % d'accélération des ventes donne des ajustements individuels
-allant de -5 % à -14 % selon le prix du lot, mais un montant constant en
-euros, autour de 23 000 euros par lot. C'est l'inverse de ce qui se fait
+Arpeggio, viser 8 % d'accélération des ventes donne des ajustements
+individuels de -5 % à -14 % selon le prix du lot, pour un même montant
+constant d'environ 23 000 euros. C'est l'inverse de ce qui se fait
 aujourd'hui, au cas par cas.
 
-## SLIDE 14 — Signaux faibles : texte et réseau de vente
+## SLIDE 15 — Signaux faibles : texte et réseau de vente
 
 Une fois ces trois axes posés, j'ai voulu voir si je pouvais aller
 chercher un signal en plus, là où personne ne regardait : dans le texte
@@ -310,10 +333,8 @@ vente, et le réseau des vendeurs.
 
 Sur le texte, j'ai construit un moteur de recherche par similarité, avec
 une méthode qu'on appelle TF-IDF : elle pondère chaque mot selon sa
-fréquence dans un commentaire et sa rareté dans l'ensemble des
-commentaires. Sur un corpus dédupliqué de 1 346 documents et 535 termes,
-une requête comme « refus de prêt banque » retrouve directement les
-dossiers concernés. [pause]
+fréquence et sa rareté dans le corpus. Une requête comme « refus de prêt
+banque » retrouve directement les dossiers concernés. [pause]
 
 J'ai aussi essayé de prédire le désistement à partir du commentaire seul,
 avec un contrôle de fuite serré — j'ai écarté les 314 commentaires qui
@@ -336,7 +357,7 @@ réseau de vente interne, et un prescripteur externe — portent à eux deux
 différents, 9 % pour l'un, 30 % pour l'autre. C'est une dépendance
 commerciale à surveiller.
 
-## SLIDE 15 — La plateforme : cinq pages pour la direction financière
+## SLIDE 16 — La plateforme : cinq pages pour la direction financière
 
 Tout ce travail, du risque de marge au réseau de vente, se retrouve dans
 une application que la direction financière utilise elle-même, cinq
@@ -359,7 +380,7 @@ coefficients. Le commanditaire me l'a dit franchement : c'était trop
 technique pour ses utilisateurs. Je l'ai reconstruite en langage métier,
 et cette leçon compte autant à mes yeux que les résultats eux-mêmes.
 
-## SLIDE 16 — Réflexion transversale
+## SLIDE 17 — Réflexion transversale
 
 Je termine sur ce que cette année a changé dans l'idée que je me faisais
 de ce métier.
@@ -386,7 +407,7 @@ formalité qui vient après le travail, c'est un vrai acte technique. La
 note que j'avais écrite sur la séquence d'injection de SPO m'a resservi
 deux mois plus tard pour la reprise des tiers, presque telle quelle.
 
-## SLIDE 17 — Perspectives et projet professionnel
+## SLIDE 18 — Perspectives et projet professionnel
 
 J'ai commencé ce master en visant la modélisation prédictive au sens
 strict. J'en sors avec un projet un peu plus large : construire et
@@ -404,7 +425,7 @@ décision, où je pourrais continuer à tenir toute cette chaîne, ou une
 direction data plus structurée, où je travaillerais enfin à plusieurs sur
 un même sujet.
 
-## SLIDE 18 — Conclusion
+## SLIDE 19 — Conclusion
 
 Pour conclure, cette année a été dominée par la reconstruction d'un socle
 de données, avant de revenir, au second semestre, à la modélisation

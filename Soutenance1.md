@@ -297,16 +297,60 @@ anciens plutôt que de s'y ajouter.
   allégés de la typologie (déplacée) — validation structurelle PASS,
   contenu vérifié via `markitdown`.
 
+## Étape 13 — La base de données SQL manquait dans le récit
+
+- Demande explicite : ajouter la partie sur la base de données SQL, qui
+  manquait totalement alors qu'elle est l'infrastructure de tout le
+  reste du projet (notebook 01, construit avant la typologie et les
+  trois axes).
+- Nouvelle slide insérée **entre l'exploration des données et la
+  typologie**, à la place réelle du notebook 01 dans la séquence
+  (00 exploration → 01 SQL/Spark → 02 typologie → 03/04/05 axes) :
+  - les 4 exports Excel transformés en base SQLite, **7 tables + 3 vues
+    SQL** métier (marge par opération, réservations par mois, état du
+    stock) ;
+  - l'intérêt d'une vue SQL : elle n'est écrite qu'une fois, notebooks
+    et plateforme partagent la même définition d'un indicateur au lieu
+    de la recopier et risquer de la faire diverger ;
+  - une requête de comptage par commune comme premier signal utile :
+    **Le Cap d'Agde concentre 117,1 M€ de chiffre d'affaires budgété sur
+    seulement 2 opérations**, un poids à garder en tête pour l'axe A ;
+  - comparatif chronométré honnêtement, pandas vs Spark, sur la même
+    agrégation : **9,9 ms contre 577,4 ms** (+ 23,9 s de démarrage de
+    session Spark) — verdict que Spark est très surdimensionné à cette
+    volumétrie, mais que le chemin de montée en charge existe si le
+    Copilote devait un jour couvrir tout le groupe Nexity.
+  - Chiffres tous déjà vérifiés à l'étape 2 contre
+    `nb_extracts/01_preparation_sql_spark.txt` et
+    `chapitre_copilote_financier.txt` ; aucun nouveau chiffre non
+    sourcé introduit.
+- 18 slides → **19 slides**. L'ajout a fait grimper le texte à 3 620
+  mots (25,9 à 27,9 minutes) : plusieurs phrases resserrées ailleurs
+  (axe C, clôture de l'axe C, signaux faibles, migration, et la slide
+  SQL elle-même) pour revenir près de la cible sans retirer de contenu
+  demandé.
+- Recompte final : 3 380 → **3 544 mots** → 25,3 à 27,3 minutes selon le
+  débit. Ratio alternance/copilote 30,7 % / 69,3 % → **28,3 % / 71,7 %**
+  (la nouvelle slide SQL fait partie du bloc Copilote Financier).
+- `plan_slides.md` réécrit intégralement pour les 19 slides, avec
+  l'entrée « Slide 10 — La base de données SQL » marquée comme ajout
+  explicite. `.pptx` régénéré avec la nouvelle slide (bullets + 3
+  cartes chiffrées : tables/vues, Cap d'Agde, pandas vs Spark) et toutes
+  les slides suivantes renumérotées — validation structurelle PASS,
+  19 slides confirmées via `markitdown`, aucun texte de substitution.
+
 ## État à la fin de la phase 1
 
 - `discours_soutenance.md`, `plan_slides.md` et
   `soutenance_copilote_financier.pptx` sont à jour avec toutes les
   corrections des deux audits, les demandes de rééquilibrage 30/70,
   d'approfondissement (ACP, validation croisée, exploration des données),
-  de réécriture du registre, de recalibrage à 25 minutes, et de mise en
-  récit chronologique du Copilote Financier.
-- État final : **18 slides, 3 380 mots utiles → 24,1 à 26,0 minutes**
-  selon le débit (130-140 mots/minute) ; répartition ≈ 30,7 % missions
-  d'alternance / ≈ 69,3 % Copilote Financier.
+  de réécriture du registre, de recalibrage à 25 minutes, de mise en
+  récit chronologique du Copilote Financier, et d'ajout de la base de
+  données SQL.
+- État final : **19 slides, 3 544 mots utiles → 25,3 à 27,3 minutes**
+  selon le débit (130-140 mots/minute) ; répartition ≈ 28,3 % missions
+  d'alternance / ≈ 71,7 % Copilote Financier. Légèrement au-dessus de
+  25 minutes à débit lent, pile dans la cible à débit normal-rapide.
 - **En attente de validation explicite avant de passer à la phase 2**
   (questions du jury), conformément à la consigne.

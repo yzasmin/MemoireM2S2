@@ -1,25 +1,29 @@
 # Plan des slides — soutenance Copilote Financier
 
-18 slides, calibrées pour **25 minutes** à l'oral. Répartition volontaire
+19 slides, calibrées pour **25 minutes** à l'oral. Répartition volontaire
 du temps de parole : **≈ 30 % sur les deux reprises de données (missions
 d'alternance, slides 2-6), ≈ 70 % sur le Copilote Financier (slides
-8-15)** — c'est la partie data science, et c'est elle que le jury attend
+8-16)** — c'est la partie data science, et c'est elle que le jury attend
 en profondeur. Une entrée par slide : titre, contenu (bullets ou visuel du
 mémoire/repo à reprendre), et la portion de `discours_soutenance.md` qui
 lui correspond. En cas de divergence entre ce fichier et le `.pptx`
 généré en complément, **ce fichier fait foi**.
 
-**Principe de construction du Copilote Financier (slides 8-15) : le récit
+**Principe de construction du Copilote Financier (slides 8-16) : le récit
 suit le projet dans l'ordre où il s'est vraiment déroulé**, pas une liste
 de résultats mis côte à côte. Chaque slide explique pourquoi l'étape
-précédente amène à la suivante : contexte → exploration des données → ce
-que l'exploration a rendu nécessaire (la typologie) → axe A (qui utilise
+précédente amène à la suivante : contexte → exploration des données → la
+base SQL qu'il a fallu construire pour pouvoir tout interroger → ce que
+l'exploration a rendu nécessaire (la typologie) → axe A (qui utilise
 cette typologie) → axe B → axe C → signaux faibles (ajoutés une fois les
 trois axes posés) → plateforme (qui restitue tout). Chaque transition est
 prononcée à l'oral, pas seulement sous-entendue par l'ordre des slides.
 
-**Calibrage actuel :** 3 380 mots utiles → 24,1 à 26,0 minutes selon le
-débit (130-140 mots/minute), ratio réel 30,7 % / 69,3 %.
+**Calibrage actuel :** 3 544 mots utiles → 25,3 à 27,3 minutes selon le
+débit (130-140 mots/minute), ratio réel 28,3 % / 71,7 %. Légèrement au-
+dessus de 25 minutes à débit lent (130 mots/min) ; pile dans la cible à
+débit normal-rapide (140 mots/min). Resserrer encore si 25 minutes
+strictes doivent être respectées quel que soit le débit.
 
 ---
 
@@ -120,7 +124,7 @@ l'intégrité référentielle de l'ERP).
   juste
 
 **Visuel :** slide texte courte, transition conceptuelle vers la
-réflexion de la fin (slide 16).
+réflexion de la fin (slide 17).
 
 **Discours :** SLIDE 6.
 
@@ -171,8 +175,8 @@ repris du mémoire (section 2.1.2 / `docs/01_cadrage_projet.md`).
   négative — cette correction structure toute la démarche de l'axe B
 - Leçon assumée à l'oral : toujours vérifier la sortie réelle plutôt que
   la conclusion attendue
-- **Bridge de fin (à l'oral) :** ces deux leçons en poche, restait encore
-  une étape avant de pouvoir attaquer l'axe A → slide 10
+- **Bridge de fin (à l'oral) :** ces deux leçons en poche, il fallait
+  encore s'assurer d'avoir une base solide → slide 10
 
 **Visuel :** Figure 2.1 du mémoire (distribution du prix, brute puis log)
 et Figure 2.2 (intensité de vente, effet des taux visible une fois
@@ -182,13 +186,44 @@ l'effet de portefeuille neutralisé).
 
 ---
 
-### Slide 10 — La typologie : une étape avant l'axe A
+### Slide 10 — La base de données SQL
 
-**Slide nouvelle, déplacée hors de l'axe A pour que le récit suive
-l'ordre réel du projet (notebook 02 avant notebook 03) : comparer une
-opération de 2 M€ à une de 50 M€ sur leurs montants bruts n'a pas de
-sens, il fallait d'abord une typologie fondée sur la structure des
-coûts.**
+**Slide nouvelle (notebook 01), ajoutée à la demande explicite — absente
+des versions précédentes malgré son rôle d'infrastructure pour tout le
+reste du projet.**
+
+**Contenu :**
+- Les 4 exports Excel transformés en base **SQLite** : **7 tables + 3
+  vues SQL** métier (marge par opération, réservations par mois, état du
+  stock)
+- Intérêt méthodologique : une vue SQL n'est écrite qu'une fois — les
+  notebooks et la plateforme partagent la même définition de chaque
+  indicateur, au lieu de la recopier et risquer de la faire diverger
+- Exemple de requête simple révélatrice : **Le Cap d'Agde concentre
+  117,1 M€ de chiffre d'affaires budgété sur seulement 2 opérations**
+- **Comparatif Spark vs pandas, chronométré honnêtement** : pandas 9,9 ms
+  contre Spark 577,4 ms (+ 23,9 s de démarrage de session) sur la même
+  agrégation — **Spark très surdimensionné à cette volumétrie**, mais la
+  démonstration établit que le chemin de montée en charge existe si le
+  Copilote devait couvrir tout le groupe Nexity
+- **Bridge de fin (à l'oral) :** base solidement posée → encore une étape
+  avant l'axe A → slide 11
+
+**Visuel :** pas de figure extraite du mémoire pour cette slide — un
+schéma simple de l'architecture (4 exports → SQLite 7 tables/3 vues →
+notebooks + plateforme) serait idéal, ou à défaut deux cartes chiffrées
+(pandas vs Spark, Cap d'Agde).
+
+**Discours :** SLIDE 10.
+
+---
+
+### Slide 11 — La typologie : une étape avant l'axe A
+
+**Slide déplacée hors de l'axe A pour que le récit suive l'ordre réel du
+projet (notebook 02 avant notebook 03) : comparer une opération de 2 M€
+à une de 50 M€ sur leurs montants bruts n'a pas de sens, il fallait
+d'abord une typologie fondée sur la structure des coûts.**
 
 **Contenu :**
 - **ACP (analyse en composantes principales)** : 2 axes résument **61 %**
@@ -200,18 +235,18 @@ coûts.**
 - Exemple nommé : **Le Parc des Cyclades** (marge budgétée +6,5 %), ses 5
   voisines les plus proches affichent des marges de +7,9 % à +11,3 %
 - **Bridge de fin (à l'oral) :** cette typologie sert directement de
-  comparateur dans l'axe A → slide 11
+  comparateur dans l'axe A → slide 12
 
 **Visuel :** pas de figure extraite du mémoire pour cette slide — un
 schéma simple (2 axes de l'ACP + 4 groupes colorés) serait idéal si le
 temps de conception le permet ; à défaut, cartes chiffrées (61 %, 4
 familles, exemple Cyclades).
 
-**Discours :** SLIDE 10.
+**Discours :** SLIDE 11.
 
 ---
 
-### Slide 11 — Axe A : le risque de marge
+### Slide 12 — Axe A : le risque de marge
 
 **Contenu (ouvre en rappelant qu'on vient d'obtenir la typologie) :**
 - Périmètre : 123 opérations suffisamment avancées (engagement ≥ 60 %) —
@@ -225,17 +260,17 @@ familles, exemple Cyclades).
 - Régression Ridge en complément (facteurs de dérive lisibles)
 - Message assumé : signal réel mais faible
 - **Bridge de fin (à l'oral) :** axe traité → passage à la deuxième
-  question, le rythme de vente → slide 12
+  question, le rythme de vente → slide 13
 
 **Visuel :** Figure 2.3 du mémoire (distribution de la variation de
 marge) + petit tableau des 6 F1 par méthode, duo train/validation du MLP
 mis en évidence.
 
-**Discours :** SLIDE 11. **Slide la plus dense en méthode.**
+**Discours :** SLIDE 12. **Slide la plus dense en méthode.**
 
 ---
 
-### Slide 12 — Axe B : la vitesse d'écoulement
+### Slide 13 — Axe B : la vitesse d'écoulement
 
 **Contenu :**
 - Panel de 3 230 observations (opération × mois, 160 opérations) — modèle
@@ -252,12 +287,12 @@ mis en évidence.
 
 **Visuel :** Figure 2.4 du mémoire (scénarios de taux 2026).
 
-**Discours :** SLIDE 12. **Axe le plus solide — à assumer clairement
+**Discours :** SLIDE 13. **Axe le plus solide — à assumer clairement
 comme tel à l'oral.**
 
 ---
 
-### Slide 13 — Axe C : l'optimisation des prix
+### Slide 14 — Axe C : l'optimisation des prix
 
 **Contenu (ouvre sur le lien avec l'axe B : une fois qu'on sait combien de
 lots vont se vendre, la question suivante est leur prix) :**
@@ -277,11 +312,11 @@ lots vont se vendre, la question suivante est leur prix) :**
 **Visuel :** tableau des résultats clés (R², lots hors marché, règle de
 remise, exemple Arpeggio).
 
-**Discours :** SLIDE 13.
+**Discours :** SLIDE 14.
 
 ---
 
-### Slide 14 — Signaux faibles : texte et réseau de vente
+### Slide 15 — Signaux faibles : texte et réseau de vente
 
 **Contenu (ouvre en situant cette slide comme un enrichissement ajouté
 une fois les trois axes posés, pas un quatrième axe du même rang) :**
@@ -301,11 +336,11 @@ une fois les trois axes posés, pas un quatrième axe du même rang) :**
 contraste des taux de désistement) — pas de figure extraite du mémoire
 pour cette slide.
 
-**Discours :** SLIDE 14.
+**Discours :** SLIDE 15.
 
 ---
 
-### Slide 15 — La plateforme : cinq pages pour la direction financière
+### Slide 16 — La plateforme : cinq pages pour la direction financière
 
 **Contenu :**
 - Application Streamlit, périmètre 147 opérations de promotion, 5 pages
@@ -321,11 +356,11 @@ pour cette slide.
 **Visuel :** Figure 2.6 et/ou 2.7 du mémoire (captures des pages « Vue
 d'ensemble » et « Alertes marge »).
 
-**Discours :** SLIDE 15.
+**Discours :** SLIDE 16.
 
 ---
 
-### Slide 16 — Réflexion transversale
+### Slide 17 — Réflexion transversale
 
 **Contenu :**
 - **« Un traducteur avant d'être un modélisateur »** : traduire une gêne
@@ -345,11 +380,11 @@ d'ensemble » et « Alertes marge »).
 telle quelle, elle correspond maintenant exactement aux trois régimes
 évoqués à l'oral.
 
-**Discours :** SLIDE 16.
+**Discours :** SLIDE 17.
 
 ---
 
-### Slide 17 — Perspectives et projet professionnel
+### Slide 18 — Perspectives et projet professionnel
 
 **Contenu :**
 - Entrée en master visant la modélisation prédictive stricte → sortie
@@ -362,11 +397,11 @@ telle quelle, elle correspond maintenant exactement aux trois régimes
 
 **Visuel :** slide texte, 3 bullets courts, pas de graphique.
 
-**Discours :** SLIDE 17.
+**Discours :** SLIDE 18.
 
 ---
 
-### Slide 18 — Conclusion
+### Slide 19 — Conclusion
 
 **Contenu :**
 - Année dominée par la reconstruction d'un socle de données, avant retour
@@ -377,4 +412,4 @@ telle quelle, elle correspond maintenant exactement aux trois régimes
 
 **Visuel :** slide de clôture sobre (« Merci — Questions »).
 
-**Discours :** SLIDE 18.
+**Discours :** SLIDE 19.
