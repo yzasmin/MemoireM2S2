@@ -352,5 +352,62 @@ anciens plutôt que de s'y ajouter.
   selon le débit (130-140 mots/minute) ; répartition ≈ 28,3 % missions
   d'alternance / ≈ 71,7 % Copilote Financier. Légèrement au-dessus de
   25 minutes à débit lent, pile dans la cible à débit normal-rapide.
-- **En attente de validation explicite avant de passer à la phase 2**
-  (questions du jury), conformément à la consigne.
+- **Validation explicite reçue le 26/08/2026** : passage à la phase 2
+  autorisé.
+
+## Étape 14 — Phase 2 : questions du jury (`questions_jury.md`)
+
+- Fichier créé avec **20 questions probables du jury**, classées en six
+  blocs : méthodologie générale (6), axe A (4), axe B (3), axe C (3),
+  typologie/exploration (3), infrastructure SQL (1).
+- Couverture demandée respectée : méthodologie de l'axe A (choix du
+  modèle retenu malgré un F1 inférieur au CART, seuil de dérive
+  matérielle, Ridge vs Lasso), de l'axe B (effets aléatoires vs pooled
+  OLS, contradiction panel/ARIMA, choix de l'ordre ARIMA), de l'axe C
+  (Lagrange vs SLSQP, élasticité non significative retenue quand même,
+  lecture de la remise en euros constants), plus la méthodologie
+  générale du projet (validation croisée systématique, absence de deep
+  learning, confidentialité, périmètre plateforme vs notebooks, régimes
+  de preuve).
+- Chaque réponse est rédigée pour l'oral (registre naturel, pas de
+  jargon non expliqué) et suivie d'une ligne **Source :** pointant vers
+  le document exact (chapitre détaillé, notebook et cellule, ou mémoire)
+  où le chiffre ou l'argument cité est vérifiable — conformément à
+  l'exigence de traçabilité posée dès le départ.
+- Chiffres nouveaux introduits dans cette étape (absents des slides,
+  mais nécessaires pour répondre en profondeur à une question de jury),
+  tous vérifiés par grep direct dans les sources déjà extraites :
+  - notebook 03 : F1 forêt aléatoire 0,306 ± 0,069, score OOB 0,691,
+    « modèle retenu parmi les interprétables » (pas le F1 maximum
+    absolu, qui est celui du CART à 0,340) ;
+  - notebook 02 : silhouette maximale 0,47 et Davies-Bouldin minimal
+    0,96 pour K = 4, indice de Rand ajusté K-moyennes/CAH-Ward = 0,862 ;
+  - notebook 04 : coefficient pooled OLS -0,242 contre -0,216 pour le
+    modèle à effets aléatoires ; ARIMA(1,1,1)×(1,0,1,12), AICc = 611,7,
+    Ljung-Box p = 0,224 ; corrélation brute r = +0,07 puis r = -0,34 /
+    +0,44 après correction par opération active ;
+  - notebook 05 : écart Lagrange/SLSQP = 0,0056 ; élasticité interne
+    ε = -0,81, IC 95 % [-3,62 ; 1,99], p = 0,57, retenue à -1 par
+    référence à la littérature (Meen 2001, DiPasquale & Wheaton 1994) ;
+  - chapitre détaillé : section « Périmètre et limites » (147 opérations
+    en plateforme contre 267 en notebooks, à la demande du
+    commanditaire).
+- Aucune vérification par sous-agent effectuée à cette étape : les
+  chiffres proviennent tous d'un grep direct et vérifié dans les
+  fichiers sources déjà extraits en phase 1
+  (`chapitre_copilote_financier.txt`, `nb_extracts/*.txt`), pas d'une
+  nouvelle extraction. Une relecture par le sous-agent
+  data-science-expert reste possible sur demande avant la soutenance
+  finale.
+
+## État à la fin de la phase 2
+
+- `questions_jury.md` livré avec 20 questions/réponses sourcées.
+  `discours_soutenance.md`, `plan_slides.md` et
+  `soutenance_copilote_financier.pptx` restent dans l'état validé de la
+  fin de phase 1 (19 slides, 3 544 mots, 25,3 à 27,3 minutes, ratio
+  28,3 % / 71,7 %).
+- **En attente de retour de l'étudiante sur les réponses proposées**
+  avant la soutenance ; possibilité d'audit complémentaire par les deux
+  sous-agents (fresh-context sur le discours, data-science-expert sur
+  les chiffres) sur simple demande.
